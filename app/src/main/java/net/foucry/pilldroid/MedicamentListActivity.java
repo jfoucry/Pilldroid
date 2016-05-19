@@ -19,6 +19,7 @@ import android.widget.TextView;
 import net.foucry.pilldroid.dummy.DummyContent;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * An activity representing a list of Medicaments. This activity
@@ -35,6 +36,12 @@ public class MedicamentListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    final static Boolean DEMO = true;
+    final static Random random = new Random();
+    // Log TAG String
+    public interface Constants {
+        String TAG = "nef.foucry.pilldroid";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

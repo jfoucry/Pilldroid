@@ -1,4 +1,4 @@
-package net.foucry.medicament;
+package net.foucry.pilldroid;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,7 +25,7 @@ public class Utils {
     }
 
     public static final double doubleRandomInclusive(int min, int max) {
-        double value = Math.floor(min + (max - min) * CustomizedListView.random.nextDouble() *4)/4;
+        double value = Math.floor(min + (max - min) * MedicamentListActivity.random.nextDouble() *4)/4;
 
         return value;
     }
