@@ -13,9 +13,11 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-
+import net.foucry.pilldroid.Medicament;
 import net.foucry.pilldroid.dummy.DummyContent;
 
 import java.util.List;
@@ -43,10 +45,15 @@ public class MedicamentListActivity extends AppCompatActivity {
         String TAG = "nef.foucry.pilldroid";
     }
 
+    private static DBHelper dbHelper;
+    private SimpleCursorAdapter drugAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicament_list);
+
+        dbHelper = new DBHelper(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,7 +104,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
+            holder.mIDView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +112,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(MedicamentDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(MedicamentDetailFragment.ARG_ITEM_ID, holder.mItem.getCip13());
                         MedicamentDetailFragment fragment = new MedicamentDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -114,7 +121,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
-                        intent.putExtra(MedicamentDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(MedicamentDetailFragment.ARG_ITEM_ID, holder.mItem.getCip13());
 
                         context.startActivity(intent);
                     }
@@ -129,15 +136,20 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
+            public final TextView mIDView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public final TextView mEndOfStock;
+            public final ImageView mIconView;
+
+            public Medicament mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mIDView = (TextView) view.findViewById(R.id.cip13);
+                mContentView = (TextView) view.findViewById(R.id.valeur);
+                mEndOfStock = (TextView) view.findViewById(R.id.endOfStock);
+                mIconView = (ImageView) view.findViewById(R.id.list_image);
             }
 
             @Override

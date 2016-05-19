@@ -1,20 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/id"
+    <LinearLayout android:id="@+id/thumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:background="@android:color/transparent"
+        android:layout_marginRight="5sp">
 
+        <ImageView
+            android:id="@+id/list_image"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:src="@drawable/stock_ok" />
+        </LinearLayout>
+    <!-- Drug's name-->
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/valeur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</LinearLayout>
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Nom Médicament"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
+
+    <!-- CIP 13 (should change) -->
+    <TextView
+        android:id="@+id/cip13"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/valeur"
+        android:textColor="#343434"
+        android:textSize="13sp"
+        android:layout_marginTop="1sp"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="cip13 goes here" />
+
+    <!-- dateEndOfStock -->
+    <TextView
+        android:id="@+id/endOfStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/valeur"
+        android:gravity="right"
+        android:text="lundi 1 janvier 2001"
+        android:layout_marginRight="5dip"
+        android:textSize="12sp"
+        android:textColor="#212121"
+        android:textStyle="bold"/>
+
+    <!-- Rightend Arrow -->
+    <ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10sp"/>
+</RelativeLayout>
