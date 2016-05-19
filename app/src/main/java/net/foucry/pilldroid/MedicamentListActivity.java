@@ -19,7 +19,11 @@ import android.widget.TextView;
 
 import net.foucry.pilldroid.Medicament;
 import net.foucry.pilldroid.dummy.DummyContent;
+import static net.foucry.pilldroid.UtilDate.*;
+import static net.foucry.pilldroid.Utils.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -47,6 +51,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private static DBHelper dbHelper;
     private SimpleCursorAdapter drugAdapter;
+    private List<Medicament> medicaments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,47 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         });
 
+
+        if (DEMO) {
+            if (dbHelper.getCount() == 0) {
+
+                // String cis, String cip13, String nom, String mode_administration,
+                // String presentation,double stock, double prise, int warn, int alert
+
+                dbHelper.addDrug(new Medicament("60000011", "3400930000011", "Médicament test 01", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000012", "3400930000012", "Médicament test 02", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000013", "3400930000013", "Médicament test 03", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000014", "3400930000014", "Médicament test 04", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000015", "3400930000015", "Médicament test 05", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000016", "3400930000016", "Médicament test 06", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000017", "3400930000017", "Médicament test 07", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+            }
+        }
+
+        if (this.medicaments == null) {
+            this.medicaments = dbHelper.getAllDrugs();
+
+            Collections.sort(this.medicaments, new Comparator<Medicament>() {
+                @Override
+                public int compare(Medicament lhs, Medicament rhs) {
+                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+                }
+            });
+        }
         View recyclerView = findViewById(R.id.medicament_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
@@ -82,15 +128,15 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(medicaments));
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Medicament> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<Medicament> items) {
             mValues = items;
         }
 
@@ -104,8 +150,8 @@ public class MedicamentListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIDView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIDView.setText(mValues.get(position).getCip13());
+            holder.mContentView.setText(mValues.get(position).getNom());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
