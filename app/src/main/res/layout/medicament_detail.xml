@@ -1,9 +1,62 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:id="@+id/medicament_detail"-->
+    <!--style="?android:attr/textAppearanceLarge"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:padding="16dp"-->
+    <!--android:textIsSelectable="true"-->
+    <!--android:text="rput"-->
+    <!--tools:context="net.foucry.pilldroid.MedicamentDetailFragment" />-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/medicament_detail"
-    style="?android:attr/textAppearanceLarge"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context="net.foucry.pilldroid.MedicamentDetailFragment" />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="net.foucry.pilldroid.MedicamentDetailFragment">
+
+    <include
+        android:id="@+id/name_cell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
+        layout="@layout/info_cell" />
+
+    <include
+        android:id="@+id/presentation_cell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/info_cell"
+        android:layout_marginTop="5sp" />
+
+    <include
+        android:id="@+id/administration_cell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/info_cell"
+        android:layout_marginTop="5sp" />
+
+    <include
+        android:id="@+id/stock_cell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/value_input"
+        android:layout_marginTop="30sp" />
+
+    <include
+        android:id="@+id/warning_cell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/value_input"
+        android:layout_marginTop="15sp" />
+
+    <include
+        android:id="@+id/alert_cell"
+        layout="@layout/value_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5sp" />
+
+
+</LinearLayout>
