@@ -11,20 +11,24 @@
         android:background="@drawable/list_selector"
         android:textStyle="bold"
         android:textColor="#040404"
+        android:paddingLeft="5dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
         android:layout_toLeftOf="@+id/valeur"
         android:layout_alignBottom="@+id/valeur" />
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:inputType="numberDecimal"
         android:ems="10"
         android:id="@+id/valeur"
+        android:paddingRight="10dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:textAlignment="gravity"
+        android:background="@drawable/list_selector"
         android:text="0" />
 
 </RelativeLayout>

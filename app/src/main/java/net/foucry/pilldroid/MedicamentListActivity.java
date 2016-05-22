@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,16 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+
 import net.foucry.pilldroid.Medicament;
 import net.foucry.pilldroid.dummy.DummyContent;
 import static net.foucry.pilldroid.UtilDate.*;
 import static net.foucry.pilldroid.Utils.*;
-
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -128,6 +131,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(medicaments));
     }
 
@@ -148,17 +152,45 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy", Locale.getDefault());
+            String dateEndOfStock = date2String(mValues.get(position).getDateEndOfStock(), dateFormat);
+
+            Log.d(Constants.TAG, "dateEndOfStock == " + dateEndOfStock);
+            Log.d(Constants.TAG, "stock == " + mValues.get(position).getStock());
+            Log.d(Constants.TAG, "prise == " + mValues.get(position).getPrise());
+            Log.d(Constants.TAG, "warn == " + mValues.get(position).getWarnThreshold());
+            Log.d(Constants.TAG, "alert == " + mValues.get(position).getAlertThreshold());
+
             holder.mItem = mValues.get(position);
             holder.mIDView.setText(mValues.get(position).getCip13());
             holder.mContentView.setText(mValues.get(position).getNom());
+            holder.mEndOfStock.setText(dateEndOfStock);
+
+            // Test to change background programmaticaly
+            if (mValues.get(position).getPrise() == 0) {
+                holder.mView.setBackgroundResource(R.drawable.gradient_bg);
+            } else {
+                if (mValues.get(position).getStock() <= mValues.get(position).getAlertThreshold()) {
+                    holder.mView.setBackgroundResource(R.drawable.gradient_bg_alert);
+                    holder.mIconView.setImageResource(R.drawable.stock_alert);
+                } else if ((mValues.get(position).getStock() > mValues.get(position).getAlertThreshold()) &&
+                        (mValues.get(position).getStock() <= (mValues.get(position).getWarnThreshold() * mValues.get(position).getPrise()))) {
+                    holder.mView.setBackgroundResource(R.drawable.gradient_bg_warning);
+                    holder.mIconView.setImageResource(R.drawable.stock_warn);
+                } else {
+                    holder.mView.setBackgroundResource(R.drawable.gradient_bg_ok);
+                    holder.mIconView.setImageResource(R.drawable.stock_ok);
+                }
+            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Medicament medicamentCourant = (Medicament) mValues.get(position);
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(MedicamentDetailFragment.ARG_ITEM_ID, holder.mItem.getCip13());
+                        arguments.putSerializable("medicament", medicamentCourant);
                         MedicamentDetailFragment fragment = new MedicamentDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -167,7 +199,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
-                        intent.putExtra(MedicamentDetailFragment.ARG_ITEM_ID, holder.mItem.getCip13());
+                        intent.putExtra("medicament", medicamentCourant);
 
                         context.startActivity(intent);
                     }

@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "net.foucry.pilldroid"
-        minSdkVersion 22
-        targetSdkVersion 23
+        minSdkVersion 21
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }

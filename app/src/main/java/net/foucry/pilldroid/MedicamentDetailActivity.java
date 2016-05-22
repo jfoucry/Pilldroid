@@ -53,8 +53,8 @@ public class MedicamentDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(MedicamentDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(MedicamentDetailFragment.ARG_ITEM_ID));
+            arguments.putSerializable("medicament",
+                    getIntent().getSerializableExtra("medicament"));
             MedicamentDetailFragment fragment = new MedicamentDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
