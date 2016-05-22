@@ -17,10 +17,8 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="25dp"
             android:fitsSystemWindows="true"
-            android:title="Prout"
-            android:titleTextColor="@android:color/black"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar"/>
