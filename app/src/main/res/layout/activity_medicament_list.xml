@@ -32,11 +32,14 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:src="@android:drawable/ic_input_add"
+        android:adjustViewBounds="true"
+        android:clickable="false"
+        android:baselineAlignBottom="false"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

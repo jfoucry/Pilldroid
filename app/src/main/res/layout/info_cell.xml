@@ -20,7 +20,7 @@
         android:layout_below="@+id/valeur"
         android:layout_alignParentLeft="true"
         android:textStyle="italic"
-        android:textColor="#57C1DE"
+        android:textColor="#0c4758"
         android:background="@android:color/transparent"
         android:id="@+id/label"
         android:paddingLeft="10sp"

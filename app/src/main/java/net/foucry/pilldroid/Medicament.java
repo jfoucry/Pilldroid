@@ -49,19 +49,6 @@ public class Medicament implements Serializable {
         this.alertThreshold = alert;
     }
 
-//    private Medicament(Cursor cursor) {
-//        if (cursor == null) throw new AssertionError();
-//
-//        this.setCis(cursor.getString(0));
-//        this.setCip13(cursor.getString(1));
-//        this.setNom(cursor.getString(2));
-//        this.setMode_administration(cursor.getString(3));
-//        this.setPresentation(cursor.getString(4));
-//        this.setStock(cursor.getFloat(5));
-//        this.setPrise(cursor.getFloat(6));
-//    }
-
-
 
     public int getId() {
         return id;
