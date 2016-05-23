@@ -74,7 +74,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Will be used to add a drug to the list", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -105,6 +105,15 @@ public class MedicamentListActivity extends AppCompatActivity {
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
                         doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
                 dbHelper.addDrug(new Medicament("60000017", "3400930000017", "Médicament test 07", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000018", "3400930000018", "Médicament test 08", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000019", "3400930000019", "Médicament test 09", "orale",
+                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
+                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                dbHelper.addDrug(new Medicament("60000010", "3400930000010", "Médicament test 10", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
                         doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
             }
