@@ -183,11 +183,12 @@ public class MedicamentListActivity extends AppCompatActivity {
             if (mValues.get(position).getPrise() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
             } else {
-                if (mValues.get(position).getStock() <= mValues.get(position).getAlertThreshold()) {
+                int remainingStock = (int) Math.floor(mValues.get(position).getStock()/mValues.get(position).getPrise());
+                if (remainingStock <= mValues.get(position).getAlertThreshold()) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_alert);
                     holder.mIconView.setImageResource(R.drawable.stock_alert);
-                } else if ((mValues.get(position).getStock() > mValues.get(position).getAlertThreshold()) &&
-                        (mValues.get(position).getStock() <= (mValues.get(position).getWarnThreshold() * mValues.get(position).getPrise()))) {
+                } else if ((remainingStock > mValues.get(position).getAlertThreshold()) &&
+                        (remainingStock <= (mValues.get(position).getWarnThreshold()))) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_warning);
                     holder.mIconView.setImageResource(R.drawable.stock_warn);
                 } else {
