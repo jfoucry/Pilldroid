@@ -23,13 +23,17 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicament_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
+
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            toolbar.setTitle(getTitle());
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Will be use to save changes in a drug", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -53,8 +57,8 @@ public class MedicamentDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(MedicamentDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(MedicamentDetailFragment.ARG_ITEM_ID));
+            arguments.putSerializable("medicament",
+                    getIntent().getSerializableExtra("medicament"));
             MedicamentDetailFragment fragment = new MedicamentDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

@@ -1,4 +1,4 @@
-package net.foucry.medicament;
+package net.foucry.pilldroid;
 
 import java.io.Serializable;
 import java.lang.String;
@@ -6,8 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static net.foucry.medicament.UtilDate.*;
-
+import static  net.foucry.pilldroid.UtilDate.*;
 
 /**
  * Created by jacques on 26/11/15.
@@ -49,19 +48,6 @@ public class Medicament implements Serializable {
         this.warnThreshold = warn;
         this.alertThreshold = alert;
     }
-
-//    private Medicament(Cursor cursor) {
-//        if (cursor == null) throw new AssertionError();
-//
-//        this.setCis(cursor.getString(0));
-//        this.setCip13(cursor.getString(1));
-//        this.setNom(cursor.getString(2));
-//        this.setMode_administration(cursor.getString(3));
-//        this.setPresentation(cursor.getString(4));
-//        this.setStock(cursor.getFloat(5));
-//        this.setPrise(cursor.getFloat(6));
-//    }
-
 
 
     public int getId() {
@@ -183,27 +169,4 @@ public class Medicament implements Serializable {
 
         return currentStock - takeDuringPeriod;
     }
-
-
-//    public static Medicament getMedicamentByCIP13(String cip13) {
-//        Log.e(CustomizedListView.Constants.TAG, "getMedicamentByCIP13 called");
-//
-//        Context context = null;
-//        DBHelper db = new DBHelper(context);
-//        SQLiteDatabase myDatabase = DBHelper.getInstance(context).getWritableDatabase();
-//
-//        Medicament medicament = null;
-//
-//        Cursor cur = myDatabase.query("medicaments", COLUMN_LIST, "cip13 = ?", new String[]{cip13}, null, null,null);
-//        if (cur != null) {
-//            cur.moveToFirst();
-//            int count = cur.getCount();
-//            Log.d(CustomizedListView.Constants.TAG, "Number of item in cursor " + String.valueOf(count));
-//            medicament = new Medicament(cur);
-//        }
-//        cur.close();
-//        myDatabase.close();
-//        return medicament;
-//    }
-
 }

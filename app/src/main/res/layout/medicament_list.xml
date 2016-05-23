@@ -6,8 +6,7 @@
     android:name="net.foucry.pilldroid.MedicamentListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
+    android:background="@drawable/list_selector"
     tools:context="net.foucry.pilldroid.MedicamentListActivity"
     tools:listitem="@layout/medicament_list_content" />

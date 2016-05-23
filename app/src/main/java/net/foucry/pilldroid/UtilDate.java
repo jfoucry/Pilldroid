@@ -1,4 +1,4 @@
-package net.foucry.medicament;
+package net.foucry.pilldroid;
 
 import android.util.Log;
 
@@ -21,7 +21,7 @@ public class UtilDate {
      */
     public static Date dateAtNoon(Date aDate) {
 
-        Log.d(CustomizedListView.Constants.TAG, "dateAtNoon " + aDate);
+        Log.d(MedicamentListActivity.Constants.TAG, "dateAtNoon " + aDate);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(aDate);
@@ -57,7 +57,7 @@ public class UtilDate {
      */
     public static String date2String(Date date, DateFormat dateFormat) {
 
-        Log.d(CustomizedListView.Constants.TAG, "date == " + date);
+        Log.d(MedicamentListActivity.Constants.TAG, "date == " + date);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

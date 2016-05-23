@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@drawable/list_selector">
+    <TextView
+        android:id="@+id/valeur"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Valeur"
+        android:textSize="16dp"
+        android:textColor="#040404"
+        android:textStyle="bold"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Label"
+        android:layout_below="@+id/valeur"
+        android:layout_alignParentLeft="true"
+        android:textStyle="italic"
+        android:textColor="#0c4758"
+        android:background="@android:color/transparent"
+        android:id="@+id/label"
+        android:paddingLeft="10sp"
+        android:paddingTop="5dp"/>
+
+</RelativeLayout>

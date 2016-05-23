@@ -1,4 +1,4 @@
-package net.foucry.medicament;
+package net.foucry.pilldroid;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -76,7 +76,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void dropDrug() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Log.d(CustomizedListView.Constants.TAG, "Drop drug table");
+        Log.d(MedicamentListActivity.Constants.TAG, "Drop drug table");
         db.execSQL("DROP TABLE IF EXISTS drug");
 
         this.onCreate(db);
@@ -84,7 +84,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void addDrug(Medicament medicament) {
         // Logging
-        Log.d(CustomizedListView.Constants.TAG, medicament.toString());
+        Log.d(MedicamentListActivity.Constants.TAG, medicament.toString());
 
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -144,7 +144,7 @@ public class DBHelper extends SQLiteOpenHelper {
         medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
 
         // Log
-        Log.d(CustomizedListView.Constants.TAG, "getDrug("+id+")" + medicament.toString());
+        Log.d(MedicamentListActivity.Constants.TAG, "getDrug("+id+")" + medicament.toString());
 
         // Return medicament
 
@@ -183,7 +183,7 @@ public class DBHelper extends SQLiteOpenHelper {
         medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
 
         // Log
-        Log.d(CustomizedListView.Constants.TAG, "getDrug("+cip13+")" + medicament.toString());
+        Log.d(MedicamentListActivity.Constants.TAG, "getDrug("+cip13+")" + medicament.toString());
 
         // Return medicament
 
@@ -225,7 +225,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        Log.d(CustomizedListView.Constants.TAG, "getAllDrugs " + medicaments.toString());
+        Log.d(MedicamentListActivity.Constants.TAG, "getAllDrugs " + medicaments.toString());
 
         // return
         return medicaments;
@@ -269,7 +269,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         // log
-        Log.d(CustomizedListView.Constants.TAG, "delete drug "+medicament.toString());
+        Log.d(MedicamentListActivity.Constants.TAG, "delete drug "+medicament.toString());
     }
 
     public int getCount() {
