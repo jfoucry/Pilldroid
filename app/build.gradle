@@ -33,8 +33,4 @@ dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-    compile 'com.embarkmobile:zxing-android-minimal:2.0@aar'
-    compile 'com.embarkmobile:zxing-android-legacy:2.0.0@aar'
-    compile 'com.embarkmobile:zxing-android-integration:2.0.0@aar'
-    compile 'com.google.zxing:core:3.0.1'
 }

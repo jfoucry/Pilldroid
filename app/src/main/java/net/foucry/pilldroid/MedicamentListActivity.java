@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +16,15 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-
-import net.foucry.pilldroid.Medicament;
-import net.foucry.pilldroid.dummy.DummyContent;
-import static net.foucry.pilldroid.UtilDate.*;
-import static net.foucry.pilldroid.Utils.*;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import static net.foucry.pilldroid.UtilDate.date2String;
+import static net.foucry.pilldroid.Utils.doubleRandomInclusive;
 
 /**
  * An activity representing a list of Medicaments. This activity
@@ -74,8 +70,12 @@ public class MedicamentListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Will be used to add a drug to the list", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /* Snackbar.make(view, "Will be used to add a drug to the list", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show(); */
+                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                intent.putExtra("SCAN_MODE", "CODE_128");
+                //intent.putExtra("SCAN_FORMATS", "EAN_13,DATA_MATRIX");
+                startActivityForResult(intent, 0);
             }
         });
 
@@ -246,6 +246,27 @@ public class MedicamentListActivity extends AppCompatActivity {
             @Override
             public String toString() {
                 return super.toString() + " '" + mContentView.getText() + "'";
+            }
+
+            public void scanNow(View view) {
+                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                intent.putExtra("SCAN_MODE", "CODE_128");
+                //intent.putExtra("SCAN_FORMATS", "EAN_13,DATA_MATRIX");
+                startActivityForResult(intent, 0);
+            }
+
+            public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+                if (requestCode == 0) {
+                    if (resultCode == RESULT_OK) {
+                        String contents = intent.getStringExtra("SCAN_RESULT");
+                        String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                        Log.i("Prout", format);
+                        Log.i("Prout", contents);
+                        // Handle successful scan
+                    } else if (resultCode == RESULT_CANCELED) {
+                        // Handle cancel
+                    }
+                }
             }
         }
     }
