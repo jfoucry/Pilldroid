@@ -171,7 +171,10 @@ public class MedicamentListActivity extends AppCompatActivity {
                 {
                     cip13 = contents.substring(4,17);
                 }
+
+                dbMedoc.openDatabase();
                 Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+                dbMedoc.close();
 
                 if (scannedMedoc != null) {
                     Toast.makeText(context, "Medicament found in database", Toast.LENGTH_LONG).show();
