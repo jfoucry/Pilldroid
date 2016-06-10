@@ -1,15 +1,14 @@
 package net.foucry.pilldroid;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +16,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-
-import net.foucry.pilldroid.Medicament;
-import net.foucry.pilldroid.dummy.DummyContent;
-import static net.foucry.pilldroid.UtilDate.*;
-import static net.foucry.pilldroid.Utils.*;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import static net.foucry.pilldroid.UtilDate.date2String;
+import static net.foucry.pilldroid.Utils.doubleRandomInclusive;
 
 /**
  * An activity representing a list of Medicaments. This activity
@@ -53,6 +51,8 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private static DBHelper dbHelper;
+    private static DBMedoc dbMedoc;
+
     private SimpleCursorAdapter drugAdapter;
     private List<Medicament> medicaments;
 
@@ -62,6 +62,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_medicament_list);
 
         dbHelper = new DBHelper(this);
+        dbMedoc = new DBMedoc(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -70,14 +71,18 @@ public class MedicamentListActivity extends AppCompatActivity {
             toolbar.setTitle(getTitle());
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Will be used to add a drug to the list", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                *//* Snackbar.make(view, "Will be used to add a drug to the list", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show(); *//*
+                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                intent.putExtra("SCAN_MODE", "CODE_128");
+                //intent.putExtra("SCAN_FORMATS", "EAN_13,DATA_MATRIX");
+                startActivityForResult(intent, 0);
             }
-        });
+        });*/
 
 
         if (DEMO) {
@@ -139,6 +144,57 @@ public class MedicamentListActivity extends AppCompatActivity {
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+        }
+    }
+
+    public void scanNow(View view) {
+        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+        //intent.putExtra("SCAN_MODE", "CODE_128");
+        intent.putExtra("SCAN_FORMATS", "CODE_18,DATA_MATRIX");
+        startActivityForResult(intent, 0);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Context context = getApplicationContext();
+        String cip13 = null;
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                Log.i(Constants.TAG, "Format:" + format);
+                Log.i(Constants.TAG, "Content:" + contents);
+
+                // Handle successful scan
+                if (format.equals("CODE_128")) { //CODE_128
+                    cip13 = contents;
+                } else
+                {
+                    cip13 = contents.substring(4,17);
+                }
+
+                dbMedoc.openDatabase();
+                Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+                dbMedoc.close();
+
+                if (scannedMedoc != null) {
+                    Toast.makeText(context, "Medicament found in database", Toast.LENGTH_LONG).show();
+                } else
+                {
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                    dlg.setTitle(context.getString(R.string.app_name));
+                    dlg.setMessage(context.getString(R.string.msgNotFound));
+                    dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nothing to do to just dismiss dialog
+                        }
+                    });
+
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+                Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import net.foucry.pilldroid.Medicament;
-
 /**
  * Created by jfoucry on 5/25/16.
  */
@@ -27,15 +25,15 @@ public class DBMedoc  extends SQLiteOpenHelper{
     private final Context myContext;
 
     private static final String TABLE_NAME  = "medicaments";
-    private static final String MEDOC_ID    = "id";
+//    private static final String MEDOC_ID    = "id";
     private static final String MEDOC_CIS   = "cis";
     private static final String MEDOC_CIP13 = "cip13";
-    private static final String MEDOC_CIP7  = "cip7";
+//    private static final String MEDOC_CIP7  = "cip7";
     private static final String MEDOC_ADMIN = "mode_administration";
     private static final String MEDOC_NOM   = "nom";
     private static final String MEDOC_PRES  = "presentation";
 
-    private static final String[] COLUMNS_NAMES = {MEDOC_ID, MEDOC_CIS, MEDOC_CIP13, MEDOC_CIP7, MEDOC_ADMIN, MEDOC_NOM, MEDOC_PRES};
+    private static final String[] COLUMNS_NAMES = {MEDOC_CIS, MEDOC_CIP13, MEDOC_ADMIN, MEDOC_NOM, MEDOC_PRES};
 
     public DBMedoc(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -140,8 +138,8 @@ public class DBMedoc  extends SQLiteOpenHelper{
         // Build query
         Cursor cursor = db.query(TABLE_NAME,               // Which table
                 COLUMNS_NAMES,                             // column names
-                " cip13 = ?",                              // selections
-                new String[]{String.valueOf(cip13)},       // selections args
+                " cip13 =?",                              // selections
+                new String[]{cip13},       // selections args
                 null,                                      // group by
                 null,                                      // having
                 null,                                      // order by
@@ -152,16 +150,22 @@ public class DBMedoc  extends SQLiteOpenHelper{
 
         // Build medicament object
         Medicament medicament = new Medicament();
-        medicament.setId(Integer.parseInt(cursor.getString(0)));
-        medicament.setCis(cursor.getString(1));
-        medicament.setCip13(cursor.getString(2));
+        // medicament.setId(Integer.parseInt(cursor.getString(0)));
+        medicament.setCis(cursor.getString(0));
+        medicament.setCip13(cursor.getString(1));
+        medicament.setMode_administration(cursor.getString(2));
         medicament.setNom(cursor.getString(3));
-        medicament.setMode_administration(cursor.getString(4));
-        medicament.setPresentation(cursor.getString(5));
-        medicament.setStock(Double.parseDouble(cursor.getString(6)));
-        medicament.setPrise(Double.parseDouble(cursor.getString(7)));
-        medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
-        medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+        medicament.setPresentation(cursor.getString(4));
+        /*medicament.setStock(Double.parseDouble(cursor.getString(5)));
+        medicament.setPrise(Double.parseDouble(cursor.getString(6)));
+        medicament.setWarnThreshold(Integer.parseInt(cursor.getString(7)));
+        medicament.setAlertThreshold(Integer.parseInt(cursor.getString(8)));*/
+
+        // Set default values
+        medicament.setStock(0);
+        medicament.setPrise(0);
+        medicament.setWarnThreshold(14);
+        medicament.setAlertThreshold(7);
 
         // Log
         Log.d(MedicamentListActivity.Constants.TAG, "getDrug(" + cip13 + ")" + medicament.toString());
