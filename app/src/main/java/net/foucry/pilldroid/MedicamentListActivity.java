@@ -11,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -147,6 +150,25 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
     }
 
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.about, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                startActivity(new Intent(this, About.class));
+                return true;
+            case R.id.help:
+                //startActivity(new Intent(this, Help.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
     public void scanNow(View view) {
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
         //intent.putExtra("SCAN_MODE", "CODE_128");
