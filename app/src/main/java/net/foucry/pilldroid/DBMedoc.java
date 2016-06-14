@@ -47,14 +47,13 @@ public class DBMedoc  extends SQLiteOpenHelper{
     }
 
     public void createDatabase() throws IOException {
-        Log.e(MedicamentListActivity.Constants.TAG, "createDatabase called");
 
         boolean dbExist = checkDatabase();
 
         if (dbExist) {
-            // Nothing to do, DB already exist
+            Log.v("DB Exists", "db exists");
         } else {
-            this.getDatabaseName();
+            this.getReadableDatabase();
             try {
                 copyDatabase();
             } catch (IOException e) {
