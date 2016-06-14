@@ -4,7 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.widget.TextView;
+import android.text.Spanned;
+import android.webkit.WebView;
 
 /**
  * Created by jacques on 12/06/16.
@@ -21,8 +22,11 @@ public class About extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
 
-        TextView htmlTextView = (TextView)findViewById(R.id.aboutHtml);
-        htmlTextView.setText(Html.fromHtml(htmlText, new ImageGetter(), null));
+        String htmlAsString = getString(R.string.html);
+        Spanned htmlAsSpanned = Html.fromHtml(htmlAsString);
+
+        WebView webView = (WebView) findViewById(R.id.aboutHtml);
+        webView.loadDataWithBaseURL(null, htmlAsString, "text/html", "utf-8", null);
     }
 
     private class ImageGetter implements Html.ImageGetter {

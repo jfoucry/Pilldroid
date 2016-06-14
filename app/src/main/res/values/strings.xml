@@ -128,4 +128,24 @@
     <string name="msgNotFound">Médicament introuvable dans la base de données</string>
     <string name="about">À propos</string>
     <string name="help">Aide</string>
+    <string name="html">
+        <![CDATA[
+        <h1>À propos de PillDroid</h1>
+        <h2>Gestion de stock de médicaments</h2>
+        <p>This is some html. Look, here\'s an <u>underline</u>.</p>
+        <p>Look, this is <em>emphasized.</em> And here\'s some <b>bold</b>.</p>
+        <p>This is a UL list:
+        <ul>
+        <li>One</li>
+        <li>Two</li>
+        <li>Three</li>
+        </ul>
+        <p>This is an OL list:
+        <ol>
+        <li>One</li>
+        <li>Two</li>
+        <li>Three</li>
+        </ol>
+        ]]>
+    </string>
 </resources>
