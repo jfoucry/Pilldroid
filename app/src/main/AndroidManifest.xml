@@ -43,6 +43,11 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".About"
+            android:label="About"
+            android:parentActivityName=".MedicamentListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
