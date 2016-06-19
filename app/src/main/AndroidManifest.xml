@@ -43,6 +43,11 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".About"
+            android:label="À propos de PillDroid"
+            android:parentActivityName=".MedicamentListActivity"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>
