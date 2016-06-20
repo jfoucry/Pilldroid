@@ -60,6 +60,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     private List<Medicament> medicaments;
 
     private View mRecyclerView;
+    private SimpleItemRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,7 +204,9 @@ public class MedicamentListActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Add Medicament to DB then try to show it
+                            scannedMedoc.setDateEndOfStock();
                             dbHelper.addDrug(scannedMedoc);
+                            mAdapter.addItem(medicaments.size()-1,scannedMedoc);
                         }
                     });
                     dlg.show();
@@ -226,9 +229,13 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(medicaments));
+        mAdapter = (SimpleItemRecyclerViewAdapter) new SimpleItemRecyclerViewAdapter(medicaments);
+        recyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * SimpleItemRecyclerViewAdapter
+     */
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -236,6 +243,12 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         public SimpleItemRecyclerViewAdapter(List<Medicament> items) {
             mValues = items;
+        }
+
+        public void addItem(int position, Medicament scannedMedoc) {
+            mValues.add(scannedMedoc);
+            notifyDataSetChanged();
+            dbHelper.addDrug(scannedMedoc);
         }
 
         @Override
