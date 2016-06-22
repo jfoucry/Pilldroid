@@ -59,6 +59,9 @@ public class MedicamentListActivity extends AppCompatActivity {
     private SimpleCursorAdapter drugAdapter;
     private List<Medicament> medicaments;
 
+    private View mRecyclerView;
+    private SimpleItemRecyclerViewAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,20 +76,6 @@ public class MedicamentListActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                *//* Snackbar.make(view, "Will be used to add a drug to the list", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show(); *//*
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "CODE_128");
-                //intent.putExtra("SCAN_FORMATS", "EAN_13,DATA_MATRIX");
-                startActivityForResult(intent, 0);
-            }
-        });*/
-
 
         if (DEMO) {
             if (dbHelper.getCount() == 0) {
@@ -137,9 +126,10 @@ public class MedicamentListActivity extends AppCompatActivity {
                 }
             });
         }
-        View recyclerView = findViewById(R.id.medicament_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+
+        mRecyclerView = findViewById(R.id.medicament_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
 
         if (findViewById(R.id.medicament_detail_container) != null) {
             // The detail container view will be present only in the
@@ -186,24 +176,41 @@ public class MedicamentListActivity extends AppCompatActivity {
                 Log.i(Constants.TAG, "Format:" + format);
                 Log.i(Constants.TAG, "Content:" + contents);
 
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle(context.getString(R.string.app_name));
+
                 // Handle successful scan
                 if (format.equals("CODE_128")) { //CODE_128
                     cip13 = contents;
-                } else
-                {
-                    cip13 = contents.substring(4,17);
+                } else {
+                    cip13 = contents.substring(4, 17);
                 }
 
                 dbMedoc.openDatabase();
-                Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+                final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
                 dbMedoc.close();
 
                 if (scannedMedoc != null) {
-                    Toast.makeText(context, "Medicament found in database", Toast.LENGTH_LONG).show();
-                } else
-                {
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                    dlg.setTitle(context.getString(R.string.app_name));
+                    String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
+
+                    dlg.setMessage(msg);
+                    dlg.setNegativeButton(context.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Nothing to do in case of cancel
+                        }
+                    });
+                    dlg.setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Add Medicament to DB then try to show it
+                            scannedMedoc.setDateEndOfStock();
+                            dbHelper.addDrug(scannedMedoc);
+                            mAdapter.addItem(medicaments.size()-1,scannedMedoc);
+                        }
+                    });
+                    dlg.show();
+                } else {
                     dlg.setMessage(context.getString(R.string.msgNotFound));
                     dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -222,9 +229,13 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(medicaments));
+        mAdapter = (SimpleItemRecyclerViewAdapter) new SimpleItemRecyclerViewAdapter(medicaments);
+        recyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * SimpleItemRecyclerViewAdapter
+     */
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -232,6 +243,12 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         public SimpleItemRecyclerViewAdapter(List<Medicament> items) {
             mValues = items;
+        }
+
+        public void addItem(int position, Medicament scannedMedoc) {
+            mValues.add(scannedMedoc);
+            notifyDataSetChanged();
+            dbHelper.addDrug(scannedMedoc);
         }
 
         @Override
