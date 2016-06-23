@@ -1,8 +1,12 @@
 package net.foucry.pilldroid;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -62,10 +66,19 @@ public class MedicamentListActivity extends AppCompatActivity {
     private View mRecyclerView;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
+    // For the notifications
+    PendingIntent pendingIntent;
+    AlarmManager alarmManager;
+    BroadcastReceiver mReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicament_list);
+
+        // Register for alarm
+
+        RegisterAlarmBroadcast();
 
         dbHelper = new DBHelper(this);
         dbMedoc = new DBMedoc(this);
@@ -158,7 +171,19 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
+
+    public void onPause() {
+        super.onPause();
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, pendingIntent);
+    }
+
+    protected void onDestroy() {
+        unregisterReceiver(mReceiver);
+        super.onDestroy();
+    }
+
     public void scanNow(View view) {
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
         //intent.putExtra("SCAN_MODE", "CODE_128");
@@ -233,6 +258,23 @@ public class MedicamentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
+    // Received Alarm, display a toast
+    private void RegisterAlarmBroadcast() {
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Toast.makeText(context, "Vous devez passer à la pharmacie", Toast.LENGTH_LONG).show();
+            }
+        };
+        registerReceiver(mReceiver, new IntentFilter("net.foucry.pilldroid"));
+        pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("net.foucry.pilldroid"),0);
+        alarmManager = (AlarmManager)(this.getSystemService(Context.ALARM_SERVICE));
+    }
+
+    private void UnregisterAlarmBroadcast(){
+        alarmManager.cancel(pendingIntent);
+        getBaseContext().unregisterReceiver(mReceiver);
+    }
     /**
      * SimpleItemRecyclerViewAdapter
      */
