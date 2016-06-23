@@ -1,6 +1,7 @@
 package net.foucry.pilldroid;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -78,7 +80,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         // Register for alarm
 
-        RegisterAlarmBroadcast();
+//        RegisterAlarmBroadcast();
 
         dbHelper = new DBHelper(this);
         dbMedoc = new DBMedoc(this);
@@ -176,13 +178,14 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, pendingIntent);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, pendingIntent);
+        scheduleNotification(getNotification("10 second delay"), 10000);
     }
 
-    protected void onDestroy() {
+/*    protected void onDestroy() {
         unregisterReceiver(mReceiver);
         super.onDestroy();
-    }
+    }*/
 
     public void scanNow(View view) {
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
@@ -258,8 +261,26 @@ public class MedicamentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
+    private void scheduleNotification(Notification notification, int delay) {
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID,1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Scheduled Notification");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        return builder.build();
+    }
     // Received Alarm, display a toast
-    private void RegisterAlarmBroadcast() {
+/*    private void RegisterAlarmBroadcast() {
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -274,7 +295,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     private void UnregisterAlarmBroadcast(){
         alarmManager.cancel(pendingIntent);
         getBaseContext().unregisterReceiver(mReceiver);
-    }
+    }*/
     /**
      * SimpleItemRecyclerViewAdapter
      */
