@@ -3,6 +3,7 @@
     package="net.foucry.pilldroid">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -48,6 +49,7 @@
             android:parentActivityName=".MedicamentListActivity"
             android:theme="@style/AppTheme">
         </activity>
+        <receiver android:name=".NotificationPublisher" />
     </application>
 
 </manifest>
