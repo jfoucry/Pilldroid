@@ -33,6 +33,19 @@ public class UtilDate {
     }
 
     /**
+     * @return date (tomorrow)
+     */
+
+    public static Date getTomorrow() {
+        Log.d(MedicamentListActivity.Constants.TAG, "tomorrow");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR,1);
+
+        return dateAtNoon(calendar.getTime());
+    }
+
+    /**
      *
      * @param days
      * @param date

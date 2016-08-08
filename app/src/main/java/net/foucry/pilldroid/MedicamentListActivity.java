@@ -7,7 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -27,9 +27,15 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -54,6 +60,52 @@ public class MedicamentListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     final static Boolean DEMO = true;
     final static Random random = new Random();
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "MedicamentList Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://net.foucry.pilldroid/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "MedicamentList Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://net.foucry.pilldroid/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
     // Log TAG String
     public interface Constants {
         String TAG = "nef.foucry.pilldroid";
@@ -153,6 +205,9 @@ public class MedicamentListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -178,8 +233,14 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, pendingIntent);
-        scheduleNotification(getNotification("10 second delay"), 10000);
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        Date tomorrow = UtilDate.getTomorrow();
+
+        int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
+        scheduleNotification(getNotification("It's tomorrow At 12"), between2DateInMillis);
+
+        Log.d(Constants.TAG, "Notification scheduled");
     }
 
 /*    protected void onDestroy() {
@@ -234,7 +295,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                             // Add Medicament to DB then try to show it
                             scannedMedoc.setDateEndOfStock();
                             dbHelper.addDrug(scannedMedoc);
-                            mAdapter.addItem(medicaments.size()-1,scannedMedoc);
+                            mAdapter.addItem(medicaments.size() - 1, scannedMedoc);
                         }
                     });
                     dlg.show();
@@ -261,14 +322,14 @@ public class MedicamentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    private void scheduleNotification(Notification notification, int delay) {
+    private void scheduleNotification(Notification notification, long delay) {
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID,1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
@@ -279,23 +340,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         builder.setSmallIcon(R.mipmap.ic_launcher);
         return builder.build();
     }
-    // Received Alarm, display a toast
-/*    private void RegisterAlarmBroadcast() {
-        mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Toast.makeText(context, "Vous devez passer à la pharmacie", Toast.LENGTH_LONG).show();
-            }
-        };
-        registerReceiver(mReceiver, new IntentFilter("net.foucry.pilldroid"));
-        pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("net.foucry.pilldroid"),0);
-        alarmManager = (AlarmManager)(this.getSystemService(Context.ALARM_SERVICE));
-    }
 
-    private void UnregisterAlarmBroadcast(){
-        alarmManager.cancel(pendingIntent);
-        getBaseContext().unregisterReceiver(mReceiver);
-    }*/
     /**
      * SimpleItemRecyclerViewAdapter
      */
@@ -341,7 +386,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             if (mValues.get(position).getPrise() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
             } else {
-                int remainingStock = (int) Math.floor(mValues.get(position).getStock()/mValues.get(position).getPrise());
+                int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getPrise());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_alert);
                     holder.mIconView.setImageResource(R.drawable.stock_alert);
