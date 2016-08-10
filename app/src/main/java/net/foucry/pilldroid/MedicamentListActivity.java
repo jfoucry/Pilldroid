@@ -34,10 +34,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -92,6 +90,19 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
+/*        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        Date tomorrow = UtilDate.getTomorrow();*/
+
+        Medicament firstMedicament = medicaments.get(0);
+
+        long outOfStock = firstMedicament.getDateEndOfStock().getTime();
+
+        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
+        scheduleNotification(getNotification("It's today + 10s"), outOfStock);
+
+        Log.d(TAG, "Notification scheduled for "+ firstMedicament.getDateEndOfStock().toString());
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -108,10 +119,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    // Log TAG String
-    public interface Constants {
-        String TAG = "nef.foucry.pilldroid";
-    }
+    private static final String TAG = MedicamentListActivity.class.getName();
 
     private static DBHelper dbHelper;
     private static DBMedoc dbMedoc;
@@ -131,10 +139,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicament_list);
-
-        // Register for alarm
-
-//        RegisterAlarmBroadcast();
 
         dbHelper = new DBHelper(this);
         dbMedoc = new DBMedoc(this);
@@ -235,20 +239,15 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
-        Calendar calendar = Calendar.getInstance();
+        /*Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
         Date tomorrow = UtilDate.getTomorrow();
 
-        int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification("It's tomorrow At 12"), between2DateInMillis);
+        //int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
+        scheduleNotification(getNotification("It's today +20s"), 20000);
 
-        Log.d(Constants.TAG, "Notification scheduled");
+        Log.d(TAG, "Notification scheduled");*/
     }
-
-/*    protected void onDestroy() {
-        unregisterReceiver(mReceiver);
-        super.onDestroy();
-    }*/
 
     public void scanNow(View view) {
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
@@ -264,8 +263,8 @@ public class MedicamentListActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                Log.i(Constants.TAG, "Format:" + format);
-                Log.i(Constants.TAG, "Content:" + contents);
+                Log.i(TAG, "Format:" + format);
+                Log.i(TAG, "Content:" + contents);
 
                 AlertDialog.Builder dlg = new AlertDialog.Builder(this);
                 dlg.setTitle(context.getString(R.string.app_name));
@@ -351,6 +350,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         } catch (final PackageManager.NameNotFoundException e) {}
         return (String)((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
     }
+
     /**
      * SimpleItemRecyclerViewAdapter
      */
@@ -381,11 +381,11 @@ public class MedicamentListActivity extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy", Locale.getDefault());
             String dateEndOfStock = date2String(mValues.get(position).getDateEndOfStock(), dateFormat);
 
-            Log.d(Constants.TAG, "dateEndOfStock == " + dateEndOfStock);
-            Log.d(Constants.TAG, "stock == " + mValues.get(position).getStock());
-            Log.d(Constants.TAG, "prise == " + mValues.get(position).getPrise());
-            Log.d(Constants.TAG, "warn == " + mValues.get(position).getWarnThreshold());
-            Log.d(Constants.TAG, "alert == " + mValues.get(position).getAlertThreshold());
+            Log.d(TAG, "dateEndOfStock == " + dateEndOfStock);
+            Log.d(TAG, "stock == " + mValues.get(position).getStock());
+            Log.d(TAG, "prise == " + mValues.get(position).getPrise());
+            Log.d(TAG, "warn == " + mValues.get(position).getWarnThreshold());
+            Log.d(TAG, "alert == " + mValues.get(position).getAlertThreshold());
 
             holder.mItem = mValues.get(position);
             holder.mIDView.setText(mValues.get(position).getCip13());

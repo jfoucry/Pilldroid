@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public class UtilDate {
 
+    private static final String TAG = UtilDate.class.getName();
     /**
      *
      * @param aDate
@@ -21,7 +22,7 @@ public class UtilDate {
      */
     public static Date dateAtNoon(Date aDate) {
 
-        Log.d(MedicamentListActivity.Constants.TAG, "dateAtNoon " + aDate);
+        Log.d(TAG, "dateAtNoon " + aDate);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(aDate);
@@ -37,7 +38,7 @@ public class UtilDate {
      */
 
     public static Date getTomorrow() {
-        Log.d(MedicamentListActivity.Constants.TAG, "tomorrow");
+        Log.d(TAG, "tomorrow");
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR,1);
@@ -70,7 +71,7 @@ public class UtilDate {
      */
     public static String date2String(Date date, DateFormat dateFormat) {
 
-        Log.d(MedicamentListActivity.Constants.TAG, "date == " + date);
+        Log.d(TAG, "date == " + date);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

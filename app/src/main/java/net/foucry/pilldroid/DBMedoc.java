@@ -35,6 +35,8 @@ public class DBMedoc  extends SQLiteOpenHelper{
 
     private static final String[] COLUMNS_NAMES = {MEDOC_CIS, MEDOC_CIP13, MEDOC_ADMIN, MEDOC_NOM, MEDOC_PRES};
 
+    private static final String TAG = DBMedoc.class.getName();
+
     public DBMedoc(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.myContext = context;
@@ -64,7 +66,7 @@ public class DBMedoc  extends SQLiteOpenHelper{
 
     private boolean checkDatabase() {
         if (BuildConfig.DEBUG) {
-            Log.e(MedicamentListActivity.Constants.TAG, "checkDatabase called");
+            Log.e(TAG, "checkDatabase called");
         }
 
         SQLiteDatabase checkDB = null;
@@ -84,7 +86,7 @@ public class DBMedoc  extends SQLiteOpenHelper{
     }
 
     private void copyDatabase() throws IOException {
-        Log.e(MedicamentListActivity.Constants.TAG, "copyDatabase called");
+        Log.e(TAG, "copyDatabase called");
 
         InputStream myInput = myContext.getAssets().open(DATABASE_NAME);
         String outFileName = DATABASE_PATH + DATABASE_NAME;
@@ -105,7 +107,7 @@ public class DBMedoc  extends SQLiteOpenHelper{
     }
 
     public void openDatabase() throws SQLiteException {
-        Log.e(MedicamentListActivity.Constants.TAG, "openDatabase called");
+        Log.e(TAG, "openDatabase called");
         String myPath = DATABASE_PATH + DATABASE_NAME;
 
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
@@ -130,7 +132,7 @@ public class DBMedoc  extends SQLiteOpenHelper{
     private DBMedoc dbMedoc;
 
     public Medicament getMedocByCIP13(String cip13) {
-        Log.e(MedicamentListActivity.Constants.TAG, "getNedocByCIP13 - " + cip13);
+        Log.e(TAG, "getNedocByCIP13 - " + cip13);
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -167,7 +169,7 @@ public class DBMedoc  extends SQLiteOpenHelper{
         medicament.setAlertThreshold(7);
 
         // Log
-        Log.d(MedicamentListActivity.Constants.TAG, "getDrug(" + cip13 + ")" + medicament.toString());
+        Log.d(TAG, "getDrug(" + cip13 + ")" + medicament.toString());
 
         // Return medicament
 
