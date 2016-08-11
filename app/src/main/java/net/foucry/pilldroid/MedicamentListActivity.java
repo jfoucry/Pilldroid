@@ -34,8 +34,10 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -90,18 +92,26 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-/*        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
-        Date tomorrow = UtilDate.getTomorrow();*/
+
+        long dateSchedule;
 
         Medicament firstMedicament = medicaments.get(0);
 
-        long outOfStock = firstMedicament.getDateEndOfStock().getTime();
+        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+
+        if (dateAlerte.getTime() < now.getTime())
+        {
+            dateSchedule = now.getTime() + 300000;
+        } else {
+            dateSchedule = dateAlerte.getTime();
+        }
 
         // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification("It's today + 10s"), outOfStock);
+        scheduleNotification(getNotification("It's today + 10s"), dateSchedule);
 
-        Log.d(TAG, "Notification scheduled for "+ firstMedicament.getDateEndOfStock().toString());
+        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
