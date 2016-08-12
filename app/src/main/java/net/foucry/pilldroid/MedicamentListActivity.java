@@ -2,8 +2,8 @@ package net.foucry.pilldroid;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,27 +91,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-
-        long dateSchedule;
-
-        Medicament firstMedicament = medicaments.get(0);
-
-        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
-
-        if (dateAlerte.getTime() < now.getTime())
-        {
-            dateSchedule = now.getTime() + 300000;
-        } else {
-            dateSchedule = dateAlerte.getTime();
-        }
-
-        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification("It's today + 10s"), dateSchedule);
-
-        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -134,16 +112,11 @@ public class MedicamentListActivity extends AppCompatActivity {
     private static DBHelper dbHelper;
     private static DBMedoc dbMedoc;
 
-    private SimpleCursorAdapter drugAdapter;
+    // private SimpleCursorAdapter drugAdapter;
     private List<Medicament> medicaments;
 
     private View mRecyclerView;
     private SimpleItemRecyclerViewAdapter mAdapter;
-
-    // For the notifications
-    PendingIntent pendingIntent;
-    AlarmManager alarmManager;
-    BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +132,12 @@ public class MedicamentListActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
+
+        // Remove previous notification
+
+//        Log.d(TAG, "Remove old notification");
+//        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        nm.cancelAll();
 
         if (DEMO) {
             if (dbHelper.getCount() == 0) {
@@ -249,14 +228,26 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
-        /*Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
-        Date tomorrow = UtilDate.getTomorrow();
 
-        //int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification("It's today +20s"), 20000);
+        long dateSchedule;
 
-        Log.d(TAG, "Notification scheduled");*/
+        Medicament firstMedicament = medicaments.get(0);
+
+        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+
+        if (dateAlerte.getTime() < now.getTime())
+        {
+            dateSchedule = now.getTime() + 10000;
+        } else {
+            dateSchedule = dateAlerte.getTime();
+        }
+
+        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
+        scheduleNotification(getNotification("It's today + 10s"), dateSchedule);
+
+        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
     }
 
     public void scanNow(View view) {
@@ -268,7 +259,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Context context = getApplicationContext();
-        String cip13 = null;
+        String cip13;
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
@@ -306,7 +297,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                             // Add Medicament to DB then try to show it
                             scannedMedoc.setDateEndOfStock();
                             dbHelper.addDrug(scannedMedoc);
-                            mAdapter.addItem(medicaments.size() - 1, scannedMedoc);
+                            mAdapter.addItem(scannedMedoc);
                         }
                     });
                     dlg.show();
@@ -329,7 +320,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        mAdapter = (SimpleItemRecyclerViewAdapter) new SimpleItemRecyclerViewAdapter(medicaments);
+        mAdapter = new SimpleItemRecyclerViewAdapter(medicaments);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -373,7 +364,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             mValues = items;
         }
 
-        public void addItem(int position, Medicament scannedMedoc) {
+        public void addItem(Medicament scannedMedoc) {
             mValues.add(scannedMedoc);
             notifyDataSetChanged();
             dbHelper.addDrug(scannedMedoc);
@@ -423,7 +414,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Medicament medicamentCourant = (Medicament) mValues.get(position);
+                    Medicament medicamentCourant = mValues.get(position);
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putSerializable("medicament", medicamentCourant);
