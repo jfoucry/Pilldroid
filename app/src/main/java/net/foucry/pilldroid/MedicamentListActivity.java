@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,10 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
+        Log.d(TAG, "Remove old notification");
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancelAll();
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -90,6 +95,27 @@ public class MedicamentListActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+
+        long dateSchedule;
+
+        Medicament firstMedicament = medicaments.get(0);
+
+        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+
+        if (dateAlerte.getTime() < now.getTime())
+        {
+            dateSchedule = 120000;
+        } else {
+            dateSchedule = dateAlerte.getTime() - now.getTime();
+        }
+
+        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
+        scheduleNotification(getNotification("Vous devez passer à la pharmacie."), dateSchedule);
+
+        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(now.getTime() + dateSchedule));
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.

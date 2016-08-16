@@ -107,7 +107,7 @@ public class UtilDate {
     }
 
     public static String convertDate(long dateInMilliseconds) {
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(dateInMilliseconds);
         return formatter.format(calendar.getTime());
