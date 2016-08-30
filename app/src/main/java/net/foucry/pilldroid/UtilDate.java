@@ -91,4 +91,21 @@ public class UtilDate {
 
         return (int) (todayDate.getTime() - oldDate.getTime());
     }
+
+    /**
+     * @param: none
+     * return int
+     */
+
+    public static long tomorrowAtNoon() {
+        Date now = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.DAY_OF_YEAR,1);
+        Date tomorrowAtNoon = dateAtNoon(calendar.getTime());
+
+        long millis = tomorrowAtNoon.getTime() - now.getTime();
+        return millis;
+    }
 }
