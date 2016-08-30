@@ -71,6 +71,8 @@ public class MedicamentListActivity extends AppCompatActivity {
             toolbar.setTitle(getTitle());
         }
 
+        startService(new Intent(this, TimeService.class));
+
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
