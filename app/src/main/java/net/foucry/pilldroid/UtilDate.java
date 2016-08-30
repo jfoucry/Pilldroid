@@ -113,6 +113,14 @@ public class UtilDate {
 
     public static long tomorrowAtNoon() {
         Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.DAY_OF_YEAR,1);
+
+        Date tomorrowAtNoon = dateAtNoon(calendar.getTime());
+
+        return (tomorrowAtNoon.getTime() - now.getTime());
+    }
 
     public static String convertDate(long dateInMilliseconds) {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm:ss");

@@ -21,15 +21,14 @@ public class DBMedoc  extends SQLiteOpenHelper{
     private static final int DATABASE_VERSION = 1;
 
     private static String DATABASE_PATH = "/data/data/net.foucry.pilldroid/databases/";
-    private static String DATABASE_NAME = "medicaments.db";
+    private static String dbName = "medicaments.db";
     private SQLiteDatabase myDataBase;
     private final Context myContext;
+    File dbFile = new File(DATABASE_PATH + dbName);
 
     private static final String TABLE_NAME  = "medicaments";
-//    private static final String MEDOC_ID    = "id";
     private static final String MEDOC_CIS   = "cis";
     private static final String MEDOC_CIP13 = "cip13";
-//    private static final String MEDOC_CIP7  = "cip7";
     private static final String MEDOC_ADMIN = "mode_administration";
     private static final String MEDOC_NOM   = "nom";
     private static final String MEDOC_PRES  = "presentation";
@@ -70,30 +69,26 @@ public class DBMedoc  extends SQLiteOpenHelper{
 
     private void copyDatabase(String dbPath) {
         try {
-            InputStream assestDB = myContext.getAssets().open(dbName);
+            InputStream assetDB = myContext.getAssets().open(dbName);
             OutputStream appDB = new FileOutputStream(dbPath, false);
 
             byte[] buffer = new byte[1024];
             int length;
-            while ((length = assestDB.read(buffer)) > 0) {
+            while ((length = assetDB.read(buffer)) > 0) {
                 appDB.write(buffer,0, length);
             }
 
             appDB.flush();
             appDB.close();
-            assestDB.close();
+            assetDB.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        myOutput.flush();
-        myOutput.close();
-        myInput.close();
     }
 
     public void openDatabase() throws SQLiteException {
         Log.e(TAG, "openDatabase called");
-        String myPath = DATABASE_PATH + DATABASE_NAME;
+        String myPath = DATABASE_PATH + dbName;
 
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
@@ -103,15 +98,6 @@ public class DBMedoc  extends SQLiteOpenHelper{
         if (myDataBase != null) {
             myDataBase.close();
         }
-    }
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 
     private DBMedoc dbMedoc;
