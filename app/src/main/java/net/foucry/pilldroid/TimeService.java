@@ -15,7 +15,7 @@ import java.util.TimerTask;
  * Created by jacques on 22/08/16.
  */
 public class TimeService extends Service {
-    public static final long NOTIFY_INTERVAL = 10 *1000;
+    //public static final long NOTIFY_INTERVAL = 10 *1000;
 
     private Handler mHandler = new Handler();
     private Timer mTimer = null;
@@ -33,7 +33,7 @@ public class TimeService extends Service {
             mTimer = new Timer();
         }
 
-        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(),0, NOTIFY_INTERVAL);
+        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(),0, UtilDate.tomorrowAtNoon());
     }
 
     class TimeDisplayTimerTask extends TimerTask {
