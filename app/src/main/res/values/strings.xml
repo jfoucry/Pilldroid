@@ -126,4 +126,7 @@
     <string name="sbc_name">Google Book Search</string>
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
     <string name="msgNotFound">Médicament introuvable dans la base de données</string>
+    <string name="msgFound">trouvé dans la base de données</string>
+    <string name="about">À propos</string>
+    <string name="help">Aide</string>
 </resources>

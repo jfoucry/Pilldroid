@@ -20,21 +20,23 @@ public class DBMedoc  extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
 
-    File dbFile;
-    private final static String DB_PATH = "/data/data/net.foucry.pilldroid/databases/";
-    private static String dbName = "medicaments.db";
-
+    private static String DATABASE_PATH = "/data/data/net.foucry.pilldroid/databases/";
+    private static String DATABASE_NAME = "medicaments.db";
     private SQLiteDatabase myDataBase;
-    Context myContext;
+    private final Context myContext;
 
     private static final String TABLE_NAME  = "medicaments";
+//    private static final String MEDOC_ID    = "id";
     private static final String MEDOC_CIS   = "cis";
     private static final String MEDOC_CIP13 = "cip13";
+//    private static final String MEDOC_CIP7  = "cip7";
     private static final String MEDOC_ADMIN = "mode_administration";
     private static final String MEDOC_NOM   = "nom";
     private static final String MEDOC_PRES  = "presentation";
 
     private static final String[] COLUMNS_NAMES = {MEDOC_CIS, MEDOC_CIP13, MEDOC_ADMIN, MEDOC_NOM, MEDOC_PRES};
+
+    private static final String TAG = DBMedoc.class.getName();
 
     public DBMedoc(Context context) {
         super(context, dbName, null, DATABASE_VERSION);
@@ -83,11 +85,15 @@ public class DBMedoc  extends SQLiteOpenHelper{
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        myOutput.flush();
+        myOutput.close();
+        myInput.close();
     }
 
     public void openDatabase() throws SQLiteException {
-        Log.e(MedicamentListActivity.Constants.TAG, "openDatabase called");
-        String myPath = DB_PATH + dbName;
+        Log.e(TAG, "openDatabase called");
+        String myPath = DATABASE_PATH + DATABASE_NAME;
 
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
@@ -98,11 +104,20 @@ public class DBMedoc  extends SQLiteOpenHelper{
             myDataBase.close();
         }
     }
+    @Override
+    public void onCreate(SQLiteDatabase db) {
 
-    // private DBMedoc dbMedoc;
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    private DBMedoc dbMedoc;
 
     public Medicament getMedocByCIP13(String cip13) {
-        Log.e(MedicamentListActivity.Constants.TAG, "getNedocByCIP13 - " + cip13);
+        Log.e(TAG, "getNedocByCIP13 - " + cip13);
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -140,7 +155,7 @@ public class DBMedoc  extends SQLiteOpenHelper{
         medicament.setAlertThreshold(7);
 
         // Log
-        Log.d(MedicamentListActivity.Constants.TAG, "getDrug(" + cip13 + ")" + medicament.toString());
+        Log.d(TAG, "getDrug(" + cip13 + ")" + medicament.toString());
 
         // Return medicament
 

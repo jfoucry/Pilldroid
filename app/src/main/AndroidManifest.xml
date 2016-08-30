@@ -3,6 +3,7 @@
     package="net.foucry.pilldroid">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -43,6 +44,16 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".About"
+            android:label="À propos de PillDroid"
+            android:parentActivityName=".MedicamentListActivity"
+            android:theme="@style/AppTheme">
+        </activity>
+        <receiver android:name=".NotificationPublisher" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <service android:name=".TimeService"/>
     </application>
 

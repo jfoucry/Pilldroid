@@ -1,9 +1,17 @@
 package net.foucry.pilldroid;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +19,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,9 +29,15 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -45,16 +62,87 @@ public class MedicamentListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     final static Boolean DEMO = true;
     final static Random random = new Random();
-    // Log TAG String
-    public interface Constants {
-        String TAG = "nef.foucry.pilldroid";
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.d(TAG, "Remove old notification");
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancelAll();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "MedicamentList Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://net.foucry.pilldroid/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+
+        long dateSchedule;
+
+        Medicament firstMedicament = medicaments.get(0);
+
+        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+
+        if (dateAlerte.getTime() < now.getTime())
+        {
+            dateSchedule = 120000;
+        } else {
+            dateSchedule = dateAlerte.getTime() - now.getTime();
+        }
+
+        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
+        scheduleNotification(getNotification("Vous devez passer à la pharmacie."), dateSchedule);
+
+        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(now.getTime() + dateSchedule));
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "MedicamentList Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://net.foucry.pilldroid/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
+    private static final String TAG = MedicamentListActivity.class.getName();
 
     private static DBHelper dbHelper;
     private static DBMedoc dbMedoc;
 
-    private SimpleCursorAdapter drugAdapter;
+    // private SimpleCursorAdapter drugAdapter;
     private List<Medicament> medicaments;
+
+    private View mRecyclerView;
+    private SimpleItemRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +174,9 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         });*/
 
+//        Log.d(TAG, "Remove old notification");
+//        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        nm.cancelAll();
 
         if (DEMO) {
             if (dbHelper.getCount() == 0) {
@@ -136,9 +227,10 @@ public class MedicamentListActivity extends AppCompatActivity {
                 }
             });
         }
-        View recyclerView = findViewById(R.id.medicament_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+
+        mRecyclerView = findViewById(R.id.medicament_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
 
         if (findViewById(R.id.medicament_detail_container) != null) {
             // The detail container view will be present only in the
@@ -147,6 +239,54 @@ public class MedicamentListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.about, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                startActivity(new Intent(this, About.class));
+                return true;
+            case R.id.help:
+                //startActivity(new Intent(this, Help.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void onPause() {
+        super.onPause();
+
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+
+        long dateSchedule;
+
+        Medicament firstMedicament = medicaments.get(0);
+
+        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+
+        if (dateAlerte.getTime() < now.getTime())
+        {
+            dateSchedule = now.getTime() + 10000;
+        } else {
+            dateSchedule = dateAlerte.getTime();
+        }
+
+        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
+        scheduleNotification(getNotification("It's today + 10s"), dateSchedule);
+
+        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
     }
 
     public void scanNow(View view) {
@@ -158,32 +298,49 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Context context = getApplicationContext();
-        String cip13 = null;
+        String cip13;
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                Log.i(Constants.TAG, "Format:" + format);
-                Log.i(Constants.TAG, "Content:" + contents);
+                Log.i(TAG, "Format:" + format);
+                Log.i(TAG, "Content:" + contents);
+
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle(context.getString(R.string.app_name));
 
                 // Handle successful scan
                 if (format.equals("CODE_128")) { //CODE_128
                     cip13 = contents;
-                } else
-                {
-                    cip13 = contents.substring(4,17);
+                } else {
+                    cip13 = contents.substring(4, 17);
                 }
 
                 dbMedoc.openDatabase();
-                Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+                final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
                 dbMedoc.close();
 
                 if (scannedMedoc != null) {
-                    Toast.makeText(context, "Medicament found in database", Toast.LENGTH_LONG).show();
-                } else
-                {
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                    dlg.setTitle(context.getString(R.string.app_name));
+                    String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
+
+                    dlg.setMessage(msg);
+                    dlg.setNegativeButton(context.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Nothing to do in case of cancel
+                        }
+                    });
+                    dlg.setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Add Medicament to DB then try to show it
+                            scannedMedoc.setDateEndOfStock();
+                            dbHelper.addDrug(scannedMedoc);
+                            mAdapter.addItem(scannedMedoc);
+                        }
+                    });
+                    dlg.show();
+                } else {
                     dlg.setMessage(context.getString(R.string.msgNotFound));
                     dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -202,9 +359,41 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(medicaments));
+        mAdapter = new SimpleItemRecyclerViewAdapter(medicaments);
+        recyclerView.setAdapter(mAdapter);
     }
 
+    private void scheduleNotification(Notification notification, long delay) {
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle(getAppName());
+        builder.setContentText(content);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        return builder.build();
+    }
+
+    private String getAppName() {
+        PackageManager packageManager = getApplicationContext().getPackageManager();
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
+        } catch (final PackageManager.NameNotFoundException e) {}
+        return (String)((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
+    }
+
+    /**
+     * SimpleItemRecyclerViewAdapter
+     */
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -212,6 +401,12 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         public SimpleItemRecyclerViewAdapter(List<Medicament> items) {
             mValues = items;
+        }
+
+        public void addItem(Medicament scannedMedoc) {
+            mValues.add(scannedMedoc);
+            notifyDataSetChanged();
+            dbHelper.addDrug(scannedMedoc);
         }
 
         @Override
@@ -226,11 +421,11 @@ public class MedicamentListActivity extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy", Locale.getDefault());
             String dateEndOfStock = date2String(mValues.get(position).getDateEndOfStock(), dateFormat);
 
-            Log.d(Constants.TAG, "dateEndOfStock == " + dateEndOfStock);
-            Log.d(Constants.TAG, "stock == " + mValues.get(position).getStock());
-            Log.d(Constants.TAG, "prise == " + mValues.get(position).getPrise());
-            Log.d(Constants.TAG, "warn == " + mValues.get(position).getWarnThreshold());
-            Log.d(Constants.TAG, "alert == " + mValues.get(position).getAlertThreshold());
+            Log.d(TAG, "dateEndOfStock == " + dateEndOfStock);
+            Log.d(TAG, "stock == " + mValues.get(position).getStock());
+            Log.d(TAG, "prise == " + mValues.get(position).getPrise());
+            Log.d(TAG, "warn == " + mValues.get(position).getWarnThreshold());
+            Log.d(TAG, "alert == " + mValues.get(position).getAlertThreshold());
 
             holder.mItem = mValues.get(position);
             holder.mIDView.setText(mValues.get(position).getCip13());
@@ -241,7 +436,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             if (mValues.get(position).getPrise() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
             } else {
-                int remainingStock = (int) Math.floor(mValues.get(position).getStock()/mValues.get(position).getPrise());
+                int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getPrise());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_alert);
                     holder.mIconView.setImageResource(R.drawable.stock_alert);
@@ -258,7 +453,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Medicament medicamentCourant = (Medicament) mValues.get(position);
+                    Medicament medicamentCourant = mValues.get(position);
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putSerializable("medicament", medicamentCourant);

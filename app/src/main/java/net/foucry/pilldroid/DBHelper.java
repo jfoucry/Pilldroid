@@ -34,6 +34,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static DBHelper sInstance;
 
+    private static final String TAG = DBHelper.class.getName();
+
     private static final String[] COLUMS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_PRISE,
     KEY_SEUIL_WARN, KEY_SEUIL_ALERT};
 
@@ -76,7 +78,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void dropDrug() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Log.d(MedicamentListActivity.Constants.TAG, "Drop drug table");
+        Log.d(TAG, "Drop drug table");
         db.execSQL("DROP TABLE IF EXISTS drug");
 
         this.onCreate(db);
@@ -84,7 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void addDrug(Medicament medicament) {
         // Logging
-        Log.d(MedicamentListActivity.Constants.TAG, medicament.toString());
+        Log.d(TAG, medicament.toString());
 
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -144,7 +146,7 @@ public class DBHelper extends SQLiteOpenHelper {
         medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
 
         // Log
-        Log.d(MedicamentListActivity.Constants.TAG, "getDrug("+id+")" + medicament.toString());
+        Log.d(TAG, "getDrug("+id+")" + medicament.toString());
 
         // Return medicament
 
@@ -183,7 +185,7 @@ public class DBHelper extends SQLiteOpenHelper {
         medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
 
         // Log
-        Log.d(MedicamentListActivity.Constants.TAG, "getDrug("+cip13+")" + medicament.toString());
+        Log.d(TAG, "getDrug("+cip13+")" + medicament.toString());
 
         // Return medicament
 
@@ -225,7 +227,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        Log.d(MedicamentListActivity.Constants.TAG, "getAllDrugs " + medicaments.toString());
+        Log.d(TAG, "getAllDrugs " + medicaments.toString());
 
         // return
         return medicaments;
@@ -269,7 +271,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         // log
-        Log.d(MedicamentListActivity.Constants.TAG, "delete drug "+medicament.toString());
+        Log.d(TAG, "delete drug "+medicament.toString());
     }
 
     public int getCount() {

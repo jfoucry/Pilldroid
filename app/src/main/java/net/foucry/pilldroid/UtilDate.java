@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public class UtilDate {
 
+    private static final String TAG = UtilDate.class.getName();
     /**
      *
      * @param aDate
@@ -21,7 +22,7 @@ public class UtilDate {
      */
     public static Date dateAtNoon(Date aDate) {
 
-        Log.d(MedicamentListActivity.Constants.TAG, "dateAtNoon " + aDate);
+        Log.d(TAG, "dateAtNoon " + aDate);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(aDate);
@@ -30,6 +31,19 @@ public class UtilDate {
         calendar.set(Calendar.SECOND, 0);
 
         return calendar.getTime();
+    }
+
+    /**
+     * @return date (tomorrow)
+     */
+
+    public static Date getTomorrow() {
+        Log.d(TAG, "tomorrow");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR,1);
+
+        return dateAtNoon(calendar.getTime());
     }
 
     /**
@@ -57,7 +71,7 @@ public class UtilDate {
      */
     public static String date2String(Date date, DateFormat dateFormat) {
 
-        Log.d(MedicamentListActivity.Constants.TAG, "date == " + date);
+        Log.d(TAG, "date == " + date);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -100,12 +114,10 @@ public class UtilDate {
     public static long tomorrowAtNoon() {
         Date now = new Date();
 
+    public static String convertDate(long dateInMilliseconds) {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_YEAR,1);
-        Date tomorrowAtNoon = dateAtNoon(calendar.getTime());
-
-        long millis = tomorrowAtNoon.getTime() - now.getTime();
-        return millis;
+        calendar.setTimeInMillis(dateInMilliseconds);
+        return formatter.format(calendar.getTime());
     }
 }
