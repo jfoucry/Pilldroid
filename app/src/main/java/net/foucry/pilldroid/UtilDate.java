@@ -32,20 +32,6 @@ public class UtilDate {
 
         return calendar.getTime();
     }
-
-    /**
-     * @return date (tomorrow)
-     */
-
-    public static Date getTomorrow() {
-        Log.d(TAG, "tomorrow");
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR,1);
-
-        return dateAtNoon(calendar.getTime());
-    }
-
     /**
      *
      * @param days
@@ -111,7 +97,7 @@ public class UtilDate {
      * return int
      */
 
-    public static long tomorrowAtNoon() {
+    public static long tomorrowAtNoonInMillis() {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
