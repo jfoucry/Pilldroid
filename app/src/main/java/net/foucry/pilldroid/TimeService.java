@@ -33,7 +33,7 @@ public class TimeService extends Service {
             mTimer = new Timer();
         }
 
-        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(),0, UtilDate.tomorrowAtNoon());
+        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(),0, UtilDate.tomorrowAtNoonInMillis());
     }
 
     class TimeDisplayTimerTask extends TimerTask {
