@@ -4,6 +4,10 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobParameters;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +15,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -41,6 +46,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.logging.Handler;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.doubleRandomInclusive;
@@ -62,6 +68,9 @@ public class MedicamentListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     final static Boolean DEMO = true;
     final static Random random = new Random();
+
+    private JobScheduler mJobScheduler;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -73,8 +82,16 @@ public class MedicamentListActivity extends AppCompatActivity {
         super.onStart();
 
         Log.d(TAG, "Remove old notification");
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.cancelAll();
+        cancelAllJobs(mRecyclerView);
+        //NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        //nm.cancelAll();
+
+
+        try {
+            mJobScheduler.cancelAll();
+        } catch (Exception e) {
+            Log.d(TAG, "no old job to remove");
+        }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -96,7 +113,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        Calendar calendar = Calendar.getInstance();
+        /*Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
 
         long dateSchedule;
@@ -115,8 +132,28 @@ public class MedicamentListActivity extends AppCompatActivity {
         // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
         scheduleNotification(getNotification("Vous devez passer à la pharmacie."), dateSchedule);
 
-        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(now.getTime() + dateSchedule));
+/*        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(now.getTime() + dateSchedule));*//*
 
+        ComponentName mServiceCoponent = new ComponentName(this, PillDroidJobService.class);
+        JobInfo.Builder builder = new JobInfo.Builder(kJobId++, mServiceCoponent);
+        builder.setMinimumLatency(5 * 1000);
+        builder.setOverrideDeadline(50 * 1000);
+        builder.setRequiresDeviceIdle(true);
+        builder.setRequiresCharging(false);
+        JobScheduler jobScheduler = (JobScheduler) getApplication().getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.schedule(builder.build());*/
+
+
+
+        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+
+        JobInfo.Builder builder = new JobInfo.Builder(1,
+                new ComponentName( getPackageName(), PillDroidJobService.class.getName()));
+        builder.setPeriodic(3000);
+
+        if (mJobScheduler.schedule(builder.build()) <= 0) {
+            Log.d(TAG, "Something goes wrong at job schedule");
+        }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -131,6 +168,11 @@ public class MedicamentListActivity extends AppCompatActivity {
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    public void cancelAllJobs(View v) {
+        JobScheduler tm = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        tm.cancelAll();
     }
 
     private static final String TAG = MedicamentListActivity.class.getName();
