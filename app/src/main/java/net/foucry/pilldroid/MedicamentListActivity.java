@@ -113,47 +113,16 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        /*Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-
-        long dateSchedule;
-
-        Medicament firstMedicament = medicaments.get(0);
-
-        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
-
-        if (dateAlerte.getTime() < now.getTime())
-        {
-            dateSchedule = 120000;
-        } else {
-            dateSchedule = dateAlerte.getTime() - now.getTime();
-        }
-
-        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification("Vous devez passer à la pharmacie."), dateSchedule);
-
-/*        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(now.getTime() + dateSchedule));*//*
-
-        ComponentName mServiceCoponent = new ComponentName(this, PillDroidJobService.class);
-        JobInfo.Builder builder = new JobInfo.Builder(kJobId++, mServiceCoponent);
-        builder.setMinimumLatency(5 * 1000);
-        builder.setOverrideDeadline(50 * 1000);
-        builder.setRequiresDeviceIdle(true);
-        builder.setRequiresCharging(false);
-        JobScheduler jobScheduler = (JobScheduler) getApplication().getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        jobScheduler.schedule(builder.build());*/
-
-
-
         mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
         JobInfo.Builder builder = new JobInfo.Builder(1,
                 new ComponentName( getPackageName(), PillDroidJobService.class.getName()));
-        builder.setPeriodic(3000);
+        builder.setPeriodic(300000); // Dans 5 minutes, en millisecondes
 
         if (mJobScheduler.schedule(builder.build()) <= 0) {
             Log.d(TAG, "Something goes wrong at job schedule");
         }
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -186,6 +155,14 @@ public class MedicamentListActivity extends AppCompatActivity {
     private View mRecyclerView;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
+    public int getCount() {
+        return medicaments.size();
+    }
+
+    public Medicament getItem(int position) {
+        return medicaments.get(position);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,24 +178,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             toolbar.setTitle(getTitle());
         }
 
-        startService(new Intent(this, TimeService.class));
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                *//* Snackbar.make(view, "Will be used to add a drug to the list", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show(); *//*
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "CODE_128");
-                //intent.putExtra("SCAN_FORMATS", "EAN_13,DATA_MATRIX");
-                startActivityForResult(intent, 0);
-            }
-        });*/
-
-//        Log.d(TAG, "Remove old notification");
-//        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//        nm.cancelAll();
+//        startService(new Intent(this, TimeService.class));
 
         if (DEMO) {
             if (dbHelper.getCount() == 0) {
@@ -336,6 +296,17 @@ public class MedicamentListActivity extends AppCompatActivity {
         //intent.putExtra("SCAN_MODE", "CODE_128");
         intent.putExtra("SCAN_FORMATS", "CODE_18,DATA_MATRIX");
         startActivityForResult(intent, 0);
+    }
+
+    public void newStockCalculation() {
+        Medicament currentMedicament;
+        for (int position = 0 ; position < getCount() ; position++ ) {
+            currentMedicament = getItem(position);
+            currentMedicament.newStock(currentMedicament.getStock());
+        }
+
+        Toast.makeText( getApplicationContext(), "PillDroid - Calcul nouveau stocks", Toast.LENGTH_SHORT).show();
+        // TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
