@@ -1,5 +1,7 @@
 package net.foucry.pilldroid;
 
+import android.view.FocusFinder;
+
 import java.io.Serializable;
 import java.lang.String;
 import java.text.SimpleDateFormat;
@@ -34,7 +36,7 @@ public class Medicament implements Serializable {
 
     public Medicament() {}
 
-    public Medicament(String cis, String cip13, String nom, String mode_administration, String presentation,
+    public Medicament(final String cis, final String cip13, final String nom, final String mode_administration, final String presentation,
                       double stock, double prise, int warn, int alert) {
         super();
 
