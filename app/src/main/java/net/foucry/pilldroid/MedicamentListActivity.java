@@ -150,16 +150,16 @@ public class MedicamentListActivity extends AppCompatActivity {
     private static DBMedoc dbMedoc;
 
     // private SimpleCursorAdapter drugAdapter;
-    private List<Medicament> medicaments;
+    private static List<Medicament> medicaments;
 
     private View mRecyclerView;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
-    public int getCount() {
+    public static int getCount() {
         return medicaments.size();
     }
 
-    public Medicament getItem(int position) {
+    public static Medicament getItem(int position) {
         return medicaments.get(position);
     }
 
@@ -219,10 +219,10 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
 
-        if (this.medicaments == null) {
-            this.medicaments = dbHelper.getAllDrugs();
+        if (medicaments == null) {
+            medicaments = dbHelper.getAllDrugs();
 
-            Collections.sort(this.medicaments, new Comparator<Medicament>() {
+            Collections.sort(medicaments, new Comparator<Medicament>() {
                 @Override
                 public int compare(Medicament lhs, Medicament rhs) {
                     return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
@@ -298,14 +298,14 @@ public class MedicamentListActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
-    public void newStockCalculation() {
+    public static void newStockCalculation(Context context) {
         Medicament currentMedicament;
         for (int position = 0 ; position < getCount() ; position++ ) {
             currentMedicament = getItem(position);
             currentMedicament.newStock(currentMedicament.getStock());
         }
 
-        Toast.makeText( getApplicationContext(), "PillDroid - Calcul nouveau stocks", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "PillDroid - Calcul nouveau stocks", Toast.LENGTH_SHORT).show();
         // TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
     }
 

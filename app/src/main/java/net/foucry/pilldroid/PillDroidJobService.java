@@ -18,7 +18,7 @@ public class PillDroidJobService extends JobService {
         @Override
         public boolean handleMessage(Message msg) {
 //            Toast.makeText( getApplicationContext(), "PillDroid - Calcul nouveau stocks", Toast.LENGTH_SHORT).show();
-//            MedicamentListActivity.newStockCalculation();
+            MedicamentListActivity.newStockCalculation(getApplicationContext());
 
             jobFinished( (JobParameters) msg.obj,false);
             return true;
