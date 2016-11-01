@@ -129,4 +129,5 @@
     <string name="msgFound">trouvé dans la base de données</string>
     <string name="about">À propos</string>
     <string name="help">Aide</string>
+    <string name="notification_text">Vous devez passer à la pharmarcie -POUET</string>
 </resources>
