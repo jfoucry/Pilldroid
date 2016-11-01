@@ -69,8 +69,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     final static Boolean DEMO = true;
     final static Random random = new Random();
 
-    private JobScheduler mJobScheduler;
-
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -82,16 +80,16 @@ public class MedicamentListActivity extends AppCompatActivity {
         super.onStart();
 
         Log.d(TAG, "Remove old notification");
-        cancelAllJobs(mRecyclerView);
-        //NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        //nm.cancelAll();
+//        cancelAllJobs(mRecyclerView);
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancelAll();
 
 
-        try {
+        /*try {
             mJobScheduler.cancelAll();
         } catch (Exception e) {
             Log.d(TAG, "no old job to remove");
-        }
+        }*/
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -113,15 +111,15 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-
-        JobInfo.Builder builder = new JobInfo.Builder(1,
-                new ComponentName( getPackageName(), PillDroidJobService.class.getName()));
-        builder.setPeriodic(300000); // Dans 5 minutes, en millisecondes
-
-        if (mJobScheduler.schedule(builder.build()) <= 0) {
-            Log.d(TAG, "Something goes wrong at job schedule");
-        }
+//        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+//
+//        JobInfo.Builder builder = new JobInfo.Builder(1,
+//                new ComponentName( getPackageName(), PillDroidJobService.class.getName()));
+//        builder.setPeriodic(30000); // Dans 30 secondes, en millisecondes
+//
+//        if (mJobScheduler.schedule(builder.build()) <= 0) {
+//            Log.d(TAG, "Something goes wrong at job schedule");
+//        }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -139,27 +137,27 @@ public class MedicamentListActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    public void cancelAllJobs(View v) {
+/*    public void cancelAllJobs(View v) {
         JobScheduler tm = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         tm.cancelAll();
-    }
+    }*/
 
     private static final String TAG = MedicamentListActivity.class.getName();
 
-    private static DBHelper dbHelper;
-    private static DBMedoc dbMedoc;
+    private DBHelper dbHelper;
+    private DBMedoc dbMedoc;
 
     // private SimpleCursorAdapter drugAdapter;
-    private static List<Medicament> medicaments;
+    private List<Medicament> medicaments;
 
     private View mRecyclerView;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
-    public static int getCount() {
+    public int getCount() {
         return medicaments.size();
     }
 
-    public static Medicament getItem(int position) {
+    public Medicament getItem(int position) {
         return medicaments.get(position);
     }
 
@@ -269,7 +267,8 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
-        Calendar calendar = Calendar.getInstance();
+        newStockCalculation();
+      /*  Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
 
         long dateSchedule;
@@ -286,11 +285,16 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
 
         // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification("It's today + 10s"), dateSchedule);
+        scheduleNotification(getNotification(getString(R.string.notification_text)), 10000);
 
-        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
+        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));*/
     }
 
+    /** scanNow
+     *
+     * @param view
+     *  call ZXing Library to scan a new QR/EAN code
+     */
     public void scanNow(View view) {
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
         //intent.putExtra("SCAN_MODE", "CODE_128");
@@ -298,15 +302,40 @@ public class MedicamentListActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
-    public static void newStockCalculation(Context context) {
+    /**
+     * Calculation of newStock
+     */
+    public void newStockCalculation() {
         Medicament currentMedicament;
-        for (int position = 0 ; position < getCount() ; position++ ) {
-            currentMedicament = getItem(position);
+        for (int position = 0 ; position < this. getCount() ; position++ ) {
+            currentMedicament = this.getItem(position);
             currentMedicament.newStock(currentMedicament.getStock());
         }
 
-        Toast.makeText(context, "PillDroid - Calcul nouveau stocks", Toast.LENGTH_SHORT).show();
-        // TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
+        // Must record new stock in DB
+//        Toast.makeText(getApplicationContext(), "PillDroid - Calcul nouveau stocks", Toast.LENGTH_SHORT).show();
+//         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
+
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+
+        long dateSchedule;
+
+        Medicament firstMedicament = medicaments.get(0);
+
+        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+
+        if (dateAlerte.getTime() < now.getTime())
+        {
+            dateSchedule = now.getTime() + 10000; // If dateAlerte < now we schedule an alert for now + 5 seconds
+        } else {
+            dateSchedule = dateAlerte.getTime(); // If dateAlerte > now we use dateAlerte as scheduleDate
+        }
+
+        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
+        scheduleNotification(getNotification(getString(R.string.notification_text)), dateSchedule);
+
+        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -377,6 +406,8 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(Notification notification, long delay) {
+        Log.i(TAG, "scheduleNotification delay == " + delay);
+
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
@@ -388,6 +419,8 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private Notification getNotification(String content) {
+        Log.i(TAG, "getNotification");
+
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle(getAppName());
         builder.setContentText(content);
