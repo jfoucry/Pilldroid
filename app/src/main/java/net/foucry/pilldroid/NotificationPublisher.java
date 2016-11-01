@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
+import android.util.Log;
 
 /**
  * Created by jfoucry on 6/23/16.
@@ -16,6 +17,8 @@ public class NotificationPublisher extends BroadcastReceiver {
     public static String NOTIFICATION = "notification";
 
     public void onReceive(Context context, Intent intent) {
+        Log.i(TAG, "onReceive");
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notification = intent.getParcelableExtra(NOTIFICATION);
