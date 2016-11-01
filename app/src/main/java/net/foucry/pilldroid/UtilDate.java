@@ -22,7 +22,7 @@ public class UtilDate {
      */
     public static Date dateAtNoon(Date aDate) {
 
-        Log.d(TAG, "dateAtNoon " + aDate);
+//        Log.d(TAG, "dateAtNoon " + aDate);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(aDate);
