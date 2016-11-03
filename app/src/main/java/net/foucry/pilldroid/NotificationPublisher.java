@@ -8,16 +8,19 @@ import android.content.Intent;
 import android.os.Vibrator;
 import android.util.Log;
 
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
+
 /**
  * Created by jfoucry on 6/23/16.
  */
 public class NotificationPublisher extends BroadcastReceiver {
 
+    private static String TAG = Thread.currentThread().getStackTrace()[1].getMethodName();
     public static String NOTIFICATION_ID = "notification-id";
     public static String NOTIFICATION = "notification";
 
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive");
+        Log.i(TAG, "");
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

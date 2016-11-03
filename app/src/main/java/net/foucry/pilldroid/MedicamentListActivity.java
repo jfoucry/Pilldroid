@@ -48,6 +48,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.logging.Handler;
 
+import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.doubleRandomInclusive;
 
@@ -268,26 +269,6 @@ public class MedicamentListActivity extends AppCompatActivity {
         super.onPause();
 
         newStockCalculation();
-      /*  Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-
-        long dateSchedule;
-
-        Medicament firstMedicament = medicaments.get(0);
-
-        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
-
-        if (dateAlerte.getTime() < now.getTime())
-        {
-            dateSchedule = now.getTime() + 10000;
-        } else {
-            dateSchedule = dateAlerte.getTime();
-        }
-
-        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification(getString(R.string.notification_text)), 10000);
-
-        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));*/
     }
 
     /** scanNow
@@ -306,6 +287,7 @@ public class MedicamentListActivity extends AppCompatActivity {
      * Calculation of newStock
      */
     public void newStockCalculation() {
+
         Medicament currentMedicament;
         for (int position = 0 ; position < this. getCount() ; position++ ) {
             currentMedicament = this.getItem(position);
@@ -327,13 +309,13 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         if (dateAlerte.getTime() < now.getTime())
         {
-            dateSchedule = now.getTime() + 10000; // If dateAlerte < now we schedule an alert for now + 5 seconds
+            dateSchedule = now.getTime() + 3600000; // If dateAlerte < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)
         } else {
             dateSchedule = dateAlerte.getTime(); // If dateAlerte > now we use dateAlerte as scheduleDate
         }
 
         // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification(getString(R.string.notification_text)), dateSchedule);
+        scheduleNotification(getNotification(getString(R.string.notification_text)),3600000);
 
         Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
     }
@@ -409,7 +391,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         Log.i(TAG, "scheduleNotification delay == " + delay);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
