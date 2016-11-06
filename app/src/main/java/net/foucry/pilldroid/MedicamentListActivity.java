@@ -50,6 +50,7 @@ import java.util.logging.Handler;
 
 import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 import static net.foucry.pilldroid.UtilDate.date2String;
+import static net.foucry.pilldroid.UtilDate.tomorrowAtNoonInMillis;
 import static net.foucry.pilldroid.Utils.doubleRandomInclusive;
 
 /**
@@ -314,8 +315,8 @@ public class MedicamentListActivity extends AppCompatActivity {
             dateSchedule = dateAlerte.getTime(); // If dateAlerte > now we use dateAlerte as scheduleDate
         }
 
-        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification(getString(R.string.notification_text)),3600000);
+        long delay = (long) (dateSchedule - now.getTime());
+        scheduleNotification(getNotification(getString(R.string.notification_text)),delay);
 
         Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
     }
