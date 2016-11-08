@@ -4,10 +4,6 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.job.JobInfo;
-import android.app.job.JobParameters;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +11,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,12 +40,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.logging.Handler;
 
 import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 import static net.foucry.pilldroid.UtilDate.date2String;
-import static net.foucry.pilldroid.UtilDate.tomorrowAtNoonInMillis;
-import static net.foucry.pilldroid.Utils.doubleRandomInclusive;
+import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 /**
  * An activity representing a list of Medicaments. This activity
@@ -69,6 +61,7 @@ public class MedicamentListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     final static Boolean DEMO = true;
+    final static Boolean DBDEMO = true;
     final static Random random = new Random();
 
     /**
@@ -181,41 +174,51 @@ public class MedicamentListActivity extends AppCompatActivity {
 //        startService(new Intent(this, TimeService.class));
 
         if (DEMO) {
+            // Added to drop database each the app is launch.
+            if (DBDEMO) {
+                dbHelper.dropDrug();
+            }
             if (dbHelper.getCount() == 0) {
 
                 // String cis, String cip13, String nom, String mode_administration,
                 // String presentation,double stock, double prise, int warn, int alert
 
+                // Limit for randmon generator
+                final int min_stock=5;
+                final int max_stock=50;
+                final int min_prise=0;
+                final int max_prise=3;
+                
                 dbHelper.addDrug(new Medicament("60000011", "3400930000011", "Médicament test 01", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000012", "3400930000012", "Médicament test 02", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000013", "3400930000013", "Médicament test 03", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000014", "3400930000014", "Médicament test 04", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000015", "3400930000015", "Médicament test 05", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000016", "3400930000016", "Médicament test 06", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000017", "3400930000017", "Médicament test 07", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000018", "3400930000018", "Médicament test 08", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000019", "3400930000019", "Médicament test 09", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000010", "3400930000010", "Médicament test 10", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
             }
         }
 
@@ -310,12 +313,12 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         if (dateAlerte.getTime() < now.getTime())
         {
-            dateSchedule = now.getTime() + 3600000; // If dateAlerte < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)
+            dateSchedule = now.getTime() + 50000; // If dateAlerte < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)
         } else {
             dateSchedule = dateAlerte.getTime(); // If dateAlerte > now we use dateAlerte as scheduleDate
         }
 
-        long delay = (long) (dateSchedule - now.getTime());
+        long delay = dateSchedule - now.getTime();
         scheduleNotification(getNotification(getString(R.string.notification_text)),delay);
 
         Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
@@ -416,7 +419,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         ApplicationInfo applicationInfo = null;
         try {
             applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
-        } catch (final PackageManager.NameNotFoundException e) {}
+        } catch (final PackageManager.NameNotFoundException ignored) {}
         return (String)((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
     }
 
@@ -428,11 +431,11 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         private final List<Medicament> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Medicament> items) {
+        SimpleItemRecyclerViewAdapter(List<Medicament> items) {
             mValues = items;
         }
 
-        public void addItem(Medicament scannedMedoc) {
+        void addItem(Medicament scannedMedoc) {
             mValues.add(scannedMedoc);
             notifyDataSetChanged();
             dbHelper.addDrug(scannedMedoc);
@@ -507,16 +510,16 @@ public class MedicamentListActivity extends AppCompatActivity {
             return mValues.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIDView;
-            public final TextView mContentView;
-            public final TextView mEndOfStock;
-            public final ImageView mIconView;
+        class ViewHolder extends RecyclerView.ViewHolder {
+            final View mView;
+            final TextView mIDView;
+            final TextView mContentView;
+            final TextView mEndOfStock;
+            final ImageView mIconView;
 
-            public Medicament mItem;
+            Medicament mItem;
 
-            public ViewHolder(View view) {
+            ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mIDView = (TextView) view.findViewById(R.id.cip13);
