@@ -46,7 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return sInstance;
     }
 
-    public DBHelper(Context context) {
+    DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -76,7 +76,7 @@ public class DBHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public void dropDrug() {
+    void dropDrug() {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.d(TAG, "Drop drug table");
         db.execSQL("DROP TABLE IF EXISTS drug");
@@ -84,7 +84,7 @@ public class DBHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public void addDrug(Medicament medicament) {
+    void addDrug(Medicament medicament) {
         // Logging
         Log.d(TAG, medicament.toString());
 
@@ -129,30 +129,36 @@ public class DBHelper extends SQLiteOpenHelper {
                 null);                                  // limits
 
         // if case we got result, go to the first one
-        if (cursor != null)
+        Medicament medicament = new Medicament();
+        if (cursor != null) {
             cursor.moveToFirst();
 
-        // Build medicament object
-        Medicament medicament = new Medicament();
-        medicament.setId(Integer.parseInt(cursor.getString(0)));
-        medicament.setCis(cursor.getString(1));
-        medicament.setCip13(cursor.getString(2));
-        medicament.setNom(cursor.getString(3));
-        medicament.setMode_administration(cursor.getString(4));
-        medicament.setPresentation(cursor.getString(5));
-        medicament.setStock(Double.parseDouble(cursor.getString(6)));
-        medicament.setPrise(Double.parseDouble(cursor.getString(7)));
-        medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
-        medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
-
+            // Build medicament object
+            medicament.setId(Integer.parseInt(cursor.getString(0)));
+            medicament.setCis(cursor.getString(1));
+            medicament.setCip13(cursor.getString(2));
+            medicament.setNom(cursor.getString(3));
+            medicament.setMode_administration(cursor.getString(4));
+            medicament.setPresentation(cursor.getString(5));
+            medicament.setStock(Double.parseDouble(cursor.getString(6)));
+            medicament.setPrise(Double.parseDouble(cursor.getString(7)));
+            medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
+            medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+        }
         // Log
         Log.d(TAG, "getDrug("+id+")" + medicament.toString());
 
+        if (null != cursor) cursor.close();
         // Return medicament
 
         return medicament;
     }
 
+    /**
+     *
+     * @param cip13 drug id in French nomemclature
+     * @return the medicament object found in DB or null
+     */
     public Medicament getDrugByCIP13(String cip13) {
         // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
@@ -161,37 +167,43 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_DRUG,            // Which table
                 COLUMS,                                 // column names
                 " cip13 = ?",                              // selections
-                new String[] { String.valueOf(cip13) },    // selections args
+                new String[]{String.valueOf(cip13)},    // selections args
                 null,                                   // group by
                 null,                                   // having
                 null,                                   // order by
                 null);                                  // limits
 
         // if case we got result, go to the first one
-        if (cursor != null)
+        Medicament medicament = new Medicament();
+        if (cursor != null) {
             cursor.moveToFirst();
 
-        // Build medicament object
-        Medicament medicament = new Medicament();
-        medicament.setId(Integer.parseInt(cursor.getString(0)));
-        medicament.setCis(cursor.getString(1));
-        medicament.setCip13(cursor.getString(2));
-        medicament.setNom(cursor.getString(3));
-        medicament.setMode_administration(cursor.getString(4));
-        medicament.setPresentation(cursor.getString(5));
-        medicament.setStock(Double.parseDouble(cursor.getString(6)));
-        medicament.setPrise(Double.parseDouble(cursor.getString(7)));
-        medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
-        medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+            // Build medicament object
+            medicament.setId(Integer.parseInt(cursor.getString(0)));
+            medicament.setCis(cursor.getString(1));
+            medicament.setCip13(cursor.getString(2));
+            medicament.setNom(cursor.getString(3));
+            medicament.setMode_administration(cursor.getString(4));
+            medicament.setPresentation(cursor.getString(5));
+            medicament.setStock(Double.parseDouble(cursor.getString(6)));
+            medicament.setPrise(Double.parseDouble(cursor.getString(7)));
+            medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
+            medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+        }
 
-        // Log
-        Log.d(TAG, "getDrug("+cip13+")" + medicament.toString());
+        if (null != cursor) cursor.close();
 
-        // Return medicament
+        Log.d(TAG, "getDrug(" + cip13 + ")" + medicament.toString());
 
         return medicament;
     }
-    public List<Medicament> getAllDrugs() {
+
+    /**
+     *
+     * @return a List of All medicaments presents in database
+     */
+
+    List<Medicament> getAllDrugs() {
         List<Medicament> medicaments = new LinkedList<Medicament>();
 
         // Build the query
@@ -202,7 +214,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         // For Each row, build a medicament and add it to the list
-        Medicament medicament = null;
+        Medicament medicament;
         if (cursor.moveToFirst()) {
             do {
                 medicament = new Medicament();
@@ -229,10 +241,14 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         Log.d(TAG, "getAllDrugs " + medicaments.toString());
 
-        // return
         return medicaments;
     }
 
+    /**
+     *
+     * @param medicament object to be updated in DB
+     * @return code of update operation (should be 0)
+     */
     public int updateDrug(Medicament medicament) {
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -258,6 +274,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return i;
     }
 
+    /**
+     * Delete a medicament object in datebase
+     * @param medicament object to be delete in the DB
+     */
     public void deleteDrug(Medicament medicament) {
         // Get writable database
         SQLiteDatabase db = this.getWritableDatabase();
@@ -274,6 +294,10 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "delete drug "+medicament.toString());
     }
 
+    /**
+     * Get count of all medicament present in database
+     * @return number of medicament in DB
+     */
     public int getCount() {
 
         String query = "SELECT count (*) FROM " + TABLE_DRUG;
