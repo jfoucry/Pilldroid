@@ -22,12 +22,17 @@ public class Utils {
               os.write(bytes, 0, count);
             }
         }
-        catch(Exception ex){}
+        catch(Exception ignored){}
     }
 
-    public static final double doubleRandomInclusive(int min, int max) {
-        double value = Math.floor(min + (max - min) * MedicamentListActivity.random.nextDouble() *4)/4;
-
-        return value;
+    /**
+     * Return a random number between twovalues - use to gənerat a false demo DB
+     * @param min minimal value accepted
+     * @param max maximum value accepted
+     * @return
+     */
+    static final int intRandomExclusive(int min, int max) {
+        Random r = new Random();
+        return r.nextInt(max - min) +max;
     }
 }

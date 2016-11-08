@@ -16,7 +16,7 @@ import java.io.OutputStream;
 /**
  * Created by jfoucry on 5/25/16.
  */
-public class DBMedoc  extends SQLiteOpenHelper{
+class DBMedoc  extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
 
@@ -37,7 +37,7 @@ public class DBMedoc  extends SQLiteOpenHelper{
 
     private static final String TAG = DBMedoc.class.getName();
 
-    public DBMedoc(Context context) {
+    DBMedoc(Context context) {
         super(context, dbName, null, DATABASE_VERSION);
         this.myContext = context;
     }
@@ -86,7 +86,7 @@ public class DBMedoc  extends SQLiteOpenHelper{
         }
     }
 
-    public void openDatabase() throws SQLiteException {
+    void openDatabase() throws SQLiteException {
         Log.e(TAG, "openDatabase called");
         String myPath = DATABASE_PATH + dbName;
 
@@ -100,9 +100,12 @@ public class DBMedoc  extends SQLiteOpenHelper{
         }
     }
 
-    private DBMedoc dbMedoc;
-
-    public Medicament getMedocByCIP13(String cip13) {
+    /**
+     * Lookup in the DB for a record corresponding to cpi1
+     * @param cip13 string representing the object we're looking for
+     * @return return a medicament objet
+     */
+    Medicament getMedocByCIP13(String cip13) {
         Log.e(TAG, "getNedocByCIP13 - " + cip13);
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -110,8 +113,8 @@ public class DBMedoc  extends SQLiteOpenHelper{
         // Build query
         Cursor cursor = db.query(TABLE_NAME,               // Which table
                 COLUMNS_NAMES,                             // column names
-                " cip13 =?",                              // selections
-                new String[]{cip13},       // selections args
+                " cip13 =?",                               // selections
+                new String[]{cip13},                       // selections args
                 null,                                      // group by
                 null,                                      // having
                 null,                                      // order by

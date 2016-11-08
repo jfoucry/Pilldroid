@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +41,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 import static net.foucry.pilldroid.UtilDate.date2String;
-import static net.foucry.pilldroid.Utils.doubleRandomInclusive;
+import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 /**
  * An activity representing a list of Medicaments. This activity
@@ -61,7 +61,9 @@ public class MedicamentListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     final static Boolean DEMO = true;
+    final static Boolean DBDEMO = true;
     final static Random random = new Random();
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -96,27 +98,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-
-        long dateSchedule;
-
-        Medicament firstMedicament = medicaments.get(0);
-
-        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
-
-        if (dateAlerte.getTime() < now.getTime())
-        {
-            dateSchedule = 120000;
-        } else {
-            dateSchedule = dateAlerte.getTime() - now.getTime();
-        }
-
-        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification("Vous devez passer à la pharmacie."), dateSchedule);
-
-        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(now.getTime() + dateSchedule));
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -135,14 +116,21 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private static final String TAG = MedicamentListActivity.class.getName();
 
-    private static DBHelper dbHelper;
-    private static DBMedoc dbMedoc;
+    private DBHelper dbHelper;
+    private DBMedoc dbMedoc;
 
-    // private SimpleCursorAdapter drugAdapter;
     private List<Medicament> medicaments;
 
     private View mRecyclerView;
     private SimpleItemRecyclerViewAdapter mAdapter;
+
+    public int getCount() {
+        return medicaments.size();
+    }
+
+    public Medicament getItem(int position) {
+        return medicaments.get(position);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,68 +147,59 @@ public class MedicamentListActivity extends AppCompatActivity {
             toolbar.setTitle(getTitle());
         }
 
-        startService(new Intent(this, TimeService.class));
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                *//* Snackbar.make(view, "Will be used to add a drug to the list", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show(); *//*
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "CODE_128");
-                //intent.putExtra("SCAN_FORMATS", "EAN_13,DATA_MATRIX");
-                startActivityForResult(intent, 0);
-            }
-        });*/
-
-//        Log.d(TAG, "Remove old notification");
-//        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//        nm.cancelAll();
-
         if (DEMO) {
+            // Added to drop database each the app is launch.
+            if (DBDEMO) {
+                dbHelper.dropDrug();
+            }
             if (dbHelper.getCount() == 0) {
 
                 // String cis, String cip13, String nom, String mode_administration,
                 // String presentation,double stock, double prise, int warn, int alert
 
+                // Limit for randmon generator
+                final int min_stock=5;
+                final int max_stock=50;
+                final int min_prise=0;
+                final int max_prise=3;
+                
                 dbHelper.addDrug(new Medicament("60000011", "3400930000011", "Médicament test 01", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000012", "3400930000012", "Médicament test 02", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000013", "3400930000013", "Médicament test 03", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000014", "3400930000014", "Médicament test 04", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000015", "3400930000015", "Médicament test 05", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000016", "3400930000016", "Médicament test 06", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000017", "3400930000017", "Médicament test 07", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000018", "3400930000018", "Médicament test 08", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000019", "3400930000019", "Médicament test 09", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
                 dbHelper.addDrug(new Medicament("60000010", "3400930000010", "Médicament test 10", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        doubleRandomInclusive(0, 100), doubleRandomInclusive(0, 10), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
             }
         }
 
-        if (this.medicaments == null) {
-            this.medicaments = dbHelper.getAllDrugs();
+        if (medicaments == null) {
+            medicaments = dbHelper.getAllDrugs();
 
-            Collections.sort(this.medicaments, new Comparator<Medicament>() {
+            Collections.sort(medicaments, new Comparator<Medicament>() {
                 @Override
                 public int compare(Medicament lhs, Medicament rhs) {
                     return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
@@ -267,6 +246,35 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
+        newStockCalculation();
+    }
+
+    /** scanNow
+     *
+     * @param view
+     *  call ZXing Library to scan a new QR/EAN code
+     */
+    public void scanNow(View view) {
+        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+        //intent.putExtra("SCAN_MODE", "CODE_128");
+        intent.putExtra("SCAN_FORMATS", "CODE_18,DATA_MATRIX");
+        startActivityForResult(intent, 0);
+    }
+
+    /**
+     * Calculation of newStock
+     */
+    public void newStockCalculation() {
+
+        Medicament currentMedicament;
+        for (int position = 0 ; position < this. getCount() ; position++ ) {
+            currentMedicament = this.getItem(position);
+            currentMedicament.newStock(currentMedicament.getStock());
+        }
+
+//         TODO: Must record new stock in DB
+//         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
+
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
 
@@ -278,22 +286,15 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         if (dateAlerte.getTime() < now.getTime())
         {
-            dateSchedule = now.getTime() + 10000;
+            dateSchedule = now.getTime() + 50000; // If dateAlerte < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)
         } else {
-            dateSchedule = dateAlerte.getTime();
+            dateSchedule = dateAlerte.getTime(); // If dateAlerte > now we use dateAlerte as scheduleDate
         }
 
-        // int between2DateInMillis = (int) (tomorrow.getTime() - now.getTime());
-        scheduleNotification(getNotification("It's today + 10s"), dateSchedule);
+        long delay = dateSchedule - now.getTime();
+        scheduleNotification(getNotification(getString(R.string.notification_text)),delay);
 
         Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
-    }
-
-    public void scanNow(View view) {
-        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-        //intent.putExtra("SCAN_MODE", "CODE_128");
-        intent.putExtra("SCAN_FORMATS", "CODE_18,DATA_MATRIX");
-        startActivityForResult(intent, 0);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -364,8 +365,10 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(Notification notification, long delay) {
+        Log.i(TAG, "scheduleNotification delay == " + delay);
+
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -375,6 +378,8 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private Notification getNotification(String content) {
+        Log.i(TAG, "getNotification");
+
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle(getAppName());
         builder.setContentText(content);
@@ -387,7 +392,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         ApplicationInfo applicationInfo = null;
         try {
             applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
-        } catch (final PackageManager.NameNotFoundException e) {}
+        } catch (final PackageManager.NameNotFoundException ignored) {}
         return (String)((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
     }
 
@@ -399,11 +404,11 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         private final List<Medicament> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Medicament> items) {
+        SimpleItemRecyclerViewAdapter(List<Medicament> items) {
             mValues = items;
         }
 
-        public void addItem(Medicament scannedMedoc) {
+        void addItem(Medicament scannedMedoc) {
             mValues.add(scannedMedoc);
             notifyDataSetChanged();
             dbHelper.addDrug(scannedMedoc);
@@ -478,16 +483,16 @@ public class MedicamentListActivity extends AppCompatActivity {
             return mValues.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIDView;
-            public final TextView mContentView;
-            public final TextView mEndOfStock;
-            public final ImageView mIconView;
+        class ViewHolder extends RecyclerView.ViewHolder {
+            final View mView;
+            final TextView mIDView;
+            final TextView mContentView;
+            final TextView mEndOfStock;
+            final ImageView mIconView;
 
-            public Medicament mItem;
+            Medicament mItem;
 
-            public ViewHolder(View view) {
+            ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mIDView = (TextView) view.findViewById(R.id.cip13);

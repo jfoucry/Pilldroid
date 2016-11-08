@@ -7,22 +7,24 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by jacques on 05/05/16.
  */
-public class UtilDate {
+class UtilDate {
 
     private static final String TAG = UtilDate.class.getName();
     /**
      *
-     * @param aDate
-     * @return date
+     * @param aDate anydate
+     * @return date the same date as input but at noon (12:00:00)
      *
      * set date time at Noon
      */
-    public static Date dateAtNoon(Date aDate) {
+    static Date dateAtNoon(Date aDate) {
 
-        Log.d(TAG, "dateAtNoon " + aDate);
+//        Log.d(TAG, "dateAtNoon " + aDate);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(aDate);
@@ -34,13 +36,13 @@ public class UtilDate {
     }
     /**
      *
-     * @param days
-     * @param date
+     * @param days number of days to remove to the ate
+     * @param date date before day removing
      * @return date
      *
      * Substract days to date and return a new date
      */
-    public static Date removeDaysToDate(int days, Date date) {
+    static Date removeDaysToDate(int days, Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_YEAR, -days);
@@ -50,12 +52,12 @@ public class UtilDate {
 
     /**
      *
-     * @param date
-     * @return String
+     * @param date Date to be converted
+     * @return String of the converted date
      *
      * Convert a date to a String using a SimpleDateFormat
      */
-    public static String date2String(Date date, DateFormat dateFormat) {
+    static String date2String(Date date, DateFormat dateFormat) {
 
         Log.d(TAG, "date == " + date);
 
@@ -67,25 +69,25 @@ public class UtilDate {
 
     /**
      *
-     * @param dateString
-     * @return date
+     * @param dateString string representing a Date to be conveted
+     * @return date Date after convertion
      *
      * Convert String date into Date
      */
-    public static Date string2Date(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    static Date string2Date(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
         ParsePosition pos = new ParsePosition(0);
         return dateFormat.parse(dateString,pos);
     }
 
     /**
      *
-     * @param date
-     * @return int
+     * @param date start date
+     * @return int numbers of days between date and today
      *
      * Number of days between date (older than today) and today
      */
-    public static int nbOfDaysBetweenDateAndToday(Date date) {
+    static int nbOfDaysBetweenDateAndToday(Date date) {
         Date oldDate = dateAtNoon(date); // Be sure that the old date is at Noon
         Date todayDate = dateAtNoon(new Date()); // Be sure that we use today at Noon
 
@@ -97,7 +99,7 @@ public class UtilDate {
      * return int
      */
 
-    public static long tomorrowAtNoonInMillis() {
+    static long tomorrowAtNoonInMillis() {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
@@ -108,8 +110,8 @@ public class UtilDate {
         return (tomorrowAtNoon.getTime() - now.getTime());
     }
 
-    public static String convertDate(long dateInMilliseconds) {
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
+    static String convertDate(long dateInMilliseconds) {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm:ss", Locale.FRANCE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(dateInMilliseconds);
         return formatter.format(calendar.getTime());
