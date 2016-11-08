@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -384,6 +385,8 @@ public class MedicamentListActivity extends AppCompatActivity {
         builder.setContentTitle(getAppName());
         builder.setContentText(content);
         builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                R.mipmap.ic_launcher));
         return builder.build();
     }
 
