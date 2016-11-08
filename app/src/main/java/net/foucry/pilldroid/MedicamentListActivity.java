@@ -75,16 +75,8 @@ public class MedicamentListActivity extends AppCompatActivity {
         super.onStart();
 
         Log.d(TAG, "Remove old notification");
-//        cancelAllJobs(mRecyclerView);
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.cancelAll();
-
-
-        /*try {
-            mJobScheduler.cancelAll();
-        } catch (Exception e) {
-            Log.d(TAG, "no old job to remove");
-        }*/
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -106,16 +98,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-//        mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-//
-//        JobInfo.Builder builder = new JobInfo.Builder(1,
-//                new ComponentName( getPackageName(), PillDroidJobService.class.getName()));
-//        builder.setPeriodic(30000); // Dans 30 secondes, en millisecondes
-//
-//        if (mJobScheduler.schedule(builder.build()) <= 0) {
-//            Log.d(TAG, "Something goes wrong at job schedule");
-//        }
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -132,17 +114,11 @@ public class MedicamentListActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-/*    public void cancelAllJobs(View v) {
-        JobScheduler tm = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        tm.cancelAll();
-    }*/
-
     private static final String TAG = MedicamentListActivity.class.getName();
 
     private DBHelper dbHelper;
     private DBMedoc dbMedoc;
 
-    // private SimpleCursorAdapter drugAdapter;
     private List<Medicament> medicaments;
 
     private View mRecyclerView;
@@ -170,8 +146,6 @@ public class MedicamentListActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
-
-//        startService(new Intent(this, TimeService.class));
 
         if (DEMO) {
             // Added to drop database each the app is launch.
@@ -298,8 +272,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             currentMedicament.newStock(currentMedicament.getStock());
         }
 
-        // Must record new stock in DB
-//        Toast.makeText(getApplicationContext(), "PillDroid - Calcul nouveau stocks", Toast.LENGTH_SHORT).show();
+//         TODO: Must record new stock in DB
 //         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
 
         Calendar calendar = Calendar.getInstance();
