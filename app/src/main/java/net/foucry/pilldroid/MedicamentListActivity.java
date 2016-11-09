@@ -366,14 +366,14 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(Notification notification, long delay) {
-        Log.i(TAG, "scheduleNotification delay == " + delay);
+        Log.i(TAG, "scheduleNotification delay == " + 30000);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        long futureInMillis = SystemClock.elapsedRealtime() + 30000;
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
@@ -384,7 +384,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle(getAppName());
         builder.setContentText(content);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_stat_small_capsule);
         builder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.mipmap.ic_launcher));
         return builder.build();
@@ -447,14 +447,14 @@ public class MedicamentListActivity extends AppCompatActivity {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getPrise());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_alert);
-                    holder.mIconView.setImageResource(R.drawable.stock_alert);
+                    holder.mIconView.setImageResource(R.drawable.ic_stock_nok);
                 } else if ((remainingStock > mValues.get(position).getAlertThreshold()) &&
                         (remainingStock <= (mValues.get(position).getWarnThreshold()))) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_warning);
-                    holder.mIconView.setImageResource(R.drawable.stock_warn);
+                    holder.mIconView.setImageResource(R.drawable.ic_stock_waring);
                 } else {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_ok);
-                    holder.mIconView.setImageResource(R.drawable.stock_ok);
+                    holder.mIconView.setImageResource(R.drawable.ic_stock_ok);
                 }
             }
 
