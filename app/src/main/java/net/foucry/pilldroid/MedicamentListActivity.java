@@ -462,7 +462,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Medicament medicamentCourant = mValues.get(position);
-                    if (mTwoPane) {
+                    if (mTwoPane) {                                     // This part is used on tablets
                         Bundle arguments = new Bundle();
                         arguments.putSerializable("medicament", medicamentCourant);
                         MedicamentDetailFragment fragment = new MedicamentDetailFragment();
@@ -470,7 +470,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.medicament_detail_container, fragment)
                                 .commit();
-                    } else {
+                    } else {                                            // This part is used on phones
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
