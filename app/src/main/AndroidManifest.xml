@@ -52,5 +52,4 @@
         <service android:name=".PillDroidJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
-
 </manifest>
