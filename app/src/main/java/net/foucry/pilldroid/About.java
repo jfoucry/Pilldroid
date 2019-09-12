@@ -1,5 +1,6 @@
 package net.foucry.pilldroid;
 
+import android.R;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
