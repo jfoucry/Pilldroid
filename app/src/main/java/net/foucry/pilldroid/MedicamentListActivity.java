@@ -319,7 +319,10 @@ public class MedicamentListActivity extends AppCompatActivity {
                 // Handle cancel
                 Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
             }
-        }
+            else {
+                Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
+            }
+        } // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et raffraichissement de la base.
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {

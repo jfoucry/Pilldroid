@@ -35,6 +35,8 @@ public class MedicamentDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Will be use to save changes in a drug", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                setResult(1);
+                return;
             }
         });
 
