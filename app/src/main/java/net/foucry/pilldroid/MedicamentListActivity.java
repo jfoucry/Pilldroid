@@ -246,13 +246,13 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         Medicament firstMedicament = medicaments.get(0);
 
-        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+        Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
 
-        if (dateAlerte.getTime() < now.getTime())
+        if (dateAlert.getTime() < now.getTime())
         {
-            dateSchedule = now.getTime() + 50000; // If dateAlerte < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)
+            dateSchedule = now.getTime() + 50000; // If dateAlert < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)
         } else {
-            dateSchedule = dateAlerte.getTime(); // If dateAlerte > now we use dateAlerte as scheduleDate
+            dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
         }
 
         long delay = dateSchedule - now.getTime();
