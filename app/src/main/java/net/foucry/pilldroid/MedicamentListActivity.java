@@ -60,6 +60,8 @@ public class MedicamentListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
+
+    // TODO: Change DEMO/DBDEMO form statci to non-static. In order to create fake data at only at launchtime
     private boolean mTwoPane;
     final static Boolean DEMO = true;
     final static Boolean DBDEMO = true;
@@ -319,10 +321,12 @@ public class MedicamentListActivity extends AppCompatActivity {
                 // Handle cancel
                 Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
             }
-            else {
+            else if (requestCode == 1 ){
                 Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
+                // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et
+                // TODO : raffraichissement de la base.[Call updateDrug(medicament)]
             }
-        } // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et raffraichissement de la base.
+        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
