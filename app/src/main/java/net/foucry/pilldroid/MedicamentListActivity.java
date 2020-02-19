@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -107,7 +106,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
         dbMedoc = new DBMedoc(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -319,10 +318,11 @@ public class MedicamentListActivity extends AppCompatActivity {
                 // Handle cancel
                 Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
             }
-            else {
-                Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
-            }
-        } // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et raffraichissement de la base.
+        }
+        else if (requestCode == 1) {
+            // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et raffraichissement de la base.
+            Toast.makeText(context, "back from detail == "+requestCode, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -442,8 +442,8 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
-
-                        context.startActivity(intent);
+                        int requestCode = 1;
+                        startActivityForResult(intent, requestCode);
                     }
                 }
             });
@@ -466,10 +466,10 @@ public class MedicamentListActivity extends AppCompatActivity {
             ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIDView = (TextView) view.findViewById(R.id.cip13);
-                mContentView = (TextView) view.findViewById(R.id.valeur);
-                mEndOfStock = (TextView) view.findViewById(R.id.endOfStock);
-                mIconView = (ImageView) view.findViewById(R.id.list_image);
+                mIDView = view.findViewById(R.id.cip13);
+                mContentView = view.findViewById(R.id.valeur);
+                mEndOfStock = view.findViewById(R.id.endOfStock);
+                mIconView = view.findViewById(R.id.list_image);
             }
 
             @Override
