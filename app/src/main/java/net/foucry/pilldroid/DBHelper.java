@@ -20,7 +20,7 @@ class DBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static String DATABASE_NAME = "ordonnance.db";
 
-    private static final String TABLE_DRUG = "drug";
+    private static final String TABLE_DRUG      = "drug";
     private static final String KEY_ID          = "id";
     private static final String KEY_CIS         = "cis";
     private static final String KEY_CIP13       = "cip13";
