@@ -122,14 +122,22 @@ public class MedicamentDetailFragment extends Fragment {
     {
         Context context = getContext();
         Toast.makeText(context, "***PROUT***", Toast.LENGTH_SHORT).show();
+        View currentView = getView();
+        View nameView;
+        View adminModeView;
+        View presentationView;
+        View stockView;
+        View priseView;
+        View warningView;
+        View alertView;
 
-        Intent intent = getIntent();
+        stockView = currentView.findViewById(R.id.alert_cell);
+        TextView stockValue = stockView.findViewById(R.id.valeur);
 
-        String presentation = intent.getStringExtra("Presentation");
-        String name = intent.getStringExtra("Nom");
+        Log.d(TAG, "StockValue ==  "+ stockValue);
+        Log.d(TAG, "medicamentID "+ medicament.getId());
 
-        Log.d(TAG, "value of Presentation "+ presentation);
-        Log.d(TAG, "value of Nom "+ name);
+        Toast.makeText(context,"stock value "+ stockValue, Toast.LENGTH_SHORT).show();
         super.onStop();
     }
 }
