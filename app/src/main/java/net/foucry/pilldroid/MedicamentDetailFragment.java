@@ -2,9 +2,11 @@ package net.foucry.pilldroid;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,13 @@ import android.widget.Toast;
  * on handsets.
  */
 public class MedicamentDetailFragment extends Fragment {
+
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
     public static final String ARG_ITEM_ID = "medicament";
+    private static final String TAG = MedicamentListActivity.class.getName();
 
     /**
      * The dummy content this fragment is presenting.
@@ -55,8 +59,7 @@ public class MedicamentDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View detailView = inflater.inflate(R.layout.medicament_detail, container, false);
         View nameView;
         View adminModeView;
@@ -119,6 +122,14 @@ public class MedicamentDetailFragment extends Fragment {
     {
         Context context = getContext();
         Toast.makeText(context, "***PROUT***", Toast.LENGTH_SHORT).show();
+
+        Intent intent = getIntent();
+
+        String presentation = intent.getStringExtra("Presentation");
+        String name = intent.getStringExtra("Nom");
+
+        Log.d(TAG, "value of Presentation "+ presentation);
+        Log.d(TAG, "value of Nom "+ name);
         super.onStop();
     }
 }
