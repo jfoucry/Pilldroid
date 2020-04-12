@@ -2,7 +2,7 @@ package net.foucry.pilldroid;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -132,7 +132,8 @@ public class MedicamentDetailFragment extends Fragment {
         View alertView;
 
         stockView = currentView.findViewById(R.id.alert_cell);
-        TextView stockValue = stockView.findViewById(R.id.valeur);
+        TextView stockTextView = stockView.findViewById(R.id.valeur);
+        String stockValue = stockTextView.getText().toString();
 
         Log.d(TAG, "StockValue ==  "+ stockValue);
         Log.d(TAG, "medicamentID "+ medicament.getId());
