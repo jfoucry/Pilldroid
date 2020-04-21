@@ -18,6 +18,7 @@ import android.widget.Toast;
  * on handsets.
  */
 public class MedicamentDetailFragment extends Fragment {
+
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -119,6 +120,22 @@ public class MedicamentDetailFragment extends Fragment {
     {
         Context context = getContext();
         Toast.makeText(context, "***PROUT***", Toast.LENGTH_SHORT).show();
+
         super.onStop();
+    }
+
+    private void grabNewMedicamentValues()
+    {
+        View nameView;
+        View adminModeView;
+        View presentationView;
+        View stockView;
+        View priseView;
+        View warningView;
+        View alertView;
+
+        nameView detailView.findViewById(R.id.name_cell);
+        medicament.setNom(nameView.getText());
+
     }
 }
