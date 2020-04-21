@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class MedicamentDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "medicament";
+    private static final String TAG = MedicamentListActivity.class.getName();
 
     /**
      * The dummy content this fragment is presenting.
@@ -56,8 +58,7 @@ public class MedicamentDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View detailView = inflater.inflate(R.layout.medicament_detail, container, false);
         View nameView;
         View adminModeView;
@@ -120,12 +121,7 @@ public class MedicamentDetailFragment extends Fragment {
     {
         Context context = getContext();
         Toast.makeText(context, "***PROUT***", Toast.LENGTH_SHORT).show();
-
-        super.onStop();
-    }
-
-    private void grabNewMedicamentValues()
-    {
+        View currentView = getView();
         View nameView;
         View adminModeView;
         View presentationView;
@@ -134,8 +130,14 @@ public class MedicamentDetailFragment extends Fragment {
         View warningView;
         View alertView;
 
-        nameView detailView.findViewById(R.id.name_cell);
-        medicament.setNom(nameView.getText());
+        stockView = currentView.findViewById(R.id.alert_cell);
+        TextView stockTextView = stockView.findViewById(R.id.valeur);
+        String stockValue = stockTextView.getText().toString();
 
+        Log.d(TAG, "StockValue ==  "+ stockValue);
+        Log.d(TAG, "medicamentID "+ medicament.getId());
+
+        Toast.makeText(context,"stock value "+ stockValue, Toast.LENGTH_SHORT).show();
+        super.onStop();
     }
 }

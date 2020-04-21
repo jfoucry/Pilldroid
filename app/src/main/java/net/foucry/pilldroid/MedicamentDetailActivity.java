@@ -36,6 +36,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
                 Snackbar.make(view, "Will be use to save changes in a drug", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 setResult(1);
+
                 finish();
             }
         });
