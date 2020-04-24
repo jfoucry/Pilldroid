@@ -149,8 +149,8 @@ public class MedicamentDetailFragment extends Fragment {
         Log.d(TAG, "PriseValue ==  "+ priseValue);
         Log.d(TAG, "AlertValue ==  "+ alertValue);
         Log.d(TAG, "WarningValue ==  "+ warningValue);
-        Log.d(TAG, "medicamentID "+ medicament.getId());
-        Log.d(TAG, "medicament "+ medicament());
+        Log.d(TAG, "medicamentID == "+ medicament.getId());
+        Log.d(TAG, "medicament == "+ medicament);
 
         super.onStop();
     }
