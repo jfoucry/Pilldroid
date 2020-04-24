@@ -48,6 +48,7 @@ public class About extends AppCompatActivity{
 //            Drawable d = getResources().getDrawable(id);
             //Drawable d = ResourcesCompatApi21.getDrawable(getResources(),id, null);
             Drawable d = ContextCompat.getDrawable(getApplicationContext(),id);
+            assert d != null;
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
             return d;
         }

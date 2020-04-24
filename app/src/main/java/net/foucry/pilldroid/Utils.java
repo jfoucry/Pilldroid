@@ -3,9 +3,7 @@ package net.foucry.pilldroid;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import java.util.Date;
 import java.util.Random;
-import java.lang.Math;
 
 public class Utils {
     public static void CopyStream(InputStream is, OutputStream os)
