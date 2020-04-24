@@ -276,9 +276,11 @@ public class MedicamentListActivity extends AppCompatActivity {
                 dlg.setTitle(context.getString(R.string.app_name));
 
                 // Handle successful scan
+                assert format != null;
                 if (format.equals("CODE_128")) { //CODE_128
                     cip13 = contents;
                 } else {
+                    assert contents != null;
                     cip13 = contents.substring(4, 17);
                 }
 
@@ -475,6 +477,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 mIconView = view.findViewById(R.id.list_image);
             }
 
+            @NonNull
             @Override
             public String toString() {
                 return super.toString() + " '" + mContentView.getText() + "'";

@@ -1,5 +1,6 @@
 package net.foucry.pilldroid;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -50,13 +51,14 @@ public class MedicamentDetailFragment extends Fragment {
             medicament = (Medicament) getArguments().getSerializable(ARG_ITEM_ID);
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(medicament.getNom());
             }
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View detailView = inflater.inflate(R.layout.medicament_detail, container, false);
@@ -102,8 +104,8 @@ public class MedicamentDetailFragment extends Fragment {
             priseValue.setText(Double.toString(medicament.getPrise()));
 
             warningView = detailView.findViewById(R.id.warning_cell);
-            TextView warningLibelle = (TextView) warningView.findViewById(R.id.libelle);
-            TextView warningValue = (TextView) warningView.findViewById(R.id.valeur);
+            TextView warningLibelle = warningView.findViewById(R.id.libelle);
+            TextView warningValue = warningView.findViewById(R.id.valeur);
             warningLibelle.setText("Seuil d'alerte");
             warningValue.setText(Integer.toString(medicament.getWarnThreshold()));
 
@@ -129,6 +131,7 @@ public class MedicamentDetailFragment extends Fragment {
         View warningView;
         View alertView;
 
+        assert currentView != null;
         stockView = currentView.findViewById(R.id.stock_cell);
         TextView stockTextView = stockView.findViewById(R.id.valeur);
         String stockValue = stockTextView.getText().toString();
