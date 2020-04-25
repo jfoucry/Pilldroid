@@ -277,7 +277,7 @@ class DBHelper extends SQLiteOpenHelper {
         // Update row
         int i = db.update(TABLE_DRUG,           // table
                 values,                         // column/value
-                KEY_ID+" = ?",                  // selections
+                KEY_ID+" = ?",       // selections
                 new String[] {String.valueOf(medicament.getId()) } ); // selections args
 
         // Close DB
