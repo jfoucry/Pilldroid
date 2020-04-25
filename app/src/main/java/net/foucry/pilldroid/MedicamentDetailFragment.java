@@ -32,6 +32,7 @@ public class MedicamentDetailFragment extends Fragment {
      * The dummy content this fragment is presenting.
      */
     private Medicament medicament;
+    private DBHelper dbHelper = new DBHelper();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -123,6 +124,7 @@ public class MedicamentDetailFragment extends Fragment {
     {
         Context context = getContext();
         View currentView = getView();
+
         // View nameView;
         // View adminModeView;
         // View presentationView;
@@ -153,8 +155,9 @@ public class MedicamentDetailFragment extends Fragment {
         Log.d(TAG, "AlertValue ==  "+ alertValue);
         Log.d(TAG, "WarningValue ==  "+ warningValue);
         Log.d(TAG, "medicamentID == "+ medicament.getId());
-        Log.d(TAG, "medicament == "+ medicament);
+        Log.d(TAG, "medicament == "+ medicament.toString());
 
+        dbHelper.updateDrug(medicament);
         super.onStop();
     }
 }

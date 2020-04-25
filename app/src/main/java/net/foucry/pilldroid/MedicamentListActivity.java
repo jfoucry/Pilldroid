@@ -62,8 +62,8 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     // TODO: Change DEMO/DBDEMO form statci to non-static. In order to create fake data at only at launchtime
     private boolean mTwoPane;
-    final static Boolean DEMO = true;
-    final static Boolean DBDEMO = true;
+    final Boolean DEMO = false;
+    final Boolean DBDEMO = false;
     final static Random random = new Random();
 
     @Override
@@ -232,12 +232,14 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void newStockCalculation() {
 
         Medicament currentMedicament;
+        DBHelper dbHelper = new DBHelper();
+
         for (int position = 0 ; position < this. getCount() ; position++ ) {
             currentMedicament = this.getItem(position);
             currentMedicament.newStock(currentMedicament.getStock());
+            dbHelper.updateDrug(currentMedicament);
         }
 
-//         TODO: Must record new stock in DB
 //         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
 
         Calendar calendar = Calendar.getInstance();
