@@ -13,7 +13,7 @@ import android.util.Log;
  */
 public class NotificationPublisher extends BroadcastReceiver {
 
-    private static String TAG = NotificationPublisher.class.getName();;
+    private static String TAG = NotificationPublisher.class.getName();
     public static String NOTIFICATION_ID = "notification-id";
     public static String NOTIFICATION = "notification";
 

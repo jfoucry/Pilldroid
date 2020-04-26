@@ -39,6 +39,10 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String[] COLUMS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_PRISE,
     KEY_SEUIL_WARN, KEY_SEUIL_ALERT};
 
+    public DBHelper() {
+        super();
+    }
+
     public static synchronized DBHelper getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new DBHelper(context.getApplicationContext());
