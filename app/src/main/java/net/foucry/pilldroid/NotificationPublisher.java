@@ -13,12 +13,12 @@ import android.util.Log;
  */
 public class NotificationPublisher extends BroadcastReceiver {
 
-    private static String TAG = Thread.currentThread().getStackTrace()[1].getMethodName();
+    private static String TAG = NotificationPublisher.class.getName();;
     public static String NOTIFICATION_ID = "notification-id";
     public static String NOTIFICATION = "notification";
 
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "");
+        Log.i(TAG, "Receive notification");
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
