@@ -32,7 +32,7 @@ public class MedicamentDetailFragment extends Fragment {
      * The dummy content this fragment is presenting.
      */
     private Medicament medicament;
-    private DBHelper dbHelper = new DBHelper();
+    private DBHelper dbHelper;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -59,7 +59,6 @@ public class MedicamentDetailFragment extends Fragment {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View detailView = inflater.inflate(R.layout.medicament_detail, container, false);
@@ -123,6 +122,7 @@ public class MedicamentDetailFragment extends Fragment {
     public void onStop()
     {
         Context context = getContext();
+        dbHelper = new DBHelper(context);
         View currentView = getView();
 
         // View nameView;
@@ -156,6 +156,11 @@ public class MedicamentDetailFragment extends Fragment {
         Log.d(TAG, "WarningValue ==  "+ warningValue);
         Log.d(TAG, "medicamentID == "+ medicament.getId());
         Log.d(TAG, "medicament == "+ medicament.toString());
+
+        medicament.setStock(Double.parseDouble(stockValue));
+        medicament.setPrise(Double.parseDouble(priseValue));
+        medicament.setWarnThreshold(Integer.parseInt(warningValue));
+        medicament.setAlertThreshold(Integer.parseInt(alertValue));
 
         dbHelper.updateDrug(medicament);
         super.onStop();
