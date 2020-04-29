@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:background="#E1E1E1"
+    android:weightSum="1" >
     <TextView
+        android:id="@+id/libelle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/libelle"
-        android:background="@drawable/list_selector"
-        android:textStyle="bold"
-        android:textColor="#040404"
-        android:paddingLeft="5dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/valeur"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_toStartOf="@id/valeur"
         android:gravity="center_vertical"
-        android:layout_toLeftOf="@+id/valeur"
-        android:layout_alignBottom="@+id/valeur" />
+        android:paddingStart="5dp"
+        android:paddingEnd="25dp"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#040404"
+        android:textStyle="bold" />
 
     <EditText
+        android:id="@+id/valeur"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/valeur"
-        android:paddingRight="25dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:textAlignment="gravity"
-        android:background="@drawable/list_selector"
+        android:layout_alignParentEnd="true"
+        android:autofillHints=""
+        android:background="@drawable/rounded_corner"
+        android:ems="10"
+        android:gravity="end|fill_vertical"
+        android:inputType="numberDecimal"
+        android:labelFor="@id/valeur"
+        android:paddingEnd="25dp"
+        android:paddingStart="5dp"
         android:text="0"
-        android:gravity="right|fill_vertical"
-        android:numeric="decimal" />
+        android:textAlignment="gravity" />
 
 </RelativeLayout>

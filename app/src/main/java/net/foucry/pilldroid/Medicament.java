@@ -1,7 +1,5 @@
 package net.foucry.pilldroid;
 
-import android.view.FocusFinder;
-
 import java.io.Serializable;
 import java.lang.String;
 import java.text.SimpleDateFormat;

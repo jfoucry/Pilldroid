@@ -228,7 +228,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void newStockCalculation() {
 
         Medicament currentMedicament;
-        DBHelper dbHelper = new DBHelper();
+        //DBHelper DBHelper dbHelper;
 
         for (int position = 0 ; position < this. getCount() ; position++ ) {
             currentMedicament = this.getItem(position);
@@ -355,7 +355,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle(getAppName());
         builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.ic_stat_small_capsule);
+        builder.setSmallIcon(R.drawable.ic_pill);
         builder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.mipmap.ic_launcher));
         return builder.build();
@@ -418,14 +418,14 @@ public class MedicamentListActivity extends AppCompatActivity {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getPrise());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_alert);
-                    holder.mIconView.setImageResource(R.drawable.ic_stock_nok);
+                    holder.mIconView.setImageResource(R.drawable.lower_stock);
                 } else if ((remainingStock > mValues.get(position).getAlertThreshold()) &&
                         (remainingStock <= (mValues.get(position).getWarnThreshold()))) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_warning);
-                    holder.mIconView.setImageResource(R.drawable.ic_stock_waring);
+                    holder.mIconView.setImageResource(R.drawable.warning_stock);
                 } else {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_ok);
-                    holder.mIconView.setImageResource(R.drawable.ic_stock_ok);
+                    holder.mIconView.setImageResource(R.drawable.ok_stock);
                 }
             }
 

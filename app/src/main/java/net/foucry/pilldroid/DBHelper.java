@@ -259,9 +259,8 @@ class DBHelper extends SQLiteOpenHelper {
     /**
      *
      * @param medicament object to be updated in DB
-     * @return code of update operation (should be 0)
      */
-    public int updateDrug(Medicament medicament) {
+    public void updateDrug(Medicament medicament) {
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -283,7 +282,6 @@ class DBHelper extends SQLiteOpenHelper {
         // Close DB
         db.close();
 
-        return i;
     }
 
     /**
