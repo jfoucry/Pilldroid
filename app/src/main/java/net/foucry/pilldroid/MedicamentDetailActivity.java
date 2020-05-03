@@ -4,14 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
-import net.foucry.pilldroid.Medicament;
+import static net.foucry.pilldroid.R.id.detail_toolbar;
 
 /**
  * An activity representing a single Medicament detail screen. This
@@ -34,13 +36,14 @@ public class MedicamentDetailActivity extends AppCompatActivity {
 
         medicament = (Medicament) extras.getSerializable("medicament");
 
+        Log.d(TAG, "medicament == " + medicament.toString());
+
         setContentView(R.layout.activity_medicament_detail);
-        Toolbar toolbar = findViewById(R.id.detail_toolbar);
+        Toolbar toolbar = findViewById(detail_toolbar);
 
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            toolbar.setTitle(getTitle());
         }
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -49,10 +52,9 @@ public class MedicamentDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Will be use to save changes in a drug", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                Log.d(TAG, "Click on save icone + medicament ");
+                Log.d(TAG, "Click on save icone");
 
-                // TODO: récupérer les infos de la vue (cf onStop du Fragment)
-
+                getMedicamentChanges();
                 setResult(1);
 
                 finish();
@@ -63,6 +65,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(medicament.getNom());
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -102,5 +105,50 @@ public class MedicamentDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getMedicamentChanges()
+    {
+        Log.d(TAG, "Time to save new values");
+
+        DBHelper dbHelper = new DBHelper(this);
+
+        View stockView;
+        View priseView;
+        View warningView;
+        View alertView;
+
+        stockView = (View) findViewById(R.id.stock_cell);
+        EditText stockTextView = stockView.findViewById(R.id.valeur);
+        String stockValue = stockTextView.getText().toString();
+
+        priseView = (View) findViewById(R.id.prise_cell);
+        TextView priseTextView = priseView.findViewById(R.id.valeur);
+        String priseValue = priseTextView.getText().toString();
+
+        alertView = (View) findViewById(R.id.alert_cell);
+        TextView alertTextView = alertView.findViewById(R.id.valeur);
+        String alertValue = alertTextView.getText().toString();
+
+        warningView = (View) findViewById(R.id.warning_cell);
+        TextView warningTextView = warningView.findViewById(R.id.valeur);
+        String warningValue = warningTextView.getText().toString();
+
+        Log.d(TAG, "StockValue ==  "+ stockValue);
+        Log.d(TAG, "PriseValue ==  "+ priseValue);
+        Log.d(TAG, "AlertValue ==  "+ alertValue);
+        Log.d(TAG, "WarningValue ==  "+ warningValue);
+        Log.d(TAG, "medicamentID == "+ medicament.getId());
+        Log.d(TAG, "medicament == "+ medicament.toString());
+
+        medicament.setStock(Double.parseDouble(stockValue));
+        medicament.setPrise(Double.parseDouble(priseValue));
+        medicament.setWarnThreshold(Integer.parseInt(warningValue));
+        medicament.setAlertThreshold(Integer.parseInt(alertValue));
+        medicament.setDateLastUpdate();
+        medicament.setDateEndOfStock();
+
+        dbHelper.updateDrug(medicament);
+        return;
     }
 }
