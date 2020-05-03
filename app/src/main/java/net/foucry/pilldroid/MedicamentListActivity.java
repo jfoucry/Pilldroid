@@ -249,7 +249,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         if (dateAlert.getTime() < now.getTime())
         {
-            dateSchedule = now.getTime() + 50000; // If dateAlert < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)
+            dateSchedule = now.getTime() + 50000; // If dateAlert < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)[in prod define delay]
         } else {
             dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
         }
@@ -320,7 +320,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 // Handle cancel
                 Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
             }
-            else if (requestCode == 1 ){
+            else {
                 Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
                 // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et
                 // TODO : raffraichissement de la base.[Call updateDrug(medicament)]

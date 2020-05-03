@@ -121,47 +121,6 @@ public class MedicamentDetailFragment extends Fragment {
     @Override
     public void onStop()
     {
-        Context context = getContext();
-        dbHelper = new DBHelper(context);
-        View currentView = getView();
-
-        View stockView;
-        View priseView;
-        View warningView;
-        View alertView;
-
-        assert currentView != null;
-        stockView = currentView.findViewById(R.id.stock_cell);
-        TextView stockTextView = stockView.findViewById(R.id.valeur);
-        String stockValue = stockTextView.getText().toString();
-
-        priseView = currentView.findViewById(R.id.prise_cell);
-        TextView priseTextView = priseView.findViewById(R.id.valeur);
-        String priseValue = priseTextView.getText().toString();
-
-        alertView = currentView.findViewById(R.id.alert_cell);
-        TextView alertTextView = alertView.findViewById(R.id.valeur);
-        String alertValue = alertTextView.getText().toString();
-
-        warningView = currentView.findViewById(R.id.warning_cell);
-        TextView warningTextView = warningView.findViewById(R.id.valeur);
-        String warningValue = warningTextView.getText().toString();
-
-        Log.d(TAG, "StockValue ==  "+ stockValue);
-        Log.d(TAG, "PriseValue ==  "+ priseValue);
-        Log.d(TAG, "AlertValue ==  "+ alertValue);
-        Log.d(TAG, "WarningValue ==  "+ warningValue);
-        Log.d(TAG, "medicamentID == "+ medicament.getId());
-        Log.d(TAG, "medicament == "+ medicament.toString());
-
-        medicament.setStock(Double.parseDouble(stockValue));
-        medicament.setPrise(Double.parseDouble(priseValue));
-        medicament.setWarnThreshold(Integer.parseInt(warningValue));
-        medicament.setAlertThreshold(Integer.parseInt(alertValue));
-        medicament.setDateLastUpdate();
-        medicament.setDateEndOfStock();
-
-        dbHelper.updateDrug(medicament);
         super.onStop();
     }
 }
