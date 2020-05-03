@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="10dp"
-    android:background="#E1E1E1"
-    android:weightSum="1" >
+    android:background="@drawable/list_selector"
+    android:weightSum="1">
     <TextView
         android:id="@+id/libelle"
         android:layout_width="wrap_content"
