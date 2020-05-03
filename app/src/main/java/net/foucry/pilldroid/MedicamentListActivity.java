@@ -320,11 +320,10 @@ public class MedicamentListActivity extends AppCompatActivity {
                 // Handle cancel
                 Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
             }
-            else {
-                Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
-                // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et
-                // TODO : raffraichissement de la base.[Call updateDrug(medicament)]
-            }
+        } else if (requestCode == 1){
+            Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
+            // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et
+            // TODO : raffraichissement de la base.[Call updateDrug(medicament)]
         }
     }
 

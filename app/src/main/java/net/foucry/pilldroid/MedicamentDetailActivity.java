@@ -56,7 +56,6 @@ public class MedicamentDetailActivity extends AppCompatActivity {
 
                 getMedicamentChanges();
                 setResult(1);
-
                 finish();
             }
         });
