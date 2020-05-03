@@ -262,7 +262,7 @@ class DBHelper extends SQLiteOpenHelper {
      */
     public void updateDrug(Medicament medicament) {
 
-        Log.d(TAG, "Update Drug == " + medicament.toString());
+        Log.d(TAG, "Update Drug == " + medicament);
 
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -276,6 +276,7 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_PRES, medicament.getPresentation());
         values.put(KEY_STOCK, medicament.getStock());
 
+        Log.d(TAG, "values are " +values.toString());
         // Update row
         int i = db.update(TABLE_DRUG,           // table
                 values,                         // column/value
@@ -285,6 +286,11 @@ class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "Return update = " + i);
         // Close DB
         db.close();
+
+        // DEBUG
+        Medicament toto = getDrug(medicament.getId());
+        Log.d(TAG, "toto stock== " + toto.getStock());
+
 
     }
 
@@ -305,7 +311,7 @@ class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         // log
-        Log.d(TAG, "delete drug "+medicament.toString());
+        Log.d(TAG, "delete drug "+medicament);
     }
 
     /**
