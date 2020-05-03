@@ -232,7 +232,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void newStockCalculation() {
 
         Medicament currentMedicament;
-        //DBHelper DBHelper dbHelper;
+        dbHelper = new DBHelper(this);
 
         for (int position = 0 ; position < this. getCount() ; position++ ) {
             currentMedicament = this.getItem(position);

@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+
+import net.foucry.pilldroid.Medicament;
 
 /**
  * An activity representing a single Medicament detail screen. This
@@ -18,11 +21,22 @@ import android.view.MenuItem;
  */
 public class MedicamentDetailActivity extends AppCompatActivity {
 
+    private static final String TAG = MedicamentDetailActivity.class.getName();
+
+    Medicament medicament;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+
+        /* fetching the string passed with intent using ‘extras’*/
+
+        medicament = (Medicament) extras.getSerializable("medicament");
+
         setContentView(R.layout.activity_medicament_detail);
         Toolbar toolbar = findViewById(R.id.detail_toolbar);
+
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -35,6 +49,10 @@ public class MedicamentDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Will be use to save changes in a drug", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Log.d(TAG, "Click on save icone + medicament ");
+
+                // TODO: récupérer les infos de la vue (cf onStop du Fragment)
+
                 setResult(1);
 
                 finish();

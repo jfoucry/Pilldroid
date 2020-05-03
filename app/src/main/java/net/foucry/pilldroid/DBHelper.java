@@ -261,6 +261,9 @@ class DBHelper extends SQLiteOpenHelper {
      * @param medicament object to be updated in DB
      */
     public void updateDrug(Medicament medicament) {
+
+        Log.d(TAG, "Update Drug == " + medicament.toString());
+
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -279,6 +282,7 @@ class DBHelper extends SQLiteOpenHelper {
                 KEY_ID+" = ?",       // selections
                 new String[] {String.valueOf(medicament.getId()) } ); // selections args
 
+        Log.d(TAG, "Return update = " + i);
         // Close DB
         db.close();
 

@@ -26,7 +26,7 @@ public class MedicamentDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "medicament";
-    private static final String TAG = MedicamentListActivity.class.getName();
+    private static final String TAG = MedicamentDetailFragment.class.getName();
 
     /**
      * The dummy content this fragment is presenting.
@@ -125,9 +125,6 @@ public class MedicamentDetailFragment extends Fragment {
         dbHelper = new DBHelper(context);
         View currentView = getView();
 
-        // View nameView;
-        // View adminModeView;
-        // View presentationView;
         View stockView;
         View priseView;
         View warningView;
@@ -161,6 +158,8 @@ public class MedicamentDetailFragment extends Fragment {
         medicament.setPrise(Double.parseDouble(priseValue));
         medicament.setWarnThreshold(Integer.parseInt(warningValue));
         medicament.setAlertThreshold(Integer.parseInt(alertValue));
+        medicament.setDateLastUpdate();
+        medicament.setDateEndOfStock();
 
         dbHelper.updateDrug(medicament);
         super.onStop();
