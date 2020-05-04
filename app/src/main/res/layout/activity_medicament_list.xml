@@ -16,7 +16,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="67dp"
+            android:layout_height="@dimen/app_bar_height"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -27,24 +27,22 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/medicament_list" />
-
+        <include
+            layout="@layout/medicament_list"
+            android:layout_height="598dp" />
     </FrameLayout>
 
-    <include
-        layout="@layout/custom_button"
-        app:layout_anchor="@+id/app_bar"
-        app:layout_anchorGravity="center" />
-
-    <!--    <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@drawable/ic_add_circle_black_60dp"
-            app:layout_anchor="@+id/frameLayout"
-            app:layout_anchorGravity="top|center" />-->
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:onClick="scanNow"
+        android:src="@android:drawable/ic_input_add"
+        android:adjustViewBounds="true"
+        android:clickable="false"
+        android:baselineAlignBottom="false"/>
 
 
 </android.support.design.widget.CoordinatorLayout>
