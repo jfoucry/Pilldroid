@@ -14,7 +14,7 @@
             android:layout_width="50sp"
             android:layout_height="50sp"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_stock_ok"
+            android:src="@drawable/ok_stock"
             android:contentDescription="Icone de stock"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true" />
@@ -66,7 +66,7 @@
     <!-- Rightend Arrow -->
     <ImageView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/arrow"
+        android:src="@drawable/ic_navigate_next_black_24dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10sp"/>
