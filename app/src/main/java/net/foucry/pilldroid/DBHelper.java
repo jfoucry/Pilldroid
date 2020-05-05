@@ -15,21 +15,21 @@ import java.util.List;
  */
 
 
-public class DBHelper extends SQLiteOpenHelper {
+class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static String DATABASE_NAME = "ordonnance.db";
 
-    private static final String TABLE_DRUG = "drug";
-    private static final String KEY_ID = "id";
-    private static final String KEY_CIS = "cis";
-    private static final String KEY_CIP13 = "cip13";
-    private static final String KEY_NAME = "nom";
-    private static final String KEY_ADMIN = "mode_administration";
-    private static final String KEY_PRES = "presentation";
-    private static final String KEY_STOCK = "stock";
-    private static final String KEY_PRISE = "prise";
-    private static final String KEY_SEUIL_WARN = "warning";
+    private static final String TABLE_DRUG      = "drug";
+    private static final String KEY_ID          = "id";
+    private static final String KEY_CIS         = "cis";
+    private static final String KEY_CIP13       = "cip13";
+    private static final String KEY_NAME        = "nom";
+    private static final String KEY_ADMIN       = "mode_administration";
+    private static final String KEY_PRES        = "presentation";
+    private static final String KEY_STOCK       = "stock";
+    private static final String KEY_PRISE       = "prise";
+    private static final String KEY_SEUIL_WARN  = "warning";
     private static final String KEY_SEUIL_ALERT = "alerte";
 
     private static DBHelper sInstance;
@@ -76,6 +76,9 @@ public class DBHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
+    /**
+     * Drop current database. Debug code only
+     */
     void dropDrug() {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.d(TAG, "Drop drug table");
@@ -84,6 +87,10 @@ public class DBHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
+    /**
+     * Split medicament values into database record and record it to the DB
+     * @param medicament the medicament object to be saved
+     */
     void addDrug(Medicament medicament) {
         // Logging
         Log.d(TAG, medicament.toString());
@@ -114,6 +121,11 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * return a medicament from the DB with is id
+     * @param id of the medicament we looking for (not used)
+     * @return return the found medicament of null
+     */
     public Medicament getDrug(int id) {
         // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
@@ -247,9 +259,11 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      *
      * @param medicament object to be updated in DB
-     * @return code of update operation (should be 0)
      */
-    public int updateDrug(Medicament medicament) {
+    public void updateDrug(Medicament medicament) {
+
+        Log.d(TAG, "Update Drug == " + medicament);
+
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -262,20 +276,26 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_PRES, medicament.getPresentation());
         values.put(KEY_STOCK, medicament.getStock());
 
+        Log.d(TAG, "values are " +values.toString());
         // Update row
         int i = db.update(TABLE_DRUG,           // table
                 values,                         // column/value
-                KEY_ID+" = ?",                  // selections
+                KEY_ID+" = ?",       // selections
                 new String[] {String.valueOf(medicament.getId()) } ); // selections args
 
+        Log.d(TAG, "Return update = " + i);
         // Close DB
         db.close();
 
-        return i;
+        // DEBUG
+        Medicament toto = getDrug(medicament.getId());
+        Log.d(TAG, "toto stock== " + toto.getStock());
+
+
     }
 
     /**
-     * Delete a medicament object in datebase
+     * Delete a medicament object in database
      * @param medicament object to be delete in the DB
      */
     public void deleteDrug(Medicament medicament) {
@@ -291,14 +311,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         // log
-        Log.d(TAG, "delete drug "+medicament.toString());
+        Log.d(TAG, "delete drug "+medicament);
     }
 
     /**
      * Get count of all medicament present in database
      * @return number of medicament in DB
      */
-    public int getCount() {
+    int getCount() {
 
         String query = "SELECT count (*) FROM " + TABLE_DRUG;
 

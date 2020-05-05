@@ -1,8 +1,10 @@
 package net.foucry.pilldroid;
 
+import net.foucry.pilldroid.R;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.webkit.WebView;
@@ -43,8 +45,10 @@ public class About extends AppCompatActivity{
                 return null;
             }
 
-            Drawable d = getResources().getDrawable(id);
-//            Drawable d = ResourcesCompat.getDrawable(getResources(),id, null);
+//            Drawable d = getResources().getDrawable(id);
+            //Drawable d = ResourcesCompatApi21.getDrawable(getResources(),id, null);
+            Drawable d = ContextCompat.getDrawable(getApplicationContext(),id);
+            assert d != null;
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
             return d;
         }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/list_selector"
     tools:context="net.foucry.pilldroid.MedicamentDetailActivity"
     tools:ignore="MergeRootFrame">
 
@@ -21,7 +22,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar"/>
+            app:toolbarId="@+id/detail_toolbar"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/detail_toolbar"
@@ -45,7 +46,7 @@
         android:layout_height="60dp"
         android:layout_gravity="center_vertical|start"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_save"
+        android:src="@drawable/ic_save_black_24dp"
         app:layout_anchor="@+id/medicament_detail_container"
         app:layout_anchorGravity="top|end" />
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fb"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_centerInParent="true"
+    android:layout_gravity="top|center"
+    android:backgroundTint="@drawable/fb_play_bg"
+    android:src="@drawable/fb_icon_play" />
+
+

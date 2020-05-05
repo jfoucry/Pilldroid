@@ -16,7 +16,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="@dimen/app_bar_height"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -27,7 +27,9 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/medicament_list" />
+        <include
+            layout="@layout/medicament_list"
+            android:layout_height="598dp" />
     </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton

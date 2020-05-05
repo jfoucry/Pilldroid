@@ -24,7 +24,7 @@ class DBMedoc  extends SQLiteOpenHelper{
     private static String dbName = "medicaments.db";
     private SQLiteDatabase myDataBase;
     private final Context myContext;
-    File dbFile = new File(DATABASE_PATH + dbName);
+    private File dbFile = new File(DATABASE_PATH + dbName);
 
     private static final String TABLE_NAME  = "medicaments";
     private static final String MEDOC_CIS   = "cis";
@@ -54,10 +54,9 @@ class DBMedoc  extends SQLiteOpenHelper{
 
     @Override
     public synchronized  SQLiteDatabase getReadableDatabase() {
-        if (!dbFile.exists()) {
-            SQLiteDatabase db = super.getReadableDatabase();
-            copyDatabase(db.getPath());
-        }
+        if (dbFile.exists()) return super.getReadableDatabase();
+        SQLiteDatabase db = super.getReadableDatabase();
+        copyDatabase(db.getPath());
         return super.getReadableDatabase();
     }
 

@@ -9,7 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -27,10 +27,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -59,16 +55,12 @@ public class MedicamentListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
-    final static Boolean DEMO = true;
-    final static Boolean DBDEMO = true;
-    final static Random random = new Random();
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+    // TODO: Change DEMO/DBDEMO form statci to non-static. In order to create fake data at only at launchtime
+    private boolean mTwoPane;
+    final Boolean DEMO = false;
+    final Boolean DBDEMO = false;
+    final static Random random = new Random();
 
     @Override
     public void onStart() {
@@ -76,42 +68,14 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         Log.d(TAG, "Remove old notification");
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.cancelAll();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "MedicamentList Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://net.foucry.pilldroid/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
+        if (nm != null) {
+            nm.cancelAll();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "MedicamentList Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://net.foucry.pilldroid/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 
     private static final String TAG = MedicamentListActivity.class.getName();
@@ -140,7 +104,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
         dbMedoc = new DBMedoc(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -162,7 +126,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 final int max_stock=50;
                 final int min_prise=0;
                 final int max_prise=3;
-                
+
                 dbHelper.addDrug(new Medicament("60000011", "3400930000011", "Médicament test 01", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
                         intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
@@ -218,9 +182,6 @@ public class MedicamentListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -267,12 +228,14 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void newStockCalculation() {
 
         Medicament currentMedicament;
+        dbHelper = new DBHelper(this);
+
         for (int position = 0 ; position < this. getCount() ; position++ ) {
             currentMedicament = this.getItem(position);
             currentMedicament.newStock(currentMedicament.getStock());
+            dbHelper.updateDrug(currentMedicament);
         }
 
-//         TODO: Must record new stock in DB
 //         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
 
         Calendar calendar = Calendar.getInstance();
@@ -282,13 +245,13 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         Medicament firstMedicament = medicaments.get(0);
 
-        Date dateAlerte = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+        Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
 
-        if (dateAlerte.getTime() < now.getTime())
+        if (dateAlert.getTime() < now.getTime())
         {
-            dateSchedule = now.getTime() + 50000; // If dateAlerte < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)
+            dateSchedule = now.getTime() + 50000; // If dateAlert < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)[in prod define delay]
         } else {
-            dateSchedule = dateAlerte.getTime(); // If dateAlerte > now we use dateAlerte as scheduleDate
+            dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
         }
 
         long delay = dateSchedule - now.getTime();
@@ -311,9 +274,11 @@ public class MedicamentListActivity extends AppCompatActivity {
                 dlg.setTitle(context.getString(R.string.app_name));
 
                 // Handle successful scan
+                assert format != null;
                 if (format.equals("CODE_128")) { //CODE_128
                     cip13 = contents;
                 } else {
+                    assert contents != null;
                     cip13 = contents.substring(4, 17);
                 }
 
@@ -355,6 +320,10 @@ public class MedicamentListActivity extends AppCompatActivity {
                 // Handle cancel
                 Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
             }
+        } else if (requestCode == 1){
+            Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
+            // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et
+            // TODO : raffraichissement de la base.[Call updateDrug(medicament)]
         }
     }
 
@@ -365,16 +334,18 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(Notification notification, long delay) {
-        Log.i(TAG, "scheduleNotification delay == " + delay);
+        Log.i(TAG, "scheduleNotification delay == " + 30000);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        long futureInMillis = SystemClock.elapsedRealtime() + 30000;
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        if (alarmManager != null) {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        }
     }
 
     private Notification getNotification(String content) {
@@ -383,7 +354,9 @@ public class MedicamentListActivity extends AppCompatActivity {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle(getAppName());
         builder.setContentText(content);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_pill);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                R.mipmap.ic_launcher));
         return builder.build();
     }
 
@@ -444,14 +417,14 @@ public class MedicamentListActivity extends AppCompatActivity {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getPrise());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_alert);
-                    holder.mIconView.setImageResource(R.drawable.stock_alert);
+                    holder.mIconView.setImageResource(R.drawable.lower_stock);
                 } else if ((remainingStock > mValues.get(position).getAlertThreshold()) &&
                         (remainingStock <= (mValues.get(position).getWarnThreshold()))) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_warning);
-                    holder.mIconView.setImageResource(R.drawable.stock_warn);
+                    holder.mIconView.setImageResource(R.drawable.warning_stock);
                 } else {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_ok);
-                    holder.mIconView.setImageResource(R.drawable.stock_ok);
+                    holder.mIconView.setImageResource(R.drawable.ok_stock);
                 }
             }
 
@@ -459,7 +432,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Medicament medicamentCourant = mValues.get(position);
-                    if (mTwoPane) {
+                    if (mTwoPane) {                                     // This part is used on tablets
                         Bundle arguments = new Bundle();
                         arguments.putSerializable("medicament", medicamentCourant);
                         MedicamentDetailFragment fragment = new MedicamentDetailFragment();
@@ -467,12 +440,12 @@ public class MedicamentListActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.medicament_detail_container, fragment)
                                 .commit();
-                    } else {
+                    } else {                                            // This part is used on phones
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
-
-                        context.startActivity(intent);
+                        int requestCode = 1;
+                        startActivityForResult(intent, requestCode);
                     }
                 }
             });
@@ -495,12 +468,13 @@ public class MedicamentListActivity extends AppCompatActivity {
             ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIDView = (TextView) view.findViewById(R.id.cip13);
-                mContentView = (TextView) view.findViewById(R.id.valeur);
-                mEndOfStock = (TextView) view.findViewById(R.id.endOfStock);
-                mIconView = (ImageView) view.findViewById(R.id.list_image);
+                mIDView = view.findViewById(R.id.cip13);
+                mContentView = view.findViewById(R.id.valeur);
+                mEndOfStock = view.findViewById(R.id.endOfStock);
+                mIconView = view.findViewById(R.id.list_image);
             }
 
+            @NonNull
             @Override
             public String toString() {
                 return super.toString() + " '" + mContentView.getText() + "'";

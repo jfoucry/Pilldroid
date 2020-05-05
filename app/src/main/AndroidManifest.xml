@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -29,9 +29,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.foucry.pilldroid.MedicamentListActivity" />
         </activity>
-        <activity android:name="com.google.zxing.client.android.CaptureActivity"
-            android:screenOrientation="landscape"
+        <activity
+            android:name="com.google.zxing.client.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
@@ -48,13 +49,8 @@
             android:parentActivityName=".MedicamentListActivity"
             android:theme="@style/AppTheme">
         </activity>
-        <receiver android:name=".NotificationPublisher" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <receiver android:name=".NotificationPublisher" />
         <service android:name=".PillDroidJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
-
 </manifest>
