@@ -160,7 +160,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
 
-        if (medicaments == null) {
+       /* if (medicaments == null) {
             medicaments = dbHelper.getAllDrugs();
 
             Collections.sort(medicaments, new Comparator<Medicament>() {
@@ -170,6 +170,8 @@ public class MedicamentListActivity extends AppCompatActivity {
                 }
             });
         }
+*/
+        constructMedsList();
 
         mRecyclerView = findViewById(R.id.medicament_list);
         assert mRecyclerView != null;
@@ -226,15 +228,6 @@ public class MedicamentListActivity extends AppCompatActivity {
      * Calculation of newStock
      */
     public void newStockCalculation() {
-
-        Medicament currentMedicament;
-        dbHelper = new DBHelper(this);
-
-        for (int position = 0 ; position < this. getCount() ; position++ ) {
-            currentMedicament = this.getItem(position);
-            currentMedicament.newStock(currentMedicament.getStock());
-            dbHelper.updateDrug(currentMedicament);
-        }
 
 //         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
 
@@ -451,6 +444,32 @@ public class MedicamentListActivity extends AppCompatActivity {
             });
         }
 
+        protected void constructMedsList()
+        {
+            Medicament currentMedicament;
+            dbHelper = new DBHelper(this);
+
+            if (!medicaments.isEmpty()) {
+                medicaments.clear();
+            }
+
+            medicaments = dbHelper.getAllDrugs();
+
+            Collections.sort(medicaments, new Comparator<Medicament>() {
+                @Override
+                public int compare(Medicament lhs, Medicament rhs) {
+                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+                }
+            });
+
+            for (int position = 0 ; position < this. getCount() ; position++ ) {
+                currentMedicament = this.getItem(position);
+                currentMedicament.newStock(currentMedicament.getStock());
+                dbHelper.updateDrug(currentMedicament);
+            }
+
+
+        }
         @Override
         public int getItemCount() {
             return mValues.size();
