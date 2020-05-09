@@ -26,6 +26,11 @@ android {
         incremental false
     }*/
     buildToolsVersion = buildToolsVersion1
+    allprojects {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
 }
 
 repositories {
@@ -43,3 +48,4 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
 }
+
