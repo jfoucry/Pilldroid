@@ -85,7 +85,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private List<Medicament> medicaments;
 
-    private View mRecyclerView;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
     public int getCount() {
@@ -94,6 +93,36 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public Medicament getItem(int position) {
         return medicaments.get(position);
+    }
+
+    public void constructMedsList()
+    {
+        Medicament currentMedicament;
+        dbHelper = new DBHelper(getApplicationContext());
+
+        if (!(medicaments == null)) {
+            if (!medicaments.isEmpty()) {
+                medicaments.clear();
+            }
+        }
+        medicaments = dbHelper.getAllDrugs();
+
+        Collections.sort(medicaments, new Comparator<Medicament>() {
+            @Override
+            public int compare(Medicament lhs, Medicament rhs) {
+                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+            }
+        });
+
+        for (int position = 0 ; position < this.getCount() ; position++ ) {
+            currentMedicament = this.getItem(position);
+            currentMedicament.newStock(currentMedicament.getStock());
+            dbHelper.updateDrug(currentMedicament);
+        }
+
+        View mRecyclerView = findViewById(R.id.medicament_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
     }
 
     @Override
@@ -160,20 +189,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
 
-        if (medicaments == null) {
-            medicaments = dbHelper.getAllDrugs();
-
-            Collections.sort(medicaments, new Comparator<Medicament>() {
-                @Override
-                public int compare(Medicament lhs, Medicament rhs) {
-                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-                }
-            });
-        }
-
-        mRecyclerView = findViewById(R.id.medicament_list);
-        assert mRecyclerView != null;
-        setupRecyclerView((RecyclerView) mRecyclerView);
+        constructMedsList();
 
         if (findViewById(R.id.medicament_detail_container) != null) {
             // The detail container view will be present only in the
@@ -226,15 +242,6 @@ public class MedicamentListActivity extends AppCompatActivity {
      * Calculation of newStock
      */
     public void newStockCalculation() {
-
-        Medicament currentMedicament;
-        dbHelper = new DBHelper(this);
-
-        for (int position = 0 ; position < this. getCount() ; position++ ) {
-            currentMedicament = this.getItem(position);
-            currentMedicament.newStock(currentMedicament.getStock());
-            dbHelper.updateDrug(currentMedicament);
-        }
 
 //         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
 
@@ -314,7 +321,6 @@ public class MedicamentListActivity extends AppCompatActivity {
                             // nothing to do to just dismiss dialog
                         }
                     });
-
                 }
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
@@ -322,8 +328,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         } else if (requestCode == 1){
             Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
-            // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et
-            // TODO : raffraichissement de la base.[Call updateDrug(medicament)]
+            constructMedsList();
         }
     }
 
@@ -450,6 +455,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 }
             });
         }
+
 
         @Override
         public int getItemCount() {

@@ -41,7 +41,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     public static synchronized DBHelper getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new DBHelper(context.getApplicationContext());
+            sInstance = new DBHelper(context);
         }
         return sInstance;
     }
@@ -286,12 +286,6 @@ class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "Return update = " + i);
         // Close DB
         db.close();
-
-        // DEBUG
-        Medicament toto = getDrug(medicament.getId());
-        Log.d(TAG, "toto stock== " + toto.getStock());
-
-
     }
 
     /**
