@@ -2,13 +2,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 27
     defaultConfig {
         applicationId "net.foucry.pilldroid"
-        minSdkVersion 27
-        targetSdkVersion 29
-        versionCode 1
+        minSdkVersion defaultMinSdkVersion
+        targetSdkVersion defaultTargetSdkVersion
+        versionCode defaultVersionCode1
         versionName "1.0"
+        applicationIdSuffix = 'alpha'
     }
     buildTypes {
         release {
@@ -33,19 +34,22 @@ android {
     }
 }
 
-repositories {
+/*repositories {
     mavenCentral()
     maven {
         url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
     }
-}
+}*/
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.13'
+
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
+
+    implementation 'com.google.zxing:core:3.4.0'
 }
 
