@@ -11,8 +11,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +39,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
@@ -51,6 +56,7 @@ import static net.foucry.pilldroid.Utils.intRandomExclusive;
  */
 public class MedicamentListActivity extends AppCompatActivity {
 
+    private static final String CHANNEL_ID = "MedicamentCHANEL";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -232,10 +238,13 @@ public class MedicamentListActivity extends AppCompatActivity {
      *  call ZXing Library to scan a new QR/EAN code
      */
     public void scanNow(View view) {
-        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.initiateScan();
+
+/*        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
         //intent.putExtra("SCAN_MODE", "CODE_128");
         intent.putExtra("SCAN_FORMATS", "CODE_18,DATA_MATRIX");
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, 0);*/
     }
 
     /**
@@ -269,11 +278,13 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Context context = getApplicationContext();
+
         String cip13;
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+
                 Log.i(TAG, "Format:" + format);
                 Log.i(TAG, "Content:" + contents);
 
@@ -356,11 +367,16 @@ public class MedicamentListActivity extends AppCompatActivity {
     private Notification getNotification(String content) {
         Log.i(TAG, "getNotification");
 
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle(getAppName());
-        builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.ic_pill);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
+        //Intent intent  = new Intent(this, AlertDetails.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(getAppName())
+                .setContentText(content)
+                .setSmallIcon(R.drawable.ic_pill)
+                .setAutoCancel(true)
+                .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.mipmap.ic_launcher));
         return builder.build();
     }
