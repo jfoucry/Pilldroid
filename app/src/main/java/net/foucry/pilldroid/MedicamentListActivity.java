@@ -5,20 +5,17 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,8 +61,8 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     // TODO: Change DEMO/DBDEMO form statci to non-static. In order to create fake data at only at launchtime
     private boolean mTwoPane;
-    final Boolean DEMO = false;
-    final Boolean DBDEMO = false;
+    final Boolean DEMO = true;
+    final Boolean DBDEMO = true;
     final static Random random = new Random();
 
     @Override
@@ -238,21 +235,21 @@ public class MedicamentListActivity extends AppCompatActivity {
      *  call ZXing Library to scan a new QR/EAN code
      */
     public void scanNow(View view) {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.initiateScan();
+        //        new IntentIntegrator(this).initiateScan(); Simpliest way
 
-/*        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-        //intent.putExtra("SCAN_MODE", "CODE_128");
-        intent.putExtra("SCAN_FORMATS", "CODE_18,DATA_MATRIX");
-        startActivityForResult(intent, 0);*/
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.CODE_128, IntentIntegrator.DATA_MATRIX);
+        integrator.setPrompt("Scanner un Médicament");
+        integrator.setCameraId(0);  // Use a specific camera of the device
+        integrator.setBeepEnabled(true);
+        integrator.setBarcodeImageEnabled(false);
+        integrator.initiateScan();
     }
 
     /**
      * Calculation of newStock
      */
     public void newStockCalculation() {
-
-//         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
 
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
@@ -276,70 +273,18 @@ public class MedicamentListActivity extends AppCompatActivity {
         Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         Context context = getApplicationContext();
 
-        String cip13;
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-                Log.i(TAG, "Format:" + format);
-                Log.i(TAG, "Content:" + contents);
-
-                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                dlg.setTitle(context.getString(R.string.app_name));
-
-                // Handle successful scan
-                assert format != null;
-                if (format.equals("CODE_128")) { //CODE_128
-                    cip13 = contents;
-                } else {
-                    assert contents != null;
-                    cip13 = contents.substring(4, 17);
-                }
-
-                dbMedoc.openDatabase();
-                final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
-                dbMedoc.close();
-
-                if (scannedMedoc != null) {
-                    String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
-
-                    dlg.setMessage(msg);
-                    dlg.setNegativeButton(context.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Nothing to do in case of cancel
-                        }
-                    });
-                    dlg.setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Add Medicament to DB then try to show it
-                            scannedMedoc.setDateEndOfStock();
-                            dbHelper.addDrug(scannedMedoc);
-                            mAdapter.addItem(scannedMedoc);
-                        }
-                    });
-                    dlg.show();
-                } else {
-                    dlg.setMessage(context.getString(R.string.msgNotFound));
-                    dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // nothing to do to just dismiss dialog
-                        }
-                    });
-                }
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
-                Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
+        if (result !=null ) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
-        } else if (requestCode == 1){
-            Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
-            constructMedsList();
         }
     }
 
@@ -366,10 +311,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private Notification getNotification(String content) {
         Log.i(TAG, "getNotification");
-
-        //Intent intent  = new Intent(this, AlertDetails.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getAppName())
