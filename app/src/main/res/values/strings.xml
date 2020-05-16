@@ -8,4 +8,8 @@
     <string name="about">À propos</string>
     <string name="help">Aide</string>
     <string name="notification_text">Vous devez passer à la pharmarcie -POUET</string>
+
+    <string name="title_activity_scan">scanActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
