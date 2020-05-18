@@ -40,7 +40,7 @@
             app:srcCompat="@drawable/ic_keyboard_black_24dp" />
 
         <ImageButton
-            android:id="@+id/cancel_action"
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|left"
