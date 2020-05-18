@@ -445,3 +445,70 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
     }
 }
+
+/*
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Context context = getApplicationContext();
+        String cip13;
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                Log.i(TAG, "Format:" + format);
+                Log.i(TAG, "Content:" + contents);
+
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle(context.getString(R.string.app_name));
+
+                // Handle successful scan
+                assert format != null;
+                if (format.equals("CODE_128")) { //CODE_128
+                    cip13 = contents;
+                } else {
+                    assert contents != null;
+                    cip13 = contents.substring(4, 17);
+                }
+
+                dbMedoc.openDatabase();
+                final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+                dbMedoc.close();
+
+                if (scannedMedoc != null) {
+                    String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
+
+                    dlg.setMessage(msg);
+                    dlg.setNegativeButton(context.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Nothing to do in case of cancel
+                        }
+                    });
+                    dlg.setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Add Medicament to DB then try to show it
+                            scannedMedoc.setDateEndOfStock();
+                            dbHelper.addDrug(scannedMedoc);
+                            mAdapter.addItem(scannedMedoc);
+                        }
+                    });
+                    dlg.show();
+                } else {
+                    dlg.setMessage(context.getString(R.string.msgNotFound));
+                    dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nothing to do to just dismiss dialog
+                        }
+                    });
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+                Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == 1){
+            Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
+            constructMedsList();
+        }
+    }
+ */
