@@ -36,7 +36,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.foucry.pilldroid.MedicamentListActivity" />
         </activity>
-        <activity
+<!--        <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape"
@@ -52,7 +52,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity>-->
         <activity
             android:name=".About"
             android:label="À propos de PillDroid"

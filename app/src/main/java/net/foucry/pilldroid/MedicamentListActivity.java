@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -64,6 +65,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     final Boolean DEMO = true;
     final Boolean DBDEMO = true;
     final static Random random = new Random();
+    public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
 
     @Override
     public void onStart() {
@@ -237,20 +239,21 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void scanNow(View view) {
         //        new IntentIntegrator(this).initiateScan(); Simpliest way
 
-        IntentIntegrator integrator = new IntentIntegrator(this);
+/*        IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.CODE_128, IntentIntegrator.DATA_MATRIX);
         integrator.setPrompt("Scanner un Médicament");
         integrator.setCameraId(0);  // Use a specific camera of the device
         integrator.setBeepEnabled(true);
         integrator.setBarcodeImageEnabled(false);
-        integrator.initiateScan();
+        integrator.initiateScan();*/
+
+        new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(scanActivity.class).initiateScan();
     }
 
     /**
      * Calculation of newStock
      */
     public void newStockCalculation() {
-
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
 
@@ -273,18 +276,36 @@ public class MedicamentListActivity extends AppCompatActivity {
         Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Context context = getApplicationContext();
-
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-
-        if (result !=null ) {
-            if (result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
+        switch (requestCode) {
+            case CUSTOMIZED_REQUEST_CODE: {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+                break;
             }
+            default:
+                break;
+        }
+
+        IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+
+        if(result.getContents() == null) {
+            Intent originalIntent = result.getOriginalIntent();
+            if (originalIntent == null) {
+                Log.d(TAG, "Cancelled scan");
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                Log.d(TAG,"Cancelled scan due to missing camera permission");
+                Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Log.d(TAG, "Scanned");
+            Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
         }
     }
 
