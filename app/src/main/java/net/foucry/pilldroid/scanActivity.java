@@ -40,17 +40,20 @@ public class scanActivity extends Activity {
     private DecoratedBarcodeView barcodeScannerView;
     private ImageButton keyboardButton;
     private ImageButton cancelButton;
+    //private Button switchFlashlightButton;
     private ViewfinderView viewfinderView;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
-//        barcodeScannerView.setTorchListener(this);
+        //barcodeScannerView = findViewById(R.id.custom_barcode_scanner);
+        //barcodeScannerView.setTorchListener((DecoratedBarcodeView.TorchListener) this);
 
-//        switchFlashlightButton = findViewById(R.id.switch_flashlight);
+        //switchFlashlightButton = findViewById(R.id.switch_flashlight);
 
         keyboardButton = findViewById(R.id.keyboard);
         cancelButton = findViewById(R.id.cancel);
@@ -59,9 +62,9 @@ public class scanActivity extends Activity {
 
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...
-//        if (!hasFlash()) {
-//            switchFlashlightButton.setVisibility(View.GONE);
-//        }
+/*        if (!hasFlash()) {
+            switchFlashlightButton.setVisibility(View.GONE);
+        }*/
 
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
