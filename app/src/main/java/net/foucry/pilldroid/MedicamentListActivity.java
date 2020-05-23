@@ -247,7 +247,8 @@ public class MedicamentListActivity extends AppCompatActivity {
         integrator.setBarcodeImageEnabled(false);
         integrator.initiateScan();*/
 
-        new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(scanActivity.class).initiateScan();
+        // new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(scanActivity.class).initiateScan();
+        new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
     }
 
     /**
