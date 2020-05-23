@@ -4,12 +4,21 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
     <string name="msgNotFound">Médicament introuvable dans la base de données</string>
-    <string name="msgFound">trouvé dans la base de données</string>
+    <string name="msgFound">Médicament trouvé dans la base de données</string>
     <string name="about">À propos</string>
     <string name="help">Aide</string>
-    <string name="notification_text">Vous devez passer à la pharmarcie -POUET</string>
+    <string name="notification_text">Vous devez passer à la pharmarcie</string>
 
-    <string name="title_activity_scan">scanActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_scan" translatable="false">scanActivity</string>
+    <string name="dummy_button" translatable="false">Dummy Button</string>
+    <string name="dummy_content" translatable="false">DUMMY\nCONTENT</string>
+    <string name="turn_on_flashlight">Turn Flash On</string>
+    <string name="turn_off_flashlight">Turn Flash Off</string>
+    <string name="med_name_label">Nom</string>
+    <string name="med_presention_labal">Presentation</string>
+    <string name="med_administationMode_label">Mode d\'administration</string>
+    <string name="med_current_stock_label">Stock courant</string>
+    <string name="med_take_label">Prise</string>
+    <string name="med_warningTherehold_label">Seuil d\'alerte</string>
+    <string name="med_criticalTherehold_label">Seuil critique</string>
 </resources>
