@@ -13,7 +13,7 @@
             android:id="@+id/list_image"
             android:layout_width="50sp"
             android:layout_height="50sp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:src="@drawable/ok_stock"
             android:contentDescription="Icone de stock"
             android:layout_centerVertical="true"
@@ -41,7 +41,7 @@
             android:text="cip13 goes here"
             android:layout_below="@+id/valeur"
             android:layout_toEndOf="@+id/list_image"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginStart="5dp" />
 
         <TextView
             android:id="@+id/endOfStock"
@@ -49,7 +49,6 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="lundi 1 janvier 2001"
-            android:layout_marginRight="15dp"
             android:textSize="14sp"
             android:textColor="#212121"
             android:textStyle="bold"
@@ -64,11 +63,13 @@
     <!-- dateEndOfStock -->
 
     <!-- Rightend Arrow -->
-    <ImageView android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_navigate_next_black_24dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="10sp"/>
+        android:layout_marginRight="10sp"
+        android:contentDescription="@string/detail_view"
+        android:src="@drawable/ic_navigate_next_black_24dp" />
 
 </RelativeLayout>
