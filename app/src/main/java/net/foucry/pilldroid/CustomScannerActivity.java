@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 
@@ -26,6 +27,8 @@ public class CustomScannerActivity extends Activity implements
     private DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
     private ViewfinderView viewfinderView;
+    private ImageButton cancelButton;
+    private ImageButton keyboardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,9 @@ public class CustomScannerActivity extends Activity implements
 
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
+
+        cancelButton = findViewById(R.id.cancel_button);
+        keyboardButton = findViewById(R.id.keyboard_button);
 
         switchFlashlightButton = findViewById(R.id.switch_flashlight);
 
@@ -123,5 +129,17 @@ public class CustomScannerActivity extends Activity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void onCancel()
+    {
+        setResult(2);
+        finish();
+    }
+
+    public void onKeyboard()
+    {
+        setResult(3);
+        finish();
     }
 }
