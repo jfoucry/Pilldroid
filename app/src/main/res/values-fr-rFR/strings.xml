@@ -18,4 +18,6 @@
     <string name="turn_off_flashlight">Éteindre le flash</string>
     <string name="turn_on_flashlight">Allumer le flash</string>
     <string name="notification_text">Vous devez passer à la pharmacie</string>
+    <string name="button_keyboard">Utilisez le clavier</string>
+    <string name="detail_view">Vue de détail</string>
 </resources>

@@ -8,10 +8,6 @@
     <string name="about">À propos</string>
     <string name="help">Aide</string>
     <string name="notification_text">Vous devez passer à la pharmarcie</string>
-
-    <string name="title_activity_scan" translatable="false">scanActivity</string>
-    <string name="dummy_button" translatable="false">Dummy Button</string>
-    <string name="dummy_content" translatable="false">DUMMY\nCONTENT</string>
     <string name="turn_on_flashlight">Turn Flash On</string>
     <string name="turn_off_flashlight">Turn Flash Off</string>
     <string name="med_name_label">Nom</string>
@@ -21,4 +17,6 @@
     <string name="med_take_label">Prise</string>
     <string name="med_warningTherehold_label">Seuil d\'alerte</string>
     <string name="med_criticalTherehold_label">Seuil critique</string>
-</resources>
+    <string name="button_keyboard">"Use the keyboard"</string>
+    <string name="detail_view">Detail view</string>
+ </resources>
