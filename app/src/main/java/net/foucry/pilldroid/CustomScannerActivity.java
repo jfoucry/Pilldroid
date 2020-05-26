@@ -131,15 +131,14 @@ public class CustomScannerActivity extends Activity implements
         capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    public void onCancel()
-    {
-        setResult(2);
+
+    public void onKeyboard(View view) {
+        setResult(3);
         finish();
     }
 
-    public void onKeyboard()
-    {
-        setResult(3);
+    public void onCancel(View view) {
+        setResult(2);
         finish();
     }
 }
