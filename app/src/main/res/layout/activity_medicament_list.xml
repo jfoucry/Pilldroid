@@ -31,6 +31,7 @@
             layout="@layout/medicament_list"
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
+
     </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,11 +40,18 @@
         android:layout_height="60dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:onClick="scanNow"
-        android:src="@android:drawable/ic_input_add"
+        android:accessibilityHeading="true"
         android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/transparent"
+        android:baselineAlignBottom="false"
         android:clickable="false"
-        android:baselineAlignBottom="false"/>
+        android:onClick="scanNow"
+        android:src="@drawable/ic_add_circle_black_24dp"
+        app:backgroundTint="@android:color/darker_gray"
+        app:fabCustomSize="60dp"
+        app:maxImageSize="60dp" />
+
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
