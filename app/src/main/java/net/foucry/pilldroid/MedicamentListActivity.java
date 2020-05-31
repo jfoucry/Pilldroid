@@ -279,8 +279,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "RequestCode == " + requestCode);
-
         if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
@@ -297,20 +295,20 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
 
-        Log.d(TAG, "result" +result);
-
-        if(result.getContents() == null) {
-            Intent originalIntent = result.getOriginalIntent();
-            if (originalIntent == null) {
-                Log.d(TAG, "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                Log.d(TAG,"Cancelled scan due to missing camera permission");
-                Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "result" +result);if(result.getContents() == null) {
+                    Intent originalIntent = result.getOriginalIntent();
+                    if (originalIntent == null) {
+                        Log.d(TAG, "Cancelled scan");
+                        Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                        Log.d(TAG,"Cancelled scan due to missing camera permission");
+                        Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d(TAG, "Scanned");
+                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
             }
-        } else {
-            Log.d(TAG, "Scanned");
-            Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
         }
     }
 
