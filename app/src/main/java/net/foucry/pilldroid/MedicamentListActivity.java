@@ -66,6 +66,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     final Boolean DBDEMO = true;
     final static Random random = new Random();
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+    public final int SAVE_RQUEST_CODE = 0x000000ff;
 
     @Override
     public void onStart() {
@@ -286,27 +287,37 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
         switch (requestCode) {
             case CUSTOMIZED_REQUEST_CODE: {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode + "RESULT_CODE == " + resultCode, Toast.LENGTH_LONG).show();
+                Log.d(TAG, "requestCode == "+ requestCode);
+                Log.d(TAG, "resultCode == " + resultCode);
                 break;
             }
-            default:
+            case SAVE_RQUEST_CODE: {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode + "RESULT_CODE == " + resultCode, Toast.LENGTH_LONG).show();
+                Log.d(TAG, "requestCode == "+ requestCode);
+                Log.d(TAG, "resultCode == " + resultCode);
                 break;
-        }
-
-        IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
-
-        if(result.getContents() == null) {
-            Intent originalIntent = result.getOriginalIntent();
-            if (originalIntent == null) {
-                Log.d(TAG, "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                Log.d(TAG,"Cancelled scan due to missing camera permission");
-                Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
             }
-        } else {
-            Log.d(TAG, "Scanned");
-            Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            default {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode + "RESULT_CODE == " + resultCode, Toast.LENGTH_LONG).show();
+                Log.d(TAG, "requestCode == "+ requestCode);
+                Log.d(TAG, "resultCode == " + resultCode);
+                IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+
+                if(result.getContents() == null) {
+                    Intent originalIntent = result.getOriginalIntent();
+                    if (originalIntent == null) {
+                        Log.d(TAG, "Cancelled scan");
+                        Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                        Log.d(TAG,"Cancelled scan due to missing camera permission");
+                        Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d(TAG, "Scanned");
+                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 
