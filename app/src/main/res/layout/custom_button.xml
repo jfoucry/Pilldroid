@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.floatingactionbutton.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fb"
-    android:layout_width="60dp"
-    android:layout_height="60dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:layout_gravity="top|center"
-    android:backgroundTint="@drawable/fb_play_bg"
-    android:src="@drawable/fb_icon_play" />
-
+    android:backgroundTint="@android:color/transparent"
+    app:fabCustomSize="60dp"
+    app:maxImageSize="60dp"
+    android:src="@drawable/ic_add_circle_black_24dp" />
 

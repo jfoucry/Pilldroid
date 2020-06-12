@@ -1,17 +1,15 @@
 package net.foucry.pilldroid;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.support.design.widget.CollapsingToolbarLayout;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * A fragment representing a single Medicament detail screen.
@@ -76,43 +74,43 @@ public class MedicamentDetailFragment extends Fragment {
             nameView = detailView.findViewById(R.id.name_cell);
             TextView nameLabel = nameView.findViewById(R.id.label);
             TextView nameValeur = nameView.findViewById(R.id.valeur);
-            nameLabel.setText("Nom");
+            nameLabel.setText(R.string.med_name_label);
             nameValeur.setText(medicament.getNom());
 
             presentationView = detailView.findViewById(R.id.presentation_cell);
             TextView presentationLabel = presentationView.findViewById(R.id.label);
             TextView presentationValeur = presentationView.findViewById(R.id.valeur);
-            presentationLabel.setText("Presentation");
+            presentationLabel.setText(R.string.med_presention_labal);
             presentationValeur.setText(medicament.getPresentation());
 
             adminModeView = detailView.findViewById(R.id.administration_cell);
             TextView adminModeLabel = adminModeView.findViewById(R.id.label);
             TextView adminModeValeur = adminModeView.findViewById(R.id.valeur);
-            adminModeLabel.setText("Mode d'administration");
+            adminModeLabel.setText(R.string.med_administationMode_label);
             adminModeValeur.setText(medicament.getMode_administration());
 
             stockView = detailView.findViewById(R.id.stock_cell);
             TextView stockLibelle = (stockView.findViewById(R.id.libelle));
             TextView stockValue = stockView.findViewById(R.id.valeur);
-            stockLibelle.setText("Stock courant");
+            stockLibelle.setText(R.string.med_current_stock_label);
             stockValue.setText(Double.toString(medicament.getStock()));
 
             priseView = detailView.findViewById(R.id.prise_cell);
             TextView priseLibelle = priseView.findViewById(R.id.libelle);
             TextView priseValue = (priseView.findViewById(R.id.valeur));
-            priseLibelle.setText("Prise");
+            priseLibelle.setText(R.string.med_take_label);
             priseValue.setText(Double.toString(medicament.getPrise()));
 
             warningView = detailView.findViewById(R.id.warning_cell);
             TextView warningLibelle = warningView.findViewById(R.id.libelle);
             TextView warningValue = warningView.findViewById(R.id.valeur);
-            warningLibelle.setText("Seuil d'alerte");
+            warningLibelle.setText(R.string.med_warningTherehold_label);
             warningValue.setText(Integer.toString(medicament.getWarnThreshold()));
 
             alertView = detailView.findViewById(R.id.alert_cell);
             TextView alertLibelle = alertView.findViewById(R.id.libelle);
             TextView alertValue = alertView.findViewById(R.id.valeur);
-            alertLibelle.setText("Seuil critique");
+            alertLibelle.setText(R.string.med_criticalTherehold_label);
             alertValue.setText(Integer.toString(medicament.getAlertThreshold()));
         }
 

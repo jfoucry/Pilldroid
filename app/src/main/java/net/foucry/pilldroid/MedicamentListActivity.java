@@ -5,18 +5,17 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,6 +36,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
@@ -51,6 +54,7 @@ import static net.foucry.pilldroid.Utils.intRandomExclusive;
  */
 public class MedicamentListActivity extends AppCompatActivity {
 
+    private static final String CHANNEL_ID = "MedicamentCHANEL";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -61,6 +65,8 @@ public class MedicamentListActivity extends AppCompatActivity {
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
     final static Random random = new Random();
+    public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+    public final int SAVE_RQUEST_CODE = 0x000000ff;
 
     @Override
     public void onStart() {
@@ -85,7 +91,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private List<Medicament> medicaments;
 
-    private View mRecyclerView;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
     public int getCount() {
@@ -94,6 +99,36 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public Medicament getItem(int position) {
         return medicaments.get(position);
+    }
+
+    public void constructMedsList()
+    {
+        Medicament currentMedicament;
+        dbHelper = new DBHelper(getApplicationContext());
+
+        if (!(medicaments == null)) {
+            if (!medicaments.isEmpty()) {
+                medicaments.clear();
+            }
+        }
+        medicaments = dbHelper.getAllDrugs();
+
+        Collections.sort(medicaments, new Comparator<Medicament>() {
+            @Override
+            public int compare(Medicament lhs, Medicament rhs) {
+                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+            }
+        });
+
+        for (int position = 0 ; position < this.getCount() ; position++ ) {
+            currentMedicament = this.getItem(position);
+            currentMedicament.newStock(currentMedicament.getStock());
+            dbHelper.updateDrug(currentMedicament);
+        }
+
+        View mRecyclerView = findViewById(R.id.medicament_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
     }
 
     @Override
@@ -160,20 +195,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
 
-        if (medicaments == null) {
-            medicaments = dbHelper.getAllDrugs();
-
-            Collections.sort(medicaments, new Comparator<Medicament>() {
-                @Override
-                public int compare(Medicament lhs, Medicament rhs) {
-                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-                }
-            });
-        }
-
-        mRecyclerView = findViewById(R.id.medicament_list);
-        assert mRecyclerView != null;
-        setupRecyclerView((RecyclerView) mRecyclerView);
+        constructMedsList();
 
         if (findViewById(R.id.medicament_detail_container) != null) {
             // The detail container view will be present only in the
@@ -216,28 +238,24 @@ public class MedicamentListActivity extends AppCompatActivity {
      *  call ZXing Library to scan a new QR/EAN code
      */
     public void scanNow(View view) {
-        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-        //intent.putExtra("SCAN_MODE", "CODE_128");
-        intent.putExtra("SCAN_FORMATS", "CODE_18,DATA_MATRIX");
-        startActivityForResult(intent, 0);
+        //        new IntentIntegrator(this).initiateScan(); Simpliest way
+
+/*        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.CODE_128, IntentIntegrator.DATA_MATRIX);
+        integrator.setPrompt("Scanner un Médicament");
+        integrator.setCameraId(0);  // Use a specific camera of the device
+        integrator.setBeepEnabled(true);
+        integrator.setBarcodeImageEnabled(false);
+        integrator.initiateScan();*/
+
+        // new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(scanActivity.class).initiateScan();
+        new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
     }
 
     /**
      * Calculation of newStock
      */
     public void newStockCalculation() {
-
-        Medicament currentMedicament;
-        dbHelper = new DBHelper(this);
-
-        for (int position = 0 ; position < this. getCount() ; position++ ) {
-            currentMedicament = this.getItem(position);
-            currentMedicament.newStock(currentMedicament.getStock());
-            dbHelper.updateDrug(currentMedicament);
-        }
-
-//         TODO: si un des médicaments est en rouge, on déclanche une notification visuelle pour dans 5 secondes
-
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
 
@@ -260,70 +278,36 @@ public class MedicamentListActivity extends AppCompatActivity {
         Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Context context = getApplicationContext();
-        String cip13;
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                Log.i(TAG, "Format:" + format);
-                Log.i(TAG, "Content:" + contents);
-
-                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                dlg.setTitle(context.getString(R.string.app_name));
-
-                // Handle successful scan
-                assert format != null;
-                if (format.equals("CODE_128")) { //CODE_128
-                    cip13 = contents;
-                } else {
-                    assert contents != null;
-                    cip13 = contents.substring(4, 17);
-                }
-
-                dbMedoc.openDatabase();
-                final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
-                dbMedoc.close();
-
-                if (scannedMedoc != null) {
-                    String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
-
-                    dlg.setMessage(msg);
-                    dlg.setNegativeButton(context.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Nothing to do in case of cancel
-                        }
-                    });
-                    dlg.setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Add Medicament to DB then try to show it
-                            scannedMedoc.setDateEndOfStock();
-                            dbHelper.addDrug(scannedMedoc);
-                            mAdapter.addItem(scannedMedoc);
-                        }
-                    });
-                    dlg.show();
-                } else {
-                    dlg.setMessage(context.getString(R.string.msgNotFound));
-                    dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // nothing to do to just dismiss dialog
-                        }
-                    });
-
-                }
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
-                Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
+        switch (requestCode) {
+            case CUSTOMIZED_REQUEST_CODE: {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+                break;
             }
-        } else if (requestCode == 1){
-            Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
-            // TODO : Si requestCode=1 -> Sauvegarde du medoc dans la base et
-            // TODO : raffraichissement de la base.[Call updateDrug(medicament)]
+            default:
+                break;
+        }
+
+        IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+
+        if(result.getContents() == null) {
+            Intent originalIntent = result.getOriginalIntent();
+            if (originalIntent == null) {
+                Log.d(TAG, "Cancelled scan");
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                Log.d(TAG,"Cancelled scan due to missing camera permission");
+                Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Log.d(TAG, "Scanned");
+            Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -351,11 +335,12 @@ public class MedicamentListActivity extends AppCompatActivity {
     private Notification getNotification(String content) {
         Log.i(TAG, "getNotification");
 
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle(getAppName());
-        builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.ic_pill);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(getAppName())
+                .setContentText(content)
+                .setSmallIcon(R.drawable.ic_pill)
+                .setAutoCancel(true)
+                .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.mipmap.ic_launcher));
         return builder.build();
     }
@@ -451,6 +436,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             });
         }
 
+
         @Override
         public int getItemCount() {
             return mValues.size();
@@ -482,3 +468,70 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
     }
 }
+
+/*
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Context context = getApplicationContext();
+        String cip13;
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                Log.i(TAG, "Format:" + format);
+                Log.i(TAG, "Content:" + contents);
+
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle(context.getString(R.string.app_name));
+
+                // Handle successful scan
+                assert format != null;
+                if (format.equals("CODE_128")) { //CODE_128
+                    cip13 = contents;
+                } else {
+                    assert contents != null;
+                    cip13 = contents.substring(4, 17);
+                }
+
+                dbMedoc.openDatabase();
+                final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+                dbMedoc.close();
+
+                if (scannedMedoc != null) {
+                    String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
+
+                    dlg.setMessage(msg);
+                    dlg.setNegativeButton(context.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Nothing to do in case of cancel
+                        }
+                    });
+                    dlg.setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Add Medicament to DB then try to show it
+                            scannedMedoc.setDateEndOfStock();
+                            dbHelper.addDrug(scannedMedoc);
+                            mAdapter.addItem(scannedMedoc);
+                        }
+                    });
+                    dlg.show();
+                } else {
+                    dlg.setMessage(context.getString(R.string.msgNotFound));
+                    dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nothing to do to just dismiss dialog
+                        }
+                    });
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+                Toast.makeText(context, "Scan annulé", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == 1){
+            Toast.makeText(context, "back from detail", Toast.LENGTH_SHORT).show();
+            constructMedsList();
+        }
+    }
+ */

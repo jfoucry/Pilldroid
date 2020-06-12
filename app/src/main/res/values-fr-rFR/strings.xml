@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PillDroid</string>
+    <string name="title_medicament_detail">Détail Médicament</string>
+    <string name="button_cancel">Annuler</string>
+    <string name="button_ok">OK</string>
+    <string name="med_presention_labal">Présentation</string>
+    <string name="med_name_label">Nom</string>
+    <string name="med_administationMode_label">Mode d\'adminitration</string>
+    <string name="msgNotFound">Médicament introuvable dans la base de données</string>
+    <string name="about">À propos</string>
+    <string name="help">Aide</string>
+    <string name="med_take_label">Prise</string>
+    <string name="med_criticalTherehold_label">Seuil critique</string>
+    <string name="med_warningTherehold_label">Seuil d\'alerte</string>
+    <string name="msgFound">Médicament trouvé dans la base de données</string>
+    <string name="med_current_stock_label">Stock courant</string>
+    <string name="turn_off_flashlight">Éteindre le flash</string>
+    <string name="turn_on_flashlight">Allumer le flash</string>
+    <string name="notification_text">Vous devez passer à la pharmacie</string>
+    <string name="button_keyboard">Utilisez le clavier</string>
+    <string name="detail_view">Vue de détail</string>
+    <string name="scan_action">Scanner un code barre de médicament</string>
+    <string name="save_button">Save</string>
+</resources>
