@@ -66,7 +66,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     final Boolean DBDEMO = false;
     final static Random random = new Random();
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
-    public final int SAVE_REQUEST_CODE = 0x000000ff;
 
     @Override
     public void onStart() {
@@ -277,11 +276,9 @@ public class MedicamentListActivity extends AppCompatActivity {
         switch (requestCode) {
             case CUSTOMIZED_REQUEST_CODE: {
                 Toast.makeText(this, "REQUEST_CODE = " + requestCode +"RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
-                break;
-            }
-            case SAVE_REQUEST_CODE: {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode +"RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
-                updateDrug();
+                if (resultCode == 1) {
+                    constructMedsList();
+                }
                 break;
             }
             default: {
@@ -428,7 +425,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             holder.mContentView.setText(mValues.get(position).getNom());
             holder.mEndOfStock.setText(dateEndOfStock);
 
-            // Test to change background programmaticaly
+            // Test to change background programmatically
             if (mValues.get(position).getPrise() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
             } else {
@@ -462,8 +459,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
-                        int requestCode = SAVE_REQUEST_CODE;
-                        startActivityForResult(intent, requestCode);
+                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                     }
                 }
             });
