@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import static net.foucry.pilldroid.R.id.detail_toolbar;
@@ -36,6 +37,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
 
         medicament = (Medicament) extras.getSerializable("medicament");
 
+        assert medicament != null;
         Log.d(TAG, "medicament == " + medicament.toString());
 
         setContentView(R.layout.activity_medicament_detail);
@@ -46,7 +48,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
         }
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        ImageButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
