@@ -54,10 +54,10 @@
             </intent-filter>
         </activity>-->
         <activity
-            android:name=".About"
+            android:name="About"
             android:label="À propos de PillDroid"
             android:parentActivityName=".MedicamentListActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity android:name=".CustomScannerActivity" />
 
         <receiver android:name=".NotificationPublisher" />
