@@ -62,8 +62,8 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     // TODO: Change DEMO/DBDEMO form statci to non-static. In order to create fake data at only at launchtime
     private boolean mTwoPane;
-    final Boolean DEMO = true;
-    final Boolean DBDEMO = true;
+    final Boolean DEMO = false;
+    final Boolean DBDEMO = false;
     final static Random random = new Random();
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
 
@@ -279,6 +279,8 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "RequestCode == " + requestCode);
+
         if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
@@ -294,6 +296,8 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
 
         IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+
+        Log.d(TAG, "result" +result);
 
         if(result.getContents() == null) {
             Intent originalIntent = result.getOriginalIntent();
@@ -428,7 +432,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
-                        int requestCode = 1;
+                        int requestCode = 0x0000ffff;
                         startActivityForResult(intent, requestCode);
                     }
                 }
