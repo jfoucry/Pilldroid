@@ -66,6 +66,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     final Boolean DBDEMO = false;
     final static Random random = new Random();
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+    public final int SAVE_RQUEST_CODE = 0x000000ff;
 
     @Override
     public void onStart() {
@@ -237,17 +238,6 @@ public class MedicamentListActivity extends AppCompatActivity {
      *  call ZXing Library to scan a new QR/EAN code
      */
     public void scanNow(View view) {
-        //        new IntentIntegrator(this).initiateScan(); Simpliest way
-
-/*        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.CODE_128, IntentIntegrator.DATA_MATRIX);
-        integrator.setPrompt("Scanner un Médicament");
-        integrator.setCameraId(0);  // Use a specific camera of the device
-        integrator.setBeepEnabled(true);
-        integrator.setBarcodeImageEnabled(false);
-        integrator.initiateScan();*/
-
-        // new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(scanActivity.class).initiateScan();
         new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
     }
 
@@ -286,16 +276,19 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
         switch (requestCode) {
             case CUSTOMIZED_REQUEST_CODE: {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode +"RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
                 break;
             }
-            default:
+            case SAVE_REQUEST_CODE: {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode +"RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
+                updateDrug();
                 break;
-        }
+            }
+            default: {
+                IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
 
-        IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
-
-                Log.d(TAG, "result" +result);if(result.getContents() == null) {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+                if(result.getContents() == null) {
                     Intent originalIntent = result.getOriginalIntent();
                     if (originalIntent == null) {
                         Log.d(TAG, "Cancelled scan");
@@ -307,7 +300,46 @@ public class MedicamentListActivity extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "Scanned");
                     Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+
+                    /*AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                    dlg.setTitle(context.getString(R.string.app_name));
+
+                    // Handle successful scan
+                    assert format != null;
+                    if (format.equals("CODE_128")) { //CODE_128
+                        cip13 = contents;
+                    } else {
+                        assert contents != null;
+                        cip13 = contents.substring(4, 17);
+                    }
+
+                    // Get Medoc from database
+                    dbMedoc.openDatabase();
+                    final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+                    dbMedoc.close();
+
+                    if (scannedMedoc != null) {
+                        String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
+
+                        dlg.setMessage(msg);
+                        dlg.setNegativeButton(context.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Nothing to do in case of cancel
+                            }
+                        });
+                        dlg.setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Add Medicament to DB then try to show it
+                                scannedMedoc.setDateEndOfStock();
+                                dbHelper.addDrug(scannedMedoc);
+                                mAdapter.addItem(scannedMedoc);
+                            }
+                        });
+                        dlg.show();*/
                 }
+                break;
             }
         }
     }
