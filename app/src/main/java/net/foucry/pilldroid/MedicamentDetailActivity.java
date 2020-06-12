@@ -35,6 +35,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
 
         /* fetching the string passed with intent using ‘extras’*/
 
+        assert extras != null;
         medicament = (Medicament) extras.getSerializable("medicament");
 
         assert medicament != null;
@@ -150,6 +151,5 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         medicament.setDateEndOfStock();
 
         dbHelper.updateDrug(medicament);
-        return;
     }
 }
