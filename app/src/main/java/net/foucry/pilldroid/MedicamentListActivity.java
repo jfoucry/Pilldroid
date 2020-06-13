@@ -155,7 +155,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 // String cis, String cip13, String nom, String mode_administration,
                 // String presentation,double stock, double prise, int warn, int alert
 
-                // Limit for randmon generator
+                // Limit for randoms generator
                 final int min_stock=5;
                 final int max_stock=50;
                 final int min_prise=0;
@@ -276,8 +276,26 @@ public class MedicamentListActivity extends AppCompatActivity {
         switch (requestCode) {
             case CUSTOMIZED_REQUEST_CODE: {
                 Toast.makeText(this, "REQUEST_CODE = " + requestCode +"RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
-                if (resultCode == 1) {
-                    constructMedsList();
+                Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
+                switch (resultCode) {
+                    case 1: {
+                        constructMedsList();
+                        break;
+                    }
+                    case 2: {
+                        Toast.makeText(this, "Cancelled scan", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Cancelled Scan");
+                        break;
+                    }
+                    case 3: {
+                        Toast.makeText(this, "Keyboard input", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Keyboard Input");
+                        break;
+                    }
+                    default: {
+                        Toast.makeText(this, "What are you doing here?", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "What are you doing here?");
+                    }
                 }
                 break;
             }
@@ -289,13 +307,16 @@ public class MedicamentListActivity extends AppCompatActivity {
                     Intent originalIntent = result.getOriginalIntent();
                     if (originalIntent == null) {
                         Log.d(TAG, "Cancelled scan");
+                        Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
                         Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                     } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
                         Log.d(TAG,"Cancelled scan due to missing camera permission");
+                        Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
                         Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Log.d(TAG, "Scanned");
+                    Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
                     Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
 
                     /*AlertDialog.Builder dlg = new AlertDialog.Builder(this);
