@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +36,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -64,7 +65,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
-    final static Random random = new Random();
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
 
     @Override
@@ -317,45 +317,40 @@ public class MedicamentListActivity extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "Scanned");
                     Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
+                    Log.d(TAG, "result.getContents = " + result.getContents());
+                    Log.d(TAG, "format = " + result.getFormatName());
+
                     Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
 
-                    /*AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                    dlg.setTitle(context.getString(R.string.app_name));
+                    String cip13;
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                    dlg.setTitle(getString(R.string.app_name));
 
                     // Handle successful scan
-                    assert format != null;
-                    if (format.equals("CODE_128")) { //CODE_128
-                        cip13 = contents;
+                    if (result.getFormatName().equals("CODE_128")) { //CODE_128
+                        cip13 = result.getContents();
                     } else {
-                        assert contents != null;
-                        cip13 = contents.substring(4, 17);
+                        cip13 = result.getContents().substring(4, 17);
                     }
 
                     // Get Medoc from database
-                    dbMedoc.openDatabase();
                     final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
-                    dbMedoc.close();
 
                     if (scannedMedoc != null) {
                         String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
 
                         dlg.setMessage(msg);
-                        dlg.setNegativeButton(context.getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Nothing to do in case of cancel
-                            }
+                        dlg.setNegativeButton(getString(R.string.button_cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
+                            // Nothing to do in case of cancel
                         });
-                        dlg.setPositiveButton(context.getString(R.string.button_ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Add Medicament to DB then try to show it
-                                scannedMedoc.setDateEndOfStock();
-                                dbHelper.addDrug(scannedMedoc);
-                                mAdapter.addItem(scannedMedoc);
-                            }
+                        dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
+                            // Add Medicament to DB then try to show it
+                            scannedMedoc.setDateEndOfStock();
+                            dbHelper.addDrug(scannedMedoc);
+                            mAdapter.addItem(scannedMedoc);
                         });
-                        dlg.show();*/
+                        dlg.show();
+                    }
                 }
                 break;
             }
