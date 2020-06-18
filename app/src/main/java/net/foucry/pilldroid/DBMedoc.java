@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+
 /**
  * Created by jfoucry on 5/25/16.
  */
@@ -20,11 +21,9 @@ class DBMedoc  extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
 
-    private static String DATABASE_PATH = "/data/data/net.foucry.pilldroid/databases/";
     private static String dbName = "medicaments.db";
-    private SQLiteDatabase myDataBase;
     private final Context myContext;
-    private File dbFile = new File(DATABASE_PATH + dbName);
+    private SQLiteDatabase myDataBase;
 
     private static final String TABLE_NAME  = "medicaments";
     private static final String MEDOC_CIS   = "cis";
@@ -37,6 +36,7 @@ class DBMedoc  extends SQLiteOpenHelper{
 
     private static final String TAG = DBMedoc.class.getName();
 
+
     DBMedoc(Context context) {
         super(context, dbName, null, DATABASE_VERSION);
         this.myContext = context;
@@ -44,9 +44,12 @@ class DBMedoc  extends SQLiteOpenHelper{
 
     @Override
     public synchronized SQLiteDatabase getWritableDatabase() {
+
+        File dbFile = myContext.getDatabasePath(dbName);
+
         if (!dbFile.exists()) {
             SQLiteDatabase db = super.getWritableDatabase();
-            copyDatabase(db.getPath());
+            copyDatabase(dbFile.getPath());
         }
 
         return  super.getWritableDatabase();
@@ -54,9 +57,12 @@ class DBMedoc  extends SQLiteOpenHelper{
 
     @Override
     public synchronized  SQLiteDatabase getReadableDatabase() {
+        File dbFile = myContext.getDatabasePath(dbName);
+
         if (dbFile.exists()) return super.getReadableDatabase();
+
         SQLiteDatabase db = super.getReadableDatabase();
-        copyDatabase(db.getPath());
+        copyDatabase(dbFile.getPath());
         return super.getReadableDatabase();
     }
 
@@ -67,6 +73,7 @@ class DBMedoc  extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
     private void copyDatabase(String dbPath) {
+        Log.d(TAG, "try to copy database");
         try {
             InputStream assetDB = myContext.getAssets().open(dbName);
             OutputStream appDB = new FileOutputStream(dbPath, false);
@@ -87,7 +94,7 @@ class DBMedoc  extends SQLiteOpenHelper{
 
     void openDatabase() throws SQLiteException {
         Log.e(TAG, "openDatabase called");
-        String myPath = DATABASE_PATH + dbName;
+        String myPath = myContext.getDatabasePath(dbName).getPath();
 
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
@@ -102,10 +109,10 @@ class DBMedoc  extends SQLiteOpenHelper{
     /**
      * Lookup in the DB for a record corresponding to cpi1
      * @param cip13 string representing the object we're looking for
-     * @return return a medicament objet
+     * @return return a medicament object
      */
     Medicament getMedocByCIP13(String cip13) {
-        Log.e(TAG, "getNedocByCIP13 - " + cip13);
+        Log.e(TAG, "CIP13 - " + cip13);
 
         SQLiteDatabase db = this.getReadableDatabase();
 
