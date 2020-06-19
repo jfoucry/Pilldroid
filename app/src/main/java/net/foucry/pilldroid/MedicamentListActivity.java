@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -290,6 +291,25 @@ public class MedicamentListActivity extends AppCompatActivity {
                     case 3: {
                         Toast.makeText(this, "Keyboard input", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Keyboard Input");
+                        String cip13_input = showInputDialog();
+
+                        final Medicament medoc = dbMedoc.getMedocByCIP13(cip13_input);
+                        if ( medoc != null ) {
+                            medoc.setDateEndOfStock();
+                            dbHelper.addDrug(medoc);
+                            mAdapter.addItem(medoc);
+                        } else {
+                            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                            dlg.setTitle(getString(R.string.app_name));
+                            dlg.setMessage(getString(R.string.msgNotFound));
+                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // nothing to do to just dismiss dialog
+                                }
+                            });
+                            dlg.show();
+                        }
                         break;
                     }
                     default: {
@@ -303,6 +323,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
 
                 Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+                Log.d(TAG, "REQUEST_CODE = " + requestCode + "resultCode = " + resultCode);
                 if(result.getContents() == null) {
                     Intent originalIntent = result.getOriginalIntent();
                     if (originalIntent == null) {
@@ -350,11 +371,49 @@ public class MedicamentListActivity extends AppCompatActivity {
                             mAdapter.addItem(scannedMedoc);
                         });
                         dlg.show();
+                    } else {
+                        dlg.setMessage(getString(R.string.msgNotFound));
+                        dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // nothing to do to just dismiss dialog
+                            }
+                        });
+                        dlg.show();
                     }
                 }
                 break;
             }
         }
+    }
+
+    protected String showInputDialog() {
+
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(MedicamentListActivity.this);
+        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MedicamentListActivity.this);
+        alertDialogBuilder.setView(promptView);
+
+        final EditText editText = promptView.findViewById(R.id.edittext);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        editText.getText();
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+        return editText.toString();
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
