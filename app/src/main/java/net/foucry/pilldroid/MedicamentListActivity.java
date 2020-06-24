@@ -327,13 +327,36 @@ public class MedicamentListActivity extends AppCompatActivity {
                 if(result.getContents() == null) {
                     Intent originalIntent = result.getOriginalIntent();
                     if (originalIntent == null) {
-                        Log.d(TAG, "Cancelled scan");
+                        Log.d(TAG, "Cancelled scan"); // Todo: put here resultCode =3 test
                         Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
                         Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                     } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
                         Log.d(TAG,"Cancelled scan due to missing camera permission");
                         Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
                         Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+                    } else if (resultCode == 3) {
+                        Toast.makeText(this, "Keyboard input", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Keyboard Input");
+                        String cip13_input = showInputDialog();
+
+                        final Medicament medoc = dbMedoc.getMedocByCIP13(cip13_input);
+                        if ( medoc != null ) {
+                            medoc.setDateEndOfStock();
+                            dbHelper.addDrug(medoc);
+                            mAdapter.addItem(medoc);
+                        } else {
+                            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                            dlg.setTitle(getString(R.string.app_name));
+                            dlg.setMessage(getString(R.string.msgNotFound));
+                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // nothing to do to just dismiss dialog
+                                }
+                            });
+                            dlg.show();
+                        }
+                        break;
                     }
                 } else {
                     Log.d(TAG, "Scanned");
@@ -344,42 +367,67 @@ public class MedicamentListActivity extends AppCompatActivity {
                     Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
 
                     String cip13;
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                    dlg.setTitle(getString(R.string.app_name));
 
-                    // Handle successful scan
-                    if (result.getFormatName().equals("CODE_128")) { //CODE_128
-                        cip13 = result.getContents();
+                    if (resultCode == 3) {
+                        Toast.makeText(this, "Keyboard input", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Keyboard Input");
+                        cip13= showInputDialog();
+
+                        final Medicament medoc = dbMedoc.getMedocByCIP13(cip13);
+                        if ( medoc != null ) {
+                            medoc.setDateEndOfStock();
+                            dbHelper.addDrug(medoc);
+                            mAdapter.addItem(medoc);
+                        } else {
+                            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                            dlg.setTitle(getString(R.string.app_name));
+                            dlg.setMessage(getString(R.string.msgNotFound));
+                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // nothing to do to just dismiss dialog
+                                }
+                            });
+                            dlg.show();
+                        }
                     } else {
-                        cip13 = result.getContents().substring(4, 17);
-                    }
+                        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                        dlg.setTitle(getString(R.string.app_name));
 
-                    // Get Medoc from database
-                    final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+                        // Handle successful scan
+                        if (result.getFormatName().equals("CODE_128")) { //CODE_128
+                            cip13 = result.getContents();
+                        } else {
+                            cip13 = result.getContents().substring(4, 17);
+                        }
 
-                    if (scannedMedoc != null) {
-                        String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
+                        // Get Medoc from database
+                        final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
 
-                        dlg.setMessage(msg);
-                        dlg.setNegativeButton(getString(R.string.button_cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
-                            // Nothing to do in case of cancel
-                        });
-                        dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
-                            // Add Medicament to DB then try to show it
-                            scannedMedoc.setDateEndOfStock();
-                            dbHelper.addDrug(scannedMedoc);
-                            mAdapter.addItem(scannedMedoc);
-                        });
-                        dlg.show();
-                    } else {
-                        dlg.setMessage(getString(R.string.msgNotFound));
-                        dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // nothing to do to just dismiss dialog
-                            }
-                        });
-                        dlg.show();
+                        if (scannedMedoc != null) {
+                            String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
+
+                            dlg.setMessage(msg);
+                            dlg.setNegativeButton(getString(R.string.button_cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
+                                // Nothing to do in case of cancel
+                            });
+                            dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
+                                // Add Medicament to DB then try to show it
+                                scannedMedoc.setDateEndOfStock();
+                                dbHelper.addDrug(scannedMedoc);
+                                mAdapter.addItem(scannedMedoc);
+                            });
+                            dlg.show();
+                        } else {
+                            dlg.setMessage(getString(R.string.msgNotFound));
+                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // nothing to do to just dismiss dialog
+                                }
+                            });
+                            dlg.show();
+                        }
                     }
                 }
                 break;
@@ -472,9 +520,13 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
 
         void addItem(Medicament scannedMedoc) {
-            mValues.add(scannedMedoc);
-            notifyDataSetChanged();
-            dbHelper.addDrug(scannedMedoc);
+            if (!dbHelper.isMedicamentExist(scannedMedoc.getCip13().toString())) {
+                mValues.add(scannedMedoc);
+                notifyDataSetChanged();
+                dbHelper.addDrug(scannedMedoc);
+            } else {
+                Toast.makeText(getApplicationContext(), "aleready in the database", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
