@@ -274,168 +274,88 @@ public class MedicamentListActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             return;
         }
-        switch (requestCode) {
-            case CUSTOMIZED_REQUEST_CODE: {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode +"RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
-                Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
-                switch (resultCode) {
-                    case 1: {
-                        constructMedsList();
-                        break;
-                    }
-                    case 2: {
-                        Toast.makeText(this, "Cancelled scan", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Cancelled Scan");
-                        break;
-                    }
-                    case 3: {
-                        Toast.makeText(this, "Keyboard input", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Keyboard Input");
-                        String cip13_input = showInputDialog();
-
-                        final Medicament medoc = dbMedoc.getMedocByCIP13(cip13_input);
-                        if ( medoc != null ) {
-                            medoc.setDateEndOfStock();
-                            dbHelper.addDrug(medoc);
-                            mAdapter.addItem(medoc);
-                        } else {
-                            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                            dlg.setTitle(getString(R.string.app_name));
-                            dlg.setMessage(getString(R.string.msgNotFound));
-                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // nothing to do to just dismiss dialog
-                                }
-                            });
-                            dlg.show();
-                        }
-                        break;
-                    }
-                    default: {
-                        Toast.makeText(this, "What are you doing here?", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "What are you doing here?");
-                    }
-                }
-                break;
+        if (requestCode == CUSTOMIZED_REQUEST_CODE) {
+            Toast.makeText(this, "REQUEST_CODE = " + requestCode + "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
+            Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
+            if (resultCode == 1) {
+                constructMedsList();
+            } else {
+                Toast.makeText(this, "What are you doing here?", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "What are you doing here?");
             }
-            default: {
-                IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+        } else {
+            IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
 
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
-                Log.d(TAG, "REQUEST_CODE = " + requestCode + "resultCode = " + resultCode);
-                if(result.getContents() == null) {
-                    Intent originalIntent = result.getOriginalIntent();
-                    if (originalIntent == null) {
-                        Log.d(TAG, "Cancelled scan"); // Todo: put here resultCode =3 test
-                        Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
-                        Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                        Log.d(TAG,"Cancelled scan due to missing camera permission");
-                        Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
-                        Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
-                    } else if (resultCode == 3) {
+            Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+            Log.d(TAG, "REQUEST_CODE = " + requestCode + "resultCode = " + resultCode);
+            if (result.getContents() == null) {
+                Intent originalIntent = result.getOriginalIntent();
+                if (originalIntent == null) {
+                    if (resultCode == 3) {          // TODO: Should call showInputDialog and have keyboardInput back
                         Toast.makeText(this, "Keyboard input", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Keyboard Input");
-                        String cip13_input = showInputDialog();
-
-                        final Medicament medoc = dbMedoc.getMedocByCIP13(cip13_input);
-                        if ( medoc != null ) {
-                            medoc.setDateEndOfStock();
-                            dbHelper.addDrug(medoc);
-                            mAdapter.addItem(medoc);
-                        } else {
-                            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                            dlg.setTitle(getString(R.string.app_name));
-                            dlg.setMessage(getString(R.string.msgNotFound));
-                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // nothing to do to just dismiss dialog
-                                }
-                            });
-                            dlg.show();
-                        }
-                        break;
-                    }
-                } else {
-                    Log.d(TAG, "Scanned");
-                    Log.d(TAG, "REQUEST_CODE = " + requestCode +" RESULT_CODE = " + resultCode);
-                    Log.d(TAG, "result.getContents = " + result.getContents());
-                    Log.d(TAG, "format = " + result.getFormatName());
-
-                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-
-                    String cip13;
-
-                    if (resultCode == 3) {
-                        Toast.makeText(this, "Keyboard input", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Keyboard Input");
-                        cip13= showInputDialog();
-
-                        final Medicament medoc = dbMedoc.getMedocByCIP13(cip13);
-                        if ( medoc != null ) {
-                            medoc.setDateEndOfStock();
-                            dbHelper.addDrug(medoc);
-                            mAdapter.addItem(medoc);
-                        } else {
-                            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                            dlg.setTitle(getString(R.string.app_name));
-                            dlg.setMessage(getString(R.string.msgNotFound));
-                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // nothing to do to just dismiss dialog
-                                }
-                            });
-                            dlg.show();
-                        }
                     } else {
-                        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                        dlg.setTitle(getString(R.string.app_name));
-
-                        // Handle successful scan
-                        if (result.getFormatName().equals("CODE_128")) { //CODE_128
-                            cip13 = result.getContents();
-                        } else {
-                            cip13 = result.getContents().substring(4, 17);
-                        }
-
-                        // Get Medoc from database
-                        final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
-
-                        if (scannedMedoc != null) {
-                            String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
-
-                            dlg.setMessage(msg);
-                            dlg.setNegativeButton(getString(R.string.button_cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
-                                // Nothing to do in case of cancel
-                            });
-                            dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
-                                // Add Medicament to DB then try to show it
-                                scannedMedoc.setDateEndOfStock();
-                                dbHelper.addDrug(scannedMedoc);
-                                mAdapter.addItem(scannedMedoc);
-                            });
-                            dlg.show();
-                        } else {
-                            dlg.setMessage(getString(R.string.msgNotFound));
-                            dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // nothing to do to just dismiss dialog
-                                }
-                            });
-                            dlg.show();
-                        }
+                        Log.d(TAG, "Cancelled scan"); // Todo: put here resultCode =3 test
+                        Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
                     }
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                    Log.d(TAG, "Cancelled scan due to missing camera permission");
+                    Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
+                    Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
                 }
-                break;
+            } else {
+                Log.d(TAG, "Scanned");
+                Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
+                Log.d(TAG, "result.getContents = " + result.getContents());
+                Log.d(TAG, "format = " + result.getFormatName());
+
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+
+                String cip13;
+
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle(getString(R.string.app_name));
+
+                // Handle successful scan
+                if (result.getFormatName().equals("CODE_128")) { //CODE_128
+                    cip13 = result.getContents();
+                } else {
+                    cip13 = result.getContents().substring(4, 17);
+                }
+
+                // Get Medoc from database
+                final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
+
+                if (scannedMedoc != null) {
+                    String msg = scannedMedoc.getNom() + " " + getString(R.string.msgFound);
+
+                    dlg.setMessage(msg);
+                    dlg.setNegativeButton(getString(R.string.button_cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
+                        // Nothing to do in case of cancel
+                    });
+                    dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
+                        // Add Medicament to DB then try to show it
+                        scannedMedoc.setDateEndOfStock();
+                        dbHelper.addDrug(scannedMedoc);
+                        mAdapter.addItem(scannedMedoc);
+                    });
+                    dlg.show();
+                } else {
+                    dlg.setMessage(getString(R.string.msgNotFound));
+                    dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nothing to do to just dismiss dialog
+                        }
+                    });
+                    dlg.show();
+                }
             }
         }
     }
 
-    protected String showInputDialog() {
+    protected void showInputDialog() {
 
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(MedicamentListActivity.this);
@@ -461,7 +381,6 @@ public class MedicamentListActivity extends AppCompatActivity {
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
-        return editText.toString();
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
