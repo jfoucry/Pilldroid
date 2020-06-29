@@ -1,12 +1,14 @@
 package net.foucry.pilldroid;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -27,19 +29,20 @@ public class CustomScannerActivity extends Activity implements
     private DecoratedBarcodeView barcodeScannerView;
     private Button switchFlashlightButton;
     private ViewfinderView viewfinderView;
-    private ImageButton cancelButton;
-    private ImageButton keyboardButton;
+
+    private static final String TAG = MedicamentListActivity.class.getName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scanner);
 
+        final Context context = this;
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
 
-        cancelButton = findViewById(R.id.cancel_button);
-        keyboardButton = findViewById(R.id.keyboard_button);
+        ImageButton cancelButton = findViewById(R.id.cancel_button);
+        ImageButton keyboardButton = findViewById(R.id.keyboard_button);
 
         switchFlashlightButton = findViewById(R.id.switch_flashlight);
 
