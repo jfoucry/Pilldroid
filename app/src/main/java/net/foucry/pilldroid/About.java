@@ -22,7 +22,7 @@ public class About extends AppCompatActivity{
 
         String htmlString = null;
 
-        aboutView = (WebView) findViewById(R.id.aboutHtml);
+        aboutView = findViewById(R.id.aboutHtml);
 
         aboutView.loadUrl("file:///android_asset/about.html");
         aboutView.clearCache(true);
