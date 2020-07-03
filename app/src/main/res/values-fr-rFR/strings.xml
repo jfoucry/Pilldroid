@@ -22,4 +22,5 @@
     <string name="detail_view">Vue de détail</string>
     <string name="scan_action">Scanner un code barre de médicament</string>
     <string name="save_button">Save</string>
+    <string name="flashlighButton">Toggle Flash</string>
 </resources>

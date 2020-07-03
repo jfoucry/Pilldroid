@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +18,8 @@ import java.util.List;
 class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static String DATABASE_NAME = "ordonnance.db";
+    @SuppressWarnings("CanBeFinal")
+    private static final ThreadLocal<String> DATABASE_NAME = ThreadLocal.withInitial(() -> "ordonnance.db");
 
     private static final String TABLE_DRUG      = "drug";
     private static final String KEY_ID          = "id";
@@ -48,7 +48,7 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME.get(), null, DATABASE_VERSION);
     }
 
     @Override

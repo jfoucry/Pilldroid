@@ -119,19 +119,19 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         View warningView;
         View alertView;
 
-        stockView = (View) findViewById(R.id.stock_cell);
+        stockView = findViewById(R.id.stock_cell);
         EditText stockTextView = stockView.findViewById(R.id.valeur);
         String stockValue = stockTextView.getText().toString();
 
-        priseView = (View) findViewById(R.id.prise_cell);
+        priseView = findViewById(R.id.prise_cell);
         TextView priseTextView = priseView.findViewById(R.id.valeur);
         String priseValue = priseTextView.getText().toString();
 
-        alertView = (View) findViewById(R.id.alert_cell);
+        alertView = findViewById(R.id.alert_cell);
         TextView alertTextView = alertView.findViewById(R.id.valeur);
         String alertValue = alertTextView.getText().toString();
 
-        warningView = (View) findViewById(R.id.warning_cell);
+        warningView = findViewById(R.id.warning_cell);
         TextView warningTextView = warningView.findViewById(R.id.valeur);
         String warningValue = warningTextView.getText().toString();
 

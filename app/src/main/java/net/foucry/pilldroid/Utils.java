@@ -29,7 +29,7 @@ public class Utils {
      * @param max maximum value accepted
      * @return
      */
-    static final int intRandomExclusive(int min, int max) {
+    static int intRandomExclusive(int min, int max) {
         Random r = new Random();
         return r.nextInt(max - min) +max;
     }
