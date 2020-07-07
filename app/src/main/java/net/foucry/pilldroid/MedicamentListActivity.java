@@ -323,7 +323,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
                 // Get Medoc from database
                 final Medicament scannedMedoc = dbMedoc.getMedocByCIP13(cip13);
-                askToAddInDB(scannedMedoc);
+                    askToAddInDB(scannedMedoc);
             }
         }
     }
@@ -340,9 +340,9 @@ public class MedicamentListActivity extends AppCompatActivity {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", (dialog, id) -> {
                     String cip13 = editText.getText().toString();
+
                     Medicament med = dbMedoc.getMedocByCIP13(cip13);
-                    askToAddInDB(med);
-                    addMedToList(med);
+                        askToAddInDB(med);
                 })
                 .setNegativeButton("Cancel",
                         (dialog, id) -> dialog.cancel());
@@ -544,3 +544,18 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
     }
 }
+
+/*
+editText.addTextChangeListener( new TextWatcher() {
+	@Override
+	void afterTextChanged(Editable s){
+
+	}
+	void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+	}
+	void onTextChanged(CharSequence s, int start, int before, int count) {
+
+	}
+});
+ */
