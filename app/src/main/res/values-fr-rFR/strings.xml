@@ -23,4 +23,6 @@
     <string name="scan_action">Scanner un code barre de médicament</string>
     <string name="save_button">Save</string>
     <string name="flashlighButton">Toggle Flash</string>
+    <string name="enter_cip_13_here">Enter cip 13 here..</string>
+    <string name="enter_cip_13">Enter CIP 13</string>
 </resources>
