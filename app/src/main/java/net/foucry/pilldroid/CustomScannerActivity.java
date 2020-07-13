@@ -25,10 +25,8 @@ public class CustomScannerActivity extends Activity implements
 
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
-    private Button switchFlashlightButton;
+    private ImageButton switchFlashlightButton;
     private ViewfinderView viewfinderView;
-    private ImageButton cancelButton;
-    private ImageButton keyboardButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,9 +35,6 @@ public class CustomScannerActivity extends Activity implements
 
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
-
-        cancelButton = findViewById(R.id.cancel_button);
-        keyboardButton = findViewById(R.id.keyboard_button);
 
         switchFlashlightButton = findViewById(R.id.switch_flashlight);
 
@@ -99,10 +94,10 @@ public class CustomScannerActivity extends Activity implements
     }
 
     public void switchFlashlight(View view) {
-        if (getString(R.string.turn_on_flashlight).contentEquals(switchFlashlightButton.getText())) {
-            barcodeScannerView.setTorchOn();
-        } else {
+        if (switchFlashlightButton.isActivated()) {
             barcodeScannerView.setTorchOff();
+        } else {
+            barcodeScannerView.setTorchOn();
         }
     }
 
@@ -118,12 +113,12 @@ public class CustomScannerActivity extends Activity implements
 
     @Override
     public void onTorchOn() {
-        switchFlashlightButton.setText(R.string.turn_off_flashlight);
+        switchFlashlightButton.setActivated(true);
     }
 
     @Override
     public void onTorchOff() {
-        switchFlashlightButton.setText(R.string.turn_on_flashlight);
+        switchFlashlightButton.setActivated(false);
     }
 
     @Override

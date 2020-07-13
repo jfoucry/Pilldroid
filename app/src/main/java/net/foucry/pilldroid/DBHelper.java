@@ -18,7 +18,8 @@ import java.util.List;
 class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static String DATABASE_NAME = "ordonnance.db";
+    @SuppressWarnings("CanBeFinal")
+    private static final ThreadLocal<String> DATABASE_NAME = ThreadLocal.withInitial(() -> "ordonnance.db");
 
     private static final String TABLE_DRUG      = "drug";
     private static final String KEY_ID          = "id";
@@ -47,7 +48,7 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME.get(), null, DATABASE_VERSION);
     }
 
     @Override
@@ -324,6 +325,22 @@ class DBHelper extends SQLiteOpenHelper {
 
         mCount.close();
         return count;
+    }
+    boolean isMedicamentExist(String cip13) {
+        boolean value = false;
+        try {
+            Cursor c = this.getReadableDatabase().rawQuery("SELECT * FROM "+ TABLE_DRUG + " where cip13 = "+cip13, null);
+
+            if(c.getCount()>0)
+            {
+                value = true;
+            }
+            c.close();
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return value;
     }
 }
 

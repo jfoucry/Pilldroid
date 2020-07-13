@@ -2,7 +2,6 @@ package net.foucry.pilldroid;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +34,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
 
         /* fetching the string passed with intent using ‘extras’*/
 
+        assert extras != null;
         medicament = (Medicament) extras.getSerializable("medicament");
 
         assert medicament != null;
@@ -119,19 +119,19 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         View warningView;
         View alertView;
 
-        stockView = (View) findViewById(R.id.stock_cell);
+        stockView = findViewById(R.id.stock_cell);
         EditText stockTextView = stockView.findViewById(R.id.valeur);
         String stockValue = stockTextView.getText().toString();
 
-        priseView = (View) findViewById(R.id.prise_cell);
+        priseView = findViewById(R.id.prise_cell);
         TextView priseTextView = priseView.findViewById(R.id.valeur);
         String priseValue = priseTextView.getText().toString();
 
-        alertView = (View) findViewById(R.id.alert_cell);
+        alertView = findViewById(R.id.alert_cell);
         TextView alertTextView = alertView.findViewById(R.id.valeur);
         String alertValue = alertTextView.getText().toString();
 
-        warningView = (View) findViewById(R.id.warning_cell);
+        warningView = findViewById(R.id.warning_cell);
         TextView warningTextView = warningView.findViewById(R.id.valeur);
         String warningValue = warningTextView.getText().toString();
 
@@ -150,6 +150,5 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         medicament.setDateEndOfStock();
 
         dbHelper.updateDrug(medicament);
-        return;
     }
 }
