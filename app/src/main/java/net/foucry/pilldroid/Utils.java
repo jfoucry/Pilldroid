@@ -24,10 +24,10 @@ public class Utils {
     }
 
     /**
-     * Return a random number between twovalues - use to gənerat a false demo DB
+     * Return a random number between twovalues - use to gənerate a false demo DB
      * @param min minimal value accepted
      * @param max maximum value accepted
-     * @return
+     * @return int random number
      */
     static int intRandomExclusive(int min, int max) {
         Random r = new Random();
