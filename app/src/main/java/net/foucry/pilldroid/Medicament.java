@@ -86,9 +86,9 @@ public class Medicament implements Serializable {
         return warnThreshold;
     }
 
-    public String getDateLastUpdate() {
+/*    public String getDateLastUpdate() {
         return dateLastUpdate;
-    }
+    }*/
 
     Date getDateEndOfStock() {
         return dateEndOfStock;
