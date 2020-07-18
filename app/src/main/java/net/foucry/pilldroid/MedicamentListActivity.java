@@ -249,21 +249,27 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         long dateSchedule;
 
-        Medicament firstMedicament = medicaments.get(0);
+        Medicament firstMedicament = null;
 
-        Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
-
-        if (dateAlert.getTime() < now.getTime())
-        {
-            dateSchedule = now.getTime() + 50000; // If dateAlert < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)[in prod define delay]
-        } else {
-            dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
+        try {
+            firstMedicament = medicaments.get(0);
         }
+        catch (Exception ignored){}
 
-        long delay = dateSchedule - now.getTime();
-        scheduleNotification(getNotification(getString(R.string.notification_text)),delay);
+        if (firstMedicament != null) {
+            Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
 
-        Log.d(TAG, "Notification scheduled for "+ UtilDate.convertDate(dateSchedule));
+            if (dateAlert.getTime() < now.getTime()) {
+                dateSchedule = now.getTime() + 50000; // If dateAlert < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)[in prod define delay]
+            } else {
+                dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
+            }
+
+            long delay = dateSchedule - now.getTime();
+            scheduleNotification(getNotification(getString(R.string.notification_text)), delay);
+
+            Log.d(TAG, "Notification scheduled for " + UtilDate.convertDate(dateSchedule));
+        }
     }
 
     @Override
@@ -328,6 +334,9 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * show keybordInput dialoo
+     */
     protected void showInputDialog() {
         // get prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(MedicamentListActivity.this);
@@ -352,6 +361,11 @@ public class MedicamentListActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /***
+     * Ask if the medicament found in the database should be include in the
+     * user database
+     * @param Medicament med - medicament to be added
+     */
     private void askToAddInDB(Medicament med) {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setTitle(getString(R.string.app_name));
@@ -376,11 +390,15 @@ public class MedicamentListActivity extends AppCompatActivity {
         dlg.show();
     }
 
+    /**
+     * Add New medimenant to the user database
+     * @param Medicament med - medicament to be added
+     */
     private void addMedToList(Medicament med)
     {
         med.setDateEndOfStock();
-        dbHelper.addDrug(med);
         mAdapter.addItem(med);
+        dbHelper.addDrug(med);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -506,6 +524,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
+                        int requestCode =1;
                         startActivityForResult(intent, requestCode);
                     }
                 }
