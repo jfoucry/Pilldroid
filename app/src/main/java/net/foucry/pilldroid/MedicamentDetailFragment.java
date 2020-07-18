@@ -51,6 +51,7 @@ public class MedicamentDetailFragment extends Fragment {
             medicament = (Medicament) getArguments().getSerializable(ARG_ITEM_ID);
 
             Activity activity = this.getActivity();
+            assert activity != null;
             CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(medicament.getNom());
