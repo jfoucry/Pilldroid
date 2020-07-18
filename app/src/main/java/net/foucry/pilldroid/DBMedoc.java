@@ -3,7 +3,6 @@ package net.foucry.pilldroid;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -23,7 +22,7 @@ class DBMedoc  extends SQLiteOpenHelper {
 
     private static String dbName = "medicaments.db";
     private final Context myContext;
-    private SQLiteDatabase myDataBase;
+    private SQLiteDatabase myDataBase = null;
 
     private static final String TABLE_NAME = "medicaments";
     private static final String MEDOC_CIS = "cis";
@@ -48,7 +47,6 @@ class DBMedoc  extends SQLiteOpenHelper {
         File dbFile = myContext.getDatabasePath(dbName);
 
         if (!dbFile.exists()) {
-            SQLiteDatabase db = super.getWritableDatabase();
             copyDatabase(dbFile.getPath());
         }
 
@@ -61,7 +59,6 @@ class DBMedoc  extends SQLiteOpenHelper {
 
         if (dbFile.exists()) return super.getReadableDatabase();
 
-        SQLiteDatabase db = super.getReadableDatabase();
         copyDatabase(dbFile.getPath());
         return super.getReadableDatabase();
     }
@@ -94,12 +91,12 @@ class DBMedoc  extends SQLiteOpenHelper {
         }
     }
 
-    void openDatabase() throws SQLiteException {
+/*    void openDatabase() throws SQLiteException {
         Log.e(TAG, "openDatabase called");
         String myPath = myContext.getDatabasePath(dbName).getPath();
 
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-    }
+    }*/
 
     @Override
     public synchronized void close() {
@@ -120,16 +117,18 @@ class DBMedoc  extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Build query
-        /*Cursor cursor = db.query(TABLE_NAME,               // Which table
+        Cursor cursor = db.query(TABLE_NAME,               // Which table
                 COLUMNS_NAMES,                             // column names
-                " cip13 =?",                               // selections
+                " cip13 =?",                       // selections
                 new String[]{cip13},                       // selections args
-                null,                                      // group by
-                null,                                      // having
-                null,                                      // order by
-                null);                                     // limits*/
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " where cip13 = " + cip13, null);
+                null,                              // group by
+                null,                               // having
+                null,                              // order by
+                null);                                // limits
+        //Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " where cip13 = " + cip13, null);
         if (cursor.getCount() != 0) {
+
+            cursor.moveToFirst();
 
             // Build medicament object
             Medicament medicament = new Medicament();
