@@ -408,7 +408,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(Notification notification, long delay) {
-        Log.i(TAG, "scheduleNotification delay == " + 30000);
+        Log.d(TAG, "scheduleNotification delay == " + 30000);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_ID, 1);
