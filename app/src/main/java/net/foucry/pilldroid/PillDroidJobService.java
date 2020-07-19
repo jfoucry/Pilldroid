@@ -2,10 +2,9 @@ package net.foucry.pilldroid;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
-import android.os.Message;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 
 /**
@@ -27,7 +26,7 @@ public class PillDroidJobService extends JobService {
 
     @Override
     public boolean onStartJob (JobParameters params) {
-        Log.i(TAG, "on Start Job: " + params.getJobId());
+        Log.d(TAG, "on Start Job: " + params.getJobId());
         mJobHandler.sendMessage(Message.obtain(mJobHandler, 1,params));
         return false;
     }
