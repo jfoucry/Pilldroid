@@ -7,7 +7,6 @@
     <string name="msgFound">Drug found in the database</string>
     <string name="about">About</string>
     <string name="help">Help</string>
-    <string name="notification_text">You have to go to the pharmacy</string>
     <string name="turn_on_flashlight">Turn Flash On</string>
     <string name="turn_off_flashlight">Turn Flash Off</string>
     <string name="med_name_label">Name</string>
@@ -22,7 +21,8 @@
     <string name="scan_action">Scan a drug barcode</string>
     <string name="save_button">Save</string>
     <string name="input_cip13">Input Cip13 with the keyboard</string>
-    <string name="flashlighButton">Toggle Flash</string>
+    <string name="flashlighButton">Toggle flash</string>
     <string name="enter_cip_13_here">Enter cip 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
+    <string name="pharmacy">You must go to the pharmacy</string>
 </resources>

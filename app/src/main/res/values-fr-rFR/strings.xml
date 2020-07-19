@@ -17,12 +17,13 @@
     <string name="med_current_stock_label">Stock courant</string>
     <string name="turn_off_flashlight">Éteindre le flash</string>
     <string name="turn_on_flashlight">Allumer le flash</string>
-    <string name="notification_text">Vous devez passer à la pharmacie</string>
     <string name="button_keyboard">Utilisez le clavier</string>
     <string name="detail_view">Vue de détail</string>
     <string name="scan_action">Scanner un code barre de médicament</string>
     <string name="save_button">Save</string>
-    <string name="flashlighButton">Toggle Flash</string>
-    <string name="enter_cip_13_here">Enter cip 13 here..</string>
+    <string name="flashlighButton">Allumez/Eteindre le Flash</string>
+    <string name="enter_cip_13_here">Entrez le code CIP 13 ici…</string>
     <string name="enter_cip_13">Enter CIP 13</string>
+    <string name="pharmacy">Vous devez passer à la pharmacie</string>
+    <string name="input_cip13">Entrez le code CIP 13 avec le clavier</string>
 </resources>
