@@ -227,7 +227,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-
         newStockCalculation();
     }
 
@@ -266,7 +265,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
 
             long delay = dateSchedule - now.getTime();
-            scheduleNotification(getNotification(getString(R.string.notification_text)), delay);
+            scheduleNotification(getNotification(getString(R.string.pharmacy)), delay);
 
             Log.d(TAG, "Notification scheduled for " + UtilDate.convertDate(dateSchedule));
         }
@@ -274,6 +273,9 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
+
         if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
@@ -408,14 +410,14 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(Notification notification, long delay) {
-        Log.d(TAG, "scheduleNotification delay == " + 30000);
+        Log.d(TAG, "scheduleNotification delay == " + delay);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + 30000;
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
@@ -423,7 +425,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private Notification getNotification(String content) {
-        Log.i(TAG, "getNotification");
+        Log.d(TAG, "getNotification");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getAppName())
@@ -524,8 +526,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
-                        int requestCode =1;
-                        startActivityForResult(intent, requestCode);
+                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                     }
                 }
             });
