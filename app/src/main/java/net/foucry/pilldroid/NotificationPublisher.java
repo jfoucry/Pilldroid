@@ -46,6 +46,7 @@ public class NotificationPublisher extends BroadcastReceiver {
      */
     public static String createNotificationChannel(Context context) {
 
+        Log.d(TAG, "start create notification channel");
         // The id of the channel.
         String channelId = "Channel_id";
 
