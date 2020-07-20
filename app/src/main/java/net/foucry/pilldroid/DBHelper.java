@@ -276,6 +276,7 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_ADMIN, medicament.getMode_administration());
         values.put(KEY_PRES, medicament.getPresentation());
         values.put(KEY_STOCK, medicament.getStock());
+        values.put(KEY_PRISE, medicament.getPrise());
 
         Log.d(TAG, "values are " +values.toString());
         // Update row
