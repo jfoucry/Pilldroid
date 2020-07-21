@@ -415,7 +415,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         Intent notificationIntent = new Intent(context, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.KEY_MESSAGE, getString(R.string.pharmacy));
-        notificationIntent.putExtra((NotificationPublisher.KEY_TITLE, getString(R.string.app_name));
+        notificationIntent.putExtra(NotificationPublisher.KEY_TITLE, getString(R.string.app_name));
         notificationIntent.putExtra(NotificationPublisher.KEY_SOUND, true);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
