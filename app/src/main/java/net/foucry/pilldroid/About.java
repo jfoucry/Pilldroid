@@ -38,8 +38,8 @@ public class About extends AppCompatActivity{
 
         public Drawable getDrawable(String source) {
             int id;
-            if (source.equals("ic_launcher.png")) {
-                id = R.mipmap.ic_launcher;
+            if (source.equals("ic_launcher-web.png")) {
+                id = R.drawable.ic_launcher;
             } else {
                 return null;
             }
