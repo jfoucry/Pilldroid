@@ -431,7 +431,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_pill)
                 .setAutoCancel(true)
                 .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                R.mipmap.ic_launcher));
+                R.drawable.ic_launcher));
         return builder.build();
     }
 
