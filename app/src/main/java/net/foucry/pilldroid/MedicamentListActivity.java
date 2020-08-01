@@ -408,7 +408,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(Notification notification, long delay) {
-        Log.i(TAG, "scheduleNotification delay == " + 30000);
+        Log.d(TAG, "scheduleNotification delay == " + delay);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_ID, 1);
@@ -423,7 +423,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     private Notification getNotification(String content) {
-        Log.i(TAG, "getNotification");
+        Log.d(TAG, "content = " + content);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getAppName())
