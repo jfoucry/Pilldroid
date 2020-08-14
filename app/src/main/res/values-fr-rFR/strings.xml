@@ -25,4 +25,6 @@
     <string name="flashlighButton">Toggle Flash</string>
     <string name="enter_cip_13_here">Enter cip 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
+    <string name="input_cip13">Saisissez le code CIP13 avec le clavier</string>
+    <string name="pharmacy">Vous devez passer à la pharmacie</string>
 </resources>

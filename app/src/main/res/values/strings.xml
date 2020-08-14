@@ -25,4 +25,5 @@
     <string name="flashlighButton">Toggle Flash</string>
     <string name="enter_cip_13_here">Enter cip 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
+    <string name="channel_description" translatable="false">PillDroid Channel</string>
 </resources>
