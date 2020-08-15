@@ -3,8 +3,12 @@ package net.foucry.pilldroid;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -30,14 +34,12 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
+
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
@@ -107,18 +109,18 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
         medicaments = dbHelper.getAllDrugs();
 
-        Collections.sort(medicaments, new Comparator<Medicament>() {
+/*        Collections.sort(medicaments, new Comparator<Medicament>() {
             @Override
             public int compare(Medicament lhs, Medicament rhs) {
                 return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
             }
-        });
+        });*/
 
-        for (int position = 0 ; position < this.getCount() ; position++ ) {
+/*        for (int position = 0 ; position < this.getCount() ; position++ ) {
             currentMedicament = this.getItem(position);
             currentMedicament.newStock(currentMedicament.getStock());
             dbHelper.updateDrug(currentMedicament);
-        }
+        }*/
 
         View mRecyclerView = findViewById(R.id.medicament_list);
         assert mRecyclerView != null;
@@ -222,7 +224,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        newStockCalculation();
+        scheduleJob();
     }
 
     /** scanNow
@@ -237,7 +239,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     /**
      * Calculation of newStock
      */
-    public void newStockCalculation() {
+/*    public void newStockCalculation() {
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
 
@@ -264,7 +266,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
             Log.d(TAG, "Notification scheduled for " + UtilDate.convertDate(dateSchedule));
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -404,11 +406,11 @@ public class MedicamentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    /**
+/*    *//**
      * Schedule Notification for the delay
      * @param Context context
      * @param long delay - date for the notification in milliseconds
-     */
+     *//*
     private void scheduleNotification(Context context, long delay) {
         Log.d(TAG, "scheduleNotification delay == " + delay);
 
@@ -425,8 +427,31 @@ public class MedicamentListActivity extends AppCompatActivity {
         if (alarmManager != null) {
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
         }
-    }
+    }*/
 
+    public void scheduleJob() {
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+
+        ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
+        JobInfo info = new JobInfo.Builder(123, componentName)
+                .setPersisted(false)
+                .setMinimumLatency(60 *1000)
+                .build();
+        //                 .setPeriodic(5 * 60 * 1000)
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d(TAG, ("Job scheduled " + cal(now.getTime() + 60000)));
+        } else {
+            Log.d(TAG, "Job scheduling failed");
+        }
+    }
+    public void cancelJob(View v) {
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(123);
+        Log.d(TAG, "Job cancelled");
+    }
     /**
      * SimpleItemRecyclerViewAdapter
      */
