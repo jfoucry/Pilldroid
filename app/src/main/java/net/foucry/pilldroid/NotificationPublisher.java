@@ -55,12 +55,14 @@ public class NotificationPublisher extends BroadcastReceiver {
                 .setChannelId(APP_NAME)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(context.getString(R.string.pharmacy)))
+                .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         if (isEnableSound) {
             Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             builder.setSound(alarmSound);
         }
+
 
         notificationManager.notify(notificationId, builder.build());
     }
