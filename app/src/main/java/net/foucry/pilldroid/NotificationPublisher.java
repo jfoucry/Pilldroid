@@ -38,8 +38,6 @@ public class NotificationPublisher extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Receive notification");
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
         int notificationId = intent.getIntExtra(NOTIFICATION_ID, 0);
         String message = intent.getStringExtra(KEY_MESSAGE);
         String title = intent.getStringExtra(KEY_TITLE);
@@ -63,6 +61,10 @@ public class NotificationPublisher extends BroadcastReceiver {
             builder.setSound(alarmSound);
         }
 
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(notificationId, builder.build());
 
         notificationManager.notify(notificationId, builder.build());
     }

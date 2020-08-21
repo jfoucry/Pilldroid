@@ -1,14 +1,22 @@
 package net.foucry.pilldroid;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Date;
 import java.util.List;
@@ -24,7 +32,7 @@ public class PillDroidJobService extends JobService {
     private  static final String TAG = JobService.class.getName();
     private boolean jobCancelled = false;
 
-    private List<Medicament> medicaments = null;
+    private String CHANNEL_ID = null;
     private DBHelper dbHelper = new DBHelper(this);
 
     @Override
@@ -35,12 +43,19 @@ public class PillDroidJobService extends JobService {
         return true;
     }
 
+    /**
+     * Grab sorted list of medicaments
+     * test dateAlert of the first of the list
+     * if dateAlert < now
+     *  schedule notification
+     * @param JobParameters params
+     */
     private void doBackgroundWork(final JobParameters params) {
 
         if (jobCancelled) {
             return;
         }
-        medicaments = dbHelper.getAllDrugs();
+        List<Medicament> medicaments = dbHelper.getAllDrugs();
 
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
@@ -64,6 +79,7 @@ public class PillDroidJobService extends JobService {
             }
 
             long delay = dateSchedule - now.getTime();
+            createNotificationChannel();
             scheduleNotification(getApplicationContext(), delay);
         }
 
@@ -88,18 +104,36 @@ public class PillDroidJobService extends JobService {
     private void scheduleNotification(Context context, long delay) {
         Log.d(TAG, "scheduleNotification delay == " + delay);
 
-        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-        notificationIntent.putExtra(NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationPublisher.KEY_MESSAGE, getString(R.string.pharmacy));
-        notificationIntent.putExtra(NotificationPublisher.KEY_TITLE, getString(R.string.app_name));
-        notificationIntent.putExtra(NotificationPublisher.KEY_SOUND, true);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_pill)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.pharmacy))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        int notificationId = 666;
+        notificationManager.notify(notificationId, builder.build());
 
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-        }
+    }
+
+    /**
+     * createNotificationChannelid for android API >= 28
+     * @param Context context
+     * @return String channel_id
+     */
+    private void createNotificationChannel() {
+
+        Log.d(TAG, "start create notification channel");
+        CharSequence name = getString(R.string.channel_name);
+        String description = getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
     }
 }

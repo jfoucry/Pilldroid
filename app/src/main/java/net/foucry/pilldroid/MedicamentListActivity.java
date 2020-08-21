@@ -1,8 +1,6 @@
 package net.foucry.pilldroid;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -10,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,11 +31,9 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
@@ -63,6 +58,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+    public String CHANNEL_ID = null;
 
     @Override
     public void onStart() {
@@ -99,7 +95,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void constructMedsList()
     {
-        Medicament currentMedicament;
         dbHelper = new DBHelper(getApplicationContext());
 
         if (!(medicaments == null)) {
@@ -442,7 +437,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
         if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, ("Job scheduled " + cal(now.getTime() + 60000)));
+            Log.d(TAG, ("Job scheduled " + (now.getTime() + 60000)));
         } else {
             Log.d(TAG, "Job scheduling failed");
         }

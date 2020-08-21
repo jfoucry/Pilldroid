@@ -25,4 +25,6 @@
     <string name="enter_cip_13_here">Enter cip 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
     <string name="pharmacy">You must go to the pharmacy</string>
+    <string name="channel_name">pilldroidChannel</string>
+    <string name="channel_description">PillDroid NotificationChannel</string>
 </resources>
