@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 /**
  * Created by jfoucry on 6/23/16.
@@ -61,11 +62,9 @@ public class NotificationPublisher extends BroadcastReceiver {
             builder.setSound(alarmSound);
         }
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
-// notificationId is a unique int for each notification that you must define
-        notificationManager.notify(notificationId, builder.build());
-
+        // notificationId is a unique int for each notification that you must define
         notificationManager.notify(notificationId, builder.build());
     }
 
