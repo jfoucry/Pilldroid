@@ -17,6 +17,7 @@ import androidx.core.app.NotificationManagerCompat;
  * Publish notification
  */
 
+/* TODO: must be remove
 
 public class NotificationPublisher extends BroadcastReceiver {
 
@@ -50,10 +51,10 @@ public class NotificationPublisher extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channel_id)
                 .setSmallIcon(R.drawable.ic_pill)
                 .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(context.getString(R.string.pharmacy))
+                .setContentText(context.getString(R.string.notification_text))
                 .setChannelId(APP_NAME)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(context.getString(R.string.pharmacy)))
+                        .bigText(context.getString(R.string.notification_text)))
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
