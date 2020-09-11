@@ -53,12 +53,11 @@ public class MedicamentListActivity extends AppCompatActivity {
      * device.
      */
 
-    // TODO: Change DEMO/DBDEMO form statci to non-static. In order to create fake data at only at launchtime
+    // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at lunchtime
     private boolean mTwoPane;
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
-    public String CHANNEL_ID = null;
 
     @Override
     public void onStart() {
@@ -85,10 +84,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private SimpleItemRecyclerViewAdapter mAdapter;
 
-    public int getCount() {
-        return medicaments.size();
-    }
-
     public Medicament getItem(int position) {
         return medicaments.get(position);
     }
@@ -103,19 +98,6 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
         medicaments = dbHelper.getAllDrugs();
-
-/*        Collections.sort(medicaments, new Comparator<Medicament>() {
-            @Override
-            public int compare(Medicament lhs, Medicament rhs) {
-                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-            }
-        });*/
-
-/*        for (int position = 0 ; position < this.getCount() ; position++ ) {
-            currentMedicament = this.getItem(position);
-            currentMedicament.newStock(currentMedicament.getStock());
-            dbHelper.updateDrug(currentMedicament);
-        }*/
 
         View mRecyclerView = findViewById(R.id.medicament_list);
         assert mRecyclerView != null;
@@ -222,6 +204,10 @@ public class MedicamentListActivity extends AppCompatActivity {
         scheduleJob();
     }
 
+    public void onResume() {
+        super.onResume();
+    }
+
     /** scanNow
      *
      * @param view
@@ -230,38 +216,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void scanNow(View view) {
         new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
     }
-
-    /**
-     * Calculation of newStock
-     */
-/*    public void newStockCalculation() {
-        Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-
-        long dateSchedule;
-
-        Medicament firstMedicament = null;
-
-        try {
-            firstMedicament = medicaments.get(0);
-        }
-        catch (Exception ignored){}
-
-        if (firstMedicament != null) {
-            Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
-
-            if (dateAlert.getTime() < now.getTime()) {
-                dateSchedule = now.getTime() + 50000; // If dateAlert < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)[in prod define delay]
-            } else {
-                dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
-            }
-
-            long delay = dateSchedule - now.getTime();
-            scheduleNotification(this, delay);
-
-            Log.d(TAG, "Notification scheduled for " + UtilDate.convertDate(dateSchedule));
-        }
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -401,50 +355,26 @@ public class MedicamentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-/*    *//**
-     * Schedule Notification for the delay
-     * @param Context context
-     * @param long delay - date for the notification in milliseconds
-     *//*
-    private void scheduleNotification(Context context, long delay) {
-        Log.d(TAG, "scheduleNotification delay == " + delay);
-
-        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-        notificationIntent.putExtra(NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationPublisher.KEY_MESSAGE, getString(R.string.pharmacy));
-        notificationIntent.putExtra(NotificationPublisher.KEY_TITLE, getString(R.string.app_name));
-        notificationIntent.putExtra(NotificationPublisher.KEY_SOUND, true);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-        }
-    }*/
-
     public void scheduleJob() {
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
 
         ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
-        JobInfo info = new JobInfo.Builder(123, componentName)
-                .setPersisted(false)
-                .setMinimumLatency(60 *1000)
+        JobInfo info = new JobInfo.Builder(24560, componentName)
+                .setPersisted(true)
+                .setPeriodic(15 *60 *1000)
                 .build();
-        //                 .setPeriodic(5 * 60 * 1000)
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
         if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, ("Job scheduled " + (now.getTime() + 60000)));
+            Log.d(TAG, ("Job scheduled " + UtilDate.convertDate(now.getTime()+15 * 60*1000)));
         } else {
             Log.d(TAG, "Job scheduling failed");
         }
     }
     public void cancelJob(View v) {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        scheduler.cancel(123);
+        scheduler.cancel(24560);
         Log.d(TAG, "Job cancelled");
     }
     /**
@@ -465,7 +395,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 notifyDataSetChanged();
                 dbHelper.addDrug(scannedMedoc);
             } else {
-                Toast.makeText(getApplicationContext(), "aleready in the database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "already in the database", Toast.LENGTH_SHORT).show();
             }
         }
 
