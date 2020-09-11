@@ -21,7 +21,7 @@ import java.util.List;
 public class PillDroidJobService extends JobService {
     private  static final String TAG = JobService.class.getName();
     private boolean jobCancelled = false;
-    private String CHANNEL_ID = "pillDroid";
+    private String CHANNEL_ID = getString(R.string.app_name);
     private DBHelper dbHelper = new DBHelper(this);
 
 
@@ -39,7 +39,7 @@ public class PillDroidJobService extends JobService {
      * test dateAlert of the first of the list
      * if dateAlert < now
      *  schedule notification
-     * @param JobParameters params
+     * @param params JobParameters
      */
     private void doBackgroundWork(final JobParameters params) {
 
@@ -87,8 +87,7 @@ public class PillDroidJobService extends JobService {
 
     /**
      * Schedule Notification for the delay
-     * @param Context context
-     * @param long delay - date for the notification in millisecond
+     * @param delay long - date for the notification in millisecond
      */
     private void scheduleNotification(long delay) {
         Log.d(TAG, "scheduleNotification delay == " + delay);
