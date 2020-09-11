@@ -1,6 +1,9 @@
 package net.foucry.pilldroid;
 
 import android.app.NotificationManager;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -38,7 +41,7 @@ import java.util.Locale;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
-import net.foucry.pilldroid.PillDroidJobService;
+
 /**
  * An activity representing a list of Medicaments. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -216,11 +219,13 @@ public class MedicamentListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     public void onPause() {
         super.onPause();
+        scheduleJob();
+    }
 
-        ();
+    public void onResume() {
+        super.onResume();
     }
 
     /** scanNow
@@ -359,6 +364,28 @@ public class MedicamentListActivity extends AppCompatActivity {
         med.setDateEndOfStock();
         mAdapter.addItem(med);
         dbHelper.addDrug(med);
+    }
+    public void scheduleJob() {
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+
+        ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
+        JobInfo info = new JobInfo.Builder(24560, componentName)
+                .setPersisted(true)
+                .setPeriodic(15 *60 *1000)
+                .build();
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d(TAG, ("Job scheduled " + UtilDate.convertDate(now.getTime()+15 * 60*1000)));
+        } else {
+            Log.d(TAG, "Job scheduling failed");
+        }
+    }
+    public void cancelJob(View v) {
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(24560);
+        Log.d(TAG, "Job cancelled");
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
