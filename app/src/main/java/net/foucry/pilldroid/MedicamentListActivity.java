@@ -3,12 +3,12 @@ package net.foucry.pilldroid;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.os.SystemClock;
 import androidx.annotation.NonNull;
@@ -28,6 +28,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,7 +65,6 @@ import static net.foucry.pilldroid.Utils.intRandomExclusive;
  */
 public class MedicamentListActivity extends AppCompatActivity {
 
-    private static final String CHANNEL_ID = "MedicamentCHANEL";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -92,17 +101,12 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private SimpleItemRecyclerViewAdapter mAdapter;
 
-    public int getCount() {
-        return medicaments.size();
-    }
-
     public Medicament getItem(int position) {
         return medicaments.get(position);
     }
 
     public void constructMedsList()
     {
-        Medicament currentMedicament;
         dbHelper = new DBHelper(getApplicationContext());
 
         if (!(medicaments == null)) {
@@ -111,19 +115,6 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
         medicaments = dbHelper.getAllDrugs();
-
-        Collections.sort(medicaments, new Comparator<Medicament>() {
-            @Override
-            public int compare(Medicament lhs, Medicament rhs) {
-                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-            }
-        });
-
-        for (int position = 0 ; position < this.getCount() ; position++ ) {
-            currentMedicament = this.getItem(position);
-            currentMedicament.newStock(currentMedicament.getStock());
-            dbHelper.updateDrug(currentMedicament);
-        }
 
         View mRecyclerView = findViewById(R.id.medicament_list);
         assert mRecyclerView != null;
@@ -227,8 +218,11 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
+        scheduleJob();
+    }
 
-        newStockCalculation();
+    public void onResume() {
+        super.onResume();
     }
 
     /** scanNow
@@ -240,40 +234,11 @@ public class MedicamentListActivity extends AppCompatActivity {
         new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
     }
 
-    /**
-     * Calculation of newStock
-     */
-    public void newStockCalculation() {
-        Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-
-        long dateSchedule;
-
-        Medicament firstMedicament = null;
-
-        try {
-            firstMedicament = medicaments.get(0);
-        }
-        catch (Exception ignored){}
-
-        if (firstMedicament != null) {
-            Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
-
-            if (dateAlert.getTime() < now.getTime()) {
-                dateSchedule = now.getTime() + 50000; // If dateAlert < now we schedule an alert for now + 5 seconds (3600000 pour 1 heure)[in prod define delay]
-            } else {
-                dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
-            }
-
-            long delay = dateSchedule - now.getTime();
-            scheduleNotification(getNotification(getString(R.string.notification_text)), delay);
-
-            Log.d(TAG, "Notification scheduled for " + UtilDate.convertDate(dateSchedule));
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
+
         if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
@@ -407,41 +372,27 @@ public class MedicamentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    private void scheduleNotification(Notification notification, long delay) {
-        Log.d(TAG, "scheduleNotification delay == " + delay);
+    public void scheduleJob() {
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
 
-        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        long futureInMillis = SystemClock.elapsedRealtime() + 30000;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
+        JobInfo info = new JobInfo.Builder(24560, componentName)
+                .setPersisted(true)
+                .setPeriodic(15 *60 *1000)
+                .build();
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d(TAG, ("Job scheduled " + UtilDate.convertDate(now.getTime()+15 * 60*1000)));
+        } else {
+            Log.d(TAG, "Job scheduling failed");
         }
     }
-
-    private Notification getNotification(String content) {
-        Log.d(TAG, "content = " + content);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle(getAppName())
-                .setContentText(content)
-                .setSmallIcon(R.drawable.ic_pill)
-                .setAutoCancel(true)
-                .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                R.drawable.ic_launcher));
-        return builder.build();
-    }
-
-    private String getAppName() {
-        PackageManager packageManager = getApplicationContext().getPackageManager();
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
-        } catch (final PackageManager.NameNotFoundException ignored) {}
-        return (String)((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
+    public void cancelJob(View v) {
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(24560);
+        Log.d(TAG, "Job cancelled");
     }
 
     /**
@@ -462,7 +413,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 notifyDataSetChanged();
                 dbHelper.addDrug(scannedMedoc);
             } else {
-                Toast.makeText(getApplicationContext(), "aleready in the database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "already in the database", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -524,8 +475,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
-                        int requestCode =1;
-                        startActivityForResult(intent, requestCode);
+                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                     }
                 }
             });

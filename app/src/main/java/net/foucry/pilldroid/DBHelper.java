@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +36,7 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_SEUIL_ALERT = "alerte";
 
     private static DBHelper sInstance;
+    List<Medicament> medicaments = new LinkedList<Medicament>();
 
     private static final String TAG = DBHelper.class.getName();
 
@@ -213,16 +216,15 @@ class DBHelper extends SQLiteOpenHelper {
 
     /**
      *
-     * @return a List of All medicaments presents in database
+     * @return a Sorted and updated by dateEndOfStock List of All medicaments presents in database
      */
 
     List<Medicament> getAllDrugs() {
-        List<Medicament> medicaments = new LinkedList<Medicament>();
 
         // Build the query
         String query = "SELECT * FROM " + TABLE_DRUG;
 
-        // Get reference to readable DB (tutorial parle de writable, mais bof... on verra)
+        // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
@@ -252,6 +254,21 @@ class DBHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
+
+        Medicament currentMedicament = null;
+        for (int position = 0 ; position < getCount() ; position++ ) {
+            currentMedicament = getItem(position);
+            currentMedicament.newStock(currentMedicament.getStock());
+            updateDrug(currentMedicament);
+        }
+
+        Collections.sort(medicaments, new Comparator<Medicament>() {
+            @Override
+            public int compare(Medicament lhs, Medicament rhs) {
+                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+            }
+        });
+
         Log.d(TAG, "getAllDrugs " + medicaments.toString());
 
         return medicaments;
@@ -276,6 +293,7 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_ADMIN, medicament.getMode_administration());
         values.put(KEY_PRES, medicament.getPresentation());
         values.put(KEY_STOCK, medicament.getStock());
+        values.put(KEY_PRISE, medicament.getPrise());
 
         Log.d(TAG, "values are " +values.toString());
         // Update row
@@ -326,6 +344,11 @@ class DBHelper extends SQLiteOpenHelper {
         mCount.close();
         return count;
     }
+
+    public Medicament getItem(int position) {
+        return medicaments.get(position);
+    }
+
     boolean isMedicamentExist(String cip13) {
         boolean value = false;
         try {
