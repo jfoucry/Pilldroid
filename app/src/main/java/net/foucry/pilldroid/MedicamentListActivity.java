@@ -1,22 +1,11 @@
 package net.foucry.pilldroid;
 
-import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.util.Calendar;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.SystemClock;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.NotificationCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,14 +36,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
-import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
-
+import net.foucry.pilldroid.PillDroidJobService;
 /**
  * An activity representing a list of Medicaments. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -64,7 +48,6 @@ import static net.foucry.pilldroid.Utils.intRandomExclusive;
  * item details side-by-side using two vertical panes.
  */
 public class MedicamentListActivity extends AppCompatActivity {
-
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -101,12 +84,17 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     private SimpleItemRecyclerViewAdapter mAdapter;
 
+    public int getCount() {
+        return medicaments.size();
+    }
+
     public Medicament getItem(int position) {
         return medicaments.get(position);
     }
 
     public void constructMedsList()
     {
+        Medicament currentMedicament;
         dbHelper = new DBHelper(getApplicationContext());
 
         if (!(medicaments == null)) {
@@ -115,6 +103,19 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
         medicaments = dbHelper.getAllDrugs();
+
+        Collections.sort(medicaments, new Comparator<Medicament>() {
+            @Override
+            public int compare(Medicament lhs, Medicament rhs) {
+                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+            }
+        });
+
+        for (int position = 0 ; position < this.getCount() ; position++ ) {
+            currentMedicament = this.getItem(position);
+            currentMedicament.newStock(currentMedicament.getStock());
+            dbHelper.updateDrug(currentMedicament);
+        }
 
         View mRecyclerView = findViewById(R.id.medicament_list);
         assert mRecyclerView != null;
@@ -218,11 +219,8 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        scheduleJob();
-    }
 
-    public void onResume() {
-        super.onResume();
+        ();
     }
 
     /** scanNow
@@ -236,9 +234,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-
         if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
@@ -372,27 +367,13 @@ public class MedicamentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    public void scheduleJob() {
-        Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-
-        ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
-        JobInfo info = new JobInfo.Builder(24560, componentName)
-                .setPersisted(true)
-                .setPeriodic(15 *60 *1000)
-                .build();
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        int resultCode = scheduler.schedule(info);
-        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, ("Job scheduled " + UtilDate.convertDate(now.getTime()+15 * 60*1000)));
-        } else {
-            Log.d(TAG, "Job scheduling failed");
-        }
-    }
-    public void cancelJob(View v) {
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        scheduler.cancel(24560);
-        Log.d(TAG, "Job cancelled");
+    private String getAppName() {
+        PackageManager packageManager = getApplicationContext().getPackageManager();
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
+        } catch (final PackageManager.NameNotFoundException ignored) {}
+        return (String)((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
     }
 
     /**
@@ -413,7 +394,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 notifyDataSetChanged();
                 dbHelper.addDrug(scannedMedoc);
             } else {
-                Toast.makeText(getApplicationContext(), "already in the database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "aleready in the database", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -475,7 +456,8 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
-                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                        int requestCode =1;
+                        startActivityForResult(intent, requestCode);
                     }
                 }
             });
