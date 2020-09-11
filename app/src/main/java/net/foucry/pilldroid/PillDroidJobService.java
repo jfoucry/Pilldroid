@@ -1,18 +1,10 @@
 package net.foucry.pilldroid;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
-import android.content.Context;
-import android.content.Intent;
 import android.icu.util.Calendar;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -20,8 +12,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Date;
 import java.util.List;
-
-import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 
 
 /**
@@ -31,13 +21,14 @@ import static net.foucry.pilldroid.NotificationPublisher.NOTIFICATION_ID;
 public class PillDroidJobService extends JobService {
     private  static final String TAG = JobService.class.getName();
     private boolean jobCancelled = false;
-
-    private String CHANNEL_ID = null;
+    private String CHANNEL_ID = "pillDroid";
     private DBHelper dbHelper = new DBHelper(this);
+
 
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job started");
+        createNotificationChannel();
         doBackgroundWork(params);
 
         return true;
@@ -79,8 +70,7 @@ public class PillDroidJobService extends JobService {
             }
 
             long delay = dateSchedule - now.getTime();
-            createNotificationChannel();
-            scheduleNotification(getApplicationContext(), delay);
+            scheduleNotification(delay);
         }
 
         Log.d(TAG, "Job finished");
@@ -98,12 +88,11 @@ public class PillDroidJobService extends JobService {
     /**
      * Schedule Notification for the delay
      * @param Context context
-     * @param long delay - date for the notification in milliseconds
-     * @param context
+     * @param long delay - date for the notification in millisecond
      */
-    private void scheduleNotification(Context context, long delay) {
+    private void scheduleNotification(long delay) {
         Log.d(TAG, "scheduleNotification delay == " + delay);
-
+        createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_pill)
                 .setContentTitle(getString(R.string.app_name))
@@ -119,8 +108,6 @@ public class PillDroidJobService extends JobService {
 
     /**
      * createNotificationChannelid for android API >= 28
-     * @param Context context
-     * @return String channel_id
      */
     private void createNotificationChannel() {
 
@@ -133,7 +120,15 @@ public class PillDroidJobService extends JobService {
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-
+        try {
+            notificationManager.createNotificationChannel(channel);
+        } catch  (Exception e) {
+        // This will catch any exception, because they are all descended from Exception
+            Log.e(TAG, e.toString());
+            //At the level Exception Class handle the error in Exception Table
+            // Exception Create That Error  Object and throw it
+            //E.g: FileNotFoundException ,etc
+            e.printStackTrace();
+        }
     }
 }
