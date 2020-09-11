@@ -15,11 +15,11 @@ import java.util.Locale;
 class UtilDate {
 
     private static final String TAG = UtilDate.class.getName();
+
     /**
-     *
      * @param aDate anydate
      * @return date the same date as input but at noon (12:00:00)
-     *
+     * <p>
      * set date time at Noon
      */
     static Date dateAtNoon(Date aDate) {
@@ -34,12 +34,12 @@ class UtilDate {
 
         return calendar.getTime();
     }
+
     /**
-     *
      * @param days number of days to remove to the ate
      * @param date date before day removing
      * @return date
-     *
+     * <p>
      * Substract days to date and return a new date
      */
     static Date removeDaysToDate(int days, Date date) {
@@ -51,10 +51,9 @@ class UtilDate {
     }
 
     /**
-     *
      * @param date Date to be converted
      * @return String of the converted date
-     *
+     * <p>
      * Convert a date to a String using a SimpleDateFormat
      */
     static String date2String(Date date, DateFormat dateFormat) {
@@ -68,23 +67,21 @@ class UtilDate {
     }
 
     /**
-     *
-     * @param dateString string representing a Date to be conveted
-     * @return date Date after convertion
-     *
+     * @param dateString string representing a Date to be converted
+     * @return date Date after conversion
+     * <p>
      * Convert String date into Date
      */
     static Date string2Date(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
         ParsePosition pos = new ParsePosition(0);
-        return dateFormat.parse(dateString,pos);
+        return dateFormat.parse(dateString, pos);
     }
 
     /**
-     *
      * @param date start date
      * @return int numbers of days between date and today
-     *
+     * <p>
      * Number of days between date (older than today) and today
      */
     static int nbOfDaysBetweenDateAndToday(Date date) {
