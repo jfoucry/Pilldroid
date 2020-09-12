@@ -21,7 +21,7 @@ import java.util.List;
 public class PillDroidJobService extends JobService {
     private  static final String TAG = JobService.class.getName();
     private boolean jobCancelled = false;
-    private String CHANNEL_ID = getString(R.string.app_name);
+    private String CHANNEL_ID = "PillDroid";
     private DBHelper dbHelper = new DBHelper(this);
 
 
