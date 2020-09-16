@@ -329,7 +329,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     /***
      * Ask if the medicament found in the database should be include in the
      * user database
-     * @param Medicament med - medicament to be added
+     * @param med Medicament- medicament to be added
      */
     private void askToAddInDB(Medicament med) {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
@@ -357,7 +357,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     /**
      * Add New medimenant to the user database
-     * @param Medicament med - medicament to be added
+     * @param med Medicament - medicament to be added
      */
     private void addMedToList(Medicament med)
     {
@@ -489,7 +489,6 @@ public class MedicamentListActivity extends AppCompatActivity {
                 }
             });
         }
-
 
         @Override
         public int getItemCount() {
