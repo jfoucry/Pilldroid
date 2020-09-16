@@ -61,16 +61,18 @@ public class PillDroidJobService extends JobService {
         catch (Exception ignored){}
 
         if (firstMedicament != null) {
-            Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
+            if (firstMedicament.getPrise() != 0) {
+                Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
 
-            if (dateAlert.getTime() < now.getTime()) {
-                dateSchedule = now.getTime() + 120000; // If dateAlert < now we schedule an alert for now + 120 seconds
-            } else {
-                dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
+                if (dateAlert.getTime() < now.getTime()) {
+                    dateSchedule = now.getTime() + 120000; // If dateAlert < now we schedule an alert for now + 120 seconds
+                } else {
+                    dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
+                }
+
+                long delay = dateSchedule - now.getTime();
+                scheduleNotification(delay);
             }
-
-            long delay = dateSchedule - now.getTime();
-            scheduleNotification(delay);
         }
 
         Log.d(TAG, "Job finished");
