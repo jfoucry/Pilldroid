@@ -2,15 +2,16 @@ package net.foucry.pilldroid;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -49,34 +50,26 @@ public class PillDroidJobService extends JobService {
         List<Medicament> medicaments = dbHelper.getAllDrugs();
 
         Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-
-        long dateSchedule;
 
         Medicament firstMedicament = null;
 
         try {
             firstMedicament = medicaments.get(0);
         }
-        catch (Exception ignored){}
+        catch (Exception e){
+            Log.e(TAG, e.toString());
+            e.printStackTrace();
+        }
 
+        // TODO: remove comments when save drugs will wor again
         if (firstMedicament != null) {
-            if (firstMedicament.getPrise() != 0) {
-                Date dateAlert = UtilDate.removeDaysToDate(firstMedicament.getAlertThreshold(), firstMedicament.getDateEndOfStock());
-
-                if (dateAlert.getTime() < now.getTime()) {
-                    dateSchedule = now.getTime() + 120000; // If dateAlert < now we schedule an alert for now + 120 seconds
-                } else {
-                    dateSchedule = dateAlert.getTime(); // If dateAlert > now we use dateAlert as scheduleDate
-                }
-
-                long delay = dateSchedule - now.getTime();
-                scheduleNotification(delay);
-            }
+            //if (firstMedicament.getPrise() != 0) {
+                scheduleNotification();
+            //}
         }
 
         Log.d(TAG, "Job finished");
-        jobFinished(params, false);
+        jobFinished(params, true);
     }
 
 
@@ -89,16 +82,17 @@ public class PillDroidJobService extends JobService {
 
     /**
      * Schedule Notification for the delay
-     * @param delay long - date for the notification in millisecond
      */
-    private void scheduleNotification(long delay) {
-        Log.d(TAG, "scheduleNotification delay == " + delay);
+    private void scheduleNotification() {
         createNotificationChannel();
+        Intent intent = new Intent(this, MedicamentListActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_pill)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notification_text))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
