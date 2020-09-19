@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
+import static net.foucry.pilldroid.UtilDate.dateAtNoon;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 /**
@@ -66,10 +67,15 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        Log.d(TAG, "Remove old notification");
+        Log.d(TAG, "Remove old notification and old job");
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (nm != null) {
             nm.cancelAll();
+        }
+
+        JobScheduler js = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        if (js != null) {
+            js.cancelAll();
         }
     }
 
@@ -365,35 +371,61 @@ public class MedicamentListActivity extends AppCompatActivity {
         mAdapter.addItem(med);
         dbHelper.addDrug(med);
     }
+
+    /**
+     * scheduleJob
+     * call at onPause, schedule job for next 24 hours
+     */
     public void scheduleJob() {
         Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorrow = calendar.getTime();
 
+        Date scheduleDate;
+
+        JobInfo info;
         ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
-        JobInfo info = new JobInfo.Builder(24560, componentName)
-                .setPersisted(true)
-                .setPeriodic(15 *60 *1000)
-                .build();
+        if (today.before(dateAtNoon(today))) {
+            info = new JobInfo.Builder(24560, componentName)
+                    .setPersisted(true)
+                    .setPeriodic(dateAtNoon(today).getTime())
+                    .build();
+            scheduleDate = today;
+        } else {
+            info = new JobInfo.Builder(24560, componentName)
+                    .setPersisted(true)
+                    .setPeriodic(dateAtNoon(tomorrow).getTime())
+                    .build();
+            scheduleDate = tomorrow;
+        }
+
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
         if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, ("Job scheduled " + UtilDate.convertDate(now.getTime()+15 * 60*1000)));
+            Log.d(TAG, "Job scheduled at " + dateAtNoon(scheduleDate));
         } else {
             Log.d(TAG, "Job scheduling failed");
         }
     }
+
     public void cancelJob(View v) {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.cancel(24560);
         Log.d(TAG, "Job cancelled");
     }
 
+    /**
+     *
+     * @param recyclerView
+     */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
         mAdapter = new SimpleItemRecyclerViewAdapter(medicaments);
         recyclerView.setAdapter(mAdapter);
     }
 
+    // TDOO: remove in release
     private String getAppName() {
         PackageManager packageManager = getApplicationContext().getPackageManager();
         ApplicationInfo applicationInfo = null;
