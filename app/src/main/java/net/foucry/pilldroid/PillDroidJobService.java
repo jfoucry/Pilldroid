@@ -61,11 +61,10 @@ public class PillDroidJobService extends JobService {
             e.printStackTrace();
         }
 
-        // TODO: remove comments when save drugs will wor again
         if (firstMedicament != null) {
-            //if (firstMedicament.getPrise() != 0) {
+            if (firstMedicament.getPrise() != 0) {
                 scheduleNotification();
-            //}
+            }
         }
 
         Log.d(TAG, "Job finished");
