@@ -52,8 +52,6 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Will be use to save changes in a drug", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 Log.d(TAG, "Click on save icone");
 
                 getMedicamentChanges();
