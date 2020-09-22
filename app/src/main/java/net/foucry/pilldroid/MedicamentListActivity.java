@@ -369,7 +369,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     {
         med.setDateEndOfStock();
         mAdapter.addItem(med);
-        dbHelper.addDrug(med);
     }
 
     /**
@@ -409,6 +408,10 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * cancelJob in PillDroidJobService
+     * @param v Riew
+     */
     public void cancelJob(View v) {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.cancel(24560);
@@ -416,8 +419,8 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param recyclerView
+     * setupRecyclerView (list of medicaments
+     * @param recyclerView RecyclerView
      */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
@@ -425,7 +428,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    // TDOO: remove in release
+    // TODO: remove in release
     private String getAppName() {
         PackageManager packageManager = getApplicationContext().getPackageManager();
         ApplicationInfo applicationInfo = null;
