@@ -44,12 +44,11 @@ public class PillDroidJobService extends JobService {
      */
     private void doBackgroundWork(final JobParameters params) {
 
+        Log.d(TAG,"background job");
         if (jobCancelled) {
             return;
         }
         List<Medicament> medicaments = dbHelper.getAllDrugs();
-
-        Calendar calendar = Calendar.getInstance();
 
         Medicament firstMedicament = null;
 
@@ -68,7 +67,7 @@ public class PillDroidJobService extends JobService {
         }
 
         Log.d(TAG, "Job finished");
-        jobFinished(params, true);
+        jobFinished(params, false);
     }
 
 
@@ -83,6 +82,7 @@ public class PillDroidJobService extends JobService {
      * Schedule Notification for the delay
      */
     private void scheduleNotification() {
+        Log.d(TAG, "schedule notification");
         createNotificationChannel();
         Intent intent = new Intent(this, MedicamentListActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,0);
