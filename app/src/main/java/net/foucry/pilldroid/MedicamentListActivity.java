@@ -388,13 +388,13 @@ public class MedicamentListActivity extends AppCompatActivity {
         if (today.before(dateAtNoon(today))) {
             info = new JobInfo.Builder(24560, componentName)
                     .setPersisted(true)
-                    .setPeriodic(dateAtNoon(today).getTime())
+                    .setMinimumLatency(dateAtNoon(today).getTime())
                     .build();
             scheduleDate = today;
         } else {
             info = new JobInfo.Builder(24560, componentName)
                     .setPersisted(true)
-                    .setPeriodic(dateAtNoon(tomorrow).getTime())
+                    .setMinimumLatency(dateAtNoon(tomorrow).getTime())
                     .build();
             scheduleDate = tomorrow;
         }
