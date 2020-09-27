@@ -478,6 +478,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             // Test to change background programmatically
             if (mValues.get(position).getPrise() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
+                holder.mIconView.setImageResource(R.drawable.ic_suspended_pill);
             } else {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getPrise());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
