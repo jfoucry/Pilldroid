@@ -112,6 +112,8 @@ public class MedicamentDetailActivity extends AppCompatActivity {
 
         DBHelper dbHelper = new DBHelper(this);
 
+        Medicament newMedicament = dbHelper.getDrugByCIP13(medicament.getCip13());
+
         View stockView;
         View priseView;
         View warningView;
@@ -133,6 +135,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         TextView warningTextView = warningView.findViewById(R.id.valeur);
         String warningValue = warningTextView.getText().toString();
 
+
         Log.d(TAG, "StockValue ==  "+ stockValue);
         Log.d(TAG, "PriseValue ==  "+ priseValue);
         Log.d(TAG, "AlertValue ==  "+ alertValue);
@@ -140,13 +143,13 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         Log.d(TAG, "medicamentID == "+ medicament.getId());
         Log.d(TAG, "medicament == "+ medicament.toString());
 
-        medicament.setStock(Double.parseDouble(stockValue));
-        medicament.setPrise(Double.parseDouble(priseValue));
-        medicament.setWarnThreshold(Integer.parseInt(warningValue));
-        medicament.setAlertThreshold(Integer.parseInt(alertValue));
-        medicament.setDateLastUpdate();
-        medicament.setDateEndOfStock();
+        newMedicament.setStock(Double.parseDouble(stockValue));
+        newMedicament.setPrise(Double.parseDouble(priseValue));
+        newMedicament.setWarnThreshold(Integer.parseInt(warningValue));
+        newMedicament.setAlertThreshold(Integer.parseInt(alertValue));
+        newMedicament.setDateLastUpdate();
+        newMedicament.setDateEndOfStock();
 
-        dbHelper.updateDrug(medicament);
+        dbHelper.updateDrug(newMedicament);
     }
 }
