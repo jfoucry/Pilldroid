@@ -3,6 +3,8 @@ package net.foucry.pilldroid;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -35,7 +37,6 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_SEUIL_WARN  = "warning";
     private static final String KEY_SEUIL_ALERT = "alerte";
 
-    private static DBHelper sInstance;
     List<Medicament> medicaments = new LinkedList<Medicament>();
 
     private static final String TAG = DBHelper.class.getName();
@@ -137,6 +138,8 @@ class DBHelper extends SQLiteOpenHelper {
                 null,                                   // order by
                 null);                                  // limits
 
+        Log.d(TAG, "Cursor == " + DatabaseUtils.dumpCursorToString(cursor));
+
         // if case we got result, go to the first one
         Medicament medicament = new Medicament();
         if (cursor != null) {
@@ -157,7 +160,9 @@ class DBHelper extends SQLiteOpenHelper {
         // Log
         Log.d(TAG, "getDrug("+id+")" + medicament.toString());
 
-        if (null != cursor) cursor.close();
+        assert cursor != null;
+        cursor.close();
+        db.close();
         // Return medicament
 
         return medicament;
@@ -200,7 +205,8 @@ class DBHelper extends SQLiteOpenHelper {
             medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
         }
 
-        if (null != cursor) cursor.close();
+        assert cursor != null;
+        cursor.close();
 
         Log.d(TAG, "getDrug(" + cip13 + ")" + medicament.toString());
 
@@ -220,6 +226,8 @@ class DBHelper extends SQLiteOpenHelper {
         // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
+
+        Log.d(TAG, "Cursor == " + DatabaseUtils.dumpCursorToString(cursor));
 
         // For Each row, build a medicament and add it to the list
         Medicament medicament;
@@ -247,8 +255,9 @@ class DBHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
+        db.close();
 
-        Medicament currentMedicament = null;
+        Medicament currentMedicament;
         for (int position = 0 ; position < getCount() ; position++ ) {
             currentMedicament = getItem(position);
             currentMedicament.newStock(currentMedicament.getStock());
@@ -280,6 +289,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Create ContentValues to add columnm/value
         ContentValues values = new ContentValues();
+        values.put(KEY_ID, medicament.getId());
         values.put(KEY_CIS, medicament.getCis());
         values.put(KEY_CIP13, medicament.getCip13());
         values.put(KEY_NAME, medicament.getNom());
@@ -288,12 +298,31 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_STOCK, medicament.getStock());
         values.put(KEY_PRISE, medicament.getPrise());
 
+        String[] selectionArgs = { String.valueOf(medicament.getId()) };
+        
         Log.d(TAG, "values are " +values.toString());
         // Update row
+        /*String query = "UPDATE " + TABLE_DRUG + " set" +
+                " id = " + medicament.getId() +
+                ", nom = " + "\"" + medicament.getNom() + "\"" +
+                ", cis = " + medicament.getCis() +
+                ", cip13 =" + medicament.getCip13() +
+                ", presentation =" + "\"" + medicament.getPresentation() + "\"" +
+                ", mode_administration = " + "\"" + medicament.getMode_administration() + "\"" +
+                ", stock = " + medicament.getStock() +
+                ", prise =" + medicament.getPrise() +
+                ", warning =" + medicament.getWarnThreshold() +
+                ", alerte = " + medicament.getAlertThreshold() +
+                " WHERE id = " + medicament.getId();
+
+        Log.d(TAG,"rawQuery = " + query);
+
+        db.execSQL(query);*/
+
         int i = db.update(TABLE_DRUG,           // table
                 values,                         // column/value
                 KEY_ID+" = ?",       // selections
-                new String[] {String.valueOf(medicament.getId()) } ); // selections args
+                selectionArgs ); // selections args
 
         Log.d(TAG, "Return update = " + i);
         // Close DB
@@ -335,6 +364,7 @@ class DBHelper extends SQLiteOpenHelper {
         int count = mCount.getInt(0);
 
         mCount.close();
+        db.close();
         return count;
     }
 
