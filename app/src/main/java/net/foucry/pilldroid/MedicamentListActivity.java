@@ -33,8 +33,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -103,7 +101,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void constructMedsList()
     {
-        Medicament currentMedicament;
         dbHelper = new DBHelper(getApplicationContext());
 
         if (!(medicaments == null)) {
@@ -112,19 +109,6 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
         medicaments = dbHelper.getAllDrugs();
-
-        Collections.sort(medicaments, new Comparator<Medicament>() {
-            @Override
-            public int compare(Medicament lhs, Medicament rhs) {
-                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-            }
-        });
-
-        for (int position = 0 ; position < this.getCount() ; position++ ) {
-            currentMedicament = this.getItem(position);
-            currentMedicament.newStock(currentMedicament.getStock());
-            dbHelper.updateDrug(currentMedicament);
-        }
 
         View mRecyclerView = findViewById(R.id.medicament_list);
         assert mRecyclerView != null;
@@ -146,11 +130,12 @@ public class MedicamentListActivity extends AppCompatActivity {
             toolbar.setTitle(getTitle());
         }
 
+        // Added to drop database each the app is launch.
+        if (DBDEMO) {
+            dbHelper.dropDrug();
+        }
+
         if (DEMO) {
-            // Added to drop database each the app is launch.
-            if (DBDEMO) {
-                dbHelper.dropDrug();
-            }
             if (dbHelper.getCount() == 0) {
 
                 // String cis, String cip13, String nom, String mode_administration,
@@ -306,7 +291,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     /**
-     * show keybordInput dialoo
+     * show keyboardInput dialog
      */
     protected void showInputDialog() {
         // get prompts.xml view
@@ -332,7 +317,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         alert.show();
     }
 
-    /***
+    /**
      * Ask if the medicament found in the database should be include in the
      * user database
      * @param med Medicament- medicament to be added
@@ -362,13 +347,19 @@ public class MedicamentListActivity extends AppCompatActivity {
     }
 
     /**
-     * Add New medimenant to the user database
+     * Add New medicament to the user database
      * @param med Medicament - medicament to be added
      */
     private void addMedToList(Medicament med)
     {
         med.setDateEndOfStock();
         mAdapter.addItem(med);
+
+        Log.d(TAG, "Call MedicamentDetailActivity");
+        Context context = this;
+        Intent intent = new Intent(context, MedicamentDetailActivity.class);
+        intent.putExtra("medicament", med);
+        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
     }
 
     /**
@@ -484,7 +475,7 @@ public class MedicamentListActivity extends AppCompatActivity {
             holder.mContentView.setText(mValues.get(position).getNom());
             holder.mEndOfStock.setText(dateEndOfStock);
 
-            // Test to change background programmaticaly
+            // Test to change background programmatically
             if (mValues.get(position).getPrise() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
             } else {
@@ -518,8 +509,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
-                        int requestCode =1;
-                        startActivityForResult(intent, requestCode);
+                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                     }
                 }
             });
