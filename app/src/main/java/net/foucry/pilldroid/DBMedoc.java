@@ -106,7 +106,7 @@ class DBMedoc  extends SQLiteOpenHelper {
     }
 
     /**
-     * Lookup in the DB for a record corresponding to cpi1
+     * Lookup in the DB for a record corresponding to cip13
      *
      * @param cip13 string representing the object we're looking for
      * @return return a medicament object
