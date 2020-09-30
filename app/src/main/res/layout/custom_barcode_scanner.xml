@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/zxing_barcode_surface"
-        app:zxing_framing_rect_width="150dp"
+        app:zxing_framing_rect_width="300dp"
         app:zxing_framing_rect_height="150dp">
     </com.journeyapps.barcodescanner.BarcodeView>
 
