@@ -360,6 +360,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         Intent intent = new Intent(context, MedicamentDetailActivity.class);
         intent.putExtra("medicament", med);
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
     /**
@@ -511,6 +512,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                         Intent intent = new Intent(context, MedicamentDetailActivity.class);
                         intent.putExtra("medicament", medicamentCourant);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                     }
                 }
             });
