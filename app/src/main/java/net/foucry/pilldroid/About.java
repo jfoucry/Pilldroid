@@ -13,43 +13,18 @@ import android.webkit.WebView;
  */
 public class About extends AppCompatActivity{
 
-    private WebView aboutView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
 
-        String htmlString = null;
-
-        aboutView = findViewById(R.id.aboutHtml);
+        WebView aboutView = findViewById(R.id.aboutHtml);
 
         aboutView.loadUrl("file:///android_asset/about.html");
         aboutView.clearCache(true);
         aboutView.clearHistory();
-        aboutView.getSettings().setJavaScriptEnabled(true);
         aboutView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         aboutView.setBackgroundColor(Color.WHITE);
 
-
-    }
-
-    private class ImageGetter implements Html.ImageGetter {
-
-        public Drawable getDrawable(String source) {
-            int id;
-            if (source.equals("ic_launcher-web.png")) {
-                id = R.drawable.ic_launcher;
-            } else {
-                return null;
-            }
-
-//            Drawable d = getResources().getDrawable(id);
-            //Drawable d = ResourcesCompatApi21.getDrawable(getResources(),id, null);
-            Drawable d = ContextCompat.getDrawable(getApplicationContext(),id);
-            assert d != null;
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
-        }
     }
 }
