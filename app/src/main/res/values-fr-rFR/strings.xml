@@ -26,4 +26,15 @@
     <string name="enter_cip_13_here">Enter cip 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
     <string name="input_cip13">Saissisez le code CIP 13 à l\'aide du clavier</string>
+    <string name="slide_1_Pilldroid">Bienvenue dans Pilldroid</string>
+    <string name="slide2_Pilldroid">Pour ajouter un médicament, tapez sur le bouton « Plus »</string>
+    <string name="slide3_Pilldroid">Vous pouvez scanner le code barre (appellé cip13)</string>
+    <string name="slide4_Pilldroid">Ou le QRCode</string>
+    <string name="slide5_Pilldroid">Fond vert, visage souriante, le stock est bon</string>
+    <string name="slide6_Pilldroid">Fond orange, viaage neutre, attention le stock diminue</string>
+    <string name="slide7_Pilldroid">Font rouge, visage faisant la moue, alerte le stock est très bas</string>
+    <string name="slide9_Pilldroid">Les valeurs modifiables. Le stock est recalculé tous les jours vers midi</string>
+    <string name="slide8_Pilldroid">Les informations sur le méddicament</string>
+    <string name="slide10_Pilldroid">Traitement suspendu, la prise est mise à zéro, le stock n\'est plus calculé.</string>
+    <string name="slide11_Pilldroid">L\'icone de sauvegarde de vos modifications.</string>
 </resources>

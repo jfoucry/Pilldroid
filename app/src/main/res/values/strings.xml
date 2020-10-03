@@ -27,4 +27,15 @@
     <string name="enter_cip_13">Enter CIP 13</string>
     <string name="channel_description" translatable="false">PillDroid_NotificationChannel</string>
     <string name="channel_name" translatable="false">PillDroidChannel</string>
+    <string name="slide_1_Pilldroid">Welcome on Pilldroid</string>
+    <string name="slide2_Pilldroid">To add a med, tap on the \"Plus\" button</string>
+    <string name="slide3_Pilldroid">You can scan classic barcode (called cip13)</string>
+    <string name="slide4_Pilldroid">Or QRCode</string>
+    <string name="slide5_Pilldroid">green background, happy face, stok is ok</string>
+    <string name="slide6_Pilldroid">orange background, neutral face, warning stock in rising down</string>
+    <string name="slide7_Pilldroid">red background, unhappy face, alert stock to low</string>
+    <string name="slide9_Pilldroid">Tunable</string>
+    <string name="slide8_Pilldroid">Info</string>
+    <string name="slide10_Pilldroid">Treatment suspended</string>
+    <string name="slide11_Pilldroid">save icone</string>
 </resources>
