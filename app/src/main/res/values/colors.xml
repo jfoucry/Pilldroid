@@ -8,4 +8,12 @@
     <!-- Android standard ICS color -->
     <!-- Android standard ICS color -->
     <!-- Android standard ICS color -->
+
+    <color name="slide_1">#4f91ff</color>
+    <color name="slide_2">#fb9c25</color>
+    <color name="slide_3">#5ab55d</color>
+    <color name="slide_4">#FF0000</color>
+    <color name="slide_10">#7F7F7F</color>
+
+    <color name="tutorial_buttonTextColor">#000000</color>
 </resources>
