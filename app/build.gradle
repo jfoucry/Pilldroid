@@ -3,14 +3,43 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
+
+    def versionPropsFile = file('version.properties')
+    def versionBuild
+
+    /*Setting default value for versionBuild which is the last incremented value stored in the file */
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        versionBuild = versionProps['VERSION_BUILD'].toInteger()
+    } else {
+        throw new FileNotFoundException("Could not read version.properties!")
+    }
+
+
+    /*Wrapping inside a method avoids auto incrementing on every gradle task run. Now it runs only when we build apk*/
+    ext.autoIncrementBuildNumber = {
+
+        if (versionPropsFile.canRead()) {
+            Properties versionProps = new Properties()
+            versionProps.load(new FileInputStream(versionPropsFile))
+            versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
+            versionProps['VERSION_BUILD'] = versionBuild.toString()
+            versionProps.store(versionPropsFile.newWriter(), null)
+        } else {
+            throw new FileNotFoundException("Could not read version.properties!")
+        }
+    }
+
     defaultConfig {
         applicationId "net.foucry.pilldroid"
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
-        versionCode defaultVersionCode1
-        versionName "1.0"
+        versionCode 1
+        versionName "1.0.0." + versionBuild
         applicationIdSuffix = 'alpha'
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -58,4 +87,6 @@ dependencies {
     implementation "com.android.support:support-compat:28.0.0"
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+    implementation 'za.co.riggaroo:materialhelptutorial:1.+'
 }
