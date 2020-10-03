@@ -32,10 +32,14 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import za.co.riggaroo.materialhelptutorial.TutorialItem;
+import za.co.riggaroo.materialhelptutorial.tutorial.MaterialTutorialActivity;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.UtilDate.dateAtNoon;
@@ -205,6 +209,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 return true;
             case R.id.help:
                 //startActivity(new Intent(this, Help.class));
+                loadTutorial();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -548,7 +553,82 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void loadTutorial() {
+        Intent mainAct = new Intent(this, MaterialTutorialActivity.class);
+        mainAct.putParcelableArrayListExtra(MaterialTutorialActivity.MATERIAL_TUTORIAL_ARG_TUTORIAL_ITEMS,
+                getTutorialItems(this));
+        startActivityForResult(mainAct, 1);
+
+    }
+
+    private ArrayList<TutorialItem> getTutorialItems(Context context) {
+        TutorialItem tutorialItem1 = new TutorialItem(context.getString(R.string.slide_1_Pilldroid),
+                context.getString(R.string.slide_1_Pilldroid),
+                R.color.slide_1, R.drawable.icon_small);
+
+        // You can also add gifs, [IN BETA YET] (because Glide is awesome!)
+//          TutorialItem tutorialItem1 = new TutorialItem(context.getString(R.string.slide_1_african_story_books), context.getString(R.string.slide_1_african_story_books_subtitle),
+//                R.color.slide_1, R.drawable.gif_drawable, true);
+
+        TutorialItem tutorialItem2 = new TutorialItem(context.getString(R.string.slide2_Pilldroid),
+                context.getString(R.string.slide2_Pilldroid),
+                R.color.slide_2, R.drawable.plus_icon_small);
+
+        TutorialItem tutorialItem3 = new TutorialItem(context.getString(R.string.slide3_Pilldroid),
+                context.getString(R.string.slide3_Pilldroid),
+                R.color.slide_3, R.drawable.barcode_scan);
+
+        TutorialItem tutorialItem4 = new TutorialItem(context.getString(R.string.slide4_Pilldroid),
+                context.getString(R.string.slide4_Pilldroid),
+                R.color.slide_4, R.drawable.qr_code_scan);
+
+        TutorialItem tutorialItem5 = new TutorialItem(context.getString(R.string.slide5_Pilldroid),
+                context.getString(R.string.slide5_Pilldroid),
+                R.color.slide_3, R.drawable.emoticon_happy_outline);
+
+        TutorialItem tutorialItem6 = new TutorialItem(context.getString(R.string.slide6_Pilldroid),
+                context.getString(R.string.slide6_Pilldroid),
+                R.color.slide_2, R.drawable.emoticon_neutral_outline);
+
+        TutorialItem tutorialItem7 = new TutorialItem(context.getString(R.string.slide7_Pilldroid),
+                context.getString(R.string.slide7_Pilldroid),
+                R.color.slide_4, R.drawable.emoticon_angry_outline);
+
+        TutorialItem tutorialItem8 = new TutorialItem(context.getString(R.string.slide8_Pilldroid),
+                context.getString(R.string.slide8_Pilldroid),
+                R.color.slide_1, R.drawable.info);
+
+        TutorialItem tutorialItem9 = new TutorialItem(context.getString(R.string.slide9_Pilldroid),
+                context.getString(R.string.slide9_Pilldroid),
+                R.color.slide_2, R.drawable.tunable);
+
+
+        TutorialItem tutorialItem10 = new TutorialItem(context.getString(R.string.slide10_Pilldroid),
+        context.getString(R.string.slide10_Pilldroid),
+                R.color.slide_10, R.drawable.suspended_pill_slide);
+
+        TutorialItem tutorialItem11 = new TutorialItem(context.getString(R.string.slide11_Pilldroid),
+                context.getString(R.string.slide11_Pilldroid),
+                R.color.slide_1, R.drawable.content_save);
+
+        ArrayList<TutorialItem> tutorialItems = new ArrayList<>();
+        tutorialItems.add(tutorialItem1);
+        tutorialItems.add(tutorialItem2);
+        tutorialItems.add(tutorialItem3);
+        tutorialItems.add(tutorialItem4);
+        tutorialItems.add(tutorialItem5);
+        tutorialItems.add(tutorialItem6);
+        tutorialItems.add(tutorialItem7);
+        tutorialItems.add(tutorialItem10);
+        tutorialItems.add(tutorialItem8);
+        tutorialItems.add(tutorialItem9);
+        tutorialItems.add(tutorialItem11);
+
+        return tutorialItems;
+    }
 }
+
 
 /*
 editText.addTextChangeListener( new TextWatcher() {
