@@ -37,4 +37,5 @@
     <string name="slide8_Pilldroid">Les informations sur le méddicament</string>
     <string name="slide10_Pilldroid">Traitement suspendu, la prise est mise à zéro, le stock n\'est plus calculé.</string>
     <string name="slide11_Pilldroid">L\'icone de sauvegarde de vos modifications.</string>
+    <string name="slide12_Pilldroid">Merci d\'utiliser PilllDroid. Plus d\informations sur le site web https:\\pilldroid.foucry.net</string>
 </resources>
