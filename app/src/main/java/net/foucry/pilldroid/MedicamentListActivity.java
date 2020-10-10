@@ -611,6 +611,8 @@ public class MedicamentListActivity extends AppCompatActivity {
         TutorialItem tutorialItem11 = new TutorialItem(context.getString(R.string.slide11_Pilldroid),
                 context.getString(R.string.slide11_Pilldroid),
                 R.color.slide_1, R.drawable.content_save);
+        TutorialItem tutorialItem12 = new TutorialItem(getString(R.string.slide12_Pilldroid), getString(R.string.slide12_Pilldroid),
+                R.color.slide_1, R.drawable.icon_small);
 
         ArrayList<TutorialItem> tutorialItems = new ArrayList<>();
         tutorialItems.add(tutorialItem1);
@@ -624,6 +626,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         tutorialItems.add(tutorialItem8);
         tutorialItems.add(tutorialItem9);
         tutorialItems.add(tutorialItem11);
+        tutorialItems.add(tutorialItem12);
 
         return tutorialItems;
     }
