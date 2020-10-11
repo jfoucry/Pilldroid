@@ -45,6 +45,10 @@ import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.UtilDate.dateAtNoon;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
+// Todo: - add launch tuto at first launch
+//       - add preference to know if the tuto as already been launch
+//       - use same color in website and about
+//       - remove twopanes code
 /**
  * An activity representing a list of Medicaments. This activity
  * has different presentations for handset and tablet-size devices. On
