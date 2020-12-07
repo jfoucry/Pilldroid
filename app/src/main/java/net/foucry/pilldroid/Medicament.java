@@ -2,10 +2,8 @@ package net.foucry.pilldroid;
 
 import java.io.Serializable;
 import java.lang.String;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import static  net.foucry.pilldroid.UtilDate.*;
 
@@ -25,15 +23,16 @@ public class Medicament implements Serializable {
     private double prise;
     private int warnThreshold;
     private int alertThreshold;
-    private String dateLastUpdate;
+    private long dateLastUpdate;
 
     /* calculate part */
     private Date dateEndOfStock;
 
-    Medicament() {}
+    Medicament() {
+    }
 
     Medicament(final String cis, final String cip13, final String nom, final String mode_administration, final String presentation,
-                      double stock, double prise, int warn, int alert) {
+               double stock, double prise, int warn, int alert, long dateLastUpdate) {
         super();
 
         this.cis = cis;
@@ -45,6 +44,7 @@ public class Medicament implements Serializable {
         this.prise = prise;
         this.warnThreshold = warn;
         this.alertThreshold = alert;
+        this.dateLastUpdate = dateLastUpdate;
     }
 
 
@@ -72,7 +72,9 @@ public class Medicament implements Serializable {
         return presentation;
     }
 
-    double getStock() { return stock; }
+    double getStock() {
+        return stock;
+    }
 
     double getPrise() {
         return prise;
@@ -86,9 +88,9 @@ public class Medicament implements Serializable {
         return warnThreshold;
     }
 
-/*    public String getDateLastUpdate() {
+    long getDateLastUpdate() {
         return dateLastUpdate;
-    }*/
+    }
 
     Date getDateEndOfStock() {
         return dateEndOfStock;
@@ -131,15 +133,15 @@ public class Medicament implements Serializable {
             warn = 14;
         this.warnThreshold = warn;
     }
+
     void setAlertThreshold(int alert) {
         if (alert == 0)
             alert = 7;
         this.alertThreshold = alert;
     }
 
-    void setDateLastUpdate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
-        this.dateLastUpdate = date2String(dateAtNoon(new Date()), dateFormat);
+    void setDateLastUpdate(long l) {
+        this.dateLastUpdate = l;
     }
 
     void setDateEndOfStock() {
