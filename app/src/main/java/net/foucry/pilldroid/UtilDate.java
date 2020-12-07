@@ -17,7 +17,7 @@ class UtilDate {
     private static final String TAG = UtilDate.class.getName();
 
     /**
-     * @param aDate anydate
+     * @param aDate any date
      * @return date the same date as input but at noon (12:00:00 PM)
      * set date time at Noon
      */
@@ -30,6 +30,7 @@ class UtilDate {
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
         return calendar.getTime();
     }
@@ -79,11 +80,11 @@ class UtilDate {
      * @return int numbers of days between date and today
      * Number of days between date (older than today) and today
      */
-    static int nbOfDaysBetweenDateAndToday(Date date) {
+    static long nbOfDaysBetweenDateAndToday(Date date) {
         Date oldDate = dateAtNoon(date); // Be sure that the old date is at Noon
         Date todayDate = dateAtNoon(new Date()); // Be sure that we use today at Noon
 
-        return (int) (todayDate.getTime() - oldDate.getTime());
+        return (todayDate.getTime() - oldDate.getTime());
     }
 
     /**
