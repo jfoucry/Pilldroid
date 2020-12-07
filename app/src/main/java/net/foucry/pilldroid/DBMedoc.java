@@ -20,9 +20,9 @@ class DBMedoc  extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
-    private static String dbName = "medicaments.db";
+    private static final String dbName = "medicaments.db";
     private final Context myContext;
-    private SQLiteDatabase myDataBase = null;
+    private final SQLiteDatabase myDataBase = null;
 
     private static final String TABLE_NAME = "medicaments";
     private static final String MEDOC_CIS = "cis";
