@@ -42,7 +42,6 @@ import za.co.riggaroo.materialhelptutorial.TutorialItem;
 import za.co.riggaroo.materialhelptutorial.tutorial.MaterialTutorialActivity;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
-import static net.foucry.pilldroid.UtilDate.dateAtNoon;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 // Todo: - add launch tuto at first launch
@@ -63,7 +62,7 @@ public class MedicamentListActivity extends AppCompatActivity {
      * device.
      */
 
-    // TODO: Change DEMO/DBDEMO form statci to non-static. In order to create fake data at only at launchtime
+    // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launchtime
     private boolean mTwoPane;
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
@@ -157,34 +156,34 @@ public class MedicamentListActivity extends AppCompatActivity {
 
                 dbHelper.addDrug(new Medicament("60000011", "3400930000011", "Médicament test 01", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000012", "3400930000012", "Médicament test 02", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000013", "3400930000013", "Médicament test 03", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000014", "3400930000014", "Médicament test 04", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000015", "3400930000015", "Médicament test 05", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000016", "3400930000016", "Médicament test 06", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000017", "3400930000017", "Médicament test 07", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000018", "3400930000018", "Médicament test 08", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000019", "3400930000019", "Médicament test 09", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
                 dbHelper.addDrug(new Medicament("60000010", "3400930000010", "Médicament test 10", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7));
+                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
             }
         }
 
@@ -379,31 +378,39 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void scheduleJob() {
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        calendar.add(Calendar.MINUTE, 5);
         Date tomorrow = calendar.getTime();
 
         Date scheduleDate;
 
         JobInfo info;
         ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
-        if (today.before(dateAtNoon(today))) {
+        info = new JobInfo.Builder(24560, componentName)
+                .setMinimumLatency(60 *5 * 1000)
+                .setOverrideDeadline(60 *10 * 1000)
+                .build();
+
+        /*if (today.before(dateAtNoon(today))) {
             info = new JobInfo.Builder(24560, componentName)
                     .setPersisted(true)
-                    .setMinimumLatency(dateAtNoon(today).getTime())
+                    //.setMinimumLatency(dateAtNoon(today).getTime())
+                    .setMinimumLatency(today.getTime())
                     .build();
             scheduleDate = today;
         } else {
             info = new JobInfo.Builder(24560, componentName)
                     .setPersisted(true)
-                    .setMinimumLatency(dateAtNoon(tomorrow).getTime())
+                    //.setMinimumLatency(dateAtNoon(tomorrow).getTime())
+                    .setMinimumLatency(tomorrow.getTime())
                     .build();
             scheduleDate = tomorrow;
-        }
+        }*/
 
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
         if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, "Job scheduled at " + dateAtNoon(scheduleDate));
+            //Log.d(TAG, "Job scheduled at " + dateAtNoon(scheduleDate));
+            Log.d(TAG, "Job scheduled at ");
         } else {
             Log.d(TAG, "Job scheduling failed");
         }
