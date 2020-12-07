@@ -1,11 +1,10 @@
 package net.foucry.pilldroid;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
+
 import androidx.appcompat.app.AppCompatActivity;
-import android.text.Html;
+
 import android.webkit.WebView;
 
 /**
