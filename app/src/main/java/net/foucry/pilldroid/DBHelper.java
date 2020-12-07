@@ -3,13 +3,12 @@ package net.foucry.pilldroid;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.text.format.DateUtils;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,13 +35,14 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_PRISE       = "prise";
     private static final String KEY_SEUIL_WARN  = "warning";
     private static final String KEY_SEUIL_ALERT = "alerte";
+    private static final String KEY_LAST_UPDATE = "last_update";
 
-    List<Medicament> medicaments = new LinkedList<Medicament>();
+    final List<Medicament> medicaments = new LinkedList<>();
 
     private static final String TAG = DBHelper.class.getName();
 
     private static final String[] COLUMS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_PRISE,
-    KEY_SEUIL_WARN, KEY_SEUIL_ALERT};
+    KEY_SEUIL_WARN, KEY_SEUIL_ALERT, KEY_LAST_UPDATE};
 
     DBHelper(Context context) {
         super(context, DATABASE_NAME.get(), null, DATABASE_VERSION);
@@ -60,7 +60,8 @@ class DBHelper extends SQLiteOpenHelper {
                 "stock REAL, " +
                 "prise REAL, " +
                 "warning INT, " +
-                "alerte INT)";
+                "alerte INT, " +
+                "last_update LONG)";
 
         db.execSQL(CREATE_DRUG_TABLE);
     }
@@ -106,7 +107,8 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_STOCK, medicament.getStock());
         values.put(KEY_PRISE, medicament.getPrise());
         values.put(KEY_SEUIL_WARN, medicament.getWarnThreshold());
-        values.put(KEY_SEUIL_ALERT,medicament.getAlertThreshold());
+        values.put(KEY_SEUIL_ALERT, medicament.getAlertThreshold());
+        values.put(KEY_LAST_UPDATE, medicament.getDateLastUpdate());
 
         // Calculate some medicament's fields
 
@@ -156,6 +158,7 @@ class DBHelper extends SQLiteOpenHelper {
             medicament.setPrise(Double.parseDouble(cursor.getString(7)));
             medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
             medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+            medicament.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
         }
         // Log
         Log.d(TAG, "getDrug("+id+")" + medicament.toString());
@@ -203,6 +206,7 @@ class DBHelper extends SQLiteOpenHelper {
             medicament.setPrise(Double.parseDouble(cursor.getString(7)));
             medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
             medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+            medicament.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
         }
 
         assert cursor != null;
@@ -244,10 +248,10 @@ class DBHelper extends SQLiteOpenHelper {
                 medicament.setPrise(Double.parseDouble(cursor.getString(7)));
                 medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
                 medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
-
+                medicament.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
                 // Call calcul method
                 medicament.setDateEndOfStock();
-                medicament.setDateLastUpdate();
+
 
                 // Add medicament to medicaments
                 medicaments.add(medicament);
@@ -297,34 +301,15 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_PRES, medicament.getPresentation());
         values.put(KEY_STOCK, medicament.getStock());
         values.put(KEY_PRISE, medicament.getPrise());
+        values.put(KEY_LAST_UPDATE, medicament.getDateLastUpdate());
 
         String[] selectionArgs = { String.valueOf(medicament.getId()) };
-        
-        Log.d(TAG, "values are " +values.toString());
-        // Update row
-        /*String query = "UPDATE " + TABLE_DRUG + " set" +
-                " id = " + medicament.getId() +
-                ", nom = " + "\"" + medicament.getNom() + "\"" +
-                ", cis = " + medicament.getCis() +
-                ", cip13 =" + medicament.getCip13() +
-                ", presentation =" + "\"" + medicament.getPresentation() + "\"" +
-                ", mode_administration = " + "\"" + medicament.getMode_administration() + "\"" +
-                ", stock = " + medicament.getStock() +
-                ", prise =" + medicament.getPrise() +
-                ", warning =" + medicament.getWarnThreshold() +
-                ", alerte = " + medicament.getAlertThreshold() +
-                " WHERE id = " + medicament.getId();
 
-        Log.d(TAG,"rawQuery = " + query);
-
-        db.execSQL(query);*/
-
-        int i = db.update(TABLE_DRUG,           // table
+        db.update(TABLE_DRUG,           // table
                 values,                         // column/value
-                KEY_ID+" = ?",       // selections
-                selectionArgs ); // selections args
+                KEY_ID + " = ?",       // selections
+                selectionArgs);
 
-        Log.d(TAG, "Return update = " + i);
         // Close DB
         db.close();
     }
