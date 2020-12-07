@@ -1,5 +1,6 @@
 package net.foucry.pilldroid;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -14,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     private final Drawable mDivider;
 
-    SimpleDividerItemDecoration() {
-        mDivider = ContextCompat.getDrawable(R.drawable.line_divider);
+    SimpleDividerItemDecoration(Context context) {
+        mDivider = context.getDrawable(R.drawable.line_divider);
     }
 
     @Override
