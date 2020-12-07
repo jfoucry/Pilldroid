@@ -2,7 +2,7 @@ package net.foucry.pilldroid;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import java.util.Date;
 
 import static net.foucry.pilldroid.R.id.detail_toolbar;
 
@@ -148,7 +150,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         newMedicament.setPrise(Double.parseDouble(priseValue));
         newMedicament.setWarnThreshold(Integer.parseInt(warningValue));
         newMedicament.setAlertThreshold(Integer.parseInt(alertValue));
-        newMedicament.setDateLastUpdate();
+        newMedicament.setDateLastUpdate(UtilDate.dateAtNoon(new Date()).getTime());
         newMedicament.setDateEndOfStock();
 
         dbHelper.updateDrug(newMedicament);
