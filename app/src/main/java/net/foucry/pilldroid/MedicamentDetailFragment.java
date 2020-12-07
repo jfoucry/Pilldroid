@@ -118,9 +118,4 @@ public class MedicamentDetailFragment extends Fragment {
 
         return detailView;
     }
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-    }
 }
