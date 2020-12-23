@@ -80,11 +80,11 @@ class UtilDate {
      * @return int numbers of days between date and today
      * Number of days between date (older than today) and today
      */
-    static long nbOfDaysBetweenDateAndToday(Date date) {
+    static int nbOfDaysBetweenDateAndToday(Date date) {
         Date oldDate = dateAtNoon(date); // Be sure that the old date is at Noon
         Date todayDate = dateAtNoon(new Date()); // Be sure that we use today at Noon
 
-        return (todayDate.getTime() - oldDate.getTime());
+        return (int) (todayDate.getTime() - oldDate.getTime())/(86400*1000);
     }
 
     /**
