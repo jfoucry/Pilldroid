@@ -500,14 +500,14 @@ public class MedicamentListActivity extends AppCompatActivity {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getPrise());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_alert);
-                    holder.mIconView.setImageResource(R.drawable.lower_stock);
+                    holder.mIconView.setImageResource(R.drawable.lower_stock_vect);
                 } else if ((remainingStock > mValues.get(position).getAlertThreshold()) &&
                         (remainingStock <= (mValues.get(position).getWarnThreshold()))) {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_warning);
-                    holder.mIconView.setImageResource(R.drawable.warning_stock);
+                    holder.mIconView.setImageResource(R.drawable.warning_stock_vect);
                 } else {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_ok);
-                    holder.mIconView.setImageResource(R.drawable.ok_stock);
+                    holder.mIconView.setImageResource(R.drawable.ok_stock_vect);
                 }
             }
 
@@ -596,15 +596,15 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         TutorialItem tutorialItem5 = new TutorialItem(context.getString(R.string.slide5_Pilldroid),
                 context.getString(R.string.slide5_Pilldroid),
-                R.color.slide_3, R.drawable.emoticon_happy_outline);
+                R.color.slide_3, R.drawable.ok_stock_bitmap);
 
         TutorialItem tutorialItem6 = new TutorialItem(context.getString(R.string.slide6_Pilldroid),
                 context.getString(R.string.slide6_Pilldroid),
-                R.color.slide_2, R.drawable.emoticon_neutral_outline);
+                R.color.slide_2, R.drawable.lower_stock_bitmap);
 
         TutorialItem tutorialItem7 = new TutorialItem(context.getString(R.string.slide7_Pilldroid),
                 context.getString(R.string.slide7_Pilldroid),
-                R.color.slide_4, R.drawable.emoticon_angry_outline);
+                R.color.slide_4, R.drawable.warning_stock_bitmap);
 
         TutorialItem tutorialItem8 = new TutorialItem(context.getString(R.string.slide8_Pilldroid),
                 context.getString(R.string.slide8_Pilldroid),

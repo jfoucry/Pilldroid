@@ -21,7 +21,6 @@ import java.util.List;
 class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    @SuppressWarnings("CanBeFinal")
     private static final ThreadLocal<String> DATABASE_NAME = ThreadLocal.withInitial(() -> "ordonnance.db");
 
     private static final String TABLE_DRUG      = "drug";
@@ -264,11 +263,15 @@ class DBHelper extends SQLiteOpenHelper {
         Medicament currentMedicament;
         for (int position = 0 ; position < getCount() ; position++ ) {
             currentMedicament = getItem(position);
-            currentMedicament.newStock(currentMedicament.getStock());
-            updateDrug(currentMedicament);
+
+//            if (!DateUtils.isToday(currentMedicament.getDateLastUpdate()))
+//            {
+                currentMedicament.newStock();
+                updateDrug(currentMedicament);
+            //}
         }
 
-        Collections.sort(medicaments, new Comparator<Medicament>() {
+        medicaments.sort(new Comparator<Medicament>() {
             @Override
             public int compare(Medicament lhs, Medicament rhs) {
                 return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());

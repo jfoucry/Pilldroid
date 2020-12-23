@@ -14,7 +14,7 @@
             android:layout_width="50sp"
             android:layout_height="50sp"
             android:layout_marginStart="5dp"
-            android:src="@drawable/ok_stock"
+            android:src="@drawable/ok_stock_vect"
             android:contentDescription="Icone de stock"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true" />

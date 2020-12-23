@@ -160,11 +160,11 @@ public class Medicament implements Serializable {
         this.dateEndOfStock = calendar.getTime();
     }
 
-    double newStock(double currentStock) {
-        Date lastUpdate = string2Date(this.dateLastUpdate);
+    void newStock() {
+        Date lastUpdate = new Date(getDateLastUpdate());
         int numberOfDays = nbOfDaysBetweenDateAndToday(lastUpdate);
         double takeDuringPeriod = this.prise * numberOfDays;
-
-        return currentStock - takeDuringPeriod;
+        setStock(getStock() - takeDuringPeriod);
+        setDateLastUpdate(dateAtNoon(new Date()).getTime());
     }
 }
