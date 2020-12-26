@@ -386,8 +386,8 @@ public class MedicamentListActivity extends AppCompatActivity {
         JobInfo info;
         ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
         info = new JobInfo.Builder(24560, componentName)
-                .setMinimumLatency(60 *5 * 1000)
-                .setOverrideDeadline(60 *10 * 1000)
+                .setMinimumLatency(60 * 15 * 1000)
+                .setOverrideDeadline(60 * 60 * 1000)
                 .build();
 
         /*if (today.before(dateAtNoon(today))) {
