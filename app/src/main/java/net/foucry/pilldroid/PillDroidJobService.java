@@ -2,13 +2,15 @@ package net.foucry.pilldroid;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
-import android.content.Context;
-import android.os.Build;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class PillDroidJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job started");
+        createNotificationChannel();
         doBackgroundWork(params);
 
         return false;
@@ -79,11 +82,12 @@ public class PillDroidJobService extends JobService {
      */
     private void scheduleNotification() {
         Log.d(TAG, "schedule notification");
-        /*createNotificationChannel();
+        createNotificationChannel();
         Intent intent = new Intent(this, MedicamentListActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,0);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "PillDroid")
                 .setSmallIcon(R.drawable.ic_pill_alarm)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notification_text))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -92,9 +96,9 @@ public class PillDroidJobService extends JobService {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         int notificationId = 666;
-        notificationManager.notify(notificationId, builder.build());*/
+        notificationManager.notify(notificationId, builder.build());
 
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        /*NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O){
             NotificationChannel notificationChannel = new NotificationChannel("123", "Pilldroid", NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(notificationChannel);
@@ -105,7 +109,7 @@ public class PillDroidJobService extends JobService {
                 .setContentText(getString(R.string.notification_text))
                 .setSmallIcon(R.drawable.ic_pill_alarm);
         notificationManager.notify(1, notification.build());
-
+*/
     }
 
     /**
