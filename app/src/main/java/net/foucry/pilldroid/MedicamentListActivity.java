@@ -42,6 +42,7 @@ import za.co.riggaroo.materialhelptutorial.TutorialItem;
 import za.co.riggaroo.materialhelptutorial.tutorial.MaterialTutorialActivity;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
+import static net.foucry.pilldroid.UtilDate.dateAtNoon;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 // Todo: - add launch tuto at first launch
@@ -378,38 +379,38 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void scheduleJob() {
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
-        calendar.add(Calendar.MINUTE, 5);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date tomorrow = calendar.getTime();
 
         Date scheduleDate;
 
         JobInfo info;
         ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
-        info = new JobInfo.Builder(24560, componentName)
+        /*info = new JobInfo.Builder(24560, componentName)
                 .setMinimumLatency(60 * 15 * 1000)
                 .setOverrideDeadline(60 * 60 * 1000)
-                .build();
+                .build();*/
 
-        /*if (today.before(dateAtNoon(today))) {
+        if (today.before(dateAtNoon(today))) {
             info = new JobInfo.Builder(24560, componentName)
                     .setPersisted(true)
-                    //.setMinimumLatency(dateAtNoon(today).getTime())
-                    .setMinimumLatency(today.getTime())
+                    .setMinimumLatency(dateAtNoon(today).getTime())
+                    //.setMinimumLatency(today.getTime())
                     .build();
             scheduleDate = today;
         } else {
             info = new JobInfo.Builder(24560, componentName)
                     .setPersisted(true)
-                    //.setMinimumLatency(dateAtNoon(tomorrow).getTime())
-                    .setMinimumLatency(tomorrow.getTime())
+                    .setMinimumLatency(dateAtNoon(tomorrow).getTime())
+                    //.setMinimumLatency(tomorrow.getTime())
                     .build();
             scheduleDate = tomorrow;
-        }*/
+        }
 
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
         if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            //Log.d(TAG, "Job scheduled at " + dateAtNoon(scheduleDate));
+            Log.d(TAG, "Job scheduled at " + dateAtNoon(scheduleDate));
             Log.d(TAG, "Job scheduled at ");
         } else {
             Log.d(TAG, "Job scheduling failed");
@@ -418,7 +419,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     /**
      * cancelJob in PillDroidJobService
-     * @param v Riew
+     * @param v View
      */
     public void cancelJob(View v) {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
