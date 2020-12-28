@@ -87,29 +87,15 @@ public class PillDroidJobService extends JobService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "PillDroid")
                 .setSmallIcon(R.drawable.ic_pill_alarm)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notification_text))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         int notificationId = 666;
         notificationManager.notify(notificationId, builder.build());
-
-        /*NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O){
-            NotificationChannel notificationChannel = new NotificationChannel("123", "Pilldroid", NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(getApplicationContext(), "123")
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.notification_text))
-                .setSmallIcon(R.drawable.ic_pill_alarm);
-        notificationManager.notify(1, notification.build());
-*/
     }
 
     /**
