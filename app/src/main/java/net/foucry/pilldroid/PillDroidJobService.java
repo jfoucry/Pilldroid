@@ -61,12 +61,18 @@ public class PillDroidJobService extends JobService {
 
         if (firstMedicament != null) {
             if (firstMedicament.getPrise() != 0) {
-                scheduleNotification();
+                if(firstMedicament.getStock() < firstMedicament.getAlertThreshold()) {
+                    scheduleNotification();
+                } else
+                {
+                    double dummy = (firstMedicament.getStock() - firstMedicament.getAlertThreshold());
+                    Log.d(TAG, "no notification scheduled " + dummy);
+                }
             }
         }
 
         Log.d(TAG, "Job finished");
-        jobFinished(params, false);
+        jobFinished(params, true);
     }
 
 
