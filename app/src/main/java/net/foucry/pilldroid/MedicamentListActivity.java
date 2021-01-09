@@ -379,7 +379,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void scheduleJob() {
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        calendar.add(Calendar.MINUTE, 15);
         Date tomorrow = calendar.getTime();
 
         Date scheduleDate;
@@ -394,24 +394,24 @@ public class MedicamentListActivity extends AppCompatActivity {
         if (today.before(dateAtNoon(today))) {
             info = new JobInfo.Builder(24560, componentName)
                     .setPersisted(true)
-                    .setMinimumLatency(dateAtNoon(today).getTime())
-                    //.setMinimumLatency(today.getTime())
+//                    .setPeriodic(dateAtNoon(today).getTime())
+                    .setPeriodic(today.getTime())
                     .build();
             scheduleDate = today;
         } else {
             info = new JobInfo.Builder(24560, componentName)
                     .setPersisted(true)
-                    .setMinimumLatency(dateAtNoon(tomorrow).getTime())
-                    //.setMinimumLatency(tomorrow.getTime())
+//                    .setPeriodic(dateAtNoon(tomorrow).getTime())
+                    .setPeriodic(tomorrow.getTime())
                     .build();
             scheduleDate = tomorrow;
         }
 
+//        String scheduleDate = UtilDate.convertDate(today.getTime()+info.getMinLatencyMillis());
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         int resultCode = scheduler.schedule(info);
         if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, "Job scheduled at " + dateAtNoon(scheduleDate));
-            Log.d(TAG, "Job scheduled at ");
+            Log.d(TAG, "Job scheduled at " + scheduleDate);
         } else {
             Log.d(TAG, "Job scheduling failed");
         }
