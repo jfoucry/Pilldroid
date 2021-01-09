@@ -54,7 +54,7 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Click on save icone");
+                Log.d(TAG, "Click on save icon");
 
                 getMedicamentChanges();
                 setResult(1);
@@ -150,7 +150,8 @@ public class MedicamentDetailActivity extends AppCompatActivity {
         newMedicament.setPrise(Double.parseDouble(priseValue));
         newMedicament.setWarnThreshold(Integer.parseInt(warningValue));
         newMedicament.setAlertThreshold(Integer.parseInt(alertValue));
-        newMedicament.setDateLastUpdate(UtilDate.dateAtNoon(new Date()).getTime());
+        // newMedicament.setDateLastUpdate(UtilDate.dateAtNoon(new Date()).getTime());
+        newMedicament.setDateLastUpdate(new Date().getTime());
         newMedicament.setDateEndOfStock();
 
         dbHelper.updateDrug(newMedicament);
