@@ -33,13 +33,20 @@
                 android:value="net.foucry.pilldroid.MedicamentListActivity" />
         </activity>
         <activity
+            android:name=".WelcomeActivity"
+            android:label="Welcome"
+            android:parentActivityName=".MedicamentListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.foucry.pilldroid.MedicamentListActivity" />
+        </activity>
+        <activity
             android:name=".About"
             android:label="À propos de PillDroid"
             android:parentActivityName=".MedicamentListActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".CustomScannerActivity" />
-        <activity android:name="za.co.riggaroo.materialhelptutorial.tutorial.MaterialTutorialActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <service
             android:name=".PillDroidJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
