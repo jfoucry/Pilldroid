@@ -1,6 +1,9 @@
 package net.foucry.pilldroid;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
@@ -8,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,13 +37,25 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import za.co.riggaroo.materialhelptutorial.TutorialItem;
-import za.co.riggaroo.materialhelptutorial.tutorial.MaterialTutorialActivity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.UtilDate.dateAtNoon;
@@ -69,6 +85,18 @@ public class MedicamentListActivity extends AppCompatActivity {
     final Boolean DBDEMO = false;
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
 
+
+    private ViewPager viewPager;
+    private LinearLayout dotsLayout;
+    private int[] layouts;
+    private Button btnSkip, btnNext;
+    private PrefManager prefManager;
+
+    /**
+     * Start tutorial
+     */
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -79,10 +107,10 @@ public class MedicamentListActivity extends AppCompatActivity {
             nm.cancelAll();
         }
 
-        JobScheduler js = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        if (js != null) {
-            js.cancelAll();
-        }
+        //JobScheduler js = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        //if (js != null) {
+         //   js.cancelAll();
+        //}
     }
 
     @Override
@@ -126,6 +154,17 @@ public class MedicamentListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // tuto
+
+//        prefManager = new PrefManager(this);
+//        if (!prefManager.isFirstTimeLaunch()) {
+//        WelcomeActivity welcomeActivity = new WelcomeActivity();
+//        Indent indent = new inden
+//        startActivity(new indent(welcomeActivity));
+            startActivity(new Intent(this, WelcomeActivity.class));
+//            finish();
+//        }
         setContentView(R.layout.activity_medicament_list);
 
         dbHelper = new DBHelper(this);
@@ -213,7 +252,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 return true;
             case R.id.help:
                 //startActivity(new Intent(this, Help.class));
-                loadTutorial();
+                //loadTutorial();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -221,7 +260,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        scheduleJob();
+        //scheduleJob();
     }
 
     public void onResume() {
@@ -376,57 +415,68 @@ public class MedicamentListActivity extends AppCompatActivity {
      * scheduleJob
      * call at onPause, schedule job for next 24 hours
      */
-    public void scheduleJob() {
-        Calendar calendar = Calendar.getInstance();
-        Date today = calendar.getTime();
-        calendar.add(Calendar.MINUTE, 15);
-        Date tomorrow = calendar.getTime();
+//    public void scheduleJob() {
+//        Calendar calendar = Calendar.getInstance();
+//        Date today = calendar.getTime();
+//        calendar.add(Calendar.MINUTE, 15);
+//        Date tomorrow = calendar.getTime();
 
-        Date scheduleDate;
+//        Date scheduleDate;
 
-        JobInfo info;
-        ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
+//        JobInfo info;
+//        ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
         /*info = new JobInfo.Builder(24560, componentName)
                 .setMinimumLatency(60 * 15 * 1000)
                 .setOverrideDeadline(60 * 60 * 1000)
                 .build();*/
 
-        if (today.before(dateAtNoon(today))) {
-            info = new JobInfo.Builder(24560, componentName)
-                    .setPersisted(true)
+//        if (today.before(dateAtNoon(today))) {
+//          info = new JobInfo.Builder(24560, componentName)
+//                    .setPersisted(true)
 //                    .setPeriodic(dateAtNoon(today).getTime())
-                    .setPeriodic(today.getTime())
-                    .build();
-            scheduleDate = today;
-        } else {
-            info = new JobInfo.Builder(24560, componentName)
-                    .setPersisted(true)
+//                    .setPeriodic(today.getTime())
+//                    .build();
+//            scheduleDate = today;
+//        } else {
+//            info = new JobInfo.Builder(24560, componentName)
+//                    .setPersisted(true)
 //                    .setPeriodic(dateAtNoon(tomorrow).getTime())
-                    .setPeriodic(tomorrow.getTime())
-                    .build();
-            scheduleDate = tomorrow;
-        }
+//                    .setPeriodic(tomorrow.getTime())
+//                    .build();
+//            scheduleDate = tomorrow;
+//        }
 
 //        String scheduleDate = UtilDate.convertDate(today.getTime()+info.getMinLatencyMillis());
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        int resultCode = scheduler.schedule(info);
-        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.d(TAG, "Job scheduled at " + scheduleDate);
-        } else {
-            Log.d(TAG, "Job scheduling failed");
-        }
-    }
+        //JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        //int resultCode = scheduler.schedule(info);
+        //if (resultCode == JobScheduler.RESULT_SUCCESS) {
+       //     Log.d(TAG, "Job scheduled at " + scheduleDate);
+        //} else {
+        //    Log.d(TAG, "Job scheduling failed");
+        //}
+//    }
 
     /**
      * cancelJob in PillDroidJobService
-     * @param v View
+     * @param V View
      */
-    public void cancelJob(View v) {
+/*    public void cancelJob(View v) {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.cancel(24560);
         Log.d(TAG, "Job cancelled");
-    }
+    }*/
 
+    public void scheduleAlarm(View V) {
+        Calendar calendar = Calendar.getInstance();
+        Long time = calendar.getTimeInMillis()+24*60*60*1000;
+
+        Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP,time, PendingIntent.getBroadcast(this,1,  intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+        Toast.makeText(this, R.string.notification_text, Toast.LENGTH_LONG).show();
+    }
     /**
      * setupRecyclerView (list of medicaments
      * @param recyclerView RecyclerView
@@ -566,7 +616,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
     }
 
-    public void loadTutorial() {
+    /*public void loadTutorial() {
         Intent mainAct = new Intent(this, MaterialTutorialActivity.class);
         mainAct.putParcelableArrayListExtra(MaterialTutorialActivity.MATERIAL_TUTORIAL_ARG_TUTORIAL_ITEMS,
                 getTutorialItems(this));
@@ -641,7 +691,7 @@ public class MedicamentListActivity extends AppCompatActivity {
         tutorialItems.add(tutorialItem12);
 
         return tutorialItems;
-    }
+    }*/
 }
 
 
