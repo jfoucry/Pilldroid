@@ -26,16 +26,45 @@
     <string name="enter_cip_13_here">Enter cip 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
     <string name="input_cip13">Saissisez le code CIP 13 à l\'aide du clavier</string>
-    <string name="slide_1_Pilldroid">Bienvenue dans Pilldroid</string>
+
+    <!-- Slide Strings -->
+    <string name="slide1_Pilldroid">Bienvenue dans Pilldroid</string>
     <string name="slide2_Pilldroid">Pour ajouter un médicament, tapez sur le bouton « Plus »</string>
-    <string name="slide3_Pilldroid">Vous pouvez scanner le code barre (appellé cip13)</string>
+    <string name="slide3_Pilldroid">Vous pouvez scanner le code barre</string>
     <string name="slide4_Pilldroid">Ou le QRCode</string>
-    <string name="slide5_Pilldroid">Fond vert, visage souriante, le stock est bon</string>
-    <string name="slide6_Pilldroid">Fond orange, viaage neutre, attention le stock diminue</string>
-    <string name="slide7_Pilldroid">Font rouge, visage faisant la moue, alerte le stock est très bas</string>
+    <string name="slide5_Pilldroid">Fond vert, visage souriant, le stock est bon</string>
+    <string name="slide6_Pilldroid">Fond orange, visage neutre</string>
+    <string name="slide7_Pilldroid">Fond rouge, visage grincheux</string>
     <string name="slide9_Pilldroid">Les valeurs modifiables. Le stock est recalculé tous les jours vers midi</string>
-    <string name="slide8_Pilldroid">Les informations sur le méddicament</string>
+    <string name="slide8_Pilldroid">Les informations sur le médicament</string>
     <string name="slide10_Pilldroid">Traitement suspendu, la prise est mise à zéro, le stock n\'est plus calculé.</string>
     <string name="slide11_Pilldroid">L\'icone de sauvegarde de vos modifications.</string>
     <string name="slide12_Pilldroid">Merci d\'utiliser PilllDroid. Plus d\informations sur le site web https://pilldroid.foucry.net</string>
+    <string name="slide1_desc">Le gestionnaire de stock theorique de médicaments</string>
+    <string name="slide2_desc">Vous ajouter un médicament à la base de données</string>
+    <string name="slide3_desc">Appellé cip13</string>
+    <string name="pilldroid_icon">Icône de PillDroid</string>
+    <string name="the_plus_icon">L\'icône Plus</string>
+    <string name="slide4_desc">Pour trouver le CIP13</string>
+    <string name="happy_face">Visage souriant</string>
+    <string name="barre_code_icone">Icône de code barre</string>
+    <string name="qr_code_icon">icône de QR-Code</string>
+    <string name="slide5_desc">Le stock est suffisant</string>
+    <string name="slide6_desc">Attention le stock diminue</string>
+    <string name="slide7_desc">Alerte le stock est très bas</string>
+    <string name="neutral_face">Visage neutre</string>
+    <string name="unhappy_face">Visage grincheux</string>
+    <string name="slide8_desc">Informations sur le médicament</string>
+    <string name="medicament_info">Capture d\'écran sur la partie information du médicament</string>
+    <string name="slide9_desc">Réglages du stock courant, prise et valeurs d\'attention et d\'alerte</string>
+    <string name="tunables">Réglages</string>
+    <string name="slide10_desc">Mettre la prise à zéro suspend le traitement et les calculs de stock</string>
+    <string name="suspended_treatment_icon">Icône de traitemernt suspendu</string>
+    <string name="slide11_desc">Pour enregistrer les changements, utilisez l\'icône de sauvegarde</string>
+    <string name="save_icon">l\'icône de sauvegarde</string>
+    <string name="slide12_desc">Merci d\'utiliser PillDroid, plus de renseignements sur https://pilldroid.foucry.net</string>
+    <string name="skip">Passer</string>
+    <string name="next">Suivant</string>
+    <string name="start">Démarrage</string>
+
 </resources>
