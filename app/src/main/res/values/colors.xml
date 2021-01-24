@@ -5,10 +5,6 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black_overlay">#66000000</color>
-    <!-- Android standard ICS color -->
-    <!-- Android standard ICS color -->
-    <!-- Android standard ICS color -->
-
     <!-- slide bg -->
     <color name="bg_screen1">#4f91ff</color>
     <color name="bg_screen2">#fb9c25</color>
@@ -21,19 +17,42 @@
     <color name="dot_dark_screen2">#fb9c03</color>
     <color name="dot_dark_screen3">#5ab53b</color>
     <color name="dot_dark_screen4">#7F0000</color>
-    <color name="dot_dark_screen5">#7f7f5d</color>
+    <color name="dot_dark_screen5">#5ab53b</color>
+    <color name="dot_dark_screen6">#fb9c03</color>
+    <color name="dot_dark_screen7">#7F0000</color>
+    <color name="dot_dark_screen8">#4f91aa</color>
+    <color name="dot_dark_screen9">#fb9c03</color>
+    <color name="dot_dark_screen10">#7f7f5d</color>
+    <color name="dot_dark_screen11">#5ab53b</color>
+    <color name="dot_dark_screen12">#4f91aa</color>
 
     <!-- dots active colors -->
     <color name="dot_light_screen1">#4f91ff</color>
     <color name="dot_light_screen2">#fb9c25</color>
     <color name="dot_light_screen3">#5ab55f</color>
     <color name="dot_light_screen4">#FF7F7F</color>
+    <color name="dot_light_screen5">#5ab55f</color>
+    <color name="dot_light_screen6">#fb9c25</color>
+    <color name="dot_light_screen7">#FF7F7F</color>
+    <color name="dot_light_screen8">#4f91ff</color>
+    <color name="dot_light_screen9">#fb9c25</color>
+    <color name="dot_light_screen10">#7f7f5d</color>
+    <color name="dot_light_screen11">#5ab55f</color>
+    <color name="dot_light_screen12">#4f91ff</color>
 
     <array name="array_dot_active">
         <item>@color/dot_light_screen1</item>
         <item>@color/dot_light_screen2</item>
         <item>@color/dot_light_screen3</item>
         <item>@color/dot_light_screen4</item>
+        <item>@color/dot_light_screen5</item>
+        <item>@color/dot_light_screen6</item>
+        <item>@color/dot_light_screen7</item>
+        <item>@color/dot_light_screen8</item>
+        <item>@color/dot_light_screen9</item>
+        <item>@color/dot_light_screen10</item>
+        <item>@color/dot_light_screen11</item>
+        <item>@color/dot_light_screen12</item>
     </array>
 
     <array name="array_dot_inactive">
@@ -41,6 +60,14 @@
         <item>@color/dot_dark_screen2</item>
         <item>@color/dot_dark_screen3</item>
         <item>@color/dot_dark_screen4</item>
+        <item>@color/dot_dark_screen5</item>
+        <item>@color/dot_dark_screen6</item>
+        <item>@color/dot_dark_screen7</item>
+        <item>@color/dot_dark_screen8</item>
+        <item>@color/dot_dark_screen9</item>
+        <item>@color/dot_dark_screen10</item>
+        <item>@color/dot_dark_screen11</item>
+        <item>@color/dot_dark_screen12</item>
     </array>
 
     <color name="tutorial_buttonTextColor">#000000</color>
