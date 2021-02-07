@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"
-            android:src="@drawable/suspended_pill_slide"
+            android:src="@drawable/ic_suspended_pill"
             android:contentDescription="@string/suspended_treatment_icon" />
 
         <TextView
@@ -23,7 +23,9 @@
             android:text="@string/slide10_Pilldroid"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:paddingStart="@dimen/title_padding"
+            android:paddingEnd="@dimen/title_padding"/>
 
         <TextView
             android:layout_width="wrap_content"

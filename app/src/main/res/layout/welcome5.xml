@@ -14,17 +14,19 @@
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"
-            android:src="@drawable/ok_stock_bitmap"
+            android:src="@drawable/ok_stock_vect"
             android:contentDescription="@string/happy_face" />
 
         <TextView
-            android:layout_width="280dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/slide5_Pilldroid"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:paddingEnd="@dimen/title_padding"
+            android:paddingStart="@dimen/title_padding"/>
 
         <TextView
             android:layout_width="wrap_content"

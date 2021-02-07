@@ -23,7 +23,9 @@
             android:text="@string/slide12_Pilldroid"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:paddingStart="@dimen/title_padding"
+            android:paddingEnd="@dimen/title_padding"/>
 
         <TextView
             android:layout_width="wrap_content"
