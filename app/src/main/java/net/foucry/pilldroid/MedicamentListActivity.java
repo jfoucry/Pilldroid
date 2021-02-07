@@ -107,6 +107,9 @@ public class MedicamentListActivity extends AppCompatActivity {
             nm.cancelAll();
         }
 
+        // tuto
+        Log.i(TAG, "Launchd tuto");                                                                                                                                                                                    
+        startActivity(new Intent(this, WelcomeActivity.class));
         //JobScheduler js = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         //if (js != null) {
          //   js.cancelAll();
@@ -155,16 +158,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // tuto
-
-//        prefManager = new PrefManager(this);
-//        if (!prefManager.isFirstTimeLaunch()) {
-//        WelcomeActivity welcomeActivity = new WelcomeActivity();
-//        Indent indent = new inden
-//        startActivity(new indent(welcomeActivity));
-            startActivity(new Intent(this, WelcomeActivity.class));
-//            finish();
-//        }
         setContentView(R.layout.activity_medicament_list);
 
         dbHelper = new DBHelper(this);
