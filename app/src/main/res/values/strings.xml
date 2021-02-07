@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">PillDroid</string>
+    <string name="title_medicament_detail">Medicament Detail</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_ok">OK</string>
+    <string name="msgNotFound">Drug not found in the database</string>
+    <string name="msgFound">Drug found in the database</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="notification_text">You have to go to the pharmacy</string>
+    <string name="turn_on_flashlight">Turn Flash On</string>
+    <string name="turn_off_flashlight">Turn Flash Off</string>
+    <string name="med_name_label">Name</string>
+    <string name="med_presention_labal">Presentation</string>
+    <string name="med_administationMode_label">Administration mode</string>
+    <string name="med_current_stock_label">Current stock</string>
+    <string name="med_take_label">Take</string>
+    <string name="med_warningTherehold_label">Alert therehold</string>
+    <string name="med_criticalTherehold_label">Critical threhold</string>
+    <string name="button_keyboard">"Use the keyboard"</string>
+    <string name="detail_view">Detail view</string>
+    <string name="scan_action">Scan a drug barcode</string>
+    <string name="save_button">Save</string>
+    <string name="input_cip13">Input Cip13 with the keyboard</string>
+    <string name="flashlighButton">Toggle Flash</string>
+    <string name="enter_cip_13_here">Enter cip 13 here..</string>
+    <string name="enter_cip_13">Enter CIP 13</string>
+    <string name="channel_description" translatable="false">PillDroid_NotificationChannel</string>
+    <string name="channel_name" translatable="false">PillDroidChannel</string>
+
+    <!-- slides strings -->
+    <string name="slide1_Pilldroid">Welcome on Pilldroid</string>
+    <string name="slide1_desc">The theorical Pill Stock Manager</string>
+    <string name="slide2_Pilldroid">To add a med, tap on the "Plus" button</string>
+    <string name="slide2_desc">You\'ll add a drug to the database</string>
+    <string name="slide3_Pilldroid">You can scan classic barcode</string>
+    <string name="slide3_desc">called cip13</string>
+    <string name="slide4_Pilldroid">Or QRCode</string>
+    <string name="slide5_Pilldroid">Green background, happy face</string>
+    <string name="slide6_Pilldroid">Orange background, neutral face</string>
+    <string name="slide7_Pilldroid">Red background, unhappy face</string>
+    <string name="slide9_Pilldroid">Tunable</string>
+    <string name="slide8_Pilldroid">Info</string>
+    <string name="slide10_Pilldroid">Treatment suspended</string>
+    <string name="slide11_Pilldroid">save icone</string>
+    <string name="slide12_Pilldroid">Thanks</string>
+    <string name="pilldroid_icon">PillDroid Icon</string>
+    <string name="the_plus_icon">The plus icon</string>
+    <string name="slide4_desc">In order to find the CIP13</string>
+    <string name="slide5_desc">Stock is ok</string>
+    <string name="slide6_desc">Warning stock in rising down</string>
+    <string name="slide7_desc">Alert stock too low</string>
+    <string name="happy_face">Happy face</string>
+    <string name="barre_code_icone">Barre code icon</string>
+    <string name="qr_code_icon">qr-code icon</string>
+    <string name="neutral_face">neutral face</string>
+    <string name="unhappy_face">unhappy face</string>
+    <string name="slide8_desc">Drug info</string>
+    <string name="medicament_info">Drug info screenshot</string>
+    <string name="slide9_desc">Tunables informations</string>
+    <string name="tunables">Tunables</string>
+    <string name="slide10_desc">Take to 0 to suspend treatment</string>
+    <string name="suspended_treatment_icon">Treatment suspended icon</string>
+    <string name="slide11_desc">To save changes</string>
+    <string name="save_icon">The save icon</string>
+    <string name="slide12_desc">Thansk for using PillDroid</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="start">Start</string>
+</resources>
