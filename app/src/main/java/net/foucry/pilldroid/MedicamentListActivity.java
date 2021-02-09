@@ -244,8 +244,7 @@ public class MedicamentListActivity extends AppCompatActivity {
                 startActivity(new Intent(this, About.class));
                 return true;
             case R.id.help:
-                //startActivity(new Intent(this, Help.class));
-                //loadTutorial();
+                startActivity(new Intent(this, WelcomeActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
