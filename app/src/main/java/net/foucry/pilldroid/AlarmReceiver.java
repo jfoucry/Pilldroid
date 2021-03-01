@@ -1,16 +1,103 @@
 package net.foucry.pilldroid;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import java.util.List;
+
+
 public class AlarmReceiver extends BroadcastReceiver {
+
+    private static final String TAG = MedicamentDetailFragment.class.getName();
+
+    NotificationManager nm;
 
     @Override
     public void onReceive(Context context, Intent intent)
     {
         // Show the toast  like in above screen shot
-        Toast.makeText(context, "New stock calculted", Toast.LENGTH_LONG).show();
+        Log.d(TAG, "onReceive");
+
+               Toast.makeText(context, "New stock calculted", Toast.LENGTH_LONG).show();
+        createNotificationChannel(context);
+        DBHelper dbHelper = new DBHelper(context);
+        dbHelper.getAllDrugs();
+
+        List<Medicament> medicaments = dbHelper.getAllDrugs();
+
+        Medicament firstMedicament = null;
+
+        try {
+            firstMedicament = medicaments.get(0);
+        }
+        catch (Exception e){
+            Log.e(TAG, e.toString());
+            e.printStackTrace();
+        }
+
+        if (firstMedicament != null) {
+            if (firstMedicament.getPrise() != 0) {
+                if(firstMedicament.getStock() < firstMedicament.getAlertThreshold()) {
+                    nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(), 0);
+                   /* Notification notif = new Notification(R.drawable.ic_pill_alarm, "Crazy About Android...", System.currentTimeMillis());
+                    notif.setLatestEventInfo(context, from, message, contentIntent);
+                    nm.notify(1, notif);*/
+
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "PillDroid")
+                            .setSmallIcon(R.drawable.ic_pill_alarm)
+                            .setContentTitle(context.getString(R.string.app_name))
+                            .setContentText(context.getString(R.string.notification_text))
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .setContentIntent(pendingIntent)
+                            .setAutoCancel(true);
+
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                    int notificationId = 666;
+                    notificationManager.notify(notificationId, builder.build());
+                } else
+                {
+                    double dummy = (firstMedicament.getStock() - firstMedicament.getAlertThreshold());
+                    Log.d(TAG, "no notification scheduled " + dummy);
+                }
+            }
+        }
+
     }
+
+    private void createNotificationChannel(Context context) {
+
+        Log.d(TAG, "start create notification channel");
+        CharSequence name = context.getString(R.string.channel_name);
+        String description = context.getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        String CHANNEL_ID = "PillDroid";
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        try {
+            notificationManager.createNotificationChannel(channel);
+        } catch  (Exception e) {
+            // This will catch any exception, because they are all descended from Exception
+            Log.e(TAG, e.toString());
+            //At the level Exception Class handle the error in Exception Table
+            // Exception Create That Error  Object and throw it
+            //E.g: FileNotFoundException ,etc
+            e.printStackTrace();
+        }
+    }
+
 }
