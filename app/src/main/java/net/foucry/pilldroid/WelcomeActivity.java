@@ -1,7 +1,6 @@
 package net.foucry.pilldroid;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,7 +29,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Boolean DEBUG = false;
+        boolean DEBUG = false;
 
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
@@ -47,10 +46,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_welcome);
 
-        viewPager = findViewById(R.id.view_pager);
-        dotsLayout = findViewById(R.id.layoutDots);
-        btnSkip = findViewById(R.id.btn_skip);
-        btnNext = findViewById(R.id.btn_next);
+        viewPager   = findViewById(R.id.view_pager);
+        dotsLayout  = findViewById(R.id.layoutDots);
+        btnSkip     = findViewById(R.id.btn_skip);
+        btnNext     = findViewById(R.id.btn_next);
 
 
         // layouts of all welcome sliders
