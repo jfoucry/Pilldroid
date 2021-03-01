@@ -1,12 +1,8 @@
 package net.foucry.pilldroid;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -20,8 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,35 +28,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
+import static net.foucry.pilldroid.UtilDate.convertDate;
 import static net.foucry.pilldroid.UtilDate.date2String;
-import static net.foucry.pilldroid.UtilDate.dateAtNoon;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 // Todo: - add launch tuto at first launch
@@ -90,7 +72,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private int[] layouts;
     private Button btnSkip, btnNext;
-    private PrefManager prefManager;
 
     /**
      * Start tutorial
@@ -108,12 +89,8 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
 
         // tuto
-        Log.i(TAG, "Launchd tuto");                                                                                                                                                                                    
+        Log.i(TAG, "Launch tuto");
         startActivity(new Intent(this, WelcomeActivity.class));
-        //JobScheduler js = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        //if (js != null) {
-         //   js.cancelAll();
-        //}
     }
 
     @Override
@@ -244,6 +221,9 @@ public class MedicamentListActivity extends AppCompatActivity {
                 startActivity(new Intent(this, About.class));
                 return true;
             case R.id.help:
+                PrefManager prefManager = new PrefManager(this);
+                prefManager.setFirstTimeLaunch(true);
+
                 startActivity(new Intent(this, WelcomeActivity.class));
                 return true;
         }
@@ -253,6 +233,7 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         //scheduleJob();
+        scheduleAlarm();
     }
 
     public void onResume() {
@@ -450,7 +431,7 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     /**
      * cancelJob in PillDroidJobService
-     * @param V View
+     *
      */
 /*    public void cancelJob(View v) {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
@@ -458,16 +439,30 @@ public class MedicamentListActivity extends AppCompatActivity {
         Log.d(TAG, "Job cancelled");
     }*/
 
-    public void scheduleAlarm(View V) {
+    /**
+     * scheduleAlarm()
+     */
+    public void scheduleAlarm() {
         Calendar calendar = Calendar.getInstance();
-        Long time = calendar.getTimeInMillis()+24*60*60*1000;
+        // Set the alarm to start at approximately 2:00 p.m.
+/*        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 14);
+
+// With setInexactRepeating(), you have to use one of the AlarmManager interval
+// constants--in this case, AlarmManager.INTERVAL_DAY.
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);*/
+
+        Long time = calendar.getTimeInMillis()+5*60*1000; // every 5 minutes → 24*60*60*1000 for every 24 hours
 
         Intent intentAlarm = new Intent(this, AlarmReceiver.class);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         alarmManager.set(AlarmManager.RTC_WAKEUP,time, PendingIntent.getBroadcast(this,1,  intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
-        Toast.makeText(this, R.string.notification_text, Toast.LENGTH_LONG).show();
+
+        Log.d(TAG, "Alarm scheduled for " + convertDate(time));
     }
     /**
      * setupRecyclerView (list of medicaments
@@ -607,83 +602,6 @@ public class MedicamentListActivity extends AppCompatActivity {
             }
         }
     }
-
-    /*public void loadTutorial() {
-        Intent mainAct = new Intent(this, MaterialTutorialActivity.class);
-        mainAct.putParcelableArrayListExtra(MaterialTutorialActivity.MATERIAL_TUTORIAL_ARG_TUTORIAL_ITEMS,
-                getTutorialItems(this));
-        startActivityForResult(mainAct, 1);
-
-    }
-
-    private ArrayList<TutorialItem> getTutorialItems(Context context) {
-        TutorialItem tutorialItem1 = new TutorialItem(context.getString(R.string.slide_1_Pilldroid),
-                context.getString(R.string.slide_1_Pilldroid),
-                R.color.slide_1, R.drawable.icon_small);
-
-        // You can also add gifs, [IN BETA YET] (because Glide is awesome!)
-//          TutorialItem tutorialItem1 = new TutorialItem(context.getString(R.string.slide_1_african_story_books), context.getString(R.string.slide_1_african_story_books_subtitle),
-//                R.color.slide_1, R.drawable.gif_drawable, true);
-
-        TutorialItem tutorialItem2 = new TutorialItem(context.getString(R.string.slide2_Pilldroid),
-                context.getString(R.string.slide2_Pilldroid),
-                R.color.slide_2, R.drawable.plus_icon_small);
-
-        TutorialItem tutorialItem3 = new TutorialItem(context.getString(R.string.slide3_Pilldroid),
-                context.getString(R.string.slide3_Pilldroid),
-                R.color.slide_3, R.drawable.barcode_scan);
-
-        TutorialItem tutorialItem4 = new TutorialItem(context.getString(R.string.slide4_Pilldroid),
-                context.getString(R.string.slide4_Pilldroid),
-                R.color.slide_4, R.drawable.qr_code_scan);
-
-        TutorialItem tutorialItem5 = new TutorialItem(context.getString(R.string.slide5_Pilldroid),
-                context.getString(R.string.slide5_Pilldroid),
-                R.color.slide_3, R.drawable.ok_stock_bitmap);
-
-        TutorialItem tutorialItem6 = new TutorialItem(context.getString(R.string.slide6_Pilldroid),
-                context.getString(R.string.slide6_Pilldroid),
-                R.color.slide_2, R.drawable.lower_stock_bitmap);
-
-        TutorialItem tutorialItem7 = new TutorialItem(context.getString(R.string.slide7_Pilldroid),
-                context.getString(R.string.slide7_Pilldroid),
-                R.color.slide_4, R.drawable.warning_stock_bitmap);
-
-        TutorialItem tutorialItem8 = new TutorialItem(context.getString(R.string.slide8_Pilldroid),
-                context.getString(R.string.slide8_Pilldroid),
-                R.color.slide_1, R.drawable.info);
-
-        TutorialItem tutorialItem9 = new TutorialItem(context.getString(R.string.slide9_Pilldroid),
-                context.getString(R.string.slide9_Pilldroid),
-                R.color.slide_2, R.drawable.tunable);
-
-
-        TutorialItem tutorialItem10 = new TutorialItem(context.getString(R.string.slide10_Pilldroid),
-        context.getString(R.string.slide10_Pilldroid),
-                R.color.slide_10, R.drawable.suspended_pill_slide);
-
-        TutorialItem tutorialItem11 = new TutorialItem(context.getString(R.string.slide11_Pilldroid),
-                context.getString(R.string.slide11_Pilldroid),
-                R.color.slide_1, R.drawable.content_save);
-        TutorialItem tutorialItem12 = new TutorialItem(getString(R.string.slide12_Pilldroid), getString(R.string.slide12_Pilldroid),
-                R.color.slide_1, R.drawable.icon_small);
-
-        ArrayList<TutorialItem> tutorialItems = new ArrayList<>();
-        tutorialItems.add(tutorialItem1);
-        tutorialItems.add(tutorialItem2);
-        tutorialItems.add(tutorialItem3);
-        tutorialItems.add(tutorialItem4);
-        tutorialItems.add(tutorialItem5);
-        tutorialItems.add(tutorialItem6);
-        tutorialItems.add(tutorialItem7);
-        tutorialItems.add(tutorialItem10);
-        tutorialItems.add(tutorialItem8);
-        tutorialItems.add(tutorialItem9);
-        tutorialItems.add(tutorialItem11);
-        tutorialItems.add(tutorialItem12);
-
-        return tutorialItems;
-    }*/
 }
 
 
