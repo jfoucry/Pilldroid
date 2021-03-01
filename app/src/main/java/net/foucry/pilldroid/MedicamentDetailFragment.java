@@ -24,13 +24,11 @@ public class MedicamentDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "medicament";
-    private static final String TAG = MedicamentDetailFragment.class.getName();
 
     /**
      * The dummy content this fragment is presenting.
      */
     private Medicament medicament;
-    private DBHelper dbHelper;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
