@@ -43,9 +43,7 @@ import static net.foucry.pilldroid.UtilDate.convertDate;
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
-// Todo: - add launch tuto at first launch
-//       - add preference to know if the tuto as already been launch
-//       - use same color in website and about
+// Todo: - use same color in website and about
 //       - remove twopanes code
 /**
  * An activity representing a list of Medicaments. This activity
@@ -232,7 +230,6 @@ public class MedicamentListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        //scheduleJob();
         scheduleAlarm();
     }
 
@@ -384,85 +381,25 @@ public class MedicamentListActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
-    /**
-     * scheduleJob
-     * call at onPause, schedule job for next 24 hours
-     */
-//    public void scheduleJob() {
-//        Calendar calendar = Calendar.getInstance();
-//        Date today = calendar.getTime();
-//        calendar.add(Calendar.MINUTE, 15);
-//        Date tomorrow = calendar.getTime();
-
-//        Date scheduleDate;
-
-//        JobInfo info;
-//        ComponentName componentName = new ComponentName(this, PillDroidJobService.class);
-        /*info = new JobInfo.Builder(24560, componentName)
-                .setMinimumLatency(60 * 15 * 1000)
-                .setOverrideDeadline(60 * 60 * 1000)
-                .build();*/
-
-//        if (today.before(dateAtNoon(today))) {
-//          info = new JobInfo.Builder(24560, componentName)
-//                    .setPersisted(true)
-//                    .setPeriodic(dateAtNoon(today).getTime())
-//                    .setPeriodic(today.getTime())
-//                    .build();
-//            scheduleDate = today;
-//        } else {
-//            info = new JobInfo.Builder(24560, componentName)
-//                    .setPersisted(true)
-//                    .setPeriodic(dateAtNoon(tomorrow).getTime())
-//                    .setPeriodic(tomorrow.getTime())
-//                    .build();
-//            scheduleDate = tomorrow;
-//        }
-
-//        String scheduleDate = UtilDate.convertDate(today.getTime()+info.getMinLatencyMillis());
-        //JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        //int resultCode = scheduler.schedule(info);
-        //if (resultCode == JobScheduler.RESULT_SUCCESS) {
-       //     Log.d(TAG, "Job scheduled at " + scheduleDate);
-        //} else {
-        //    Log.d(TAG, "Job scheduling failed");
-        //}
-//    }
-
-    /**
-     * cancelJob in PillDroidJobService
-     *
-     */
-/*    public void cancelJob(View v) {
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        scheduler.cancel(24560);
-        Log.d(TAG, "Job cancelled");
-    }*/
-
-    /**
+     /**
      * scheduleAlarm()
      */
     public void scheduleAlarm() {
         Calendar calendar = Calendar.getInstance();
-        // Set the alarm to start at approximately 2:00 p.m.
-/*        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 14);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
 
-// With setInexactRepeating(), you have to use one of the AlarmManager interval
-// constants--in this case, AlarmManager.INTERVAL_DAY.
-        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);*/
+        PendingIntent alarmIntent;
 
-        Long time = calendar.getTimeInMillis()+5*60*1000; // every 5 minutes → 24*60*60*1000 for every 24 hours
-
-        Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP,time, PendingIntent.getBroadcast(this,1,  intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
 
-        Log.d(TAG, "Alarm scheduled for " + convertDate(time));
+        Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
     }
     /**
      * setupRecyclerView (list of medicaments
