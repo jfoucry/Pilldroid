@@ -1,43 +1,23 @@
 //noinspection GradleCompatible
 apply plugin: 'com.android.application'
 
+ext.versionMajor = 1
+ext.versionMinor = 2
+ext.versionPatch = 3
+ext.versionClassifier = null
+ext.isSnapshot = true
+ext.minimumSdkVersion = 28
+ext.git_version= ("git rev-parse --short HEAD".execute().text.trim())
+
 android {
     compileSdkVersion 29
-
-    def versionPropsFile = file('version.properties')
-    def versionBuild
-
-    /*Setting default value for versionBuild which is the last incremented value stored in the file */
-    if (versionPropsFile.canRead()) {
-        Properties versionProps = new Properties()
-        versionProps.load(new FileInputStream(versionPropsFile))
-        versionBuild = versionProps['VERSION_BUILD'].toInteger()
-    } else {
-        throw new FileNotFoundException("Could not read version.properties!")
-    }
-
-
-    /*Wrapping inside a method avoids auto incrementing on every gradle task run. Now it runs only when we build apk*/
-    ext.autoIncrementBuildNumber = {
-
-        if (versionPropsFile.canRead()) {
-            Properties versionProps = new Properties()
-            versionProps.load(new FileInputStream(versionPropsFile))
-            versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
-            versionProps['VERSION_BUILD'] = versionBuild.toString()
-            versionProps.store(versionPropsFile.newWriter(), null)
-        } else {
-            throw new FileNotFoundException("Could not read version.properties!")
-        }
-    }
 
     defaultConfig {
         applicationId "net.foucry.pilldroid"
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
-        versionCode 1
-        versionName "1.0.0." + versionBuild
-        applicationIdSuffix = 'alpha'
+        versionCode generateVersionCode() // 190010203
+        versionName generateVersionName() // 1.2.3-SNAPSHOT
     }
 
     buildTypes {
@@ -75,11 +55,11 @@ sourceSets {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
@@ -87,4 +67,26 @@ dependencies {
     implementation 'androidx.core:core:1.3.2'
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+}
+
+private Integer generateVersionCode() {
+    return ext.minimumSdkVersion * 10000000 + ext.versionMajor * 10000 + ext.versionMinor * 100 + ext.versionPatch
+}
+
+private String generateVersionName() {
+    String versionName = "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
+    if (ext.versionClassifier == null && ext.isSnapshot) {
+        ext.versionClassifier = "SNAPSHOT"
+    }
+
+    if (ext.versionClassifier != null) {
+        versionName += "-" + ext.versionClassifier
+    }
+
+    if (ext.git_version != null) {
+        versionName += "-" + ext.git_version
+    }
+    
+    print "Version name = " + versionName
+    return versionName;
 }
