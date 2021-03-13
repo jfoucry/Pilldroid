@@ -69,7 +69,7 @@ dependencies {
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 }
 
-private static Integer generateVersionCode() {
+private Integer generateVersionCode() {
     return ext.minimumSdkVersion * 10000000 + ext.versionMajor * 10000 + ext.versionMinor * 100 + ext.versionPatch
 }
 
