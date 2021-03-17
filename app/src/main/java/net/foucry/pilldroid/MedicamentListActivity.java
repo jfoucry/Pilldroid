@@ -9,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,10 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -39,12 +37,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static net.foucry.pilldroid.UtilDate.convertDate;
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 // Todo: - use same color in website and about
-//       - remove twopanes code
+
 /**
  * An activity representing a list of Medicaments. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -64,12 +61,6 @@ public class MedicamentListActivity extends AppCompatActivity {
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
-
-
-    private ViewPager viewPager;
-    private LinearLayout dotsLayout;
-    private int[] layouts;
-    private Button btnSkip, btnNext;
 
     /**
      * Start tutorial
@@ -196,14 +187,6 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
 
         constructMedsList();
-
-        if (findViewById(R.id.medicament_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
     }
 
 
@@ -387,7 +370,11 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void scheduleAlarm() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.HOUR_OF_DAY, 13);
+
+        if (DateUtils.isToday(calendar.getTimeInMillis())) {
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + (24 * 60 * 60 * 1000));
+        }
 
         PendingIntent alarmIntent;
 
@@ -490,21 +477,11 @@ public class MedicamentListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Medicament medicamentCourant = mValues.get(position);
-                    if (mTwoPane) {                                     // This part is used on tablets
-                        Bundle arguments = new Bundle();
-                        arguments.putSerializable("medicament", medicamentCourant);
-                        MedicamentDetailFragment fragment = new MedicamentDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.medicament_detail_container, fragment)
-                                .commit();
-                    } else {                                            // This part is used on phones
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, MedicamentDetailActivity.class);
-                        intent.putExtra("medicament", medicamentCourant);
-                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
-                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                    }
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, MedicamentDetailActivity.class);
+                    intent.putExtra("medicament", medicamentCourant);
+                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 }
             });
         }
