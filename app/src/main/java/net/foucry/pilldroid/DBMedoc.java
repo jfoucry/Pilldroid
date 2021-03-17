@@ -57,8 +57,12 @@ class DBMedoc  extends SQLiteOpenHelper {
     public synchronized SQLiteDatabase getReadableDatabase() {
         File dbFile = myContext.getDatabasePath(dbName);
 
-        if (dbFile.exists()) return super.getReadableDatabase();
+        //if (dbFile.exists()) return super.getReadableDatabase();
 
+        PrefManager prefManager = new PrefManager(myContext);
+        int oldVersion = prefManager.getDatabaseVersion();
+
+        if (oldVersion == DATABASE_VERSION) return super.getReadableDatabase();
         copyDatabase(dbFile.getPath());
         return super.getReadableDatabase();
     }
