@@ -9,7 +9,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
+import static net.foucry.pilldroid.UtilDate.dateAtNoon;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 // Todo: - use same color in website and about
@@ -57,7 +57,6 @@ public class MedicamentListActivity extends AppCompatActivity {
      */
 
     // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launchtime
-    private boolean mTwoPane;
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
@@ -368,12 +367,18 @@ public class MedicamentListActivity extends AppCompatActivity {
      * scheduleAlarm()
      */
     public void scheduleAlarm() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 13);
 
-        if (DateUtils.isToday(calendar.getTimeInMillis())) {
-            calendar.setTimeInMillis(calendar.getTimeInMillis() + (24 * 60 * 60 * 1000));
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorow = calendar.getTime();
+
+        if (today.before(dateAtNoon(today))) {
+            // schedule date = today
+            calendar.setTimeInMillis(dateAtNoon(today).getTime());
+        } else {
+            // schedule date = tomorrow
+            calendar.setTimeInMillis(dateAtNoon(tomorow).getTime());
         }
 
         PendingIntent alarmIntent;
