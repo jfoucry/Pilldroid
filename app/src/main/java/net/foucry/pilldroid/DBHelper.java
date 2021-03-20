@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +37,7 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_SEUIL_ALERT = "alerte";
     private static final String KEY_LAST_UPDATE = "last_update";
 
-    final List<Medicament> medicaments = new LinkedList<>();
+    final List<Medicament> medicaments = new ArrayList<>();
 
     private static final String TAG = DBHelper.class.getName();
 
@@ -276,6 +278,17 @@ class DBHelper extends SQLiteOpenHelper {
                 return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
             }
         });
+
+        // Move medicament with prise = 0 at the end of the list
+        for (int position = 0 ; position < getCount() ; position++ ) {
+            currentMedicament = getItem(position);
+            double currentPrise = currentMedicament.getPrise();
+            if (currentPrise == 0)
+            {
+                medicament = medicaments.remove(position);
+                medicaments.add(medicaments.size(), medicament);
+            }
+        }
 
         Log.d(TAG, "getAllDrugs " + medicaments.toString());
 
