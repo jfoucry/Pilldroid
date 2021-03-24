@@ -375,11 +375,14 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         if (today.before(dateAtNoon(today))) {
             // schedule date = today
-            calendar.setTimeInMillis(dateAtNoon(today).getTime());
+            //calendar.setTimeInMillis(dateAtNoon(today).getTime());
+            calendar.setTimeInMillis(today.getTime());
         } else {
             // schedule date = tomorrow
-            calendar.setTimeInMillis(dateAtNoon(tomorow).getTime());
+            calendar.setTimeInMillis(tomorow.getTime());
         }
+
+        calendar.set(Calendar.HOUR_OF_DAY,12);
 
         PendingIntent alarmIntent;
 
