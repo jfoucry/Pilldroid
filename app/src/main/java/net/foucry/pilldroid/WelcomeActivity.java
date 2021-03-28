@@ -104,14 +104,11 @@ public class WelcomeActivity extends AppCompatActivity {
     private void addBottomDots(int currentPage) {
         TextView[] dots = new TextView[layouts.length];
 
-        //int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
-        //int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
-
         dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new TextView(this);
             dots[i].setText("∙");
-            dots[i].setTextSize(35);
+            dots[i].setTextSize(65);
             dots[i].setTextColor(ContextCompat.getColor(this, R.color.dot_dark));
             dotsLayout.addView(dots[i]);
         }
@@ -179,7 +176,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            //LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             LayoutInflater layoutInflater = getLayoutInflater();
 
             View view = layoutInflater.inflate(layouts[position], container, false);
