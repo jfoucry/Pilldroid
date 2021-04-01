@@ -32,6 +32,8 @@ class UtilDate {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
+        Log.d(TAG, "dateAtNoon " + calendar.getTime());
+
         return calendar.getTime();
     }
 
