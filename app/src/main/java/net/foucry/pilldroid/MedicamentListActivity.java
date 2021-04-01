@@ -32,15 +32,13 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import static net.foucry.pilldroid.UtilDate.date2String;
-import static net.foucry.pilldroid.UtilDate.dateAtNoon;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
-
-// Todo: - use same color in website and about
 
 /**
  * An activity representing a list of Medicaments. This activity
@@ -369,20 +367,21 @@ public class MedicamentListActivity extends AppCompatActivity {
     public void scheduleAlarm() {
 
         Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,12);
         Date today = calendar.getTime();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date tomorow = calendar.getTime();
+        Date tomorrow = calendar.getTime();
 
-        if (today.before(dateAtNoon(today))) {
+        LocalTime todayNow = LocalTime.now();
+
+        if (todayNow.isBefore(LocalTime.NOON)) {
             // schedule date = today
             //calendar.setTimeInMillis(dateAtNoon(today).getTime());
             calendar.setTimeInMillis(today.getTime());
         } else {
             // schedule date = tomorrow
-            calendar.setTimeInMillis(tomorow.getTime());
+            calendar.setTimeInMillis(tomorrow.getTime());
         }
-
-        calendar.set(Calendar.HOUR_OF_DAY,12);
 
         PendingIntent alarmIntent;
 
