@@ -85,6 +85,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         String CHANNEL_ID = "PillDroid";
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
+        channel.enableLights(true);
+        channel.setLightColor(R.color.led);
+        channel.enableVibration(true);
+        channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
