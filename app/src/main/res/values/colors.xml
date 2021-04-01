@@ -17,4 +17,5 @@
     <color name="dot_dark">#000000</color>
 
     <color name="tutorial_buttonTextColor">#000000</color>
+    <color name="led">#31f623</color>
 </resources>
