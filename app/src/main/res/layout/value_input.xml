@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -28,7 +29,6 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:autofillHints=""
         android:background="@drawable/rounded_corner"
         android:ems="10"
         android:gravity="end|fill_vertical"
@@ -36,7 +36,10 @@
         android:labelFor="@id/valeur"
         android:paddingEnd="25dp"
         android:paddingStart="5dp"
-        android:text="0"
-        android:textAlignment="gravity" />
+        android:hint="@string/zero"
+        android:textColorHint="@color/grey"
+        android:textAlignment="gravity"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor" />
 
 </RelativeLayout>

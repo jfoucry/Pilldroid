@@ -11,14 +11,14 @@
         android:paddingStart="10sp"
         android:paddingEnd="10sp"
         android:paddingTop="5dp"
-        android:text="Valeur"
+        android:text="@string/Value"
         android:textColor="#040404"
         android:textSize="16sp"
         android:textStyle="bold" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Label"
+        android:text="@string/label"
         android:layout_below="@+id/valeur"
         android:layout_alignParentStart="true"
         android:textStyle="italic"

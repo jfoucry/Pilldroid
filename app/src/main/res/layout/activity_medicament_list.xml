@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".MedicamentListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -49,9 +49,6 @@
         android:src="@drawable/ic_add_circle_black_24dp"
         app:backgroundTint="@android:color/darker_gray"
         app:fabCustomSize="60dp"
-        app:maxImageSize="60dp" />
-
-
-
-
+        app:maxImageSize="60dp"
+        android:contentDescription="@string/add_button" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

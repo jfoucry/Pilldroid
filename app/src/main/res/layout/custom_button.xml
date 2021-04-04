@@ -9,5 +9,6 @@
     android:backgroundTint="@android:color/transparent"
     app:fabCustomSize="60dp"
     app:maxImageSize="60dp"
-    android:src="@drawable/ic_add_circle_black_24dp" />
+    android:src="@drawable/ic_add_circle_black_24dp"
+    android:contentDescription="@string/add_button" />
 

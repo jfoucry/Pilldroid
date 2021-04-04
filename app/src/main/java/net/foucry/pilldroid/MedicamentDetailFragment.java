@@ -94,24 +94,32 @@ public class MedicamentDetailFragment extends Fragment {
             TextView stockValue = stockView.findViewById(R.id.valeur);
             stockLibelle.setText(R.string.med_current_stock_label);
             stockValue.setText(Double.toString(medicament.getStock()));
+            stockValue.setHint(R.string.med_current_stock_label);
+            stockValue.setSelectAllOnFocus(true);
 
             priseView = detailView.findViewById(R.id.prise_cell);
             TextView priseLibelle = priseView.findViewById(R.id.libelle);
             TextView priseValue = (priseView.findViewById(R.id.valeur));
             priseLibelle.setText(R.string.med_take_label);
             priseValue.setText(Double.toString(medicament.getPrise()));
+            priseValue.setHint(R.string.med_take_label);
+            priseValue.setSelectAllOnFocus(true);
 
             warningView = detailView.findViewById(R.id.warning_cell);
             TextView warningLibelle = warningView.findViewById(R.id.libelle);
             TextView warningValue = warningView.findViewById(R.id.valeur);
             warningLibelle.setText(R.string.med_warningTherehold_label);
             warningValue.setText(Integer.toString(medicament.getWarnThreshold()));
+            warningValue.setHint(R.string.med_warningTherehold_label);
+            warningValue.setSelectAllOnFocus(true);
 
             alertView = detailView.findViewById(R.id.alert_cell);
             TextView alertLibelle = alertView.findViewById(R.id.libelle);
             TextView alertValue = alertView.findViewById(R.id.valeur);
-            alertLibelle.setText(R.string.med_criticalTherehold_label);
+            alertLibelle.setText(R.string.med_alertTherehold_label);
             alertValue.setText(Integer.toString(medicament.getAlertThreshold()));
+            alertValue.setHint(R.string.med_alertTherehold_label);
+            alertValue.setSelectAllOnFocus(true);
         }
 
         return detailView;

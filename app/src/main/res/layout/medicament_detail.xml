@@ -36,10 +36,9 @@
 
     <include
         android:id="@+id/prise_cell"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         layout="@layout/value_input"
-        android:layout_marginTop="30sp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <include
         android:id="@+id/warning_cell"
@@ -53,8 +52,6 @@
         layout="@layout/value_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5sp" />
-
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
