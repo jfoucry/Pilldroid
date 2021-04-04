@@ -94,6 +94,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 if (current < layouts.length) {
                     // move to next screen
                     viewPager.setCurrentItem(current);
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
                 } else {
                     launchHomeScreen();
                 }
