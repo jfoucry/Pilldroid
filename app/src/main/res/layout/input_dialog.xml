@@ -17,6 +17,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_cip_13_here"
+        android:background="@drawable/rounded_corner"
         android:inputType="number"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:autofillHints="@string/enter_cip_13_here" />
 </LinearLayout>
