@@ -9,6 +9,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -299,7 +301,9 @@ public class MedicamentListActivity extends AppCompatActivity {
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = promptView.findViewById(R.id.edittext);
+        editText.setHint("1234567890123");
         // setup a dialog window
+
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", (dialog, id) -> {
                     String cip13 = editText.getText().toString();
@@ -312,6 +316,27 @@ public class MedicamentListActivity extends AppCompatActivity {
 
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() != 13 ) {
+                    alert.getButton(alert.BUTTON_POSITIVE).setEnabled(false);
+                } else {
+                    alert.getButton(alert.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+        });
         alert.show();
     }
 
@@ -524,19 +549,3 @@ public class MedicamentListActivity extends AppCompatActivity {
         }
     }
 }
-
-
-/*
-editText.addTextChangeListener( new TextWatcher() {
-	@Override
-	void afterTextChanged(Editable s){
-
-	}
-	void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-	}
-	void onTextChanged(CharSequence s, int start, int before, int count) {
-
-	}
-});
- */
