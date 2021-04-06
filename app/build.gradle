@@ -1,11 +1,11 @@
 //noinspection GradleCompatible
 apply plugin: 'com.android.application'
 
-ext.versionMajor = 1
-ext.versionMinor = 2
-ext.versionPatch = 3
+ext.versionMajor = 0
+ext.versionMinor = 0
+ext.versionPatch = 20210406
 ext.versionClassifier = null
-ext.isSnapshot = true
+ext.isSnapshot = false
 ext.minimumSdkVersion = 28
 ext.git_version= ("git rev-parse --short HEAD".execute().text.trim())
 
