@@ -6,7 +6,7 @@ ext.versionMinor = 0
 ext.versionPatch = 20210406
 ext.versionClassifier = null
 ext.isSnapshot = false
-ext.minimumSdkVersion = 28
+ext.minimumSdkVersion = defaultMinSdkVersion
 ext.git_version= ("git rev-parse --short HEAD".execute().text.trim())
 
 android {
