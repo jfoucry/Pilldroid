@@ -6,12 +6,14 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
+import android.text.format.DateUtils;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,25 +21,26 @@ import java.util.List;
  */
 
 
+
 class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static final ThreadLocal<String> DATABASE_NAME = ThreadLocal.withInitial(() -> "ordonnance.db");
+    private static final String DATABASE_NAME = "prescription.db";
 
     private static final String TABLE_DRUG      = "drug";
     private static final String KEY_ID          = "id";
     private static final String KEY_CIS         = "cis";
     private static final String KEY_CIP13       = "cip13";
-    private static final String KEY_NAME        = "nom";
-    private static final String KEY_ADMIN       = "mode_administration";
+    private static final String KEY_NAME        = "name";
+    private static final String KEY_ADMIN       = "administration_mode";
     private static final String KEY_PRES        = "presentation";
     private static final String KEY_STOCK       = "stock";
-    private static final String KEY_PRISE       = "prise";
+    private static final String KEY_PRISE       = "take";
     private static final String KEY_SEUIL_WARN  = "warning";
-    private static final String KEY_SEUIL_ALERT = "alerte";
+    private static final String KEY_SEUIL_ALERT = "alert";
     private static final String KEY_LAST_UPDATE = "last_update";
 
-    final List<Medicament> medicaments = new ArrayList<>();
+    final List<Drug> drugs = new ArrayList<>();
 
     private static final String TAG = DBHelper.class.getName();
 
@@ -45,7 +48,7 @@ class DBHelper extends SQLiteOpenHelper {
     KEY_SEUIL_WARN, KEY_SEUIL_ALERT, KEY_LAST_UPDATE};
 
     DBHelper(Context context) {
-        super(context, DATABASE_NAME.get(), null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -54,13 +57,13 @@ class DBHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "cis TEXT, " +
                 "cip13 TEXT, "  +
-                "nom TEXT, " +
-                "mode_administration TEXT, " +
+                "name TEXT, " +
+                "administration_mode TEXT, " +
                 "presentation TEXT, " +
                 "stock REAL, " +
-                "prise REAL, " +
+                "take REAL, " +
                 "warning INT, " +
-                "alerte INT, " +
+                "alert INT, " +
                 "last_update LONG)";
 
         db.execSQL(CREATE_DRUG_TABLE);
@@ -87,30 +90,30 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Split medicament values into database record and record it to the DB
-     * @param medicament the medicament object to be saved
+     * Split drug values into database record and record it to the DB
+     * @param drug the drug object to be saved
      */
-    void addDrug(Medicament medicament) {
+    void addDrug(Drug drug) {
         // Logging
-        Log.d(TAG, medicament.toString());
+        Log.d(TAG, drug.toString());
 
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_CIS, medicament.getCis());
-        values.put(KEY_CIP13, medicament.getCip13());
-        values.put(KEY_NAME, medicament.getNom());
-        values.put(KEY_ADMIN, medicament.getMode_administration());
-        values.put(KEY_PRES, medicament.getPresentation());
-        values.put(KEY_STOCK, medicament.getStock());
-        values.put(KEY_PRISE, medicament.getPrise());
-        values.put(KEY_SEUIL_WARN, medicament.getWarnThreshold());
-        values.put(KEY_SEUIL_ALERT, medicament.getAlertThreshold());
-        values.put(KEY_LAST_UPDATE, medicament.getDateLastUpdate());
+        values.put(KEY_CIS, drug.getCis());
+        values.put(KEY_CIP13, drug.getCip13());
+        values.put(KEY_NAME, drug.getName());
+        values.put(KEY_ADMIN, drug.getAdministration_mode());
+        values.put(KEY_PRES, drug.getPresentation());
+        values.put(KEY_STOCK, drug.getStock());
+        values.put(KEY_PRISE, drug.getTake());
+        values.put(KEY_SEUIL_WARN, drug.getWarnThreshold());
+        values.put(KEY_SEUIL_ALERT, drug.getAlertThreshold());
+        values.put(KEY_LAST_UPDATE, drug.getDateLastUpdate());
 
-        // Calculate some medicament's fields
+        // Calculate some drug's fields
 
         // Insert
         db.insert(TABLE_DRUG,   // table
@@ -122,61 +125,61 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * return a medicament from the DB with is id
-     * @param id of the medicament we looking for (not used)
-     * @return return the found medicament of null
+     * return a drug from the DB with is id
+     * @param id of the drug we looking for (not used)
+     * @return return the found drug of null
      */
-    public Medicament getDrug(int id) {
+    public Drug getDrug(int id) {
         // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Build query
-        Cursor cursor = db.query(TABLE_DRUG,            // Which table
-                COLUMS,                                 // column names
-                " id = ?",                              // selections
-                new String[] { String.valueOf(id) },    // selections args
+        Cursor cursor = db.query(TABLE_DRUG,                    // Which table
+                COLUMS,                                         // column names
+                " id = ?",                             // selections
+                new String[] { String.valueOf(id) },             // selections args
                 null,                                   // group by
-                null,                                   // having
+                null,                                    // having
                 null,                                   // order by
-                null);                                  // limits
+                null);                                     // limits
 
         Log.d(TAG, "Cursor == " + DatabaseUtils.dumpCursorToString(cursor));
 
         // if case we got result, go to the first one
-        Medicament medicament = new Medicament();
+        Drug drug = new Drug();
         if (cursor != null) {
             cursor.moveToFirst();
 
-            // Build medicament object
-            medicament.setId(Integer.parseInt(cursor.getString(0)));
-            medicament.setCis(cursor.getString(1));
-            medicament.setCip13(cursor.getString(2));
-            medicament.setNom(cursor.getString(3));
-            medicament.setMode_administration(cursor.getString(4));
-            medicament.setPresentation(cursor.getString(5));
-            medicament.setStock(Double.parseDouble(cursor.getString(6)));
-            medicament.setPrise(Double.parseDouble(cursor.getString(7)));
-            medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
-            medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
-            medicament.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
+            // Build drug object
+            drug.setId(Integer.parseInt(cursor.getString(0)));
+            drug.setCis(cursor.getString(1));
+            drug.setCip13(cursor.getString(2));
+            drug.setNama(cursor.getString(3));
+            drug.setAdministration_mode(cursor.getString(4));
+            drug.setPresentation(cursor.getString(5));
+            drug.setStock(Double.parseDouble(cursor.getString(6)));
+            drug.setTake(Double.parseDouble(cursor.getString(7)));
+            drug.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
+            drug.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+            drug.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
         }
         // Log
-        Log.d(TAG, "getDrug("+id+")" + medicament.toString());
+        Log.d(TAG, "getDrug("+id+")" + drug.toString());
 
         assert cursor != null;
         cursor.close();
         db.close();
-        // Return medicament
+        // Return drug
 
-        return medicament;
+        return drug;
     }
 
     /**
      *
      * @param cip13 drug id in French nomemclature
-     * @return the medicament object found in DB or null
+     * @return the drug object found in DB or null
      */
-    public Medicament getDrugByCIP13(String cip13) {
+    public Drug getDrugByCIP13(String cip13) {
         // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -191,30 +194,30 @@ class DBHelper extends SQLiteOpenHelper {
                 null);                                  // limits
 
         // if case we got result, go to the first one
-        Medicament medicament = new Medicament();
+        Drug drug = new Drug();
         if (cursor != null) {
             cursor.moveToFirst();
 
-            // Build medicament object
-            medicament.setId(Integer.parseInt(cursor.getString(0)));
-            medicament.setCis(cursor.getString(1));
-            medicament.setCip13(cursor.getString(2));
-            medicament.setNom(cursor.getString(3));
-            medicament.setMode_administration(cursor.getString(4));
-            medicament.setPresentation(cursor.getString(5));
-            medicament.setStock(Double.parseDouble(cursor.getString(6)));
-            medicament.setPrise(Double.parseDouble(cursor.getString(7)));
-            medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
-            medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
-            medicament.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
+            // Build drug object
+            drug.setId(Integer.parseInt(cursor.getString(0)));
+            drug.setCis(cursor.getString(1));
+            drug.setCip13(cursor.getString(2));
+            drug.setNama(cursor.getString(3));
+            drug.setAdministration_mode(cursor.getString(4));
+            drug.setPresentation(cursor.getString(5));
+            drug.setStock(Double.parseDouble(cursor.getString(6)));
+            drug.setTake(Double.parseDouble(cursor.getString(7)));
+            drug.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
+            drug.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+            drug.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
         }
 
         assert cursor != null;
         cursor.close();
 
-        Log.d(TAG, "getDrug(" + cip13 + ")" + medicament.toString());
+        Log.d(TAG, "getDrug(" + cip13 + ")" + drug.toString());
 
-        return medicament;
+        return drug;
     }
 
     /**
@@ -222,7 +225,7 @@ class DBHelper extends SQLiteOpenHelper {
      * @return a Sorted and updated by dateEndOfStock List of All medicaments presents in database
      */
 
-    List<Medicament> getAllDrugs() {
+    List<Drug> getAllDrugs() {
 
         // Build the query
         String query = "SELECT * FROM " + TABLE_DRUG;
@@ -233,92 +236,92 @@ class DBHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "Cursor == " + DatabaseUtils.dumpCursorToString(cursor));
 
-        // For Each row, build a medicament and add it to the list
-        Medicament medicament;
+        // For Each row, build a drug and add it to the list
+        Drug drug;
         if (cursor.moveToFirst()) {
             do {
-                medicament = new Medicament();
-                medicament.setId(Integer.parseInt(cursor.getString(0)));
-                medicament.setCis(cursor.getString(1));
-                medicament.setCip13(cursor.getString(2));
-                medicament.setNom(cursor.getString(3));
-                medicament.setMode_administration(cursor.getString(4));
-                medicament.setPresentation(cursor.getString(5));
-                medicament.setStock(Double.parseDouble(cursor.getString(6)));
-                medicament.setPrise(Double.parseDouble(cursor.getString(7)));
-                medicament.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
-                medicament.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
-                medicament.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
+                drug = new Drug();
+                drug.setId(Integer.parseInt(cursor.getString(0)));
+                drug.setCis(cursor.getString(1));
+                drug.setCip13(cursor.getString(2));
+                drug.setNama(cursor.getString(3));
+                drug.setAdministration_mode(cursor.getString(4));
+                drug.setPresentation(cursor.getString(5));
+                drug.setStock(Double.parseDouble(cursor.getString(6)));
+                drug.setTake(Double.parseDouble(cursor.getString(7)));
+                drug.setWarnThreshold(Integer.parseInt(cursor.getString(8)));
+                drug.setAlertThreshold(Integer.parseInt(cursor.getString(9)));
+                drug.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
                 // Call calcul method
-                medicament.setDateEndOfStock();
+                drug.setDateEndOfStock();
 
 
-                // Add medicament to medicaments
-                medicaments.add(medicament);
+                // Add drug to medicaments
+                drugs.add(drug);
             } while (cursor.moveToNext());
         }
 
         cursor.close();
         db.close();
 
-        Medicament currentMedicament;
+        Drug currentDrug;
         for (int position = 0 ; position < getCount() ; position++ ) {
-            currentMedicament = getItem(position);
+            currentDrug = getItem(position);
 
-//            if (!DateUtils.isToday(currentMedicament.getDateLastUpdate()))
-//            {
-                currentMedicament.newStock();
-                updateDrug(currentMedicament);
-            //}
+            if (!DateUtils.isToday(currentDrug.getDateLastUpdate()))
+            {
+                currentDrug.newStock();
+                updateDrug(currentDrug);
+            }
         }
 
-        medicaments.sort(new Comparator<Medicament>() {
+        drugs.sort(new Comparator<Drug>() {
             @Override
-            public int compare(Medicament lhs, Medicament rhs) {
+            public int compare(Drug lhs, Drug rhs) {
                 return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
             }
         });
 
-        // Move medicament with prise = 0 at the end of the list
+        // Move drug with prise = 0 at the end of the list
         for (int position = 0 ; position < getCount() ; position++ ) {
-            currentMedicament = getItem(position);
-            double currentPrise = currentMedicament.getPrise();
-            if (currentPrise == 0)
+            currentDrug = getItem(position);
+            double currentTake = currentDrug.getTake();
+            if (currentTake == 0)
             {
-                medicament = medicaments.remove(position);
-                medicaments.add(medicaments.size(), medicament);
+                drug = drugs.remove(position);
+                drugs.add(drugs.size(), drug);
             }
         }
 
-        Log.d(TAG, "getAllDrugs " + medicaments.toString());
+        Log.d(TAG, "getAllDrugs " + drugs.toString());
 
-        return medicaments;
+        return drugs;
     }
 
     /**
      *
-     * @param medicament object to be updated in DB
+     * @param drug object to be updated in DB
      */
-    public void updateDrug(Medicament medicament) {
+    public void updateDrug(Drug drug) {
 
-        Log.d(TAG, "Update Drug == " + medicament);
+        Log.d(TAG, "Update Drug == " + drug);
 
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Create ContentValues to add columnm/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, medicament.getId());
-        values.put(KEY_CIS, medicament.getCis());
-        values.put(KEY_CIP13, medicament.getCip13());
-        values.put(KEY_NAME, medicament.getNom());
-        values.put(KEY_ADMIN, medicament.getMode_administration());
-        values.put(KEY_PRES, medicament.getPresentation());
-        values.put(KEY_STOCK, medicament.getStock());
-        values.put(KEY_PRISE, medicament.getPrise());
-        values.put(KEY_LAST_UPDATE, medicament.getDateLastUpdate());
+        values.put(KEY_ID, drug.getId());
+        values.put(KEY_CIS, drug.getCis());
+        values.put(KEY_CIP13, drug.getCip13());
+        values.put(KEY_NAME, drug.getName());
+        values.put(KEY_ADMIN, drug.getAdministration_mode());
+        values.put(KEY_PRES, drug.getPresentation());
+        values.put(KEY_STOCK, drug.getStock());
+        values.put(KEY_PRISE, drug.getTake());
+        values.put(KEY_LAST_UPDATE, drug.getDateLastUpdate());
 
-        String[] selectionArgs = { String.valueOf(medicament.getId()) };
+        String[] selectionArgs = { String.valueOf(drug.getId()) };
 
         db.update(TABLE_DRUG,           // table
                 values,                         // column/value
@@ -330,28 +333,28 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Delete a medicament object in database
-     * @param medicament object to be delete in the DB
+     * Delete a drug object in database
+     * @param drug object to be delete in the DB
      */
-    public void deleteDrug(Medicament medicament) {
+    public void deleteDrug(Drug drug) {
         // Get writable database
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Delete record
         db.delete(TABLE_DRUG,           // table
                 KEY_ID+ " = ?",         // selections
-                new String[] { String.valueOf(medicament.getId()) } );  // selections args
+                new String[] { String.valueOf(drug.getId()) } );  // selections args
 
         // Close DB
         db.close();
 
         // log
-        Log.d(TAG, "delete drug "+medicament);
+        Log.d(TAG, "delete drug "+ drug);
     }
 
     /**
-     * Get count of all medicament present in database
-     * @return number of medicament in DB
+     * Get count of all drug present in database
+     * @return number of drug in DB
      */
     int getCount() {
 
@@ -368,11 +371,11 @@ class DBHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public Medicament getItem(int position) {
-        return medicaments.get(position);
+    public Drug getItem(int position) {
+        return drugs.get(position);
     }
 
-    boolean isMedicamentExist(String cip13) {
+    boolean isDrugExist(String cip13) {
         boolean value = false;
         try {
             Cursor c = this.getReadableDatabase().rawQuery("SELECT * FROM "+ TABLE_DRUG + " where cip13 = "+cip13, null);

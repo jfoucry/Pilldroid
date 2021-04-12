@@ -16,29 +16,43 @@ import java.io.OutputStream;
 /**
  * Created by jfoucry on 5/25/16.
  */
-class DBMedoc  extends SQLiteOpenHelper {
+class DBDrugs extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
-    private static final String dbName = "medicaments.db";
+    private static final String dbName      = "drugs.db";
     private final Context myContext;
     private final SQLiteDatabase myDataBase = null;
 
-    private static final String TABLE_NAME = "medicaments";
-    private static final String MEDOC_CIS = "cis";
-    private static final String MEDOC_CIP13 = "cip13";
-    private static final String MEDOC_ADMIN = "mode_administration";
-    private static final String MEDOC_NOM = "nom";
-    private static final String MEDOC_PRES = "presentation";
+    private static final String TABLE_NAME  = "drugs";
+    private static final String DRUG_CIS    = "cis";
+    private static final String DRUG_CIP13  = "cip13";
+    private static final String DRUG_ADMIN  = "administration_mode";
+    private static final String DRUG_NAME   = "name";
+    private static final String DRUG_PRES   = "presentation";
 
-    private static final String[] COLUMNS_NAMES = {MEDOC_CIS, MEDOC_CIP13, MEDOC_ADMIN, MEDOC_NOM, MEDOC_PRES};
+    private static final String[] COLUMNS_NAMES = {DRUG_CIS, DRUG_CIP13, DRUG_ADMIN, DRUG_NAME, DRUG_PRES};
 
-    private static final String TAG = DBMedoc.class.getName();
+    private static final String TAG = DBDrugs.class.getName();
 
 
-    DBMedoc(Context context) {
+    DBDrugs(Context context) {
         super(context, dbName, null, DATABASE_VERSION);
         this.myContext = context;
+    }
+
+    public boolean isDBFileExist(File database)
+    {
+        try {
+            myContext.getDatabasePath(String.valueOf(database));
+        } catch (final Exception exception) {
+            return false;
+        }
+        return true;
+/*        if (myContext.getDatabasePath(String.valueOf(database)) != null)
+            return true;
+        else
+            return false;*/
     }
 
     @Override
@@ -46,7 +60,7 @@ class DBMedoc  extends SQLiteOpenHelper {
 
         File dbFile = myContext.getDatabasePath(dbName);
 
-        if (!dbFile.exists()) {
+        if (!isDBFileExist(dbFile)) {
             copyDatabase(dbFile.getPath());
         }
 
@@ -56,8 +70,6 @@ class DBMedoc  extends SQLiteOpenHelper {
     @Override
     public synchronized SQLiteDatabase getReadableDatabase() {
         File dbFile = myContext.getDatabasePath(dbName);
-
-        //if (dbFile.exists()) return super.getReadableDatabase();
 
         PrefManager prefManager = new PrefManager(myContext);
         int oldVersion = prefManager.getDatabaseVersion();
@@ -95,13 +107,6 @@ class DBMedoc  extends SQLiteOpenHelper {
         }
     }
 
-/*    void openDatabase() throws SQLiteException {
-        Log.e(TAG, "openDatabase called");
-        String myPath = myContext.getDatabasePath(dbName).getPath();
-
-        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-    }*/
-
     @Override
     public synchronized void close() {
         if (myDataBase != null) {
@@ -113,9 +118,9 @@ class DBMedoc  extends SQLiteOpenHelper {
      * Lookup in the DB for a record corresponding to cip13
      *
      * @param cip13 string representing the object we're looking for
-     * @return return a medicament object
+     * @return return a drug object
      */
-    Medicament getMedocByCIP13(String cip13) {
+    Drug getDrugByCIP13(String cip13) {
         Log.e(TAG, "CIP13 - " + cip13);
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -134,28 +139,28 @@ class DBMedoc  extends SQLiteOpenHelper {
 
             cursor.moveToFirst();
 
-            // Build medicament object
-            Medicament medicament = new Medicament();
-            // medicament.setId(Integer.parseInt(cursor.getString(0)));
-            medicament.setCis(cursor.getString(0));
-            medicament.setCip13(cursor.getString(1));
-            medicament.setMode_administration(cursor.getString(2));
-            medicament.setNom(cursor.getString(3));
-            medicament.setPresentation(cursor.getString(4));
+            // Build drug object
+            Drug drug = new Drug();
+            // drug.setId(Integer.parseInt(cursor.getString(0)));
+            drug.setCis(cursor.getString(0));
+            drug.setCip13(cursor.getString(1));
+            drug.setAdministration_mode(cursor.getString(2));
+            drug.setNama(cursor.getString(3));
+            drug.setPresentation(cursor.getString(4));
 
             // Set default values
-            medicament.setStock(0);
-            medicament.setPrise(0);
-            medicament.setWarnThreshold(14);
-            medicament.setAlertThreshold(7);
+            drug.setStock(0);
+            drug.setTake(0);
+            drug.setWarnThreshold(14);
+            drug.setAlertThreshold(7);
 
             // Log
-            Log.d(TAG, "getDrug(" + cip13 + ")" + medicament.toString());
+            Log.d(TAG, "getDrug(" + cip13 + ")" + drug.toString());
 
-            // Return medicament
+            // Return drug
 
             cursor.close();
-            return medicament;
+            return drug;
         } else
             return null;
     }

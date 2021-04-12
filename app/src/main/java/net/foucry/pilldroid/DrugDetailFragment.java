@@ -12,29 +12,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
- * A fragment representing a single Medicament detail screen.
- * This fragment is either contained in a {@link MedicamentListActivity}
- * in two-pane mode (on tablets) or a {@link MedicamentDetailActivity}
+ * A fragment representing a single Drug detail screen.
+ * This fragment is either contained in a {@link DrugListActivity}
+ * in two-pane mode (on tablets) or a {@link DrugDetailActivity}
  * on handsets.
  */
-public class MedicamentDetailFragment extends Fragment {
+public class DrugDetailFragment extends Fragment {
 
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "medicament";
+    public static final String ARG_ITEM_ID = "drug";
 
     /**
      * The dummy content this fragment is presenting.
      */
-    private Medicament medicament;
+    private Drug drug;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public MedicamentDetailFragment() {
+    public DrugDetailFragment() {
     }
 
     @Override
@@ -46,13 +46,13 @@ public class MedicamentDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            medicament = (Medicament) getArguments().getSerializable(ARG_ITEM_ID);
+            drug = (Drug) getArguments().getSerializable(ARG_ITEM_ID);
 
             Activity activity = this.getActivity();
             assert activity != null;
             CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(medicament.getNom());
+                appBarLayout.setTitle(drug.getName());
             }
         }
     }
@@ -64,60 +64,60 @@ public class MedicamentDetailFragment extends Fragment {
         View adminModeView;
         View presentationView;
         View stockView;
-        View priseView;
+        View takeView;
         View warningView;
         View alertView;
 
         // Show the dummy content as text in a TextView.
-        if (medicament != null) {
+        if (drug != null) {
             // Find each conponment of rootView
             nameView = detailView.findViewById(R.id.name_cell);
             TextView nameLabel = nameView.findViewById(R.id.label);
-            TextView nameValeur = nameView.findViewById(R.id.valeur);
+            TextView nameValue = nameView.findViewById(R.id.value);
             nameLabel.setText(R.string.med_name_label);
-            nameValeur.setText(medicament.getNom());
+            nameValue.setText(drug.getName());
 
             presentationView = detailView.findViewById(R.id.presentation_cell);
             TextView presentationLabel = presentationView.findViewById(R.id.label);
-            TextView presentationValeur = presentationView.findViewById(R.id.valeur);
+            TextView presentationValue = presentationView.findViewById(R.id.value);
             presentationLabel.setText(R.string.med_presention_labal);
-            presentationValeur.setText(medicament.getPresentation());
+            presentationValue.setText(drug.getPresentation());
 
             adminModeView = detailView.findViewById(R.id.administration_cell);
             TextView adminModeLabel = adminModeView.findViewById(R.id.label);
-            TextView adminModeValeur = adminModeView.findViewById(R.id.valeur);
+            TextView adminModeValue = adminModeView.findViewById(R.id.value);
             adminModeLabel.setText(R.string.med_administationMode_label);
-            adminModeValeur.setText(medicament.getMode_administration());
+            adminModeValue.setText(drug.getAdministration_mode());
 
             stockView = detailView.findViewById(R.id.stock_cell);
-            TextView stockLibelle = (stockView.findViewById(R.id.libelle));
-            TextView stockValue = stockView.findViewById(R.id.valeur);
+            TextView stockLibelle = (stockView.findViewById(R.id.label));
+            TextView stockValue = stockView.findViewById(R.id.value);
             stockLibelle.setText(R.string.med_current_stock_label);
-            stockValue.setText(Double.toString(medicament.getStock()));
+            stockValue.setText(Double.toString(drug.getStock()));
             stockValue.setHint(R.string.med_current_stock_label);
             stockValue.setSelectAllOnFocus(true);
 
-            priseView = detailView.findViewById(R.id.prise_cell);
-            TextView priseLibelle = priseView.findViewById(R.id.libelle);
-            TextView priseValue = (priseView.findViewById(R.id.valeur));
-            priseLibelle.setText(R.string.med_take_label);
-            priseValue.setText(Double.toString(medicament.getPrise()));
+            takeView = detailView.findViewById(R.id.take_cell);
+            TextView priseLabel = takeView.findViewById(R.id.label);
+            TextView priseValue = (takeView.findViewById(R.id.value));
+            priseLabel.setText(R.string.med_take_label);
+            priseValue.setText(Double.toString(drug.getTake()));
             priseValue.setHint(R.string.med_take_label);
             priseValue.setSelectAllOnFocus(true);
 
             warningView = detailView.findViewById(R.id.warning_cell);
-            TextView warningLibelle = warningView.findViewById(R.id.libelle);
-            TextView warningValue = warningView.findViewById(R.id.valeur);
+            TextView warningLibelle = warningView.findViewById(R.id.label);
+            TextView warningValue = warningView.findViewById(R.id.value);
             warningLibelle.setText(R.string.med_warningTherehold_label);
-            warningValue.setText(Integer.toString(medicament.getWarnThreshold()));
+            warningValue.setText(Integer.toString(drug.getWarnThreshold()));
             warningValue.setHint(R.string.med_warningTherehold_label);
             warningValue.setSelectAllOnFocus(true);
 
             alertView = detailView.findViewById(R.id.alert_cell);
-            TextView alertLibelle = alertView.findViewById(R.id.libelle);
-            TextView alertValue = alertView.findViewById(R.id.valeur);
+            TextView alertLibelle = alertView.findViewById(R.id.label);
+            TextView alertValue = alertView.findViewById(R.id.value);
             alertLibelle.setText(R.string.med_alertTherehold_label);
-            alertValue.setText(Integer.toString(medicament.getAlertThreshold()));
+            alertValue.setText(Integer.toString(drug.getAlertThreshold()));
             alertValue.setHint(R.string.med_alertTherehold_label);
             alertValue.setSelectAllOnFocus(true);
         }

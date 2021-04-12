@@ -10,17 +10,17 @@ import static  net.foucry.pilldroid.UtilDate.*;
 /**
  * Created by jacques on 26/11/15.
  */
-public class Medicament implements Serializable {
+public class Drug implements Serializable {
 
     /* part read form database */
     private int id;
-    private String nom;
+    private String nama;
     private String cip13;
     private String cis;
-    private String mode_administration;
+    private String administration_mode;
     private String presentation;
     private double stock;
-    private double prise;
+    private double take;
     private int warnThreshold;
     private int alertThreshold;
     private long dateLastUpdate;
@@ -28,20 +28,20 @@ public class Medicament implements Serializable {
     /* calculate part */
     private Date dateEndOfStock;
 
-    Medicament() {
+    Drug() {
     }
 
-    Medicament(final String cis, final String cip13, final String nom, final String mode_administration, final String presentation,
-               double stock, double prise, int warn, int alert, long dateLastUpdate) {
+    Drug(final String cis, final String cip13, final String nama, final String administration_mode, final String presentation,
+         double stock, double take, int warn, int alert, long dateLastUpdate) {
         super();
 
         this.cis = cis;
         this.cip13 = cip13;
-        this.nom = nom;
-        this.mode_administration = mode_administration;
+        this.nama = nama;
+        this.administration_mode = administration_mode;
         this.presentation = presentation;
         this.stock = stock;
-        this.prise = prise;
+        this.take = take;
         this.warnThreshold = warn;
         this.alertThreshold = alert;
         this.dateLastUpdate = dateLastUpdate;
@@ -52,8 +52,8 @@ public class Medicament implements Serializable {
         return id;
     }
 
-    String getNom() {
-        return nom;
+    String getName() {
+        return nama;
     }
 
     String getCip13() {
@@ -64,8 +64,8 @@ public class Medicament implements Serializable {
         return cis;
     }
 
-    String getMode_administration() {
-        return mode_administration;
+    String getAdministration_mode() {
+        return administration_mode;
     }
 
     String getPresentation() {
@@ -76,8 +76,8 @@ public class Medicament implements Serializable {
         return stock;
     }
 
-    double getPrise() {
-        return prise;
+    double getTake() {
+        return take;
     }
 
     int getAlertThreshold() {
@@ -100,8 +100,8 @@ public class Medicament implements Serializable {
         this.id = id;
     }
 
-    void setNom(String nom) {
-        this.nom = nom;
+    void setNama(String nama) {
+        this.nama = nama;
     }
 
     void setCip13(String cip13) {
@@ -112,8 +112,8 @@ public class Medicament implements Serializable {
         this.cis = cis;
     }
 
-    void setMode_administration(String mode_administration) {
-        this.mode_administration = mode_administration;
+    void setAdministration_mode(String administration_mode) {
+        this.administration_mode = administration_mode;
     }
 
     void setPresentation(String presentation) {
@@ -124,8 +124,8 @@ public class Medicament implements Serializable {
         this.stock = stock;
     }
 
-    void setPrise(double prise) {
-        this.prise = prise;
+    void setTake(double take) {
+        this.take = take;
     }
 
     void setWarnThreshold(int warn) {
@@ -146,8 +146,8 @@ public class Medicament implements Serializable {
 
     void setDateEndOfStock() {
         int numberDayOfPrise;
-        if (this.prise > 0) {
-            numberDayOfPrise = (int) Math.floor(this.stock / this.prise);
+        if (this.take > 0) {
+            numberDayOfPrise = (int) Math.floor(this.stock / this.take);
         } else {
             numberDayOfPrise = 0;
         }
@@ -164,7 +164,7 @@ public class Medicament implements Serializable {
         Date lastUpdate = new Date(getDateLastUpdate());
         int numberOfDays = nbOfDaysBetweenDateAndToday(lastUpdate);
         if (numberOfDays > 0) {
-            double takeDuringPeriod = this.prise * numberOfDays;
+            double takeDuringPeriod = this.take * numberOfDays;
             setStock(getStock() - takeDuringPeriod);
             setDateLastUpdate(new Date().getTime());
         }

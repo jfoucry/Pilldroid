@@ -6,7 +6,7 @@
     android:background="@drawable/list_selector"
     android:backgroundTint="@android:color/transparent"
     android:fitsSystemWindows="true"
-    tools:context="net.foucry.pilldroid.MedicamentDetailActivity"
+    tools:context="net.foucry.pilldroid.DrugDetailActivity"
     tools:ignore="MergeRootFrame">
 
     <com.google.android.material.appbar.AppBarLayout

@@ -8,5 +8,5 @@
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
     android:background="@drawable/list_selector"
-    tools:context="net.foucry.pilldroid.MedicamentListActivity"
+    tools:context="net.foucry.pilldroid.DrugListActivity"
     tools:listitem="@layout/medicament_list_content" />

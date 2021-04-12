@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         android:allowBackup="true">
         <activity
-            android:name=".MedicamentListActivity"
+            android:name=".DrugListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,27 +25,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MedicamentDetailActivity"
+            android:name=".DrugDetailActivity"
             android:label="@string/title_medicament_detail"
-            android:parentActivityName=".MedicamentListActivity"
+            android:parentActivityName=".DrugListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.foucry.pilldroid.MedicamentListActivity" />
+                android:value="net.foucry.pilldroid.DrugListActivity" />
         </activity>
         <activity
             android:name=".WelcomeActivity"
             android:label="Welcome"
-            android:parentActivityName=".MedicamentListActivity"
+            android:parentActivityName=".DrugListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.foucry.pilldroid.MedicamentListActivity" />
+                android:value="net.foucry.pilldroid.DrugListActivity" />
         </activity>
         <activity
             android:name=".About"
             android:label="À propos de PillDroid"
-            android:parentActivityName=".MedicamentListActivity"
+            android:parentActivityName=".DrugListActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".CustomScannerActivity" />
         <service
