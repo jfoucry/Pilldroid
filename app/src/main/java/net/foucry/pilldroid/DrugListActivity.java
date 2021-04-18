@@ -419,7 +419,7 @@ public class DrugListActivity extends AppCompatActivity {
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
 
-        Toast.makeText(getApplicationContext(), "Alarm scheduled for \" + UtilDate.convertDate(calendar.getTimeInMillis())\"", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
 
     }
     /**
