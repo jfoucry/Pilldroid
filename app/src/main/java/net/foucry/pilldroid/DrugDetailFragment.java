@@ -59,7 +59,7 @@ public class DrugDetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View detailView = inflater.inflate(R.layout.medicament_detail, container, false);
+        View detailView = inflater.inflate(R.layout.drug_detail, container, false);
         View nameView;
         View adminModeView;
         View presentationView;
@@ -74,51 +74,51 @@ public class DrugDetailFragment extends Fragment {
             nameView = detailView.findViewById(R.id.name_cell);
             TextView nameLabel = nameView.findViewById(R.id.label);
             TextView nameValue = nameView.findViewById(R.id.value);
-            nameLabel.setText(R.string.med_name_label);
+            nameLabel.setText(R.string.drug_name_label);
             nameValue.setText(drug.getName());
 
             presentationView = detailView.findViewById(R.id.presentation_cell);
             TextView presentationLabel = presentationView.findViewById(R.id.label);
             TextView presentationValue = presentationView.findViewById(R.id.value);
-            presentationLabel.setText(R.string.med_presention_labal);
+            presentationLabel.setText(R.string.drug_presention_labal);
             presentationValue.setText(drug.getPresentation());
 
             adminModeView = detailView.findViewById(R.id.administration_cell);
             TextView adminModeLabel = adminModeView.findViewById(R.id.label);
             TextView adminModeValue = adminModeView.findViewById(R.id.value);
-            adminModeLabel.setText(R.string.med_administationMode_label);
+            adminModeLabel.setText(R.string.drug_administationMode_label);
             adminModeValue.setText(drug.getAdministration_mode());
 
             stockView = detailView.findViewById(R.id.stock_cell);
             TextView stockLibelle = (stockView.findViewById(R.id.label));
             TextView stockValue = stockView.findViewById(R.id.value);
-            stockLibelle.setText(R.string.med_current_stock_label);
+            stockLibelle.setText(R.string.drug_current_stock_label);
             stockValue.setText(Double.toString(drug.getStock()));
-            stockValue.setHint(R.string.med_current_stock_label);
+            stockValue.setHint(R.string.drug_current_stock_label);
             stockValue.setSelectAllOnFocus(true);
 
             takeView = detailView.findViewById(R.id.take_cell);
             TextView priseLabel = takeView.findViewById(R.id.label);
             TextView priseValue = (takeView.findViewById(R.id.value));
-            priseLabel.setText(R.string.med_take_label);
+            priseLabel.setText(R.string.drug_take_label);
             priseValue.setText(Double.toString(drug.getTake()));
-            priseValue.setHint(R.string.med_take_label);
+            priseValue.setHint(R.string.drug_take_label);
             priseValue.setSelectAllOnFocus(true);
 
             warningView = detailView.findViewById(R.id.warning_cell);
             TextView warningLibelle = warningView.findViewById(R.id.label);
             TextView warningValue = warningView.findViewById(R.id.value);
-            warningLibelle.setText(R.string.med_warningTherehold_label);
+            warningLibelle.setText(R.string.drug_warningTherehold_label);
             warningValue.setText(Integer.toString(drug.getWarnThreshold()));
-            warningValue.setHint(R.string.med_warningTherehold_label);
+            warningValue.setHint(R.string.drug_warningTherehold_label);
             warningValue.setSelectAllOnFocus(true);
 
             alertView = detailView.findViewById(R.id.alert_cell);
             TextView alertLibelle = alertView.findViewById(R.id.label);
             TextView alertValue = alertView.findViewById(R.id.value);
-            alertLibelle.setText(R.string.med_alertTherehold_label);
+            alertLibelle.setText(R.string.drug_alertTherehold_label);
             alertValue.setText(Integer.toString(drug.getAlertThreshold()));
-            alertValue.setHint(R.string.med_alertTherehold_label);
+            alertValue.setHint(R.string.drug_alertTherehold_label);
             alertValue.setSelectAllOnFocus(true);
         }
 

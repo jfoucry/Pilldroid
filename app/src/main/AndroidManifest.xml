@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:name=".DrugDetailActivity"
-            android:label="@string/title_medicament_detail"
+            android:label="@string/title_drug_detail"
             android:parentActivityName=".DrugListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

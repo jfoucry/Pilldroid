@@ -44,7 +44,7 @@ import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 /**
- * An activity representing a list of Medicaments. This activity
+ * An activity representing a list of Drugs is activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
  * lead to a {@link DrugDetailActivity} representing
@@ -115,7 +115,7 @@ public class DrugListActivity extends AppCompatActivity {
         }
         drugs = dbHelper.getAllDrugs();
 
-        View mRecyclerView = findViewById(R.id.medicament_list);
+        View mRecyclerView = findViewById(R.id.drug_list);
         assert mRecyclerView != null;
         setupRecyclerView((RecyclerView) mRecyclerView);
     }
@@ -124,7 +124,7 @@ public class DrugListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_medicament_list);
+        setContentView(R.layout.activity_drug_list);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             dbHelper = new DBHelper(this);
@@ -286,9 +286,9 @@ public class DrugListActivity extends AppCompatActivity {
                     cip13 = result.getContents().substring(4, 17);
                 }
 
-                // Get Medoc from database
-                final Drug scannedMedoc = dbDrug.getDrugByCIP13(cip13);
-                    askToAddInDB(scannedMedoc);
+                // Get Drug from database
+                final Drug scannedDrug = dbDrug.getDrugByCIP13(cip13);
+                    askToAddInDB(scannedDrug);
             }
         }
     }
@@ -311,8 +311,8 @@ public class DrugListActivity extends AppCompatActivity {
                 .setPositiveButton("OK", (dialog, id) -> {
                     String cip13 = editText.getText().toString();
 
-                    Drug med = dbDrug.getDrugByCIP13(cip13);
-                        askToAddInDB(med);
+                    Drug aDrug = dbDrug.getDrugByCIP13(cip13);
+                        askToAddInDB(aDrug);
                 })
                 .setNegativeButton("Cancel",
                         (dialog, id) -> dialog.cancel());
@@ -342,14 +342,14 @@ public class DrugListActivity extends AppCompatActivity {
     /**
      * Ask if the drug found in the database should be include in the
      * user database
-     * @param med Drug- drug to be added
+     * @param aDrug Drug- drug to be added
      */
-    private void askToAddInDB(Drug med) {
+    private void askToAddInDB(Drug aDrug) {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setTitle(getString(R.string.app_name));
 
-        if (med != null) {
-            String msg = med.getName() + " " + getString(R.string.msgFound);
+        if (aDrug != null) {
+            String msg = aDrug.getName() + " " + getString(R.string.msgFound);
 
             dlg.setMessage(msg);
             dlg.setNegativeButton(getString(R.string.button_cancel), (dialog, which) -> {
@@ -357,7 +357,7 @@ public class DrugListActivity extends AppCompatActivity {
             });
             dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
                 // Add Drug to DB then try to show it
-                addMedToList(med);
+                addDrugToList(aDrug);
             });
         } else {
             dlg.setMessage(getString(R.string.msgNotFound));
@@ -370,17 +370,17 @@ public class DrugListActivity extends AppCompatActivity {
 
     /**
      * Add New drug to the user database
-     * @param med Drug - drug to be added
+     * @param aDrug Drug - drug to be added
      */
-    private void addMedToList(Drug med)
+    private void addDrugToList(Drug aDrug)
     {
-        med.setDateEndOfStock();
-        mAdapter.addItem(med);
+        aDrug.setDateEndOfStock();
+        mAdapter.addItem(aDrug);
 
         Log.d(TAG, "Call DrugDetailActivity");
         Context context = this;
         Intent intent = new Intent(context, DrugDetailActivity.class);
-        intent.putExtra("drug", med);
+        intent.putExtra("drug", aDrug);
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
@@ -418,6 +418,9 @@ public class DrugListActivity extends AppCompatActivity {
                 AlarmManager.INTERVAL_DAY, alarmIntent);
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
+
+        Toast.makeText(getApplicationContext(), "Alarm scheduled for \" + UtilDate.convertDate(calendar.getTimeInMillis())\"", Toast.LENGTH_SHORT).show();
+
     }
     /**
      * setupRecyclerView (list of drugs
@@ -451,11 +454,11 @@ public class DrugListActivity extends AppCompatActivity {
             mValues = items;
         }
 
-        void addItem(Drug scannedMedoc) {
-            if (!dbHelper.isDrugExist(scannedMedoc.getCip13())) {
-                mValues.add(scannedMedoc);
+        void addItem(Drug scannedDrug) {
+            if (!dbHelper.isDrugExist(scannedDrug.getCip13())) {
+                mValues.add(scannedDrug);
                 notifyDataSetChanged();
-                dbHelper.addDrug(scannedMedoc);
+                dbHelper.addDrug(scannedDrug);
             } else {
                 Toast.makeText(getApplicationContext(), "aleready in the database", Toast.LENGTH_SHORT).show();
             }
@@ -465,7 +468,7 @@ public class DrugListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.medicament_list_content, parent, false);
+                    .inflate(R.layout.drug_list_content, parent, false);
             return new ViewHolder(view);
         }
 

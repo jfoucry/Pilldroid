@@ -35,7 +35,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/medicament_detail_container"
+        android:id="@+id/drug_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -51,7 +51,7 @@
         android:contentDescription="@string/save_button"
         android:src="@drawable/ic_save_black_24dp"
         app:backgroundTint="@android:color/transparent"
-        app:layout_anchor="@+id/medicament_detail_container"
+        app:layout_anchor="@+id/drug_detail_container"
         app:layout_anchorGravity="top|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,11 +6,8 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 import android.text.format.DateUtils;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,17 +32,17 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_ADMIN       = "administration_mode";
     private static final String KEY_PRES        = "presentation";
     private static final String KEY_STOCK       = "stock";
-    private static final String KEY_PRISE       = "take";
-    private static final String KEY_SEUIL_WARN  = "warning";
-    private static final String KEY_SEUIL_ALERT = "alert";
+    private static final String KEY_TAKE = "take";
+    private static final String KEY_THRESHOLD_WARN = "warning";
+    private static final String KEY_THRESHOLD_ALERT = "alert";
     private static final String KEY_LAST_UPDATE = "last_update";
 
     final List<Drug> drugs = new ArrayList<>();
 
     private static final String TAG = DBHelper.class.getName();
 
-    private static final String[] COLUMS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_PRISE,
-    KEY_SEUIL_WARN, KEY_SEUIL_ALERT, KEY_LAST_UPDATE};
+    private static final String[] COLUMS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_TAKE,
+            KEY_THRESHOLD_WARN, KEY_THRESHOLD_ALERT, KEY_LAST_UPDATE};
 
     DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -108,9 +105,9 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_ADMIN, drug.getAdministration_mode());
         values.put(KEY_PRES, drug.getPresentation());
         values.put(KEY_STOCK, drug.getStock());
-        values.put(KEY_PRISE, drug.getTake());
-        values.put(KEY_SEUIL_WARN, drug.getWarnThreshold());
-        values.put(KEY_SEUIL_ALERT, drug.getAlertThreshold());
+        values.put(KEY_TAKE, drug.getTake());
+        values.put(KEY_THRESHOLD_WARN, drug.getWarnThreshold());
+        values.put(KEY_THRESHOLD_ALERT, drug.getAlertThreshold());
         values.put(KEY_LAST_UPDATE, drug.getDateLastUpdate());
 
         // Calculate some drug's fields
@@ -222,7 +219,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     /**
      *
-     * @return a Sorted and updated by dateEndOfStock List of All medicaments presents in database
+     * @return a Sorted and updated by dateEndOfStock List of All drugs presents in database
      */
 
     List<Drug> getAllDrugs() {
@@ -256,7 +253,7 @@ class DBHelper extends SQLiteOpenHelper {
                 drug.setDateEndOfStock();
 
 
-                // Add drug to medicaments
+                // Add drug to Drugs
                 drugs.add(drug);
             } while (cursor.moveToNext());
         }
@@ -318,7 +315,7 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_ADMIN, drug.getAdministration_mode());
         values.put(KEY_PRES, drug.getPresentation());
         values.put(KEY_STOCK, drug.getStock());
-        values.put(KEY_PRISE, drug.getTake());
+        values.put(KEY_TAKE, drug.getTake());
         values.put(KEY_LAST_UPDATE, drug.getDateLastUpdate());
 
         String[] selectionArgs = { String.valueOf(drug.getId()) };

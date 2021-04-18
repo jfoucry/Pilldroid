@@ -36,6 +36,7 @@ class DBDrugs extends SQLiteOpenHelper {
     private static final String TAG = DBDrugs.class.getName();
 
 
+
     DBDrugs(Context context) {
         super(context, dbName, null, DATABASE_VERSION);
         this.myContext = context;
@@ -49,10 +50,6 @@ class DBDrugs extends SQLiteOpenHelper {
             return false;
         }
         return true;
-/*        if (myContext.getDatabasePath(String.valueOf(database)) != null)
-            return true;
-        else
-            return false;*/
     }
 
     @Override
@@ -121,7 +118,7 @@ class DBDrugs extends SQLiteOpenHelper {
      * @return return a drug object
      */
     Drug getDrugByCIP13(String cip13) {
-        Log.e(TAG, "CIP13 - " + cip13);
+        Log.d(TAG, "CIP13 - " + cip13);
 
         SQLiteDatabase db = this.getReadableDatabase();
 

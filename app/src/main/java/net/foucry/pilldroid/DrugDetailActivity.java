@@ -2,16 +2,16 @@ package net.foucry.pilldroid;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.Date;
 
@@ -42,7 +42,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         assert drug != null;
         Log.d(TAG, "drug == " + drug.toString());
 
-        setContentView(R.layout.activity_medicament_detail);
+        setContentView(R.layout.activity_durg_detail);
         Toolbar toolbar = findViewById(detail_toolbar);
 
 
@@ -56,7 +56,7 @@ public class DrugDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "Click on save icon");
 
-                getMedicamentChanges();
+                getMDrugChanges();
                 setResult(1);
                 finish();
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
@@ -88,7 +88,7 @@ public class DrugDetailActivity extends AppCompatActivity {
             DrugDetailFragment fragment = new DrugDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.medicament_detail_container, fragment)
+                    .add(R.id.drug_detail_container, fragment)
                     .commit();
         }
     }
@@ -109,7 +109,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getMedicamentChanges()
+    private void getMDrugChanges()
     {
         Log.d(TAG, "Time to save new values");
 
