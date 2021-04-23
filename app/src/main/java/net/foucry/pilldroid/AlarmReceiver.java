@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    private static final String TAG = MedicamentDetailFragment.class.getName();
+    private static final String TAG = DrugDetailFragment.class.getName();
 
     NotificationManager nm;
 
@@ -33,21 +33,21 @@ public class AlarmReceiver extends BroadcastReceiver {
         DBHelper dbHelper = new DBHelper(context);
         dbHelper.getAllDrugs();
 
-        List<Medicament> medicaments = dbHelper.getAllDrugs();
+        List<Drug> drugs = dbHelper.getAllDrugs();
 
-        Medicament firstMedicament = null;
+        Drug firstDrug = null;
 
         try {
-            firstMedicament = medicaments.get(0);
+            firstDrug = drugs.get(0);
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
             e.printStackTrace();
         }
 
-        if (firstMedicament != null) {
-            if (firstMedicament.getPrise() != 0) {
-                if(firstMedicament.getStock() < firstMedicament.getAlertThreshold()) {
+        if (firstDrug != null) {
+            if (firstDrug.getTake() != 0) {
+                if(firstDrug.getStock() < firstDrug.getAlertThreshold()) {
                     nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(), 0);
@@ -68,7 +68,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     notificationManager.notify(notificationId, builder.build());
                 } else
                 {
-                    double dummy = (firstMedicament.getStock() - firstMedicament.getAlertThreshold());
+                    double dummy = (firstDrug.getStock() - firstDrug.getAlertThreshold());
                     Log.d(TAG, "no notification scheduled " + dummy);
                 }
             }

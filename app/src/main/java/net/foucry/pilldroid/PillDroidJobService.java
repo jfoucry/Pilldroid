@@ -46,25 +46,25 @@ public class PillDroidJobService extends JobService {
         if (jobCancelled) {
             return;
         }
-        List<Medicament> medicaments = dbHelper.getAllDrugs();
+        List<Drug> drugs = dbHelper.getAllDrugs();
 
-        Medicament firstMedicament = null;
+        Drug firstDrug = null;
 
         try {
-            firstMedicament = medicaments.get(0);
+            firstDrug = drugs.get(0);
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
             e.printStackTrace();
         }
 
-        if (firstMedicament != null) {
-            if (firstMedicament.getPrise() != 0) {
-                if(firstMedicament.getStock() < firstMedicament.getAlertThreshold()) {
+        if (firstDrug != null) {
+            if (firstDrug.getTake() != 0) {
+                if(firstDrug.getStock() < firstDrug.getAlertThreshold()) {
                     scheduleNotification();
                 } else
                 {
-                    double dummy = (firstMedicament.getStock() - firstMedicament.getAlertThreshold());
+                    double dummy = (firstDrug.getStock() - firstDrug.getAlertThreshold());
                     Log.d(TAG, "no notification scheduled " + dummy);
                 }
             }
@@ -88,7 +88,7 @@ public class PillDroidJobService extends JobService {
     void scheduleNotification() {
         Log.d(TAG, "schedule notification");
         createNotificationChannel();
-        Intent intent = new Intent(this, MedicamentListActivity.class);
+        Intent intent = new Intent(this, DrugListActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "PillDroid")
                 .setSmallIcon(R.drawable.ic_pill_alarm)
