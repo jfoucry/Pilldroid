@@ -113,20 +113,24 @@ public class PillDroidJobService extends JobService {
         String description = getString(R.string.channel_description);
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         String CHANNEL_ID = "PillDroid";
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(description);
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        try {
-            notificationManager.createNotificationChannel(channel);
-        } catch  (Exception e) {
-        // This will catch any exception, because they are all descended from Exception
-            Log.e(TAG, e.toString());
-            //At the level Exception Class handle the error in Exception Table
-            // Exception Create That Error  Object and throw it
-            //E.g: FileNotFoundException ,etc
-            e.printStackTrace();
+        NotificationChannel channel;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            channel = new NotificationChannel(CHANNEL_ID, name, importance);
+
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            try {
+                notificationManager.createNotificationChannel(channel);
+            } catch (Exception e) {
+                // This will catch any exception, because they are all descended from Exception
+                Log.e(TAG, e.toString());
+                //At the level Exception Class handle the error in Exception Table
+                // Exception Create That Error  Object and throw it
+                //E.g: FileNotFoundException ,etc
+                e.printStackTrace();
+            }
         }
     }
 }
