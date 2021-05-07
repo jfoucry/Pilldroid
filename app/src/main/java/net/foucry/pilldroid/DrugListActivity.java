@@ -1,13 +1,10 @@
 package net.foucry.pilldroid;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,7 +32,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -60,6 +56,7 @@ public class DrugListActivity extends AppCompatActivity {
     // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launchtime
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
+
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
 
     /**
@@ -215,7 +212,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        scheduleAlarm();
+        AlarmReceiver.scheduleAlarm(this);
     }
 
     public void onResume() {
@@ -388,14 +385,21 @@ public class DrugListActivity extends AppCompatActivity {
      /**
      * scheduleAlarm()
      */
-    public void scheduleAlarm() {
-
+    /*public void scheduleAlarm() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,12);
-        Date today = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date tomorrow = calendar.getTime();
+        Date today;
+        Date tomorrow;
 
+        if (BuildConfig.DEBUG) {
+            calendar.add(Calendar.HOUR, 1);
+            today = calendar.getTime();
+            calendar.add(Calendar.HOUR, 1);
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY, 12);
+            today = calendar.getTime();
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        tomorrow = calendar.getTime();
         LocalTime todayNow = LocalTime.now();
 
         if (todayNow.isBefore(LocalTime.NOON)) {
@@ -414,14 +418,24 @@ public class DrugListActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+        boolean alarmUp = (PendingIntent.getBroadcast(this, 0, intent,
+                PendingIntent.FLAG_NO_CREATE) != null);
+        if (alarmUp) {
+            Log.d(TAG, "Alarm already active");
+        }
+
+        *//*alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);*//*
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
 
         Toast.makeText(getApplicationContext(), "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
 
-    }
+    }*/
+
+
     /**
      * setupRecyclerView (list of drugs
      * @param recyclerView RecyclerView
