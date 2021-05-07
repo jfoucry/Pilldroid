@@ -16,7 +16,7 @@
     <string name="drug_current_stock_label">Current stock</string>
     <string name="drug_take_label">Take</string>
     <string name="drug_warningTherehold_label">Alert therehold</string>
-    <string name="drug_alertTherehold_label">Critical threhold</string>
+    <string name="drug_alertTherehold_label">Critical therehold</string>
     <string name="button_keyboard">"Use the keyboard"</string>
     <string name="detail_view">Detail view</string>
     <string name="scan_action">Scan a drug barcode</string>
@@ -47,7 +47,7 @@
     <string name="pilldroid_icon">PillDroid Icon</string>
     <string name="the_plus_icon">The plus icon</string>
     <string name="slide4_desc">In order to find the CIP13</string>
-    <string name="slide5_desc">Stock is ok</string>
+    <string name="slide5_desc">Stock is OK</string>
     <string name="slide6_desc">Warning stock in rising down</string>
     <string name="slide7_desc">Alert stock too low</string>
     <string name="happy_face">Happy face</string>
@@ -63,7 +63,7 @@
     <string name="suspended_treatment_icon">Treatment suspended icon</string>
     <string name="slide11_desc">To save changes</string>
     <string name="save_icon">The save icon</string>
-    <string name="slide12_desc">Thansk for using PillDroid</string>
+    <string name="slide12_desc">Thanks for using PillDroid</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="start">Start</string>
