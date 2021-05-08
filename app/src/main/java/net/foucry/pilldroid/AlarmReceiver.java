@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    private static final String TAG = DrugDetailFragment.class.getName();
+    private static final String TAG = AlarmManager.class.getName();
 
     NotificationManager notificationManager;
 
@@ -32,17 +33,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // If BOOT_COMPLETED is received we launch an alarm in 10 second in order to
         // start the alarmschedule process.
-        final String BOOT_COMPLETED_ACTION = "android.intent.action.BOOT_COMPLETED";
-        if(intent.getAction().equals(BOOT_COMPLETED_ACTION)){
 
-            /*Intent myIntent = new Intent(context, AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,  0, myIntent, 0);
-
-            AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.add(Calendar.SECOND, 10);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);*/
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            Log.d(TAG, "StartUpBootReceiver BOOT_COMPLETED");
             scheduleAlarm(context);
         }
         
@@ -69,9 +62,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                     notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(), 0);
-                   /* Notification notif = new Notification(R.drawable.ic_pill_alarm, "Crazy About Android...", System.currentTimeMillis());
-                    notif.setLatestEventInfo(context, from, message, contentIntent);
-                    nm.notify(1, notif);*/
 
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "PillDroid")
                             .setSmallIcon(R.drawable.ic_pill_alarm)
@@ -129,15 +119,17 @@ public class AlarmReceiver extends BroadcastReceiver {
         Date tomorrow;
 
         if (BuildConfig.DEBUG) {
-            calendar.add(android.icu.util.Calendar.HOUR, 1);
+            calendar.add(Calendar.MINUTE, 15);
             today = calendar.getTime();
-            calendar.add(android.icu.util.Calendar.HOUR, 1);
+            calendar.add(Calendar.MINUTE, 15);
+            tomorrow = calendar.getTime();
         } else {
             calendar.set(android.icu.util.Calendar.HOUR_OF_DAY, 12);
             today = calendar.getTime();
             calendar.add(android.icu.util.Calendar.DAY_OF_YEAR, 1);
+            tomorrow = calendar.getTime();
         }
-        tomorrow = calendar.getTime();
+
         LocalTime todayNow = LocalTime.now();
 
         if (todayNow.isBefore(LocalTime.NOON)) {
@@ -160,12 +152,16 @@ public class AlarmReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_NO_CREATE) != null);
         if (alarmUp) {
             Log.d(TAG, "Alarm already active");
+            Log.d(TAG, "Next schedule Alarm " + alarmManager.getNextAlarmClock());
         }
 
-        /*alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);*/
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
+        if(BuildConfig.DEBUG) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
+        } else {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
+                    AlarmManager.INTERVAL_DAY, alarmIntent);
+        }
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
 
