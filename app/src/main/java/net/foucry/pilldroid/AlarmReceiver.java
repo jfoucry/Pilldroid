@@ -39,7 +39,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             scheduleAlarm(context);
         }
         
-        Toast.makeText(context, "New stock calculted", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show();
         createNotificationChannel(context);
         DBHelper dbHelper = new DBHelper(context);
         dbHelper.getAllDrugs();
@@ -114,19 +114,19 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
     }
     public static void scheduleAlarm(Context context) {
-        android.icu.util.Calendar calendar = android.icu.util.Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         Date today;
         Date tomorrow;
 
         if (BuildConfig.DEBUG) {
-            calendar.add(Calendar.MINUTE, 15);
+            calendar.add(Calendar.HOUR_OF_DAY, 12);
             today = calendar.getTime();
-            calendar.add(Calendar.MINUTE, 15);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
             tomorrow = calendar.getTime();
         } else {
-            calendar.set(android.icu.util.Calendar.HOUR_OF_DAY, 12);
+            calendar.set(Calendar.HOUR_OF_DAY, 12);
             today = calendar.getTime();
-            calendar.add(android.icu.util.Calendar.DAY_OF_YEAR, 1);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
             tomorrow = calendar.getTime();
         }
 
@@ -141,6 +141,11 @@ public class AlarmReceiver extends BroadcastReceiver {
             calendar.setTimeInMillis(tomorrow.getTime());
         }
 
+/*        if (BuildConfig.DEBUG)
+        {
+            calendar.setTimeInMillis(today.getTime());
+        }*/
+
         PendingIntent alarmIntent;
 
         Intent intent = new Intent(context, AlarmReceiver.class);
@@ -152,7 +157,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_NO_CREATE) != null);
         if (alarmUp) {
             Log.d(TAG, "Alarm already active");
-            Log.d(TAG, "Next schedule Alarm " + alarmManager.getNextAlarmClock());
         }
 
         if(BuildConfig.DEBUG) {
