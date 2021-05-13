@@ -118,17 +118,17 @@ public class AlarmReceiver extends BroadcastReceiver {
         Date today;
         Date tomorrow;
 
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             calendar.add(Calendar.HOUR_OF_DAY, 12);
             today = calendar.getTime();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             tomorrow = calendar.getTime();
-        } else {
+        } else {*/
             calendar.set(Calendar.HOUR_OF_DAY, 12);
             today = calendar.getTime();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             tomorrow = calendar.getTime();
-        }
+//        }
 
         LocalTime todayNow = LocalTime.now();
 
@@ -159,13 +159,9 @@ public class AlarmReceiver extends BroadcastReceiver {
             Log.d(TAG, "Alarm already active");
         }
 
-        if(BuildConfig.DEBUG) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
-        } else {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
-                    AlarmManager.INTERVAL_DAY, alarmIntent);
-        }
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
 
