@@ -316,6 +316,8 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_PRES, drug.getPresentation());
         values.put(KEY_STOCK, drug.getStock());
         values.put(KEY_TAKE, drug.getTake());
+        values.put(KEY_THRESHOLD_WARN, drug.getWarnThreshold());
+        values.put(KEY_THRESHOLD_ALERT, drug.getAlertThreshold());
         values.put(KEY_LAST_UPDATE, drug.getDateLastUpdate());
 
         String[] selectionArgs = { String.valueOf(drug.getId()) };
