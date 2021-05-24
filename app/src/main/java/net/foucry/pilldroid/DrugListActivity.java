@@ -238,12 +238,7 @@ public class DrugListActivity extends AppCompatActivity {
         if (requestCode == CUSTOMIZED_REQUEST_CODE) {
             Toast.makeText(this, "REQUEST_CODE = " + requestCode + "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
             Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-            if (resultCode == 1) {
-                constructDrugsList();
-            } else {
-                Toast.makeText(this, "What are you doing here?", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "What are you doing here?");
-            }
+            constructDrugsList();
         } else {
             IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
 
