@@ -58,10 +58,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (firstDrug != null) {
             if (firstDrug.getTake() != 0) {
-                if(firstDrug.getStock() < firstDrug.getAlertThreshold()) {
+                if(firstDrug.getStock() <= firstDrug.getAlertThreshold()) {
                     notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(), 0);
+                    Intent notificationIntent = new Intent(context, DrugListActivity.class);
+                    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "PillDroid")
                             .setSmallIcon(R.drawable.ic_pill_alarm)
@@ -69,6 +73,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                             .setContentText(context.getString(R.string.notification_text))
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setContentIntent(pendingIntent)
+                            .setColorized(true)
                             .setAutoCancel(true);
 
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
@@ -124,7 +129,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             tomorrow = calendar.getTime();
         } else {*/
-            calendar.set(Calendar.HOUR_OF_DAY, 12);
+            calendar.set(Calendar.HOUR_OF_DAY, 11);
             today = calendar.getTime();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             tomorrow = calendar.getTime();
