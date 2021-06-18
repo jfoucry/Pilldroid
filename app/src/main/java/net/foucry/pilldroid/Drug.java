@@ -1,17 +1,20 @@
 package net.foucry.pilldroid;
 
+import android.util.Log;
+
 import java.io.Serializable;
-import java.lang.String;
 import java.util.Calendar;
 import java.util.Date;
 
-import static  net.foucry.pilldroid.UtilDate.*;
+import static net.foucry.pilldroid.UtilDate.dateAtNoon;
+import static net.foucry.pilldroid.UtilDate.nbOfDaysBetweenDateAndToday;
 
 /**
  * Created by jacques on 26/11/15.
  */
 public class Drug implements Serializable {
 
+    private static final String TAG = Drug.class.getName();
     /* part read form database */
     private int id;
     private String nama;
@@ -161,7 +164,10 @@ public class Drug implements Serializable {
     }
 
     void newStock() {
+        Log.d(TAG, "current drug = " + this.toString());
+
         Date lastUpdate = new Date(getDateLastUpdate());
+
         int numberOfDays = nbOfDaysBetweenDateAndToday(lastUpdate);
         if (numberOfDays > 0) {
             double takeDuringPeriod = this.take * numberOfDays;
