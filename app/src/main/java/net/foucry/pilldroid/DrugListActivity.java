@@ -36,6 +36,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.sentry.Sentry;
+
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
@@ -212,6 +214,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause really!");
         AlarmReceiver.scheduleAlarm(this);
     }
 
@@ -377,60 +380,6 @@ public class DrugListActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
-     /**
-     * scheduleAlarm()
-     */
-    /*public void scheduleAlarm() {
-        Calendar calendar = Calendar.getInstance();
-        Date today;
-        Date tomorrow;
-
-        if (BuildConfig.DEBUG) {
-            calendar.add(Calendar.HOUR, 1);
-            today = calendar.getTime();
-            calendar.add(Calendar.HOUR, 1);
-        } else {
-            calendar.set(Calendar.HOUR_OF_DAY, 12);
-            today = calendar.getTime();
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-        }
-        tomorrow = calendar.getTime();
-        LocalTime todayNow = LocalTime.now();
-
-        if (todayNow.isBefore(LocalTime.NOON)) {
-            // schedule date = today
-            //calendar.setTimeInMillis(dateAtNoon(today).getTime());
-            calendar.setTimeInMillis(today.getTime());
-        } else {
-            // schedule date = tomorrow
-            calendar.setTimeInMillis(tomorrow.getTime());
-        }
-
-        PendingIntent alarmIntent;
-
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        boolean alarmUp = (PendingIntent.getBroadcast(this, 0, intent,
-                PendingIntent.FLAG_NO_CREATE) != null);
-        if (alarmUp) {
-            Log.d(TAG, "Alarm already active");
-        }
-
-        *//*alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);*//*
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
-
-        Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
-
-        Toast.makeText(getApplicationContext(), "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
-
-    }*/
-
-
     /**
      * setupRecyclerView (list of drugs
      * @param recyclerView RecyclerView
@@ -469,7 +418,7 @@ public class DrugListActivity extends AppCompatActivity {
                 notifyDataSetChanged();
                 dbHelper.addDrug(scannedDrug);
             } else {
-                Toast.makeText(getApplicationContext(), "aleready in the database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "already in the database", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -486,6 +435,7 @@ public class DrugListActivity extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy", Locale.getDefault());
             String dateEndOfStock = date2String(mValues.get(position).getDateEndOfStock(), dateFormat);
 
+            Log.d(TAG, "Drug name == " + mValues.get(position).getName());
             Log.d(TAG, "dateEndOfStock == " + dateEndOfStock);
             Log.d(TAG, "stock == " + mValues.get(position).getStock());
             Log.d(TAG, "take == " + mValues.get(position).getTake());
