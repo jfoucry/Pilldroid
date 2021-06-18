@@ -24,18 +24,18 @@ class DBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "prescription.db";
 
-    private static final String TABLE_DRUG      = "drug";
-    private static final String KEY_ID          = "id";
-    private static final String KEY_CIS         = "cis";
-    private static final String KEY_CIP13       = "cip13";
-    private static final String KEY_NAME        = "name";
-    private static final String KEY_ADMIN       = "administration_mode";
-    private static final String KEY_PRES        = "presentation";
-    private static final String KEY_STOCK       = "stock";
-    private static final String KEY_TAKE = "take";
-    private static final String KEY_THRESHOLD_WARN = "warning";
+    private static final String TABLE_DRUG          = "drug";
+    private static final String KEY_ID              = "id";
+    private static final String KEY_CIS             = "cis";
+    private static final String KEY_CIP13           = "cip13";
+    private static final String KEY_NAME            = "name";
+    private static final String KEY_ADMIN           = "administration_mode";
+    private static final String KEY_PRES            = "presentation";
+    private static final String KEY_STOCK           = "stock";
+    private static final String KEY_TAKE            = "take";
+    private static final String KEY_THRESHOLD_WARN  = "warning";
     private static final String KEY_THRESHOLD_ALERT = "alert";
-    private static final String KEY_LAST_UPDATE = "last_update";
+    private static final String KEY_LAST_UPDATE     = "last_update";
 
     final List<Drug> drugs = new ArrayList<>();
 
@@ -272,12 +272,23 @@ class DBHelper extends SQLiteOpenHelper {
             }
         }
 
+
+
+        Log.d(TAG, "Before sort == " + drugs.toString());
+
+        /*drugs.sort(Comparator.comparing(Drug::getDateEndOfStock)
+                .thenComparing(Drug::getStock));*/
+
         drugs.sort(new Comparator<Drug>() {
             @Override
             public int compare(Drug lhs, Drug rhs) {
-                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+                if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
+                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+                else
+                    return (int) (lhs.getStock() - rhs.getStock());
             }
         });
+        Log.d(TAG, "After sort " + drugs.toString());
 
         // Move drug with prise = 0 at the end of the list
         for (int position = 0 ; position < getCount() ; position++ ) {
@@ -289,9 +300,6 @@ class DBHelper extends SQLiteOpenHelper {
                 drugs.add(drugs.size(), drug);
             }
         }
-
-        Log.d(TAG, "getAllDrugs " + drugs.toString());
-
         return drugs;
     }
 
@@ -301,24 +309,24 @@ class DBHelper extends SQLiteOpenHelper {
      */
     public void updateDrug(Drug drug) {
 
-        Log.d(TAG, "Update Drug == " + drug);
+        Log.d(TAG, "Update Drug == " + drug.toString());
 
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Create ContentValues to add columnm/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, drug.getId());
-        values.put(KEY_CIS, drug.getCis());
-        values.put(KEY_CIP13, drug.getCip13());
-        values.put(KEY_NAME, drug.getName());
-        values.put(KEY_ADMIN, drug.getAdministration_mode());
-        values.put(KEY_PRES, drug.getPresentation());
-        values.put(KEY_STOCK, drug.getStock());
-        values.put(KEY_TAKE, drug.getTake());
-        values.put(KEY_THRESHOLD_WARN, drug.getWarnThreshold());
+        values.put(KEY_ID,              drug.getId());
+        values.put(KEY_CIS,             drug.getCis());
+        values.put(KEY_CIP13,           drug.getCip13());
+        values.put(KEY_NAME,            drug.getName());
+        values.put(KEY_ADMIN,           drug.getAdministration_mode());
+        values.put(KEY_PRES,            drug.getPresentation());
+        values.put(KEY_STOCK,           drug.getStock());
+        values.put(KEY_TAKE,            drug.getTake());
+        values.put(KEY_THRESHOLD_WARN,  drug.getWarnThreshold());
         values.put(KEY_THRESHOLD_ALERT, drug.getAlertThreshold());
-        values.put(KEY_LAST_UPDATE, drug.getDateLastUpdate());
+        values.put(KEY_LAST_UPDATE,     drug.getDateLastUpdate());
 
         String[] selectionArgs = { String.valueOf(drug.getId()) };
 
@@ -329,6 +337,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Close DB
         db.close();
+        Log.d(TAG, "values == " + values.toString());
     }
 
     /**
