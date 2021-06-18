@@ -139,12 +139,12 @@ public class DrugDetailActivity extends AppCompatActivity {
         String warningValue = warningTextView.getText().toString();
 
 
-        Log.d(TAG, "StockValue ==  "+ stockValue);
+/*        Log.d(TAG, "StockValue ==  "+ stockValue);
         Log.d(TAG, "TakeValue ==  "+ takeValue);
         Log.d(TAG, "AlertValue ==  "+ alertValue);
         Log.d(TAG, "WarningValue ==  "+ warningValue);
         Log.d(TAG, "medicamentID == "+ drug.getId());
-        Log.d(TAG, "drug == "+ drug.toString());
+        Log.d(TAG, "drug == "+ drug.toString());*/
 
         newDrug.setStock(Double.parseDouble(stockValue));
         newDrug.setTake(Double.parseDouble(takeValue));
