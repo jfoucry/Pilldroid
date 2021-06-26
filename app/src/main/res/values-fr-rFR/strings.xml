@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PillDroid</string>
-    <string name="title_medicament_detail">Détail Médicament</string>
+    <string name="title_drug_detail">Détail Médicament</string>
     <string name="button_cancel">Annuler</string>
     <string name="button_ok">OK</string>
-    <string name="med_presention_labal">Présentation</string>
-    <string name="med_name_label">Nom</string>
-    <string name="med_administationMode_label">Mode d\'adminitration</string>
+    <string name="drug_presention_labal">Présentation</string>
+    <string name="drug_name_label">Nom</string>
+    <string name="drug_administationMode_label">Mode d\'adminitration</string>
     <string name="msgNotFound">Médicament introuvable dans la base de données</string>
     <string name="about">À propos</string>
     <string name="help">Aide</string>
-    <string name="med_take_label">Prise</string>
-    <string name="med_alertTherehold_label">Seuil critique</string>
-    <string name="med_warningTherehold_label">Seuil d\'alerte</string>
+    <string name="drug_take_label">Prise</string>
+    <string name="drug_alertTherehold_label">Seuil critique</string>
+    <string name="drug_warningTherehold_label">Seuil d\'alerte</string>
     <string name="msgFound">Médicament trouvé dans la base de données</string>
-    <string name="med_current_stock_label">Stock courant</string>
+    <string name="drug_current_stock_label">Stock courant</string>
     <string name="turn_off_flashlight">Éteindre le flash</string>
     <string name="turn_on_flashlight">Allumer le flash</string>
     <string name="notification_text">Vous devez passer à la pharmacie</string>
@@ -55,7 +55,7 @@
     <string name="neutral_face">Visage neutre</string>
     <string name="unhappy_face">Visage grincheux</string>
     <string name="slide8_desc">Informations sur le médicament</string>
-    <string name="medicament_info">Capture d\'écran sur la partie information du médicament</string>
+    <string name="drug_info">Capture d\'écran sur la partie information du médicament</string>
     <string name="slide9_desc">Réglages du stock courant, prise et valeurs d\'attention et d\'alerte</string>
     <string name="tunables">Réglages</string>
     <string name="slide10_desc">Mettre la prise à zéro suspend le traitement et les calculs de stock</string>
@@ -67,8 +67,8 @@
     <string name="next">Suivant</string>
     <string name="start">Démarrer</string>
     <string name="add_button">Ajout d\'un médicament à votre liste</string>
-    <string name="nom_m_dicament">Nom Médicament</string>
-    <string name="icone_de_stock">Icône de stock</string>
+    <string name="drugName">Nom Médicament</string>
+    <string name="stockIcon">Icône de stock</string>
     <string name="cip13_goes_here">Ici le cip13</string>
     <string name="Date">lundi 1 janvier 2001</string>
     <string name="Value">Valeur</string>

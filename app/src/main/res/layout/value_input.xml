@@ -8,13 +8,13 @@
     android:background="@drawable/list_selector"
     android:weightSum="1">
     <TextView
-        android:id="@+id/libelle"
+        android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/valeur"
+        android:layout_alignBottom="@+id/value"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/valeur"
+        android:layout_toStartOf="@id/value"
         android:gravity="center_vertical"
         android:paddingStart="5dp"
         android:paddingEnd="25dp"
@@ -24,7 +24,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/valeur"
+        android:id="@+id/value"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
@@ -33,7 +33,7 @@
         android:ems="10"
         android:gravity="end|fill_vertical"
         android:inputType="numberDecimal"
-        android:labelFor="@id/valeur"
+        android:labelFor="@id/value"
         android:paddingEnd="25dp"
         android:paddingStart="5dp"
         android:hint="@string/zero"

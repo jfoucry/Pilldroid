@@ -5,7 +5,7 @@
     android:background="@drawable/list_selector">
 
     <TextView
-        android:id="@+id/valeur"
+        android:id="@+id/value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="10sp"
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/label"
-        android:layout_below="@+id/valeur"
+        android:layout_below="@+id/value"
         android:layout_alignParentStart="true"
         android:textStyle="italic"
         android:textColor="#0c4758"

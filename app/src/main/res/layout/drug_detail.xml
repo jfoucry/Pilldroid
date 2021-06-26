@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/medicament_detail"
+    android:id="@+id/drug_detail"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="net.foucry.pilldroid.MedicamentDetailFragment">
+    tools:context="net.foucry.pilldroid.DrugDetailFragment">
 
     <include
         android:id="@+id/name_cell"
@@ -35,7 +35,7 @@
         android:layout_marginTop="30sp" />
 
     <include
-        android:id="@+id/prise_cell"
+        android:id="@+id/take_cell"
         layout="@layout/value_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

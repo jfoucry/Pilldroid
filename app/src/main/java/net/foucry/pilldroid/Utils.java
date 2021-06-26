@@ -2,10 +2,11 @@ package net.foucry.pilldroid;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.util.Random;
 
 public class Utils {
+    private static final String TAG = UtilDate.class.getName();
+
     public static void CopyStream(InputStream is, OutputStream os)
     {
         final int buffer_size=1024;
@@ -33,4 +34,5 @@ public class Utils {
         Random r = new Random();
         return r.nextInt(max - min) +max;
     }
+
 }
