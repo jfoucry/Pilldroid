@@ -17,7 +17,7 @@ public class Drug implements Serializable {
     private static final String TAG = Drug.class.getName();
     /* part read form database */
     private int id;
-    private String nama;
+    private String name;
     private String cip13;
     private String cis;
     private String administration_mode;
@@ -34,13 +34,13 @@ public class Drug implements Serializable {
     Drug() {
     }
 
-    Drug(final String cis, final String cip13, final String nama, final String administration_mode, final String presentation,
+    Drug(final String cis, final String cip13, final String name, final String administration_mode, final String presentation,
          double stock, double take, int warn, int alert, long dateLastUpdate) {
         super();
 
         this.cis = cis;
         this.cip13 = cip13;
-        this.nama = nama;
+        this.name = name;
         this.administration_mode = administration_mode;
         this.presentation = presentation;
         this.stock = stock;
@@ -56,7 +56,7 @@ public class Drug implements Serializable {
     }
 
     String getName() {
-        return nama;
+        return name;
     }
 
     String getCip13() {
@@ -103,8 +103,8 @@ public class Drug implements Serializable {
         this.id = id;
     }
 
-    void setNama(String nama) {
-        this.nama = nama;
+    void setName(String name) {
+        this.name = name;
     }
 
     void setCip13(String cip13) {
