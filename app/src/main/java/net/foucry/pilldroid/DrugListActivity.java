@@ -376,7 +376,7 @@ public class DrugListActivity extends AppCompatActivity {
         Context context = this;
         Intent intent = new Intent(context, DrugDetailActivity.class);
         intent.putExtra("drug", aDrug);
-        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);  // todo deprecated
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
@@ -473,7 +473,7 @@ public class DrugListActivity extends AppCompatActivity {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, DrugDetailActivity.class);
                     intent.putExtra("drug", drugCourant);
-                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE); // todo: deprecated
                     overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 }
             });
