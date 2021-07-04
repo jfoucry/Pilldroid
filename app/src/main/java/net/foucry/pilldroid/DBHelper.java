@@ -151,7 +151,7 @@ class DBHelper extends SQLiteOpenHelper {
             drug.setId(Integer.parseInt(cursor.getString(0)));
             drug.setCis(cursor.getString(1));
             drug.setCip13(cursor.getString(2));
-            drug.setNama(cursor.getString(3));
+            drug.setName(cursor.getString(3));
             drug.setAdministration_mode(cursor.getString(4));
             drug.setPresentation(cursor.getString(5));
             drug.setStock(Double.parseDouble(cursor.getString(6)));
@@ -199,7 +199,7 @@ class DBHelper extends SQLiteOpenHelper {
             drug.setId(Integer.parseInt(cursor.getString(0)));
             drug.setCis(cursor.getString(1));
             drug.setCip13(cursor.getString(2));
-            drug.setNama(cursor.getString(3));
+            drug.setName(cursor.getString(3));
             drug.setAdministration_mode(cursor.getString(4));
             drug.setPresentation(cursor.getString(5));
             drug.setStock(Double.parseDouble(cursor.getString(6)));
@@ -241,7 +241,7 @@ class DBHelper extends SQLiteOpenHelper {
                 drug.setId(Integer.parseInt(cursor.getString(0)));
                 drug.setCis(cursor.getString(1));
                 drug.setCip13(cursor.getString(2));
-                drug.setNama(cursor.getString(3));
+                drug.setName(cursor.getString(3));
                 drug.setAdministration_mode(cursor.getString(4));
                 drug.setPresentation(cursor.getString(5));
                 drug.setStock(Double.parseDouble(cursor.getString(6)));
@@ -291,13 +291,18 @@ class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "After sort " + drugs.toString());
 
         // Move drug with prise = 0 at the end of the list
-        for (int position = 0 ; position < getCount() ; position++ ) {
+        // todo: If some drug moved, must redo all the loop
+        int position = 0 ;
+        for ( int nbOps = 0;  nbOps < getCount() ; nbOps ++ ) {
             currentDrug = getItem(position);
             double currentTake = currentDrug.getTake();
             if (currentTake == 0)
             {
                 drug = drugs.remove(position);
-                drugs.add(drugs.size(), drug);
+                drugs.add(drug);
+            } else
+            {
+                position++;
             }
         }
         return drugs;

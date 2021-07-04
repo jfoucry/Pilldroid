@@ -142,7 +142,7 @@ class DBDrugs extends SQLiteOpenHelper {
             drug.setCis(cursor.getString(0));
             drug.setCip13(cursor.getString(1));
             drug.setAdministration_mode(cursor.getString(2));
-            drug.setNama(cursor.getString(3));
+            drug.setName(cursor.getString(3));
             drug.setPresentation(cursor.getString(4));
 
             // Set default values
