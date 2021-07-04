@@ -292,13 +292,17 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Move drug with prise = 0 at the end of the list
         // todo: If some drug moved, must redo all the loop
-        for (int position = 0 ; position < getCount() ; position++ ) {
+        int position = 0 ;
+        for ( int nbOps = 0;  nbOps < getCount() ; nbOps ++ ) {
             currentDrug = getItem(position);
             double currentTake = currentDrug.getTake();
             if (currentTake == 0)
             {
                 drug = drugs.remove(position);
                 drugs.add(drug);
+            } else
+            {
+                position++;
             }
         }
         return drugs;
