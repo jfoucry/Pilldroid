@@ -124,7 +124,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     void launchHomeScreen() {
         prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(WelcomeActivity.this, MedicamentListActivity.class));
+        startActivity(new Intent(WelcomeActivity.this, DrugListActivity.class));
         finish();
     }
 

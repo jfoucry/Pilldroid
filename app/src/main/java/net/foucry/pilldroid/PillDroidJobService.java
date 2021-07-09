@@ -46,25 +46,25 @@ public class PillDroidJobService extends JobService {
         if (jobCancelled) {
             return;
         }
-        List<Medicament> medicaments = dbHelper.getAllDrugs();
+        List<Drug> drugs = dbHelper.getAllDrugs();
 
-        Medicament firstMedicament = null;
+        Drug firstDrug = null;
 
         try {
-            firstMedicament = medicaments.get(0);
+            firstDrug = drugs.get(0);
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
             e.printStackTrace();
         }
 
-        if (firstMedicament != null) {
-            if (firstMedicament.getPrise() != 0) {
-                if(firstMedicament.getStock() < firstMedicament.getAlertThreshold()) {
+        if (firstDrug != null) {
+            if (firstDrug.getTake() != 0) {
+                if(firstDrug.getStock() < firstDrug.getAlertThreshold()) {
                     scheduleNotification();
                 } else
                 {
-                    double dummy = (firstMedicament.getStock() - firstMedicament.getAlertThreshold());
+                    double dummy = (firstDrug.getStock() - firstDrug.getAlertThreshold());
                     Log.d(TAG, "no notification scheduled " + dummy);
                 }
             }
@@ -88,7 +88,7 @@ public class PillDroidJobService extends JobService {
     void scheduleNotification() {
         Log.d(TAG, "schedule notification");
         createNotificationChannel();
-        Intent intent = new Intent(this, MedicamentListActivity.class);
+        Intent intent = new Intent(this, DrugListActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "PillDroid")
                 .setSmallIcon(R.drawable.ic_pill_alarm)
@@ -113,20 +113,24 @@ public class PillDroidJobService extends JobService {
         String description = getString(R.string.channel_description);
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         String CHANNEL_ID = "PillDroid";
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(description);
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        try {
-            notificationManager.createNotificationChannel(channel);
-        } catch  (Exception e) {
-        // This will catch any exception, because they are all descended from Exception
-            Log.e(TAG, e.toString());
-            //At the level Exception Class handle the error in Exception Table
-            // Exception Create That Error  Object and throw it
-            //E.g: FileNotFoundException ,etc
-            e.printStackTrace();
+        NotificationChannel channel;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            channel = new NotificationChannel(CHANNEL_ID, name, importance);
+
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            try {
+                notificationManager.createNotificationChannel(channel);
+            } catch (Exception e) {
+                // This will catch any exception, because they are all descended from Exception
+                Log.e(TAG, e.toString());
+                //At the level Exception Class handle the error in Exception Table
+                // Exception Create That Error  Object and throw it
+                //E.g: FileNotFoundException ,etc
+                e.printStackTrace();
+            }
         }
     }
 }

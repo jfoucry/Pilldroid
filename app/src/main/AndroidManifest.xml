@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <application
         android:fullBackupContent="true"
@@ -16,7 +17,7 @@
         android:theme="@style/AppTheme"
         android:allowBackup="true">
         <activity
-            android:name=".MedicamentListActivity"
+            android:name=".DrugListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,34 +26,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MedicamentDetailActivity"
-            android:label="@string/title_medicament_detail"
-            android:parentActivityName=".MedicamentListActivity"
+            android:name=".DrugDetailActivity"
+            android:label="@string/title_drug_detail"
+            android:parentActivityName=".DrugListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.foucry.pilldroid.MedicamentListActivity" />
+                android:value="net.foucry.pilldroid.DrugListActivity" />
         </activity>
         <activity
             android:name=".WelcomeActivity"
             android:label="Welcome"
-            android:parentActivityName=".MedicamentListActivity"
+            android:parentActivityName=".DrugListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.foucry.pilldroid.MedicamentListActivity" />
+                android:value="net.foucry.pilldroid.DrugListActivity" />
         </activity>
         <activity
             android:name=".About"
             android:label="À propos de PillDroid"
-            android:parentActivityName=".MedicamentListActivity"
+            android:parentActivityName=".DrugListActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".CustomScannerActivity" />
-        <service
+<!--        <service
             android:name=".PillDroidJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE" />-->
         <receiver android:name="net.foucry.pilldroid.AlarmReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
         </receiver>
+        <meta-data android:name="io.sentry.dsn" android:value="https://ba17f240b58144e398c862bb953256ef@o755123.ingest.sentry.io/5792286" />
     </application>
 
 </manifest>

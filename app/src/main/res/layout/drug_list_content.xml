@@ -15,15 +15,15 @@
             android:layout_height="50sp"
             android:layout_marginStart="5dp"
             android:src="@drawable/ok_stock_vect"
-            android:contentDescription="@string/icone_de_stock"
+            android:contentDescription="@string/stockIcon"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true" />
 
         <TextView
-            android:id="@+id/valeur"
+            android:id="@+id/value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nom_m_dicament"
+            android:text="@string/drugName"
             android:textColor="#040404"
             android:typeface="sans"
             android:textSize="16sp"
@@ -39,7 +39,7 @@
             android:textColor="#343434"
             android:textSize="14sp"
             android:text="@string/cip13_goes_here"
-            android:layout_below="@+id/valeur"
+            android:layout_below="@+id/value"
             android:layout_toEndOf="@+id/list_image"
             android:layout_marginStart="5dp" />
 

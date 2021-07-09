@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="@dimen/screen_shot_height"
             android:layout_height="@dimen/screen_shot_height"
-            android:contentDescription="@string/medicament_info"
+            android:contentDescription="@string/drug_info"
             android:src="@drawable/info" />
 
         <TextView

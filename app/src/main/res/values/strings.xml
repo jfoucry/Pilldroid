@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PillDroid</string>
-    <string name="title_medicament_detail">Medicament Detail</string>
+    <string name="title_drug_detail">Drug Detail</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
     <string name="msgNotFound">Drug not found in the database</string>
@@ -10,13 +10,13 @@
     <string name="notification_text">You have to go to the pharmacy</string>
     <string name="turn_on_flashlight">Turn Flash On</string>
     <string name="turn_off_flashlight">Turn Flash Off</string>
-    <string name="med_name_label">Name</string>
-    <string name="med_presention_labal">Presentation</string>
-    <string name="med_administationMode_label">Administration mode</string>
-    <string name="med_current_stock_label">Current stock</string>
-    <string name="med_take_label">Take</string>
-    <string name="med_warningTherehold_label">Alert therehold</string>
-    <string name="med_alertTherehold_label">Critical threhold</string>
+    <string name="drug_name_label">Name</string>
+    <string name="drug_presention_labal">Presentation</string>
+    <string name="drug_administationMode_label">Administration mode</string>
+    <string name="drug_current_stock_label">Current stock</string>
+    <string name="drug_take_label">Take</string>
+    <string name="drug_warningTherehold_label">Alert therehold</string>
+    <string name="drug_alertTherehold_label">Critical therehold</string>
     <string name="button_keyboard">"Use the keyboard"</string>
     <string name="detail_view">Detail view</string>
     <string name="scan_action">Scan a drug barcode</string>
@@ -47,7 +47,7 @@
     <string name="pilldroid_icon">PillDroid Icon</string>
     <string name="the_plus_icon">The plus icon</string>
     <string name="slide4_desc">In order to find the CIP13</string>
-    <string name="slide5_desc">Stock is ok</string>
+    <string name="slide5_desc">Stock is OK</string>
     <string name="slide6_desc">Warning stock in rising down</string>
     <string name="slide7_desc">Alert stock too low</string>
     <string name="happy_face">Happy face</string>
@@ -56,23 +56,23 @@
     <string name="neutral_face">neutral face</string>
     <string name="unhappy_face">unhappy face</string>
     <string name="slide8_desc">Drug info</string>
-    <string name="medicament_info">Drug info screenshot</string>
+    <string name="drug_info">Drug info screenshot</string>
     <string name="slide9_desc">Tunables informations</string>
     <string name="tunables">Tunables</string>
     <string name="slide10_desc">Take to 0 to suspend treatment</string>
     <string name="suspended_treatment_icon">Treatment suspended icon</string>
     <string name="slide11_desc">To save changes</string>
     <string name="save_icon">The save icon</string>
-    <string name="slide12_desc">Thansk for using PillDroid</string>
+    <string name="slide12_desc">Thanks for using PillDroid</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="start">Start</string>
     <string name="zero" translatable="false">0</string>
-    <string name="add_button">Add new medicament in list</string>
-    <string name="nom_m_dicament">Drug Name</string>
-    <string name="icone_de_stock">Stock Icon</string>
+    <string name="add_button">Add new drug in list</string>
+    <string name="drugName">Drug Name</string>
+    <string name="stockIcon">Stock Icon</string>
     <string name="cip13_goes_here">cip13 goes here</string>
-    <string name="Date">lundi 1 janvier 2001</string>
+    <string name="Date">Monday January 1st 2001</string>
     <string name="Value">Value</string>
     <string name="label">Label</string>
 </resources>
