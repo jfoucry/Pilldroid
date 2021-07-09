@@ -1,15 +1,15 @@
 package net.foucry.pilldroid;
 
 import android.app.Activity;
-
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 /**
  * A fragment representing a single Drug detail screen.
@@ -70,7 +70,7 @@ public class DrugDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (drug != null) {
-            // Find each conponment of rootView
+            // Find each component of rootView
             nameView = detailView.findViewById(R.id.name_cell);
             TextView nameLabel = nameView.findViewById(R.id.label);
             TextView nameValue = nameView.findViewById(R.id.value);
