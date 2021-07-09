@@ -36,8 +36,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.sentry.Sentry;
-
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
@@ -377,9 +375,31 @@ public class DrugListActivity extends AppCompatActivity {
         Intent intent = new Intent(context, DrugDetailActivity.class);
         intent.putExtra("drug", aDrug);
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);  // todo deprecated
+        //openActivityForResult(intent);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
+ /*   void openActivityForResult(Intent intent) {
+            // Intent intent = new Intent(this,DrugDetailActivity.class);
+            DrugDetailActivityLaucher.launch(intent);
+    }
+
+    ActivityResultLauncher<Intent> DrugDetailActivityLaucher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // Here, no request code
+                        try {
+                            result.getData();
+                            Intent data = result.getData();
+                            Log.d(TAG, "Result data = " +data.getDataString());
+                        }
+                        catch (Exception ignored){};
+                    }
+                }
+            });*/
     /**
      * setupRecyclerView (list of drugs
      * @param recyclerView RecyclerView
@@ -474,6 +494,7 @@ public class DrugListActivity extends AppCompatActivity {
                     Intent intent = new Intent(context, DrugDetailActivity.class);
                     intent.putExtra("drug", drugCourant);
                     startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE); // todo: deprecated
+                    //openActivityForResult(intent);
                     overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 }
             });
