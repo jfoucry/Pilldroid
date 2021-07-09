@@ -70,7 +70,7 @@ public class DrugDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (drug != null) {
-            // Find each conponment of rootView
+            // Find each component of rootView
             nameView = detailView.findViewById(R.id.name_cell);
             TextView nameLabel = nameView.findViewById(R.id.label);
             TextView nameValue = nameView.findViewById(R.id.value);
