@@ -2,10 +2,10 @@
 apply plugin: 'com.android.application'
 
 ext.versionMajor = 0
-ext.versionMinor = 0
-ext.versionPatch = 20210513
+ext.versionMinor = 10
+ext.versionPatch = 20210709
 ext.versionClassifier = null
-ext.isSnapshot = false
+ext.isSnapshot = true
 ext.minimumSdkVersion = defaultMinSdkVersion
 ext.git_version= ("git rev-parse --short HEAD".execute().text.trim())
 
