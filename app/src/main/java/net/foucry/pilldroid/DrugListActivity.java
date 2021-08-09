@@ -273,7 +273,10 @@ public class DrugListActivity extends AppCompatActivity {
                 String cip13;
 
                 // Handle successful scan
-                if (result.getFormatName().equals("CODE_128")) { //CODE_128
+
+                Log.d(TAG, "formatName = " + result.getFormatName());
+
+                if (result.getFormatName().equals("CODE_128") || (result.getFormatName().equals("EAN_13"))) { //CODE_128 || EAN 13
                     cip13 = result.getContents();
                 } else {
                     cip13 = result.getContents().substring(4, 17);
