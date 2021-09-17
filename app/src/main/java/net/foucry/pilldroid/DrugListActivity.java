@@ -426,10 +426,10 @@ public class DrugListActivity extends AppCompatActivity {
     /**
      * SimpleItemRecyclerViewAdapter
      */
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Drug> mValues;
+        private int position;
 
         SimpleItemRecyclerViewAdapter(List<Drug> items) {
             mValues = items;
@@ -454,7 +454,8 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
+        public void onBindViewHolder(final ViewHolder holder, int dummy) {
+            final int position = holder.getBindingAdapterPosition();
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy", Locale.getDefault());
             String dateEndOfStock = date2String(mValues.get(position).getDateEndOfStock(), dateFormat);
 
@@ -466,9 +467,10 @@ public class DrugListActivity extends AppCompatActivity {
             Log.d(TAG, "alert == " + mValues.get(position).getAlertThreshold());
 
             holder.mItem = mValues.get(position);
-            holder.mIDView.setText(mValues.get(position).getCip13());
+//            holder.mIDView.setText(mValues.get(position).getCip13());
             holder.mContentView.setText(mValues.get(position).getName());
             holder.mEndOfStock.setText(dateEndOfStock);
+
 
             // Test to change background programmatically
             if (mValues.get(position).getTake() == 0) {
@@ -510,7 +512,7 @@ public class DrugListActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final View mView;
-            final TextView mIDView;
+//            final TextView mIDView;
             final TextView mContentView;
             final TextView mEndOfStock;
             final ImageView mIconView;
@@ -520,7 +522,7 @@ public class DrugListActivity extends AppCompatActivity {
             ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIDView = view.findViewById(R.id.cip13);
+//                mIDView = view.findViewById(R.id.cip13);
                 mContentView = view.findViewById(R.id.value);
                 mEndOfStock = view.findViewById(R.id.endOfStock);
                 mIconView = view.findViewById(R.id.list_image);
