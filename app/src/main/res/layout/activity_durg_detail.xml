@@ -52,6 +52,5 @@
         android:src="@drawable/ic_save_black_24dp"
         app:backgroundTint="@android:color/transparent"
         app:layout_anchor="@+id/drug_detail_container"
-        app:layout_anchorGravity="top|end" />
-
+        app:layout_anchorGravity="bottom|end" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

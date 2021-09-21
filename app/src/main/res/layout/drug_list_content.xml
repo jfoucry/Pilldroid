@@ -33,17 +33,6 @@
             android:layout_marginStart="5dp" />
 
         <TextView
-            android:id="@+id/cip13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#343434"
-            android:textSize="14sp"
-            android:text="@string/cip13_goes_here"
-            android:layout_below="@+id/value"
-            android:layout_toEndOf="@+id/list_image"
-            android:layout_marginStart="5dp" />
-
-        <TextView
             android:id="@+id/endOfStock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
