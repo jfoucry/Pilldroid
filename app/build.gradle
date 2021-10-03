@@ -2,8 +2,8 @@
 apply plugin: 'com.android.application'
 
 ext.versionMajor = 0
-ext.versionMinor = 50
-ext.versionPatch = 20210929
+ext.versionMinor = 55
+ext.versionPatch = 20211003
 ext.versionClassifier = null
 ext.isSnapshot = false
 ext.minimumSdkVersion = defaultMinSdkVersion
