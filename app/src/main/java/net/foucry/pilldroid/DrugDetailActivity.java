@@ -138,19 +138,10 @@ public class DrugDetailActivity extends AppCompatActivity {
         TextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
 
-
-/*        Log.d(TAG, "StockValue ==  "+ stockValue);
-        Log.d(TAG, "TakeValue ==  "+ takeValue);
-        Log.d(TAG, "AlertValue ==  "+ alertValue);
-        Log.d(TAG, "WarningValue ==  "+ warningValue);
-        Log.d(TAG, "medicamentID == "+ drug.getId());
-        Log.d(TAG, "drug == "+ drug.toString());*/
-
         newDrug.setStock(Double.parseDouble(stockValue));
         newDrug.setTake(Double.parseDouble(takeValue));
         newDrug.setWarnThreshold(Integer.parseInt(warningValue));
         newDrug.setAlertThreshold(Integer.parseInt(alertValue));
-        // newDrug.setDateLastUpdate(UtilDate.dateAtNoon(new Date()).getTime());
         newDrug.setDateLastUpdate(new Date().getTime());
         newDrug.setDateEndOfStock();
 
