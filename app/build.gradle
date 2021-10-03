@@ -2,14 +2,19 @@
 apply plugin: 'com.android.application'
 
 ext.versionMajor = 0
-ext.versionMinor = 10
-ext.versionPatch = 20210709
+ext.versionMinor = 50
+ext.versionPatch = 20210929
 ext.versionClassifier = null
-ext.isSnapshot = true
+ext.isSnapshot = false
 ext.minimumSdkVersion = defaultMinSdkVersion
 ext.git_version= ("git rev-parse --short HEAD".execute().text.trim())
 
+
 android {
+    signingConfigs {
+        release {
+        }
+    }
     compileSdkVersion 29
 
     defaultConfig {
@@ -20,24 +25,31 @@ android {
         versionName generateVersionName() // 1.2.3-SNAPSHOT
         multiDexEnabled true
     }
+/*    flavorDimensions "version"
+    productFlavors {
+        unsigned {
+            applicationIdSuffix ".unsigned"
+        }
+    }*/
 
     buildTypes {
         release {
             minifyEnabled false
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-    }
+
     compileOptions {
         coreLibraryDesugaringEnabled true
 
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    /*dexOptions {
+    dexOptions {
         incremental false
-    }*/
+        javaMaxHeapSize "4g"
+    }
+
     allprojects {
         tasks.withType(JavaCompile) {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
@@ -64,12 +76,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
     implementation 'androidx.core:core:1.6.0'
 
 //    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
-    implementation 'io.sentry:sentry-android:4.3.0'
+    implementation 'io.sentry:sentry-android:5.2.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }
 
