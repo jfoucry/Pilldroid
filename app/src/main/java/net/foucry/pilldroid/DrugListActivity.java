@@ -237,26 +237,31 @@ public class DrugListActivity extends AppCompatActivity {
             return;
         }
         if (requestCode == CUSTOMIZED_REQUEST_CODE) {
-            Toast.makeText(this, "REQUEST_CODE = " + requestCode + "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
+            if (BuildConfig.DEBUG) { Toast.makeText(this, "REQUEST_CODE = " + requestCode +
+                    "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show(); }
             Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
             constructDrugsList();
         } else {
             IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
 
-            Toast.makeText(this, "REQUEST_CODE = " + requestCode, Toast.LENGTH_LONG).show();
+            if (BuildConfig.DEBUG) { Toast.makeText(this, "REQUEST_CODE = " + requestCode,
+                    Toast.LENGTH_LONG).show(); }
+
             Log.d(TAG, "REQUEST_CODE = " + requestCode + "resultCode = " + resultCode);
             if (result.getContents() == null) {
                 Intent originalIntent = result.getOriginalIntent();
                 if (originalIntent == null) {
                     if (resultCode == 3) {
-                        Toast.makeText(this, "Keyboard input", Toast.LENGTH_SHORT).show();
+                        if(BuildConfig.DEBUG) { Toast.makeText(this, "Keyboard input",
+                                Toast.LENGTH_SHORT).show(); }
                         Log.d(TAG, "Keyboard Input");
                         showInputDialog();
                     } else {
                         Log.d(TAG, "Cancelled scan");
                         Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
                     }
-                    Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                    if(BuildConfig.DEBUG) { Toast.makeText(this, "Cancelled",
+                            Toast.LENGTH_LONG).show(); }
                 } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
                     Log.d(TAG, "Cancelled scan due to missing camera permission");
                     Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
@@ -268,7 +273,8 @@ public class DrugListActivity extends AppCompatActivity {
                 Log.d(TAG, "result.getContents = " + result.getContents());
                 Log.d(TAG, "format = " + result.getFormatName());
 
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                if (BuildConfig.DEBUG) { Toast.makeText(this, "Scanned: " +
+                        result.getContents(), Toast.LENGTH_LONG).show(); }
 
                 String cip13;
 
@@ -377,33 +383,11 @@ public class DrugListActivity extends AppCompatActivity {
         Context context = this;
         Intent intent = new Intent(context, DrugDetailActivity.class);
         intent.putExtra("drug", aDrug);
-        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);  // todo deprecated
-        //openActivityForResult(intent);
+        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
- /*   void openActivityForResult(Intent intent) {
-            // Intent intent = new Intent(this,DrugDetailActivity.class);
-            DrugDetailActivityLaucher.launch(intent);
-    }
-
-    ActivityResultLauncher<Intent> DrugDetailActivityLaucher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // Here, no request code
-                        try {
-                            result.getData();
-                            Intent data = result.getData();
-                            Log.d(TAG, "Result data = " +data.getDataString());
-                        }
-                        catch (Exception ignored){};
-                    }
-                }
-            });*/
-    /**
+     /**
      * setupRecyclerView (list of drugs
      * @param recyclerView RecyclerView
      */
@@ -467,7 +451,6 @@ public class DrugListActivity extends AppCompatActivity {
             Log.d(TAG, "alert == " + mValues.get(position).getAlertThreshold());
 
             holder.mItem = mValues.get(position);
-//            holder.mIDView.setText(mValues.get(position).getCip13());
             holder.mContentView.setText(mValues.get(position).getName());
             holder.mEndOfStock.setText(dateEndOfStock);
 
@@ -498,8 +481,7 @@ public class DrugListActivity extends AppCompatActivity {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, DrugDetailActivity.class);
                     intent.putExtra("drug", drugCourant);
-                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE); // todo: deprecated
-                    //openActivityForResult(intent);
+                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                     overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 }
             });
