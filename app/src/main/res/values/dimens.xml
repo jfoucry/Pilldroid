@@ -4,6 +4,9 @@
     <dimen name="app_bar_height">75dp</dimen>
     <dimen name="item_width">200dp</dimen>
     <dimen name="dp19">19dp</dimen>
+    <dimen name="fab_height">48dp</dimen>
+    <dimen name="fab_width">48dp</dimen>
+    <dimen name="fab_marginTop">32dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
 
     <!-- Slide dimens -->

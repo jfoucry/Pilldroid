@@ -10,29 +10,28 @@
         android:id="@+id/name_cell"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5sp"
         layout="@layout/info_cell" />
 
     <include
         android:id="@+id/presentation_cell"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/info_cell"
-        android:layout_marginTop="5sp" />
+        layout="@layout/info_cell"/>
+<!--        android:layout_marginTop="5sp" />-->
 
     <include
         android:id="@+id/administration_cell"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/info_cell"
-        android:layout_marginTop="5sp" />
+        layout="@layout/info_cell"/>
+<!--        android:layout_marginTop="5sp" />-->
 
     <include
         android:id="@+id/stock_cell"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/value_input"
-        android:layout_marginTop="30sp" />
+        layout="@layout/value_input"/>
+<!--        android:layout_marginTop="30sp" />-->
 
     <include
         android:id="@+id/take_cell"
@@ -44,8 +43,8 @@
         android:id="@+id/warning_cell"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/value_input"
-        android:layout_marginTop="15sp" />
+        layout="@layout/value_input"/>
+<!--        android:layout_marginTop="15sp" />-->
 
     <include
         android:id="@+id/alert_cell"

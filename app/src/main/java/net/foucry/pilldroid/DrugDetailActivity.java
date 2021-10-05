@@ -42,7 +42,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         assert drug != null;
         Log.d(TAG, "drug == " + drug.toString());
 
-        setContentView(R.layout.activity_durg_detail);
+        setContentView(R.layout.activity_drug_detail);
         Toolbar toolbar = findViewById(detail_toolbar);
 
 
