@@ -25,12 +25,6 @@ android {
         versionName generateVersionName() // 1.2.3-SNAPSHOT
         multiDexEnabled true
     }
-/*    flavorDimensions "version"
-    productFlavors {
-        unsigned {
-            applicationIdSuffix ".unsigned"
-        }
-    }*/
 
     buildTypes {
         release {
