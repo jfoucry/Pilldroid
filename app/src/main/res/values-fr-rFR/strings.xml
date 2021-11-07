@@ -73,4 +73,5 @@
     <string name="Date">lundi 1 janvier 2001</string>
     <string name="Value">Valeur</string>
     <string name="label">Libellé</string>
+    <string name="drug_list">Attributs d\'un médicament</string>
 </resources>
