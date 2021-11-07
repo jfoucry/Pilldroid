@@ -38,8 +38,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             Log.d(TAG, "StartUpBootReceiver BOOT_COMPLETED");
             scheduleAlarm(context);
         }
-        
-        Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show();
+
+        if (BuildConfig.DEBUG) { Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show(); }
         createNotificationChannel(context);
         DBHelper dbHelper = new DBHelper(context);
         dbHelper.getAllDrugs();
@@ -123,33 +123,18 @@ public class AlarmReceiver extends BroadcastReceiver {
         Date today;
         Date tomorrow;
 
-        /*if (BuildConfig.DEBUG) {
-            calendar.add(Calendar.HOUR_OF_DAY, 12);
-            today = calendar.getTime();
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-            tomorrow = calendar.getTime();
-        } else {*/
-            calendar.set(Calendar.HOUR_OF_DAY, 11);
-            today = calendar.getTime();
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-            tomorrow = calendar.getTime();
-//        }
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
+        today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        tomorrow = calendar.getTime();
 
         LocalTime todayNow = LocalTime.now();
 
         if (todayNow.isBefore(LocalTime.NOON)) {
-            // schedule date = today
-            //calendar.setTimeInMillis(dateAtNoon(today).getTime());
             calendar.setTimeInMillis(today.getTime());
         } else {
-            // schedule date = tomorrow
             calendar.setTimeInMillis(tomorrow.getTime());
         }
-
-/*        if (BuildConfig.DEBUG)
-        {
-            calendar.setTimeInMillis(today.getTime());
-        }*/
 
         PendingIntent alarmIntent;
 
@@ -158,18 +143,11 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        boolean alarmUp = (PendingIntent.getBroadcast(context, 0, intent,
-                PendingIntent.FLAG_NO_CREATE) != null);
-        if (alarmUp) {
-            Log.d(TAG, "Alarm already active");
-        }
-
-
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
                 AlarmManager.INTERVAL_DAY, alarmIntent);
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
 
-        Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+        if (BuildConfig.DEBUG) { Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show(); }
     }
 }
