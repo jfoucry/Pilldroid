@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/list_selector"
-    android:backgroundTint="@android:color/transparent"
+    android:backgroundTint="@color/cardview_shadow_start_color"
     android:fitsSystemWindows="true"
     tools:context="net.foucry.pilldroid.DrugDetailActivity"
     tools:ignore="MergeRootFrame">
@@ -13,6 +13,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
+        android:background="@color/ic_launcher_background"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -31,26 +32,26 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/drug_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:contentDescription="@string/drug_list"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    </androidx.core.widget.NestedScrollView>
 
     <ImageButton
         android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_width="@dimen/fab_width"
+        android:layout_height="@dimen/fab_height"
+        android:layout_gravity="end|top"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:backgroundTint="@android:color/transparent"
         android:contentDescription="@string/save_button"
         android:src="@drawable/ic_save_black_24dp"
-        app:backgroundTint="@android:color/transparent"
-        app:layout_anchor="@+id/drug_detail_container"
-        app:layout_anchorGravity="bottom|end" />
+        app:backgroundTint="@android:color/transparent"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
