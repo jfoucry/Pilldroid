@@ -93,14 +93,6 @@ public class DrugListActivity extends AppCompatActivity {
 
     private SimpleItemRecyclerViewAdapter mAdapter;
 
-    public int getCount() {
-        return drugs.size();
-    }
-
-    public Drug getItem(int position) {
-        return drugs.get(position);
-    }
-
     public void constructDrugsList()
     {
         dbHelper = new DBHelper(getApplicationContext());
@@ -413,8 +405,6 @@ public class DrugListActivity extends AppCompatActivity {
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Drug> mValues;
-        private int position;
-
         SimpleItemRecyclerViewAdapter(List<Drug> items) {
             mValues = items;
         }
@@ -422,10 +412,11 @@ public class DrugListActivity extends AppCompatActivity {
         void addItem(Drug scannedDrug) {
             if (!dbHelper.isDrugExist(scannedDrug.getCip13())) {
                 mValues.add(scannedDrug);
-                notifyDataSetChanged();
+                //notifyDataSetChanged();
+                notifyItemInserted(mValues.size());
                 dbHelper.addDrug(scannedDrug);
             } else {
-                Toast.makeText(getApplicationContext(), "already in the database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "already in the database", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -494,7 +485,6 @@ public class DrugListActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final View mView;
-//            final TextView mIDView;
             final TextView mContentView;
             final TextView mEndOfStock;
             final ImageView mIconView;
@@ -504,7 +494,6 @@ public class DrugListActivity extends AppCompatActivity {
             ViewHolder(View view) {
                 super(view);
                 mView = view;
-//                mIDView = view.findViewById(R.id.cip13);
                 mContentView = view.findViewById(R.id.value);
                 mEndOfStock = view.findViewById(R.id.endOfStock);
                 mIconView = view.findViewById(R.id.list_image);
