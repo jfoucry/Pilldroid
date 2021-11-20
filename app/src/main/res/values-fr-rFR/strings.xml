@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PillDroid</string>
     <string name="title_drug_detail">Détail Médicament</string>
     <string name="button_cancel">Annuler</string>
     <string name="button_ok">OK</string>

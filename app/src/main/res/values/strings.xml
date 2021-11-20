@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">PillDroid</string>
     <string name="title_drug_detail">Drug Detail</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
