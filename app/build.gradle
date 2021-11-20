@@ -2,17 +2,22 @@
 apply plugin: 'com.android.application'
 
 ext.versionMajor = 0
-ext.versionMinor = 55
-ext.versionPatch = 20211003
+ext.versionMinor = 60
+ext.versionPatch = 20211115
 ext.versionClassifier = null
 ext.isSnapshot = false
 ext.minimumSdkVersion = defaultMinSdkVersion
 ext.git_version= ("git rev-parse --short HEAD".execute().text.trim())
 
-
 android {
     signingConfigs {
         release {
+        }
+        prerelease {
+            storeFile file('/home/jacques/.config/keystore')
+            storePassword 'nifgk/Cr'
+            keyAlias 'prerelase'
+            keyPassword 'nifgk/Cr'
         }
     }
     compileSdkVersion 29
@@ -27,9 +32,37 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            applicationIdSuffix ".debug"
+        }
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+        }
+        prerelease {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.prerelease
+        }
+    }
+    flavorDimensions "version"
+    productFlavors {
+        dev {
+            resValue "string", "app_name", "PillDroid dev"
+            dimension ="version"
+        }
+
+        product {
+            resValue "string", "app_name", "PillDroid"
+            dimension ="version"
+        }
+        preproduct {
+            resValue "string", "app_name", "PillDroid Pre-Release"
+            dimension ="version"
         }
     }
 
@@ -70,12 +103,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
     implementation 'androidx.core:core:1.6.0'
 
 //    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
-    implementation 'io.sentry:sentry-android:5.2.0'
+    implementation 'io.sentry:sentry-android:5.4.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }
 
