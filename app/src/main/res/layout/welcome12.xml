@@ -11,7 +11,7 @@
         android:layout_width="@dimen/img_width_height"
         android:layout_height="@dimen/img_width_height"
         android:contentDescription="@string/pilldroid_icon"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:src="@drawable/pilldroid_icon" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:paddingLeft="@dimen/desc_padding"

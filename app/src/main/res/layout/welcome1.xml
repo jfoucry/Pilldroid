@@ -13,7 +13,7 @@
         android:layout_width="@dimen/img_width_height"
         android:layout_height="@dimen/img_width_height"
         android:contentDescription="@string/pilldroid_icon"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:src="@drawable/pilldroid_icon" />
 
     <TextView
         android:layout_width="wrap_content"

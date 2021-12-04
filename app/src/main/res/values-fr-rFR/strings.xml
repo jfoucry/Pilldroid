@@ -52,7 +52,7 @@
     <string name="suspended_treatment_icon">Icône de traitemernt suspendu</string>
     <string name="slide11_desc">Pour enregistrer les changements, utilisez l\'icône de sauvegarde</string>
     <string name="save_icon">l\'icône de sauvegarde</string>
-    <string name="slide12_desc">Plus de renseignements sur \n https://pilldroid.foucry.net</string>
+    <string name="slide12_desc">Plus de renseignements sur <a href="https://pilldroid.foucry.net">https://pilldroid.foucry.net</a></string>
     <string name="skip">Passer</string>
     <string name="next">Suivant</string>
     <string name="start">Démarrer</string>
