@@ -4,7 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="black_overlay">#66000000</color>
     <!-- slide bg -->
     <color name="bg_screen1">#4f91ff</color>
     <color name="bg_screen2">#fb9c25</color>
@@ -16,7 +15,6 @@
     <color name="dot_light">#7f7f5d</color>
     <color name="dot_dark">#000000</color>
 
-    <color name="tutorial_buttonTextColor">#000000</color>
     <color name="led">#31f623</color>
     <color name="grey">#777</color>
 </resources>
