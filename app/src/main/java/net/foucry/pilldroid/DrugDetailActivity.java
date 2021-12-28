@@ -28,6 +28,8 @@ public class DrugDetailActivity extends AppCompatActivity {
     private static final String TAG = DrugDetailActivity.class.getName();
 
     Drug drug;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,8 +111,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getMDrugChanges()
-    {
+    private void getMDrugChanges() {
         Log.d(TAG, "Time to save new values");
 
         DBHelper dbHelper = new DBHelper(this);
@@ -142,9 +143,14 @@ public class DrugDetailActivity extends AppCompatActivity {
         newDrug.setTake(Double.parseDouble(takeValue));
         newDrug.setWarnThreshold(Integer.parseInt(warningValue));
         newDrug.setAlertThreshold(Integer.parseInt(alertValue));
-        newDrug.setDateLastUpdate(new Date().getTime());
         newDrug.setDateEndOfStock();
 
-        dbHelper.updateDrug(newDrug);
+        if (drug.equals(newDrug)) {
+            Log.d(TAG, "drug and newDrug are Equals");
+        } else {
+            Log.d(TAG, "drug and newDrug are NOT Equals");
+            newDrug.setDateLastUpdate(new Date().getTime());
+            dbHelper.updateDrug(newDrug);
+        }
     }
 }
