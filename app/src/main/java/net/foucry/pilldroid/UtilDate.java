@@ -5,6 +5,7 @@ import android.util.Log;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -95,7 +96,7 @@ class UtilDate {
      * @return formatted Date String
      */
     static String convertDate(long dateInMilliseconds) {
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm:ss", Locale.FRANCE);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(dateInMilliseconds);
         return formatter.format(calendar.getTime());
