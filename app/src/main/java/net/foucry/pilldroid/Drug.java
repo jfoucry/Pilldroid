@@ -5,6 +5,7 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 import static net.foucry.pilldroid.UtilDate.dateAtNoon;
 import static net.foucry.pilldroid.UtilDate.nbOfDaysBetweenDateAndToday;
@@ -148,17 +149,17 @@ public class Drug implements Serializable {
     }
 
     void setDateEndOfStock() {
-        int numberDayOfPrise;
+        int numberDayOfTake;
         if (this.take > 0) {
-            numberDayOfPrise = (int) Math.floor(this.stock / this.take);
+            numberDayOfTake = (int) Math.floor(this.stock / this.take);
         } else {
-            numberDayOfPrise = 0;
+            numberDayOfTake = 0;
         }
 
         Date aDate = dateAtNoon(new Date());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(aDate);
-        calendar.add(Calendar.DAY_OF_YEAR, numberDayOfPrise);
+        calendar.add(Calendar.DAY_OF_YEAR, numberDayOfTake);
 
         this.dateEndOfStock = calendar.getTime();
     }
@@ -174,5 +175,16 @@ public class Drug implements Serializable {
             setStock(getStock() - takeDuringPeriod);
             setDateLastUpdate(new Date().getTime());
         }
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Drug drug = (Drug) o;
+        return stock == drug.stock &&
+                take == drug.take &&
+                alertThreshold == drug.alertThreshold &&
+                warnThreshold == drug.warnThreshold &&
+                Objects.equals(name, drug.name);
     }
 }
