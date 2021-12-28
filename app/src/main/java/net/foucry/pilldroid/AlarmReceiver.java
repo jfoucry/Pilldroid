@@ -65,7 +65,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                             | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "PillDroid")
                             .setSmallIcon(R.drawable.ic_pill_alarm)
@@ -139,7 +139,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent alarmIntent;
 
         Intent intent = new Intent(context, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 

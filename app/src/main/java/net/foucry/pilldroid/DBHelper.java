@@ -315,6 +315,7 @@ class DBHelper extends SQLiteOpenHelper {
     public void updateDrug(Drug drug) {
 
         Log.d(TAG, "Update Drug == " + drug.toString());
+        Log.d(TAG, "drug last_update == " + UtilDate.convertDate(drug.getDateLastUpdate()));
 
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
