@@ -274,10 +274,20 @@ public class DrugListActivity extends AppCompatActivity {
 
                 Log.d(TAG, "formatName = " + result.getFormatName());
 
-                if (result.getFormatName().equals("CODE_128") || (result.getFormatName().equals("EAN_13"))) { //CODE_128 || EAN 13
-                    cip13 = result.getContents();
-                } else {
-                    cip13 = result.getContents().substring(4, 17);
+                switch (result.getFormatName()) {
+                    case "CODE_128":
+                    case "EAN_13":  //CODE_128 || EAN 13
+                        cip13 = result.getContents();
+                        break;
+                    case "CODE_39":
+                        cip13 = dbDrug.getCIP13FromCIP7(result.getContents());
+                        break;
+                    case "DATA_MATRIX":
+                        cip13 = result.getContents().substring(4, 17);
+                        break;
+                    default:
+                        scanNotOK();
+                        return;
                 }
 
                 // Get Drug from database
@@ -363,6 +373,21 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     /**
+     * Tell user that the barre code cannot be interpreted
+     */
+    private void scanNotOK()
+    {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle(getString(R.string.app_name));
+
+        dlg.setMessage(R.string.notInterpreted);
+        dlg.setPositiveButton("OK", (dialog, which) -> {
+            // Nothing to do just dismiss dialog
+        });
+        dlg.show();
+    }
+
+    /**
      * Add New drug to the user database
      * @param aDrug Drug - drug to be added
      */
@@ -378,7 +403,6 @@ public class DrugListActivity extends AppCompatActivity {
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
-
      /**
      * setupRecyclerView (list of drugs
      * @param recyclerView RecyclerView
@@ -389,7 +413,6 @@ public class DrugListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    // TODO: remove in release
     private String getAppName() {
         PackageManager packageManager = getApplicationContext().getPackageManager();
         ApplicationInfo applicationInfo = null;
