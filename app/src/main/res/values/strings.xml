@@ -65,4 +65,5 @@
     <string name="Value">Value</string>
     <string name="label">Label</string>
     <string name="drug_list">Drug\'s attributes</string>
+    <string name="notInterpreted">Barre code cannot be intrepreted</string>
 </resources>
