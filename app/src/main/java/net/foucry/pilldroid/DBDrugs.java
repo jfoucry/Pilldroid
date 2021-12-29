@@ -2,6 +2,7 @@ package net.foucry.pilldroid;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -27,11 +28,12 @@ class DBDrugs extends SQLiteOpenHelper {
     private static final String TABLE_NAME  = "drugs";
     private static final String DRUG_CIS    = "cis";
     private static final String DRUG_CIP13  = "cip13";
+    private static final String DRUG_CIP7   = "cip7";
     private static final String DRUG_ADMIN  = "administration_mode";
     private static final String DRUG_NAME   = "name";
     private static final String DRUG_PRES   = "presentation";
 
-    private static final String[] COLUMNS_NAMES = {DRUG_CIS, DRUG_CIP13, DRUG_ADMIN, DRUG_NAME, DRUG_PRES};
+    private static final String[] COLUMNS_NAMES = {DRUG_CIS, DRUG_CIP13, DRUG_CIP7, DRUG_ADMIN, DRUG_NAME, DRUG_PRES};
 
     private static final String TAG = DBDrugs.class.getName();
 
@@ -141,9 +143,9 @@ class DBDrugs extends SQLiteOpenHelper {
             // drug.setId(Integer.parseInt(cursor.getString(0)));
             drug.setCis(cursor.getString(0));
             drug.setCip13(cursor.getString(1));
-            drug.setAdministration_mode(cursor.getString(2));
-            drug.setName(cursor.getString(3));
-            drug.setPresentation(cursor.getString(4));
+            drug.setAdministration_mode(cursor.getString(3));
+            drug.setName(cursor.getString(4));
+            drug.setPresentation(cursor.getString(5));
 
             // Set default values
             drug.setStock(0);
@@ -153,6 +155,74 @@ class DBDrugs extends SQLiteOpenHelper {
 
             // Log
             Log.d(TAG, "getDrug(" + cip13 + ")" + drug.toString());
+
+            // Return drug
+
+            cursor.close();
+            return drug;
+        } else
+            return null;
+    }
+
+    String getCIP13FromCIP7(String cip7) {
+
+            String cip13 = null;
+
+            try {
+                Cursor c = this.getReadableDatabase().rawQuery("SELECT cip13 FROM "+ TABLE_NAME + " where cip7 = "+cip7, null);
+
+                Log.d(TAG, "Cursor == " + DatabaseUtils.dumpCursorToString(c));
+
+                c.moveToFirst();
+
+                if(c.getCount()>0)
+                {
+                    cip13 = c.getString(0);
+                }
+                c.close();
+            } catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            return cip13;
+        }
+
+    Drug getDrugByCIP7(String cip7) {
+        Log.d(TAG, "CIP7 - " + cip7);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build query
+        Cursor cursor = db.query(TABLE_NAME,               // Which table
+                COLUMNS_NAMES,                             // column names
+                " cip7 =?",                       // selections
+                new String[]{cip7},                       // selections args
+                null,                              // group by
+                null,                               // having
+                null,                              // order by
+                null);                                // limits
+        //Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " where cip13 = " + cip13, null);
+        if (cursor.getCount() != 0) {
+
+            cursor.moveToFirst();
+
+            // Build drug object
+            Drug drug = new Drug();
+            // drug.setId(Integer.parseInt(cursor.getString(0)));
+            drug.setCis(cursor.getString(0));
+            drug.setCip13(cursor.getString(1));
+            drug.setAdministration_mode(cursor.getString(3));
+            drug.setName(cursor.getString(4));
+            drug.setPresentation(cursor.getString(5));
+
+            // Set default values
+            drug.setStock(0);
+            drug.setTake(0);
+            drug.setWarnThreshold(14);
+            drug.setAlertThreshold(7);
+
+            // Log
+            Log.d(TAG, "getDrug(" + cip7 + ")" + drug.toString());
 
             // Return drug
 
