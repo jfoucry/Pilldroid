@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 ext.versionMajor = 0
 ext.versionMinor = 65
-ext.versionPatch = 20211204
+ext.versionPatch = new Date().format("yyyyMMdd")
 ext.versionClassifier = null
 ext.isSnapshot = false
 ext.minimumSdkVersion = defaultMinSdkVersion
@@ -113,7 +113,7 @@ dependencies {
 }
 
 private Integer generateVersionCode() {
-    return ext.minimumSdkVersion * 10000000 + ext.versionMajor * 10000 + ext.versionMinor * 100 + ext.versionPatch
+    return ext.minimumSdkVersion * 1000 + ext.versionMajor * 100 + ext.versionMinor
 }
 
 private String generateVersionName() {
