@@ -44,3 +44,5 @@ Thumbs.db
 
 *.class
 gen/
+/android-signing-keystore.jks
+/secrets.properties
