@@ -127,7 +127,9 @@ dependencies {
 }
 
 private Integer generateVersionCode() {
-    return ext.minimumSdkVersion * 1000 + ext.versionMajor * 100 + ext.versionMinor
+    Integer versionCode = ext.minimumSdkVersion * 1000 + ext.versionMajor * 100 + ext.versionMinor
+    print "versionCode = " + versionCode +"\n"
+    return versionCode
 }
 
 private String generateVersionName() {
@@ -144,6 +146,6 @@ private String generateVersionName() {
         versionName += "-" + ext.git_version
     }
 
-    print "Version name = " + versionName
+    print "versionName = " + versionName
     return versionName
 }
