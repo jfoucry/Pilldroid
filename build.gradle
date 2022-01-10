@@ -24,6 +24,7 @@ ext {
     defaultTargetSdkVersion = 30
     defaultVersionCode = 1
     defaultVersionCode1 = defaultVersionCode
+    defaultVersionName = 'beta-0.+$versioncode'
 }
 
 allprojects {
