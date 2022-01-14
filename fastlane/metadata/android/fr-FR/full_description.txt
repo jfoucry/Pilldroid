@@ -35,7 +35,7 @@ et mis en base de données par un script python qui sera prochainement accessibl
 l'adresse suivante <a href="https://pilldroid.foucry.net">pilldroid.foucry.net</a></p>
 <strong>Sous quel licence est distribué Pilldroid ?</strong>
 <p>Pilldroid est distribué sous la licence <a href="https://tldrlegal.com/license/bsd-3-clause-license-(revised)">
-BSD 3-Clause revisited</a></p>
+BSD 3-Clause revised</a></p>
 <strong>L'application Pilldroid embarque t'elle des bibliothèques tierce ?</strong>
 <p>Oui, Pilldroid embarque deux bibliothèques tierce :
 <ul>
