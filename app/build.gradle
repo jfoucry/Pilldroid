@@ -26,12 +26,16 @@ else {
 android {
     signingConfigs {
         release {
+            storeFile file('../android-signing-keystore.jks')
+            storePassword secretProperties['signing_keystore_password']
+            keyAlias secretProperties['signing_release_alias_key']
+            keyPassword secretProperties['signing_release_key_password']
         }
         prerelease {
             storeFile file("../android-signing-keystore.jks")
             storePassword secretProperties['signing_keystore_password']
-            keyAlias secretProperties['signing_key_alias']
-            keyPassword secretProperties['signing_key_password']
+            keyAlias secretProperties['signing_pre-release_key_alias']
+            keyPassword secretProperties['signing_pre-release_key_password']
         }
     }
     compileSdkVersion 29
@@ -41,7 +45,7 @@ android {
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
         versionCode 100
-        versionName "beta+0.100"
+        versionName "beta-0.100"
         multiDexEnabled true
     }
 
@@ -55,6 +59,7 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
+            signingConfig signingConfigs.release
         }
         prerelease {
             minifyEnabled false
