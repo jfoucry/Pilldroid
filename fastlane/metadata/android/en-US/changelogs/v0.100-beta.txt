@@ -5,7 +5,7 @@
 I made a lot a tests but there must stay some bugs.
 
 ## What is not working
-- QR-code scanne on a dark background. The library I use does not
+- QR-code scan on a dark background. The library I use does not
 find the code.
 
 ## What is not implemented
