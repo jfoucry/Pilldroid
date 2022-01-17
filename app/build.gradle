@@ -45,7 +45,7 @@ android {
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
         versionCode 100
-        versionName "v0.101-beta"
+        versionName "V0.101-beta"
         multiDexEnabled true
     }
 
