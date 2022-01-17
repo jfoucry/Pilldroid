@@ -26,13 +26,13 @@ else {
 android {
     signingConfigs {
         release {
-            storeFile file('../android-signing-keystore.jks')
+            storeFile rootProject.file("android-signing-keystore.jks")
             storePassword secretProperties['signing_keystore_password']
             keyAlias secretProperties['signing_release_alias_key']
             keyPassword secretProperties['signing_release_key_password']
         }
         prerelease {
-            storeFile file("../android-signing-keystore.jks")
+            storeFile rootProject.file("android-signing-keystore.jks")
             storePassword secretProperties['signing_keystore_password']
             keyAlias secretProperties['signing_pre-release_key_alias']
             keyPassword secretProperties['signing_pre-release_key_password']
@@ -45,7 +45,7 @@ android {
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
         versionCode 100
-        versionName "v0.100-beta"
+        versionName "v0.101-beta"
         multiDexEnabled true
     }
 
