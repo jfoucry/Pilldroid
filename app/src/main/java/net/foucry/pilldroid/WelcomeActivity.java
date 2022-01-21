@@ -180,7 +180,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         }
         else {
-            //noinspection
+            //noinspection deprecation
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
