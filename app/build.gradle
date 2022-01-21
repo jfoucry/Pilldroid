@@ -1,14 +1,6 @@
 //noinspection GradleCompatible
 apply plugin: 'com.android.application'
 
-/*ext.versionMajor = 0
-ext.versionMinor = 65
-ext.versionPatch = new Date().format("yyyyMMdd")
-ext.versionClassifier = null
-ext.isSnapshot = false
-ext.minimumSdkVersion = defaultMinSdkVersion
-ext.git_version= ("git rev-parse --short HEAD".execute().text.trim())*/
-
 // Try reading secrets from file
 def secretsPropertiesFile = rootProject.file("secrets.properties")
 def secretProperties = new Properties()
@@ -127,26 +119,3 @@ dependencies {
     implementation 'io.sentry:sentry-android:5.4.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }
-
-/*
-private Integer generateVersionCode() {
-    return ext.minimumSdkVersion * 1000 + ext.versionMajor * 100 + ext.versionMinor
-}
-
-private String generateVersionName() {
-    String versionName = "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
-    if (ext.versionClassifier == null && ext.isSnapshot) {
-        ext.versionClassifier = "SNAPSHOT"
-    }
-
-    if (ext.versionClassifier != null) {
-        versionName += "-" + ext.versionClassifier
-    }
-
-    if (ext.git_version != null) {
-        versionName += "-" + ext.git_version
-    }
-
-    print "Version name = " + versionName
-    return versionName
-}*/
