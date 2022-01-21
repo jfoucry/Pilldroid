@@ -26,7 +26,8 @@ lancer son cycle de réveil journalier ;
 - Pilldroid a besoin d'accéder à l'appareil photo de votre téléphone pour
   scanner le code barre des boites de médicaments ;
 - Pilldroid a besoin de pouvoir vous envoyer des alarmes ;
-- Pilldroid a besoin de faire vibrer le téléphone pour les alarmes.
+- Pilldroid a besoin de faire vibrer le téléphone pour les alarmes ;
+- Pilldroid utilise un accès Interent pour les remontée de crash *via* la bibliothèque [sentry.io](https://sentry.io).
   
 ## L'application Pilldroid embarque-t-elle des bibliothèques tierce ?
 
