@@ -85,4 +85,4 @@ en ligne.
 
 ## L'application Pilldroid dispose telle d'un site web ?
 
-Oui, [Pilldroid](https://pildroid.foucry.net)
+Oui, [Pilldroid](https://pilldroid.foucry.net)
