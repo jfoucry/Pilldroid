@@ -1,8 +1,11 @@
 package net.foucry.pilldroid;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
+
+import io.sentry.Sentry;
 
 public class Utils {
     private static final String TAG = UtilDate.class.getName();
@@ -20,8 +23,11 @@ public class Utils {
                   break;
               os.write(bytes, 0, count);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Sentry.captureException(e);
         }
-        catch(Exception ignored){}
+
     }
 
     /**

@@ -13,6 +13,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.List;
 
+import io.sentry.Sentry;
+
 
 /**
  * Created by jacques on 17/09/16.
@@ -56,6 +58,7 @@ public class PillDroidJobService extends JobService {
         catch (Exception e){
             Log.e(TAG, e.toString());
             e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         if (firstDrug != null) {
@@ -130,6 +133,7 @@ public class PillDroidJobService extends JobService {
                 // Exception Create That Error  Object and throw it
                 //E.g: FileNotFoundException ,etc
                 e.printStackTrace();
+                Sentry.captureException(e);
             }
         }
     }
