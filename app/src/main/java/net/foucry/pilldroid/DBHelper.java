@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import io.sentry.Sentry;
+
 /**
  * Created by jacques on 24/04/16.
  */
@@ -402,6 +404,7 @@ class DBHelper extends SQLiteOpenHelper {
         } catch(Exception e)
         {
             e.printStackTrace();
+            Sentry.captureException(e);
         }
         return value;
     }

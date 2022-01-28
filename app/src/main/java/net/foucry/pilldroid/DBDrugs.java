@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import io.sentry.Sentry;
+
 
 /**
  * Created by jfoucry on 5/25/16.
@@ -46,9 +48,11 @@ class DBDrugs extends SQLiteOpenHelper {
 
     public boolean isDBFileExist(File database)
     {
-        try {
+        try  {
             myContext.getDatabasePath(String.valueOf(database));
-        } catch (final Exception exception) {
+        }
+        catch (final Exception e){
+            Sentry.captureException(e);
             return false;
         }
         return true;
@@ -103,6 +107,7 @@ class DBDrugs extends SQLiteOpenHelper {
             assetDB.close();
         } catch (IOException e) {
             e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 
@@ -183,6 +188,7 @@ class DBDrugs extends SQLiteOpenHelper {
             } catch(Exception e)
             {
                 e.printStackTrace();
+                Sentry.captureException(e);
             }
             return cip13;
         }

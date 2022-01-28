@@ -18,6 +18,8 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
+import io.sentry.Sentry;
+
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -54,6 +56,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         catch (Exception e){
             Log.e(TAG, e.toString());
             e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         if (firstDrug != null) {
@@ -115,6 +118,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 // Exception Create That Error  Object and throw it
                 //E.g: FileNotFoundException ,etc
                 e.printStackTrace();
+                Sentry.captureException(e);
             }
         }
     }
