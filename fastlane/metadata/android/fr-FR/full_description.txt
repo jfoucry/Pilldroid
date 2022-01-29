@@ -1,65 +1,14 @@
 <p><strong>Pilldroid</strong> est un gestionnaire théorique de stock médicaments.</p>
 
 <strong>Pourquoi <em>théorique</em> ?</strong>
-<p>Pilldroid n'a aucun moyen de savoir si vous avez réellement pris vos médicaments.
+<p>*Pilldroid* n'a aucun moyen de savoir si vous avez réellement pris vos médicaments.
 C'est de votre responsabilité et Pilldroid ne vous le demande pas.</p>
 
-<strong>Comment fonctionne Pilldroid ?</strong>
+<strong>Pour en savoir plus</strong>
 <p>
 <ul>
-    <li>Pilldroid embarque une base de données de prés de 15 000 médicaments, remboursés par
-la Sécurité Sociale.</li>
-    <li>Lorsque vous scannez le code barre d'un médicament et que celui-ci est trouvé dans la
-    base, il est ajouté à la liste des médicaments que vous prenez.</li>
-    <li>vous définissez alors le stock de médicaments que vous possédez et la prise quotidienne de
-    ce médicament.</li>
-    <li>Vous pouvez aussi définir les seuils d'alerte et critique pour ce médicament. Ils sont
-    réglés à 14 et 7 jours par défaut.</li>
-    <li>Tous les jours entre 11h et midi, Pilldroid se relance en tâche de fond et procède au calcul
-    théorique du stock. Si le stock est en dessous du seuil d'alerte, le médicament passe de vert
-    à jaune. Si le stock est en dessous ou égal au seuil critique, le médicament passe en rouge et
-    une notification vous proposant de passer à la pharmacie vous est envoyée.</li>
-    <li>Pour suspendre un traitement il suffit de mettre la prise zéro (0), le médicament passe
-    alors en gris</li>
-    <li>Après votre passage à la pharmacie, vous renseignez votre nouveau stock.</li>
-    <li>En cas de changement de posologie par votre médecin, vous changer la prise.</li>
-  </ul>
+<li>Pour tout savoir sur *Pilldroid*, consultez le <a href="https://pilldroid.foucry.net">site we du projet</a></li>
+<li><a href="mailto://pilldroid@foucry.net">Contacter l'auteur par mail</a></li>
+</ul>
 </p>
 
-<strong>D'où vient la base de données des médicaments embarquée dans Pilldroid ?</strong>
-<p>Il s'agit d'une compilation de plusieurs fichiers au format <code>csv</code> issue du site
-<a href="http://base-donnees-publique.medicaments.gouv.fr">base-donnees-publique.medicaments.gouv.fr</a>
-et mis en base de données par un script python qui sera prochainement accessible.</p>
-<strong>Y a t'il un site web?</strong>
-<p>Oui, il comporte plus d'information que cette description et je vous invite à aller le lire à
-l'adresse suivante <a href="https://pilldroid.foucry.net">pilldroid.foucry.net</a></p>
-<strong>Sous quel licence est distribué Pilldroid ?</strong>
-<p>Pilldroid est distribué sous la licence <a href="https://tldrlegal.com/license/bsd-3-clause-license-(revised)">
-BSD 3-Clause revised</a></p>
-<strong>L'application Pilldroid embarque t'elle des bibliothèques tierce ?</strong>
-<p>Oui, Pilldroid embarque deux bibliothèques tierce :
-<ul>
-    <li>la bibliothèque <a href="https://github.com/journeyapps/zxing-android-embedded">zxing-android-embedded</a>
-    pour la lecture de code barre ;</li>
-    <li>le <a href="https://sentry.io/welcome/">SDK</a> pour la remontée des crashs de l'application
-    sans aucune remontée de vos données personnelles, en particulier la liste des médicaments de
-    votre stock.</li>
-</ul>
-<strong>L'application Pilldroid embarque t'elle des pisteurs ?</strong>
-<p>Pas à ma connaissance et pas à la connaissance de <a href="https://exodus-privacy.eu.org">Exodus
-Privacy</a></p>
-<strong>L'application Pilldroid a t'elle besoin de permissions ?</strong>
-<p>Oui, Pilldroid a besoin des permissions suivantes :
-<ul>
-    <li>Utilisation de l'appareil photo (pour le scan des code barre) ;</li>
-    <li>Lancement au démarrage du téléphone, pour initier son cycle de calcul du stock ;</li>
-    <li>Notification, pour vous annoncer qu'il est temps de passer à la pharmacie ;</li>
-    <li>Accès à Internet, permission pour <code>sentry.io</code> afin de remonter les crashs de
-    l'application.</li>
-</ul>
-<strong>D'où vient le projet Pilldroid ?</strong>
-<p>Pilldroid est avant tout un projet né pour mes besoins personnels, s'il est utile à d'autres,
-tant mieux.</p>
-<p>À l'origine le projet s'appelait <emphasis>PillStock</emphasis> et était destiné aux iPhones.
-M'éloignant de la firme à la Pomme, j'ai décidé (cela m'a pris plus de 7 ans pour avoir quelque
-chose de montrable).</p>
