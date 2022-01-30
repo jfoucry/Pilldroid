@@ -1,2 +1,2 @@
-Pilldroid is a theorical medication stock manager.
-**It's in french and use a use a french medication database** 
+Pilldroid is a theoretical medication stock manager.
+**It's in french and uses a french medication database** 
