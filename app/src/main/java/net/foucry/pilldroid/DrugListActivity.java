@@ -21,15 +21,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -212,16 +212,24 @@ public class DrugListActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    /** scanNow
-     *
-     * @param view
-     *  call ZXing Library to scan a new QR/EAN code
+    /** Register the launcher and result handler
+     * ActivityResultLauncher
      */
-    public void scanNow(View view) {
-        new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+            result -> {
+                if(result.getContents() == null) {
+                    Toast.makeText(DrugListActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(DrugListActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+    // Launch scan
+    public void onButtonClick(View view) {
+        barcodeLauncher.launch(new ScanOptions());
     }
 
-    @Override
+/*    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
             // This is important, otherwise the result will not be passed to the fragment
@@ -295,7 +303,7 @@ public class DrugListActivity extends AppCompatActivity {
                     askToAddInDB(scannedDrug);
             }
         }
-    }
+    }*/
 
     /**
      * show keyboardInput dialog
