@@ -5,8 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
-import io.sentry.Sentry;
-
 public class Utils {
     private static final String TAG = UtilDate.class.getName();
 
@@ -25,7 +23,6 @@ public class Utils {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Sentry.captureException(e);
         }
 
     }

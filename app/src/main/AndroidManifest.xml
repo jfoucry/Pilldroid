@@ -59,7 +59,5 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <meta-data android:name="io.sentry.dsn" android:value="https://ba17f240b58144e398c862bb953256ef@o755123.ingest.sentry.io/5792286" />
     </application>
-
 </manifest>
