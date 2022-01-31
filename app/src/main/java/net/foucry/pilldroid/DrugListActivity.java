@@ -220,16 +220,18 @@ public class DrugListActivity extends AppCompatActivity {
             result -> {
                 if(result.getContents() == null) {
                     Intent originalIntent = result.getOriginalIntent();
-                    if (originalIntent == null {
+                    if (originalIntent == null) {
                         Log.d(TAG, "Cancelled Scan");
-                        Toast.makeText(DrugListActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                        Toast.makeText(DrugListActivity.this, "Cancelled",
+                                Toast.LENGTH_LONG).show();
                     } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
                         Log.d(TAG, "Cancelled scan due missing camera permission");
-                        Toast.makeText(DrugListaActivity.this, "Cancelled due missing camera persmission",
-                            Toast.LENGTH_LONG.show());
+                        Toast.makeText(DrugListActivity.this, "Cancelled due missing camera persmission",
+                            Toast.LENGTH_LONG).show();
                     } else if (originalIntent.hasExtra(Intents.Scan.TIMEOUT)) {
                         Log.d(TAG, "Cancelled due timeout");
-                        Toast,makeText(DrugListActivity.this, "Cancelled due timeout", Toast.LENGTH_LONG.show());
+                        Toast.makeText(DrugListActivity.this, "Cancelled due timeout",
+                                Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Log.d(TAG, "Scanned");
