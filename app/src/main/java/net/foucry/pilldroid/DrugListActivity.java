@@ -219,9 +219,22 @@ public class DrugListActivity extends AppCompatActivity {
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
                 if(result.getContents() == null) {
-                    Toast.makeText(DrugListActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                    Intent originalIntent = result.getOriginalIntent();
+                    if (originalIntent == null {
+                        Log.d(TAG, "Cancelled Scan");
+                        Toast.makeText(DrugListActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                    } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                        Log.d(TAG, "Cancelled scan due missing camera permission");
+                        Toast.makeText(DrugListaActivity.this, "Cancelled due missing camera persmission",
+                            Toast.LENGTH_LONG.show());
+                    } else if (originalIntent.hasExtra(Intents.Scan.TIMEOUT)) {
+                        Log.d(TAG, "Cancelled due timeout");
+                        Toast,makeText(DrugListActivity.this, "Cancelled due timeout", Toast.LENGTH_LONG.show());
+                    }
                 } else {
-                    Toast.makeText(DrugListActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Scanned");
+                    Toast.makeText(DrugListActivity.this, "Scanned: " + result.getContents(),
+                        Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -230,10 +243,10 @@ public class DrugListActivity extends AppCompatActivity {
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
                 ScanOptions.CODE_128, ScanOptions.CODE_128);
-        //options.setPrompt("Scan a barcode");
         options.setCameraId(0);  // Use a specific camera of the device
         options.setBeepEnabled(true);
         options.setBarcodeImageEnabled(true);
+        options.setTimeout(60);
         options.setCaptureActivity(CustomScannerActivity.class);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         barcodeLauncher.launch(options);
