@@ -1,5 +1,8 @@
 package net.foucry.pilldroid;
 
+import static net.foucry.pilldroid.UtilDate.date2String;
+import static net.foucry.pilldroid.Utils.intRandomExclusive;
+
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -35,9 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static net.foucry.pilldroid.UtilDate.date2String;
-import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -226,7 +227,16 @@ public class DrugListActivity extends AppCompatActivity {
 
     // Launch scan
     public void onButtonClick(View view) {
-        barcodeLauncher.launch(new ScanOptions());
+        ScanOptions options = new ScanOptions();
+        options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
+                ScanOptions.CODE_128, ScanOptions.CODE_128);
+        //options.setPrompt("Scan a barcode");
+        options.setCameraId(0);  // Use a specific camera of the device
+        options.setBeepEnabled(true);
+        options.setBarcodeImageEnabled(true);
+        options.setCaptureActivity(CustomScannerActivity.class);
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
+        barcodeLauncher.launch(options);
     }
 
 /*    @Override
