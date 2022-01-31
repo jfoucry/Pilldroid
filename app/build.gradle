@@ -36,7 +36,7 @@ android {
         applicationId "net.foucry.pilldroid"
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
-        versionCode 102
+        versionCode 100
         versionName "v0.100-beta"
         multiDexEnabled true
     }
