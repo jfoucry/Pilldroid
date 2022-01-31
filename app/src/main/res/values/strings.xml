@@ -12,8 +12,8 @@
     <string name="drug_administationMode_label">Administration mode</string>
     <string name="drug_current_stock_label">Current stock</string>
     <string name="drug_take_label">Take</string>
-    <string name="drug_warningTherehold_label">Alert therehold</string>
-    <string name="drug_alertTherehold_label">Critical therehold</string>
+    <string name="drug_warningTherehold_label">Alert threshold</string>
+    <string name="drug_alertTherehold_label">Critical threshold</string>
     <string name="button_keyboard">"Use the keyboard"</string>
     <string name="detail_view">Detail view</string>
     <string name="save_button">Save</string>
@@ -65,5 +65,5 @@
     <string name="Value">Value</string>
     <string name="label">Label</string>
     <string name="drug_list">Drug\'s attributes</string>
-    <string name="notInterpreted">Barre code cannot be intrepreted</string>
+    <string name="notInterpreted">Barre code cannot be interpreted</string>
 </resources>
