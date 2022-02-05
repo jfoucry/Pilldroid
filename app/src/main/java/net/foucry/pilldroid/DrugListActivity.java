@@ -205,7 +205,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause really!");
+        Log.d(TAG, "onPause");
         AlarmReceiver.scheduleAlarm(this);
     }
 
@@ -216,8 +216,15 @@ public class DrugListActivity extends AppCompatActivity {
     /** Register the launcher and result handler
      * ActivityResultLauncher
      */
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
-            result -> {
+    private final ActivityResultLauncher<ScanOptions, ScanIntentResult> barcodeLauncher = registerForActivityResult(new CustomScanContract.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+          @Override
+          public void onActivityResult(ActivityResult result) {
+            if(result.getResultCode() = Activity.RESULT_OK) {
+              Intent data = result.getData();
+              Log.d(TAG, "return data ==" + data);
+              //doSomeOperations();
+            /*result -> {
                 if(result.getContents() == null) {
                     Intent originalIntent = result.getOriginalIntent();
                     if (originalIntent == null) {
@@ -237,7 +244,7 @@ public class DrugListActivity extends AppCompatActivity {
                     Log.d(TAG, "Scanned");
                     Toast.makeText(DrugListActivity.this, "Scanned: " + result.getContents(),
                         Toast.LENGTH_LONG).show();
-                }
+                }*/
             });
 
     // Launch scan
