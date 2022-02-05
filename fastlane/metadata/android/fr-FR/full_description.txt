@@ -8,7 +8,7 @@ C'est de votre responsabilité et Pilldroid ne vous le demande pas.</p>
 <p>
 <ul>
 <li>Pour tout savoir sur *Pilldroid*, consultez le <a href="https://pilldroid.foucry.net">site we du projet</a></li>
-<li><a href="mailto://pilldroid@foucry.net">Contacter l'auteur par mail</a></li>
+<li><a href="mailto:pilldroid@foucry.net">Contacter l'auteur par mail</a></li>
 </ul>
 </p>
 
