@@ -43,28 +43,7 @@ Déjà embarquée mais non fonctionnelle, `sentry.io` à besoin de l'accès Inte
 
 ## L'application Pilldroid contient-elle des pisteurs ?
 
-NON !
-
-```
-Requested API level 30 is larger than maximum we have, returning API level 28 instead.
-=== Information
-- APK path: /home/jacques/StudioProjects/PillDroid/app/build/outputs/apk/preproduct/prerelease/app-preproduct-prerelease.apk
-- APK sum: ba0bafbd8da39507d62658cd666b2e9881002463bf8897ccb9f20b6ee93d2ed8
-- App version: 0.65.20220101-d04e132
-- App version code: 24065
-- App UID: 66F9DAB6FD8F5957BA842BE9EE45FE923AE300DE
-- App name: PillDroid Pre-Release
-- App package: net.foucry.pilldroid
-- App permissions: 5
-    - android.permission.VIBRATE
-    - android.permission.RECEIVE_BOOT_COMPLETED
-    - android.permission.INTERNET
-    - com.android.alarm.permission.SET_ALARM
-    - android.permission.CAMERA
-- App libraries:
-- Certificates: 0
-=== Found trackers: 0
-```
+[NON !](https://reports.exodus-privacy.eu.org/fr/reports/234531/)
 
 ## D'où viennent les données de Pilldroid ?
 
