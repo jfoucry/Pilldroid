@@ -32,7 +32,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.client.android.Intents;
-import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.SimpleDateFormat;
@@ -216,16 +215,10 @@ public class DrugListActivity extends AppCompatActivity {
     /** Register the launcher and result handler
      * ActivityResultLauncher
      */
-    private final ActivityResultLauncher<ScanOptions, ScanIntentResult> barcodeLauncher = registerForActivityResult(new CustomScanContract.StartActivityForResult(),
-        new ActivityResultCallback<ActivityResult>() {
-          @Override
-          public void onActivityResult(ActivityResult result) {
-            if(result.getResultCode() = Activity.RESULT_OK) {
-              Intent data = result.getData();
-              Log.d(TAG, "return data ==" + data);
-              //doSomeOperations();
-            /*result -> {
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new PilldroidScanContract(),
+            result -> {
                 if(result.getContents() == null) {
+                    Toast.makeText(DrugListActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
                     Intent originalIntent = result.getOriginalIntent();
                     if (originalIntent == null) {
                         Log.d(TAG, "Cancelled Scan");
@@ -234,17 +227,17 @@ public class DrugListActivity extends AppCompatActivity {
                     } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
                         Log.d(TAG, "Cancelled scan due missing camera permission");
                         Toast.makeText(DrugListActivity.this, "Cancelled due missing camera persmission",
-                            Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();
                     } else if (originalIntent.hasExtra(Intents.Scan.TIMEOUT)) {
                         Log.d(TAG, "Cancelled due timeout");
                         Toast.makeText(DrugListActivity.this, "Cancelled due timeout",
                                 Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Log.d(TAG, "Scanned");
-                    Toast.makeText(DrugListActivity.this, "Scanned: " + result.getContents(),
-                        Toast.LENGTH_LONG).show();
-                }*/
+                    Log.d(TAG, "Scanned result == " + result.toString());
+                    Toast.makeText(DrugListActivity.this, "Scanned", Toast.LENGTH_LONG).show();
+                    //Intent originalIntent = scanIntentResult.getOriginalIntent();
+                }
             });
 
     // Launch scan
@@ -255,7 +248,7 @@ public class DrugListActivity extends AppCompatActivity {
         options.setCameraId(0);  // Use a specific camera of the device
         options.setBeepEnabled(true);
         options.setBarcodeImageEnabled(true);
-        options.setTimeout(60);
+        //options.setTimeout(3600);
         options.setCaptureActivity(CustomScannerActivity.class);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         barcodeLauncher.launch(options);
