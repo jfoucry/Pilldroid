@@ -1,6 +1,8 @@
 package net.foucry.pilldroid;
 
 import android.app.Activity;
+import android.app.job.JobService;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ViewfinderView;
 
 import java.util.Random;
@@ -21,11 +24,13 @@ import java.util.Random;
  */
 public class CustomScannerActivity extends Activity implements
         DecoratedBarcodeView.TorchListener {
+    private  static final String TAG = CustomScannerActivity.class.getName();
 
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
     private ImageButton switchFlashlightButton;
     private ViewfinderView viewfinderView;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,6 @@ public class CustomScannerActivity extends Activity implements
         barcodeScannerView.setTorchListener(this);
 
         switchFlashlightButton = findViewById(R.id.switch_flashlight);
-
         viewfinderView = findViewById(R.id.zxing_viewfinder_view);
 
         // if the device does not have flashlight in its camera,
@@ -49,6 +53,7 @@ public class CustomScannerActivity extends Activity implements
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.setShowMissingCameraPermissionDialog(false);
         capture.decode();
+
 
         changeMaskColor(null);
         changeLaserVisibility(true);
@@ -124,7 +129,6 @@ public class CustomScannerActivity extends Activity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
 
     public void onKeyboard(View view) {
         setResult(3);
