@@ -251,6 +251,7 @@ public class DrugListActivity extends AppCompatActivity {
         //options.setTimeout(3600);
         options.setCaptureActivity(CustomScannerActivity.class);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
         barcodeLauncher.launch(options);
     }
 
