@@ -3,6 +3,10 @@
 Pilldroid est une application de gestion de stock **théorique** de médicament à
 destinations des personnes résidant en France.
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/net.foucry.pilldroid/)
+
 ## Ce que n'est pas Pilldroid
 
 - Pilldroid n'est pas un pilulier. Pilldroid ne vous rappellera pas de prendre
