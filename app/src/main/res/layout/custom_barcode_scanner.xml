@@ -60,6 +60,7 @@
         android:backgroundTint="@android:color/transparent"
         android:contentDescription="@string/button_keyboard"
         android:onClick="onKeyboard"
-        android:src="@drawable/ic_keyboard_black_24dp" />
+        android:src="@drawable/ic_keyboard_black_24dp"
+        tools:ignore="PrivateResource" />
 
 </merge>

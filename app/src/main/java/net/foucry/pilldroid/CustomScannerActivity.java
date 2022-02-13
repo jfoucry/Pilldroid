@@ -1,20 +1,24 @@
 package net.foucry.pilldroid;
 
 import android.app.Activity;
-import android.app.job.JobService;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 
+import com.google.zxing.client.android.Intents;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ViewfinderView;
 
 import java.util.Random;
@@ -22,8 +26,8 @@ import java.util.Random;
 /**
  * Custom Scanner Activity extending from Activity to display a custom layout form scanner view.
  */
-public class CustomScannerActivity extends Activity implements
-        DecoratedBarcodeView.TorchListener {
+public class CustomScannerActivity extends Activity {
+
     private  static final String TAG = CustomScannerActivity.class.getName();
 
     private CaptureManager capture;
@@ -31,17 +35,23 @@ public class CustomScannerActivity extends Activity implements
     private ImageButton switchFlashlightButton;
     private ViewfinderView viewfinderView;
 
+    private ActivityResultLauncher<Intent> manualAddLauncher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scanner);
 
-        barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
+        manualAddLauncher = registerForActivityResult(new ActivityResultContract.StartActivityForResutl(),
+                result -> DrugListActivity.showInputDialog());
+
         barcodeScannerView.setTorchListener(this);
 
-        switchFlashlightButton = findViewById(R.id.switch_flashlight);
-        viewfinderView = findViewById(R.id.zxing_viewfinder_view);
+        findViewById(R.id.keyboard_button).setOnClickListener(this::addManually);
+        findViewById(R.id.cancel_button).setOnClickListener(this::onCancel);
+        // viewfinderView = findViewById(R.id.zxing_viewfinder_view);
+
+        barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
 
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...
@@ -50,13 +60,29 @@ public class CustomScannerActivity extends Activity implements
         }
 
         capture = new CaptureManager(this, barcodeScannerView);
+        Intent captureIntent = new Intent();
+        Bundle captureIntentBundle = new Bundle();
+        captureIntentBundle.putBoolean(Intents.Scan.BEEP_ENABLED, true);
+        captureIntent.putExtras(captureIntentBundle);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.setShowMissingCameraPermissionDialog(false);
-        capture.decode();
-
+        //capture.decode();
 
         changeMaskColor(null);
         changeLaserVisibility(true);
+        barcodeScannerView.decodeSingle(new BarcodeCallback() {
+            @Override
+            public void barcodeResult(BarcodeResult result) {
+                Intent scanResult = new Intent();
+                Bundle scanResultBundle = new Bundle();
+                scanResultBundle.putString("Barcode Content", result.getText());
+                scanResultBundle.putString("Barcode Format name", result.getBarcodeFormat().name());
+                scanResultBundle.putInt("returnCode", captureIntentBundle.getInt("returnCode"));
+                scanResult.putExtras(scanResultBundle);
+                CustomScannerActivity.this.setResult(RESULT_OK, scanResult);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -98,6 +124,7 @@ public class CustomScannerActivity extends Activity implements
     }
 
     public void switchFlashlight(View view) {
+        Log.d(TAG, "Switch torch");
         if (switchFlashlightButton.isActivated()) {
             barcodeScannerView.setTorchOff();
         } else {
@@ -117,11 +144,13 @@ public class CustomScannerActivity extends Activity implements
 
     @Override
     public void onTorchOn() {
+        Log.d(TAG, "TorchON");
         switchFlashlightButton.setActivated(true);
     }
 
     @Override
     public void onTorchOff() {
+        Log.d(TAG, "TorchOFF");
         switchFlashlightButton.setActivated(false);
     }
 
@@ -130,13 +159,17 @@ public class CustomScannerActivity extends Activity implements
         capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    private void handleActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode);
+        
+    }
     public void onKeyboard(View view) {
-        setResult(3);
-        finish();
+        Log.d(TAG, "onkeyboard");
+        captureIntentBundle.putInt("returnCode", 3);
     }
 
     public void onCancel(View view) {
-        setResult(2);
-        finish();
+        Log.d(TAG, "onCancel");
+        captureIntentBundle.putInt("returnCode", 2);
     }
 }

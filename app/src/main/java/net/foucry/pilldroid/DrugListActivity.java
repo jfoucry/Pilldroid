@@ -25,14 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.zxing.client.android.Intents;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,11 +51,13 @@ public class DrugListActivity extends AppCompatActivity {
      * device.
      */
 
-    // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launchtime
+    // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launch time
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
 
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+
+    private ActivityResultLauncher<Intent> mBarcodeScannerLauncher;
 
     /**
      * Start tutorial
@@ -177,6 +177,12 @@ public class DrugListActivity extends AppCompatActivity {
             }
         }
 
+        mBarcodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
+            Intent intent = result.getData();
+            Log.d(TAG, "intent == " + intent);
+            startActivity(intent);
+        });
+
         constructDrugsList();
     }
 
@@ -215,7 +221,8 @@ public class DrugListActivity extends AppCompatActivity {
     /** Register the launcher and result handler
      * ActivityResultLauncher
      */
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new PilldroidScanContract(),
+
+    /*private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new PilldroidScanContract(),
             result -> {
                 if(result.getContents() == null) {
                     Toast.makeText(DrugListActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
@@ -226,7 +233,7 @@ public class DrugListActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
                         Log.d(TAG, "Cancelled scan due missing camera permission");
-                        Toast.makeText(DrugListActivity.this, "Cancelled due missing camera persmission",
+                        Toast.makeText(DrugListActivity.this, "Cancelled due missing camera permission",
                                 Toast.LENGTH_LONG).show();
                     } else if (originalIntent.hasExtra(Intents.Scan.TIMEOUT)) {
                         Log.d(TAG, "Cancelled due timeout");
@@ -238,11 +245,11 @@ public class DrugListActivity extends AppCompatActivity {
                     Toast.makeText(DrugListActivity.this, "Scanned", Toast.LENGTH_LONG).show();
                     //Intent originalIntent = scanIntentResult.getOriginalIntent();
                 }
-            });
+            });*/
 
     // Launch scan
     public void onButtonClick(View view) {
-        ScanOptions options = new ScanOptions();
+        /*ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
                 ScanOptions.CODE_128, ScanOptions.CODE_128);
         options.setCameraId(0);  // Use a specific camera of the device
@@ -251,8 +258,12 @@ public class DrugListActivity extends AppCompatActivity {
         //options.setTimeout(3600);
         options.setCaptureActivity(CustomScannerActivity.class);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
-        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
-        barcodeLauncher.launch(options);
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);*/
+        //barcodeLauncher.launch(options);
+        Intent intent = new Intent(getApplicationContext(), CustomScannerActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtras(bundle);
+        mBarcodeScannerLauncher.launch(intent);
     }
 
 /*    @Override
