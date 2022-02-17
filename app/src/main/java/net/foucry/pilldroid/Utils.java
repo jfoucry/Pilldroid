@@ -1,5 +1,9 @@
 package net.foucry.pilldroid;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,6 +11,10 @@ import java.util.Random;
 
 public class Utils {
     private static final String TAG = UtilDate.class.getName();
+
+    public static final int MAIN_REQUEST = 1;
+    public static final int SELECT_BARCODE_REQUEST = 2;
+    public static final int BARCODE_SCAN = 3;
 
     public static void CopyStream(InputStream is, OutputStream os)
     {
@@ -38,4 +46,33 @@ public class Utils {
         return r.nextInt(max - min) +max;
     }
 
+    /**
+     * parse barcode result into barcodevalues
+     * @param int requestCode
+     * @param int resutltcode
+     * @param Intent intent
+     * @param Context context
+     * @param context
+     * @return BarcodeValues
+     */
+    static public BarcodeValues parseSetBarcodeActivtyResult(int requestCode, int resultCode, Intent intent, DrugListActivity context) {
+      String contents = null;
+      String format = null;
+
+      if (resultCode != Activity.RESULT_OK) {
+        return new BarcodeValues(null, null);
+      }
+
+      if (requestCode == Utils.BARCODE_SCAN || requestCode == Utils.SELECT_BARCODE_REQUEST) {
+        if (requestCode == Utils.BARCODE_SCAN) {
+          Log.d(TAG, "Received barcode information form camera");
+        } else if (requestCode == Utils.SELECT_BARCODE_REQUEST) {
+          Log.d(TAG, "Received barcode information form typeing it");
+        }
+
+        contents = intent.getStringExtra("BarcodeContent");
+        format = intent.getStringExtra("BarcodeFormat");
+      }
+      return new BarcodeValues(format, contents);
+    }
 }
