@@ -59,6 +59,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> mBarcodeScannerLauncher;
 
+
     /**
      * Start tutorial
      */
@@ -177,10 +178,25 @@ public class DrugListActivity extends AppCompatActivity {
             }
         }
 
-        mBarcodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
+/*        mBarcodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
             Intent intent = result.getData();
             Log.d(TAG, "intent == " + intent);
             startActivity(intent);
+        });*/
+        mBarcodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            Intent intent = result.getData();
+            BarcodeValues barcodeValues = Utils.parseSetBarcodeActivtyResult(Utils.BARCODE_SCAN, result.getResultCode(), intent, this);
+
+            if (!barcodeValues.isEmpty()) {
+                Intent newIntent = new Intent(getApplicationContext(), DrugListActivity.class);
+                Bundle newBundle = new Bundle();
+
+                newBundle.putString("BarcodeFormat", barcodeValues.format());
+                newBundle.putString("BarcodeContent", barcodeValues.content());
+
+                newIntent.putExtras(newBundle);
+                startActivity(newIntent);
+            }
         });
 
         constructDrugsList();
