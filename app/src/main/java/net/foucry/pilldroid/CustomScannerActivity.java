@@ -9,9 +9,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 
 import com.google.zxing.client.android.Intents;
@@ -28,7 +29,7 @@ import java.util.Random;
  */
 public class CustomScannerActivity extends Activity {
 
-    private  static final String TAG = CustomScannerActivity.class.getName();
+    private static final String TAG = CustomScannerActivity.class.getName();
 
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
@@ -40,14 +41,14 @@ public class CustomScannerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_custom_scanner);
 
-        manualAddLauncher = registerForActivityResult(new ActivityResultContract.StartActivityForResutl(),
+        setContentView(R.layout.activity_custom_scanner);
+        manualAddLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> DrugListActivity.showInputDialog());
 
-        barcodeScannerView.setTorchListener(this);
+        //barcodeScannerView.setTorchListener(this);
 
-        findViewById(R.id.keyboard_button).setOnClickListener(this::addManually);
+        findViewById(R.id.keyboard_button).setOnClickListener(this::onKeyboard);
         findViewById(R.id.cancel_button).setOnClickListener(this::onCancel);
         // viewfinderView = findViewById(R.id.zxing_viewfinder_view);
 
@@ -116,6 +117,7 @@ public class CustomScannerActivity extends Activity {
 
     /**
      * Check if the device's camera has a Flashlight.
+     *
      * @return true if there is Flashlight, otherwise false.
      */
     private boolean hasFlash() {
@@ -159,10 +161,6 @@ public class CustomScannerActivity extends Activity {
         capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void handleActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode);
-        
-    }
     public void onKeyboard(View view) {
         Log.d(TAG, "onkeyboard");
         captureIntentBundle.putInt("returnCode", 3);
@@ -171,5 +169,29 @@ public class CustomScannerActivity extends Activity {
     public void onCancel(View view) {
         Log.d(TAG, "onCancel");
         captureIntentBundle.putInt("returnCode", 2);
+    }
+
+    private void handleActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        BarcodeValues barcodeValues;
+
+        try {
+            barcodeValues = Utils.parseSetBarcodeActivtyResult(requestCode, resultCode, intent, this);
+        } catch (NullPointerException e) {
+            Toast.makeText(this, "Error reading image", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!barcodeValues.isEmpty()) {
+            Intent manualResult = new Intent();
+            Bundle manualResultBundle = new Bundle();
+            manualResultBundle.putString("BarcodeContent", barcodeValues.content());
+            manualResultBundle.putString("BarcodeFormat", barcodeValues.format());
+
+            manualResult.putExtras(manualResultBundle);
+            CustomScannerActivity.this.setResult(RESULT_OK, manualResult);
+            finish();
+        }
     }
 }
