@@ -11,9 +11,8 @@ import java.io.OutputStream;
 import java.util.Random;
 
 public class Utils {
-    private static final String TAG = UtilDate.class.getName();
+    private static final String TAG = Utils.class.getName();
 
-    public static final int MAIN_REQUEST = 1;
     public static final int SELECT_BARCODE_REQUEST = 2;
     public static final int BARCODE_SCAN = 3;
 
