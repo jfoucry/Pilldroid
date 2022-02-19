@@ -1,6 +1,7 @@
 package net.foucry.pilldroid;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -48,14 +49,14 @@ public class Utils {
 
     /**
      * parse barcode result into barcodevalues
-     * @param int requestCode
-     * @param int resutltcode
-     * @param Intent intent
-     * @param Context context
-     * @param context
+     * @param requestCode int
+     * @param resultCode int
+     * @param intent Intent
+     * @param context Context
      * @return BarcodeValues
      */
-    static public BarcodeValues parseSetBarcodeActivtyResult(int requestCode, int resultCode, Intent intent, DrugListActivity context) {
+    static public BarcodeValues parseSetBarcodeActivityResult(int requestCode, int resultCode,
+                                                              Intent intent, Context context) {
       String contents = null;
       String format = null;
 
