@@ -286,7 +286,7 @@ public class DrugListActivity extends AppCompatActivity {
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
         //barcodeLauncher.launch(options);
-        Intent intent = new Intent(getApplicationContext(), CustomScannerActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ScannerActivity.class);
         Bundle bundle = new Bundle();
         intent.putExtras(bundle);
         mBarcodeScannerLauncher.launch(intent);
