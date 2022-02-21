@@ -10,6 +10,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,7 +34,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.client.android.Intents;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -275,7 +275,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     // Launch scan
     public void onButtonClick(View view) {
-        ScanOptions options = new ScanOptions();
+        /*ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
                 ScanOptions.CODE_128, ScanOptions.CODE_128);
         options.setCameraId(0);  // Use a specific camera of the device
@@ -283,11 +283,16 @@ public class DrugListActivity extends AppCompatActivity {
         options.setBarcodeImageEnabled(true);
         //options.setTimeout(3600);
         options.setCaptureActivity(CustomScannerActivity.class);
+        options.setBeepEnabled(true);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
-        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);*/
         //barcodeLauncher.launch(options);
-        Intent intent = new Intent(getApplicationContext(), ScannerActivity.class);
+        Intent intent = new Intent(getApplicationContext(), CustomScannerActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putBoolean(Intents.Scan.BEEP_ENABLED, true);
+        bundle.putInt("Intents.Scan.MIXED_SCAN", Intents.Scan.MIXED_SCAN);
+        bundle.putInt("Intents.Scan.INVERTED_SCAN", Intents.Scan.INVERTED_SCAN);
+
         intent.putExtras(bundle);
         mBarcodeScannerLauncher.launch(intent);
     }

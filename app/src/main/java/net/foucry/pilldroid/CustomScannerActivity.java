@@ -61,10 +61,17 @@ public class CustomScannerActivity extends Activity {
             findViewById(R.id.switch_flashlight).setVisibility(View.GONE);
         }
 
-        capture = new CaptureManager(this, barcodeScannerView);
-
         captureIntentBundle.putBoolean(Intents.Scan.BEEP_ENABLED, true);
+        captureIntentBundle.putInt("Intents.Scan.MIXED_SCAN", Intents.Scan.MIXED_SCAN);
+        captureIntentBundle.putInt("Intents.Scan.INVERTED_SCAN", Intents.Scan.INVERTED_SCAN);
+
         captureIntent.putExtras(captureIntentBundle);
+
+        /*captureIntent.putExtra("Intents.Scan.MIXED_SCAN", Intents.Scan.MIXED_SCAN);
+        captureIntent.putExtra("Intents.Scan.INVERTED_SCAN", Intents.Scan.INVERTED_SCAN);
+        captureIntent.putExtra("Intents.Scan.BEEP_ENABLED", Intents.Scan.BEEP_ENABLED);*/
+
+        capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.setShowMissingCameraPermissionDialog(false);
         //capture.decode();
