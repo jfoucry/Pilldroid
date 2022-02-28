@@ -16,7 +16,12 @@ public class PilldroidScanContract extends ActivityResultContract<ScanOptions, S
   @NonNull
   @Override
   public Intent createIntent(@NonNull Context context, ScanOptions input) {
-    return input.createScanIntent(context);
+    return Intent(context, CaptureActivity.class).apply {
+      action = Intents.Scan.ACTION
+      putExtra(Intents.Scan.BEEP_ENABLED, true)
+      putExtra(Intents.Scan.MIXED_SCAN, "Intents.Scan.MIXED_SCAN")
+      putExtra(Intents.Scan.INVERTED, "Intents.Scan.INVERTED")
+    }
   }
 
   @Override
