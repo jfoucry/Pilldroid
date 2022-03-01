@@ -64,4 +64,6 @@
     <string name="label">Libellé</string>
     <string name="drug_list">Attributs d\'un médicament</string>
     <string name="notInterpreted">Le code barre ne peut pas être interprété</string>
+    <string name="cancelled_scan">Scan annulé</string>
+    <string name="missing_camera_permission">Permission appareil photo manquante</string>
 </resources>
