@@ -118,9 +118,7 @@ public class DrugListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_drug_list);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            dbHelper = new DBHelper(this);
-        }
+        dbHelper = new DBHelper(this);
         dbDrug = new DBDrugs(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);

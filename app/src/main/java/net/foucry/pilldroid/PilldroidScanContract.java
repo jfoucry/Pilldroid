@@ -25,7 +25,7 @@ public class PilldroidScanContract extends ActivityResultContract<ScanOptions, S
     intent.setAction(Intents.Scan.ACTION);
     intent.putExtra(Intents.Scan.BEEP_ENABLED, true);
     intent.putExtra(Intents.Scan.SCAN_TYPE, 2);
-    Log.d(TAG, "intent ==" + intent.toString());
+    Log.d(TAG, "intent ==" + intent);
     return(intent);
   }
 
