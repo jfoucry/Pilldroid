@@ -10,7 +10,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +32,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.client.android.Intents;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,7 +59,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
 
-    private ActivityResultLauncher<Intent> mBarcodeScannerLauncher;
+    private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
 
 
     /**
@@ -186,7 +185,7 @@ public class DrugListActivity extends AppCompatActivity {
             Log.d(TAG, "intent == " + intent);
             startActivity(intent);
         });*/
-        mBarcodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+       /* mBarcodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             Intent intent = result.getData();
             BarcodeValues barcodeValues = Utils.parseSetBarcodeActivityResult(Utils.BARCODE_SCAN, result.getResultCode(), intent, this);
 
@@ -196,7 +195,27 @@ public class DrugListActivity extends AppCompatActivity {
             String format = bundle.getString("Barcode Format name");
             String content = bundle.getString("Barcode Content");
             int requestCode = bundle.getInt("requestCode");
-            int returnCode = bundle.getInt("returnCode");
+            int returnCode = bundle.getInt("returnCode");*/
+            mBarcodeScannerLauncher = registerForActivityResult(new PilldroidScanContract(),
+                    result ->  {
+                if(result.getContents() == null)
+                {
+                    Intent originalIntent = result.getOriginalIntent();
+                    if(originalIntent == null) {
+                        Log.d(TAG, "Cancelled Scan");
+                        Toast.makeText(this, R.string.cancelled_scan, Toast.LENGTH_LONG).show();
+                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                        Log.d(TAG, "Missing camera permission");
+                        Toast.makeText(this, R.string.missing_camera_permission, Toast.LENGTH_LONG).show();
+                    } else {
+                        Bundle bundle = originalIntent.getExtras();
+                        Log.d(TAG, "bundle == " + bundle.getInt("returnCode"));
+                        //Todo: copy code form old method to switch between returnCode
+                    }
+                } else {
+                    Log.d(TAG, "Scanned");
+                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
 
             /*if (!barcodeValues.isEmpty()) {
                 Intent newIntent = new Intent(getApplicationContext(), DrugListActivity.class);
@@ -275,9 +294,10 @@ public class DrugListActivity extends AppCompatActivity {
 
     // Launch scan
     public void onButtonClick(View view) {
-        /*ScanOptions options = new ScanOptions();
+        Log.d(TAG, "add medication");
+        ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
-                ScanOptions.CODE_128, ScanOptions.CODE_128);
+                ScanOptions.CODE_128);
         options.setCameraId(0);  // Use a specific camera of the device
         options.setBeepEnabled(true);
         options.setBarcodeImageEnabled(true);
@@ -285,16 +305,16 @@ public class DrugListActivity extends AppCompatActivity {
         options.setCaptureActivity(CustomScannerActivity.class);
         options.setBeepEnabled(true);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
-        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);*/
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
         //barcodeLauncher.launch(options);
-        Intent intent = new Intent(getApplicationContext(), CustomScannerActivity.class);
+        Intent intent = new Intent(getApplicationContext(), PilldroidScanContract.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(Intents.Scan.BEEP_ENABLED, true);
         bundle.putInt("Intents.Scan.MIXED_SCAN", Intents.Scan.MIXED_SCAN);
         bundle.putInt("Intents.Scan.INVERTED_SCAN", Intents.Scan.INVERTED_SCAN);
 
         intent.putExtras(bundle);
-        mBarcodeScannerLauncher.launch(intent);
+        mBarcodeScannerLauncher.launch(options);
     }
 
    /* @Override

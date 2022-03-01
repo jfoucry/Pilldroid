@@ -2,11 +2,13 @@ package net.foucry.pilldroid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanIntentResult;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -16,12 +18,15 @@ public class PilldroidScanContract extends ActivityResultContract<ScanOptions, S
   @NonNull
   @Override
   public Intent createIntent(@NonNull Context context, ScanOptions input) {
-    return Intent(context, CaptureActivity.class).apply {
-      action = Intents.Scan.ACTION
-      putExtra(Intents.Scan.BEEP_ENABLED, true)
-      putExtra(Intents.Scan.MIXED_SCAN, "Intents.Scan.MIXED_SCAN")
-      putExtra(Intents.Scan.INVERTED, "Intents.Scan.INVERTED")
-    }
+    Log.d(TAG, "create Intent");
+
+    Intent intent = new Intent(context, CustomScannerActivity.class);
+
+    intent.setAction(Intents.Scan.ACTION);
+    intent.putExtra(Intents.Scan.BEEP_ENABLED, true);
+    intent.putExtra(Intents.Scan.SCAN_TYPE, 2);
+    Log.d(TAG, "intent ==" + intent.toString());
+    return(intent);
   }
 
   @Override
