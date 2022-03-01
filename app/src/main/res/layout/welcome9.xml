@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="@dimen/screen_shot_height"
         android:layout_height="@dimen/screen_shot_height"
-        android:contentDescription="@string/tunables"
+        android:contentDescription="@string/tunable"
         android:src="@drawable/tunable" />
 
     <TextView

@@ -80,13 +80,13 @@ public class DrugDetailFragment extends Fragment {
             presentationView = detailView.findViewById(R.id.presentation_cell);
             TextView presentationLabel = presentationView.findViewById(R.id.label);
             TextView presentationValue = presentationView.findViewById(R.id.value);
-            presentationLabel.setText(R.string.drug_presention_labal);
+            presentationLabel.setText(R.string.drug_presentation_label);
             presentationValue.setText(drug.getPresentation());
 
             adminModeView = detailView.findViewById(R.id.administration_cell);
             TextView adminModeLabel = adminModeView.findViewById(R.id.label);
             TextView adminModeValue = adminModeView.findViewById(R.id.value);
-            adminModeLabel.setText(R.string.drug_administationMode_label);
+            adminModeLabel.setText(R.string.drug_administrationMode_label);
             adminModeValue.setText(drug.getAdministration_mode());
 
             stockView = detailView.findViewById(R.id.stock_cell);
@@ -108,17 +108,17 @@ public class DrugDetailFragment extends Fragment {
             warningView = detailView.findViewById(R.id.warning_cell);
             TextView warningLibelle = warningView.findViewById(R.id.label);
             TextView warningValue = warningView.findViewById(R.id.value);
-            warningLibelle.setText(R.string.drug_warningTherehold_label);
+            warningLibelle.setText(R.string.drug_warningThreshold_label);
             warningValue.setText(Integer.toString(drug.getWarnThreshold()));
-            warningValue.setHint(R.string.drug_warningTherehold_label);
+            warningValue.setHint(R.string.drug_warningThreshold_label);
             warningValue.setSelectAllOnFocus(true);
 
             alertView = detailView.findViewById(R.id.alert_cell);
             TextView alertLibelle = alertView.findViewById(R.id.label);
             TextView alertValue = alertView.findViewById(R.id.value);
-            alertLibelle.setText(R.string.drug_alertTherehold_label);
+            alertLibelle.setText(R.string.drug_alertThreshold_label);
             alertValue.setText(Integer.toString(drug.getAlertThreshold()));
-            alertValue.setHint(R.string.drug_alertTherehold_label);
+            alertValue.setHint(R.string.drug_alertThreshold_label);
             alertValue.setSelectAllOnFocus(true);
         }
 

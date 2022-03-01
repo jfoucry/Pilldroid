@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="@dimen/img_width_height"
         android:layout_height="@dimen/img_width_height"
-        android:contentDescription="@string/barre_code_icone"
+        android:contentDescription="@string/barcode_icon"
         android:src="@drawable/ic_barcode" />
 
     <TextView
