@@ -33,8 +33,8 @@ public class CustomScannerActivity extends Activity {
     private ImageButton switchFlashlightButton;
     private ViewfinderView viewfinderView;
 
-    Intent captureIntent = new Intent();
-    Bundle captureIntentBundle = new Bundle();
+    final Intent captureIntent = new Intent();
+    final Bundle captureIntentBundle = new Bundle();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public class CustomScannerActivity extends Activity {
                 scanResult.putExtra("returnCode", captureIntentBundle.getInt("returnCode"));
                 scanResult.putExtra("resultCode", 1);
                 CustomScannerActivity.this.setResult(RESULT_OK, scanResult);
-                Log.d(TAG, "scanResult == " + scanResult.toString());
+                Log.d(TAG, "scanResult == " + scanResult);
                 finish();
             }
         });

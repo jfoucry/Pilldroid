@@ -155,7 +155,7 @@ class DBDrugs extends SQLiteOpenHelper {
             drug.setAlertThreshold(7);
 
             // Log
-            Log.d(TAG, "getDrug(" + cip13 + ")" + drug.toString());
+            Log.d(TAG, "getDrug(" + cip13 + ")" + drug);
 
             // Return drug
 
@@ -223,7 +223,7 @@ class DBDrugs extends SQLiteOpenHelper {
             drug.setAlertThreshold(7);
 
             // Log
-            Log.d(TAG, "getDrug(" + cip7 + ")" + drug.toString());
+            Log.d(TAG, "getDrug(" + cip7 + ")" + drug);
 
             // Return drug
 

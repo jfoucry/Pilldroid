@@ -8,11 +8,11 @@ import android.content.SharedPreferences;
      * Created by Lincoln on 05/05/16.
      */
     public class PrefManager {
-        SharedPreferences pref;
+        final SharedPreferences pref;
         SharedPreferences.Editor editor;
 
         // shared pref mode
-        int PRIVATE_MODE = 0;
+        final int PRIVATE_MODE = 0;
 
         // Shared preferences file name
         private static final String PREF_NAME = "Pildroid-Prefs";
