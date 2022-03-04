@@ -57,6 +57,8 @@ public class DrugListActivity extends AppCompatActivity {
     final Boolean DBDEMO = false;
 
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+    public final String BARCODE_FORMAT_NAME = "Barcode Format name";
+    public final String BARCODE_CONTENT = "Barcode Content";
 
     private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
 
@@ -95,8 +97,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     private SimpleItemRecyclerViewAdapter mAdapter;
 
-    public void constructDrugsList()
-    {
+    public void constructDrugsList() {
         dbHelper = new DBHelper(getApplicationContext());
 
         if (!(drugs == null)) {
@@ -139,10 +140,10 @@ public class DrugListActivity extends AppCompatActivity {
                 // String presentation,double stock, double prise, int warn, int alert
 
                 // Limit for randoms generator
-                final int min_stock=5;
-                final int max_stock=50;
-                final int min_prise=0;
-                final int max_prise=3;
+                final int min_stock = 5;
+                final int max_stock = 50;
+                final int min_prise = 0;
+                final int max_prise = 3;
 
                 dbHelper.addDrug(new Drug("60000011", "3400930000011", "Médicament test 01", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
@@ -177,54 +178,65 @@ public class DrugListActivity extends AppCompatActivity {
             }
         }
 
-/*        mBarcodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
-            Intent intent = result.getData();
-            Log.d(TAG, "intent == " + intent);
-            startActivity(intent);
-        });*/
-       /* mBarcodeScannerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            Intent intent = result.getData();
-            BarcodeValues barcodeValues = Utils.parseSetBarcodeActivityResult(Utils.BARCODE_SCAN, result.getResultCode(), intent, this);
-
-            int resultCode = result.getResultCode();
-            assert intent != null;
-            Bundle bundle = intent.getExtras();
-            String format = bundle.getString("Barcode Format name");
-            String content = bundle.getString("Barcode Content");
-            int requestCode = bundle.getInt("requestCode");
-            int returnCode = bundle.getInt("returnCode");*/
-            mBarcodeScannerLauncher = registerForActivityResult(new PilldroidScanContract(),
-                    result ->  {
-                if(result.getContents() == null)
-                {
-                    Intent originalIntent = result.getOriginalIntent();
-                    if(originalIntent == null) {
-                        Log.d(TAG, "Cancelled Scan");
-                        Toast.makeText(this, R.string.cancelled_scan, Toast.LENGTH_LONG).show();
-                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                        Log.d(TAG, "Missing camera permission");
-                        Toast.makeText(this, R.string.missing_camera_permission, Toast.LENGTH_LONG).show();
-                    } else {
+        mBarcodeScannerLauncher = registerForActivityResult(new PilldroidScanContract(),
+                result -> {
+                    if (result.getContents() == null) {
+                        Intent originalIntent = result.getOriginalIntent();
                         Bundle bundle = originalIntent.getExtras();
-                        Log.d(TAG, "bundle == " + bundle.getInt("returnCode"));
-                        //Todo: copy code form old method to switch between returnCode
+                        if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                            Log.d(TAG, "Missing camera permission");
+                            Toast.makeText(this, R.string.missing_camera_permission, Toast.LENGTH_LONG).show();
+                        } else {
+                            Log.d(TAG, "bundle == " + bundle.getInt("returnCode"));
+                            int returnCode = bundle.getInt("returnCode");
+                            int resultCode = bundle.getInt("resultCode");
+                            //Todo: copy code form old method to switch between returnCode
+                            if (resultCode != 1) {
+                                if (returnCode == 3) {
+                                    if (BuildConfig.DEBUG) {
+                                        Toast.makeText(this, "Keyboard input",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                    Log.d(TAG, "Keyboard Input");
+                                    showInputDialog();
+                                } else if (returnCode == 2) {
+                                    Toast.makeText(this, R.string.cancelled_scan, Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Log.d(TAG, "Scanned");
+                                if (BuildConfig.DEBUG) {
+                                    Toast.makeText(this, "Scanned: " + bundle.getString(BARCODE_FORMAT_NAME),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                                String cip13;
+
+                                // Handle successful scan
+
+                                Log.d(TAG, "formatName = " + bundle.getString(BARCODE_FORMAT_NAME));
+
+                                switch (bundle.getString(BARCODE_FORMAT_NAME)) {
+                                    case "CODE_128":
+                                    case "EAN_13":  //CODE_128 || EAN 13
+                                        cip13 = bundle.getString(BARCODE_CONTENT);
+                                        break;
+                                    case "CODE_39":
+                                        cip13 = dbDrug.getCIP13FromCIP7(bundle.getString(BARCODE_CONTENT));
+                                        break;
+                                    case "DATA_MATRIX":
+                                        cip13 = bundle.getString(BARCODE_CONTENT).substring(4, 17);
+                                        break;
+                                    default:
+                                        scanNotOK();
+                                        return;
+                                }
+
+                                // Get Drug from database
+                                final Drug scannedDrug = dbDrug.getDrugByCIP13(cip13);
+                                askToAddInDB(scannedDrug);
+                            }
+                        }
                     }
-                } else {
-                    Log.d(TAG, "Scanned");
-                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                }
-
-            /*if (!barcodeValues.isEmpty()) {
-                Intent newIntent = new Intent(getApplicationContext(), DrugListActivity.class);
-                Bundle newBundle = new Bundle();
-
-                newBundle.putString("BarcodeFormat", barcodeValues.format());
-                newBundle.putString("BarcodeContent", barcodeValues.content());
-
-                newIntent.putExtras(newBundle);
-                startActivity(newIntent);
-            }*/
-        });
+                });
         constructDrugsList();
     }
 
@@ -260,37 +272,9 @@ public class DrugListActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    /** Register the launcher and result handler
-     * ActivityResultLauncher
-     */
-
-    /*private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new PilldroidScanContract(),
-            result -> {
-                if(result.getContents() == null) {
-                    Toast.makeText(DrugListActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                    Intent originalIntent = result.getOriginalIntent();
-                    if (originalIntent == null) {
-                        Log.d(TAG, "Cancelled Scan");
-                        Toast.makeText(DrugListActivity.this, "Cancelled",
-                                Toast.LENGTH_LONG).show();
-                    } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                        Log.d(TAG, "Cancelled scan due missing camera permission");
-                        Toast.makeText(DrugListActivity.this, "Cancelled due missing camera permission",
-                                Toast.LENGTH_LONG).show();
-                    } else if (originalIntent.hasExtra(Intents.Scan.TIMEOUT)) {
-                        Log.d(TAG, "Cancelled due timeout");
-                        Toast.makeText(DrugListActivity.this, "Cancelled due timeout",
-                                Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Log.d(TAG, "Scanned result == " + result.toString());
-                    Toast.makeText(DrugListActivity.this, "Scanned", Toast.LENGTH_LONG).show();
-                    //Intent originalIntent = scanIntentResult.getOriginalIntent();
-                }
-            });*/
 
     // Launch scan
-    public void onButtonClick(View view) {
+    public void onButtonClick() {
         Log.d(TAG, "add medication");
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
@@ -303,108 +287,10 @@ public class DrugListActivity extends AppCompatActivity {
         options.setBeepEnabled(true);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
-        //barcodeLauncher.launch(options);
-        Intent intent = new Intent(getApplicationContext(), PilldroidScanContract.class);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(Intents.Scan.BEEP_ENABLED, true);
-        bundle.putInt("Intents.Scan.MIXED_SCAN", Intents.Scan.MIXED_SCAN);
-        bundle.putInt("Intents.Scan.INVERTED_SCAN", Intents.Scan.INVERTED_SCAN);
 
-        intent.putExtras(bundle);
+        Log.d(TAG, "scanOptions == " +  options);
         mBarcodeScannerLauncher.launch(options);
     }
-
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-        if (BuildConfig.DEBUG) {
-            Toast.makeText(this, "REQUEST_CODE = " + requestCode +
-                    "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
-        }
-        if (requestCode == CUSTOMIZED_REQUEST_CODE) {
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode +
-                        "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
-            }
-            Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-            constructDrugsList();
-        } else {
-            IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
-
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode,
-                        Toast.LENGTH_LONG).show();
-            }
-
-            Log.d(TAG, "REQUEST_CODE = " + requestCode + "resultCode = " + resultCode);
-            if (result.getContents() == null) {
-                Intent originalIntent = result.getOriginalIntent();
-                if (originalIntent == null) {
-                    if (resultCode == 3) {
-                        if (BuildConfig.DEBUG) {
-                            Toast.makeText(this, "Keyboard input",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        Log.d(TAG, "Keyboard Input");
-                        showInputDialog();
-                    } else {
-                        Log.d(TAG, "Cancelled scan");
-                        Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-                    }
-                    if (BuildConfig.DEBUG) {
-                        Toast.makeText(this, "Cancelled",
-                                Toast.LENGTH_LONG).show();
-                    }
-                } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                    Log.d(TAG, "Cancelled scan due to missing camera permission");
-                    Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-                    Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
-                }
-            } else {
-                Log.d(TAG, "Scanned");
-                Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-                Log.d(TAG, "result.getContents = " + result.getContents());
-                Log.d(TAG, "format = " + result.getFormatName());
-
-                if (BuildConfig.DEBUG) {
-                    Toast.makeText(this, "Scanned: " +
-                            result.getContents(), Toast.LENGTH_LONG).show();
-                }
-
-                String cip13;
-
-                // Handle successful scan
-
-                Log.d(TAG, "formatName = " + result.getFormatName());
-
-                switch (result.getFormatName()) {
-                    case "CODE_128":
-                    case "EAN_13":  //CODE_128 || EAN 13
-                        cip13 = result.getContents();
-                        break;
-                    case "CODE_39":
-                        cip13 = dbDrug.getCIP13FromCIP7(result.getContents());
-                        break;
-                    case "DATA_MATRIX":
-                        cip13 = result.getContents().substring(4, 17);
-                        break;
-                    default:
-                        scanNotOK();
-                        return;
-                }
-
-                // Get Drug from database
-                final Drug scannedDrug = dbDrug.getDrugByCIP13(cip13);
-                askToAddInDB(scannedDrug);
-            }
-        }
-    }*/
 
     /**
      * show keyboardInput dialog
@@ -425,7 +311,7 @@ public class DrugListActivity extends AppCompatActivity {
                     String cip13 = editText.getText().toString();
 
                     Drug aDrug = dbDrug.getDrugByCIP13(cip13);
-                        askToAddInDB(aDrug);
+                    askToAddInDB(aDrug);
                 })
                 .setNegativeButton("Cancel",
                         (dialog, id) -> dialog.cancel());
@@ -455,6 +341,7 @@ public class DrugListActivity extends AppCompatActivity {
     /**
      * Ask if the drug found in the database should be include in the
      * user database
+     *
      * @param aDrug Drug- drug to be added
      */
     private void askToAddInDB(Drug aDrug) {
@@ -484,8 +371,7 @@ public class DrugListActivity extends AppCompatActivity {
     /**
      * Tell user that the barre code cannot be interpreted
      */
-    private void scanNotOK()
-    {
+    private void scanNotOK() {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setTitle(getString(R.string.app_name));
 
@@ -498,10 +384,10 @@ public class DrugListActivity extends AppCompatActivity {
 
     /**
      * Add New drug to the user database
+     *
      * @param aDrug Drug - drug to be added
      */
-    private void addDrugToList(Drug aDrug)
-    {
+    private void addDrugToList(Drug aDrug) {
         aDrug.setDateEndOfStock();
         mAdapter.addItem(aDrug);
 
@@ -512,8 +398,10 @@ public class DrugListActivity extends AppCompatActivity {
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
-     /**
+
+    /**
      * setupRecyclerView (list of drugs
+     *
      * @param recyclerView RecyclerView
      */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -527,8 +415,9 @@ public class DrugListActivity extends AppCompatActivity {
         ApplicationInfo applicationInfo = null;
         try {
             applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
-        } catch (final PackageManager.NameNotFoundException ignored) {}
-        return (String)((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
+        } catch (final PackageManager.NameNotFoundException ignored) {
+        }
+        return (String) ((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
     }
 
     /**
@@ -537,6 +426,7 @@ public class DrugListActivity extends AppCompatActivity {
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Drug> mValues;
+
         SimpleItemRecyclerViewAdapter(List<Drug> items) {
             mValues = items;
         }
@@ -620,8 +510,6 @@ public class DrugListActivity extends AppCompatActivity {
             final TextView mContentView;
             final TextView mEndOfStock;
             final ImageView mIconView;
-
-            Drug mItem;
 
             ViewHolder(View view) {
                 super(view);
