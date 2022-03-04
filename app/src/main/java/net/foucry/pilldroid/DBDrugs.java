@@ -109,9 +109,8 @@ class DBDrugs extends SQLiteOpenHelper {
 
     @Override
     public synchronized void close() {
-        if (myDataBase != null) {
-            myDataBase.close();
-        }
+        assert false;
+        myDataBase.close();
     }
 
     /**

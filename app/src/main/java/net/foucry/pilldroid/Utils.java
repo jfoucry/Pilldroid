@@ -45,34 +45,4 @@ public class Utils {
         Random r = new Random();
         return r.nextInt(max - min) +max;
     }
-
-    /**
-     * parse barcode result into barcodevalues
-     * @param requestCode int
-     * @param resultCode int
-     * @param intent Intent
-     * @param context Context
-     * @return BarcodeValues
-     */
-    static public BarcodeValues parseSetBarcodeActivityResult(int requestCode, int resultCode,
-                                                              Intent intent, Context context) {
-      String contents = null;
-      String format = null;
-
-      if (resultCode != Activity.RESULT_OK) {
-        return new BarcodeValues(null, null);
-      }
-
-      if (requestCode == Utils.BARCODE_SCAN || requestCode == Utils.SELECT_BARCODE_REQUEST) {
-        if (requestCode == Utils.BARCODE_SCAN) {
-          Log.d(TAG, "Received barcode information form camera");
-        } else if (requestCode == Utils.SELECT_BARCODE_REQUEST) {
-          Log.d(TAG, "Received barcode information form typeing it");
-        }
-
-        contents = intent.getStringExtra("BarcodeContent");
-        format = intent.getStringExtra("BarcodeFormat");
-      }
-      return new BarcodeValues(format, contents);
-    }
 }

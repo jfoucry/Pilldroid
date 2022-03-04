@@ -12,7 +12,6 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 
-import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
@@ -24,7 +23,7 @@ import java.util.Random;
 /**
  * Custom Scanner Activity extending from Activity to display a custom layout form scanner view.
  */
-public class CustomScannerActivity extends Activity {
+public class CustomScannerActivity extends Activity implements DecoratedBarcodeView.TorchListener {
 
     private static final String TAG = CustomScannerActivity.class.getName();
 
@@ -33,7 +32,6 @@ public class CustomScannerActivity extends Activity {
     private ImageButton switchFlashlightButton;
     private ViewfinderView viewfinderView;
 
-    final Intent captureIntent = new Intent();
     final Bundle captureIntentBundle = new Bundle();
 
     @Override
@@ -41,9 +39,6 @@ public class CustomScannerActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_custom_scanner);
-/*        manualAddLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> handleActivityResult(result.getResultCode(),
-                        result.getData()));*/
 
         //barcodeScannerView.setTorchListener(this);
 
@@ -61,22 +56,11 @@ public class CustomScannerActivity extends Activity {
             findViewById(R.id.switch_flashlight).setVisibility(View.GONE);
         }
 
-        captureIntentBundle.putBoolean(Intents.Scan.BEEP_ENABLED, true);
-        captureIntentBundle.putInt("Intents.Scan.MIXED_SCAN", Intents.Scan.MIXED_SCAN);
-        captureIntentBundle.putInt("Intents.Scan.INVERTED_SCAN", Intents.Scan.INVERTED_SCAN);
-
-        captureIntent.putExtras(captureIntentBundle);
-
-        /*captureIntent.putExtra("Intents.Scan.MIXED_SCAN", Intents.Scan.MIXED_SCAN);
-        captureIntent.putExtra("Intents.Scan.INVERTED_SCAN", Intents.Scan.INVERTED_SCAN);
-        captureIntent.putExtra("Intents.Scan.BEEP_ENABLED", Intents.Scan.BEEP_ENABLED);*/
-
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
         capture.setShowMissingCameraPermissionDialog(false);
-        //capture.decode();
 
-        changeMaskColor(null);
+        //changeMaskColor(null);
         changeLaserVisibility(true);
         barcodeScannerView.decodeSingle(new BarcodeCallback() {
             @Override
@@ -137,8 +121,10 @@ public class CustomScannerActivity extends Activity {
         Log.d(TAG, "Switch torch");
         if (switchFlashlightButton.isActivated()) {
             barcodeScannerView.setTorchOff();
+            switchFlashlightButton.setActivated(false);
         } else {
             barcodeScannerView.setTorchOn();
+            switchFlashlightButton.setActivated(true);
         }
     }
 
@@ -183,27 +169,4 @@ public class CustomScannerActivity extends Activity {
         finish();
     }
 
-    /*private void handleActivityResult(int resultCode, Intent intent) {
-        super.onActivityResult(Utils.SELECT_BARCODE_REQUEST, resultCode, intent);
-
-        BarcodeValues barcodeValues;
-
-        try {
-            barcodeValues = Utils.parseSetBarcodeActivityResult(Utils.SELECT_BARCODE_REQUEST, resultCode, intent, this);
-        } catch (NullPointerException e) {
-            Toast.makeText(this, "Error reading image", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (!barcodeValues.isEmpty()) {
-            Intent manualResult = new Intent();
-            Bundle manualResultBundle = new Bundle();
-            manualResultBundle.putString("BarcodeContent", barcodeValues.content());
-            manualResultBundle.putString("BarcodeFormat", barcodeValues.format());
-
-            manualResult.putExtras(manualResultBundle);
-            CustomScannerActivity.this.setResult(RESULT_OK, manualResult);
-            finish();
-        }
-    }*/
 }
