@@ -3,10 +3,6 @@
 Pilldroid est une application de gestion de stock **théorique** de médicament à
 destinations des personnes résidant en France.
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/net.foucry.pilldroid/)
-
 ## Ce que n'est pas Pilldroid
 
 - Pilldroid n'est pas un pilulier. Pilldroid ne vous rappellera pas de prendre
@@ -31,7 +27,7 @@ lancer son cycle de réveil journalier ;
   scanner le code barre des boites de médicaments ;
 - Pilldroid a besoin de pouvoir vous envoyer des alarmes ;
 - Pilldroid a besoin de faire vibrer le téléphone pour les alarmes ;
-- Pilldroid utilise un accès Internet pour les remontée de crash *via* la bibliothèque [sentry.io](https://sentry.io).
+
   
 ## L'application Pilldroid embarque-t-elle des bibliothèques tierce ?
 
@@ -39,11 +35,6 @@ Oui. Pour la lecture de code barre, Pilldroid utilise le projet
 [zxing](https://github.com/journeyapps/zxing-android-embedded) lui-même libre et
 ouvert.
 
-A terme Pilldroid utilisera la bibliothèque
-[sentry.io](https://sentry.io/for/android/) quand j'aurais compris comment cela
-fonctionne. Le but est d'avoir des remontées les crashs de l'application sans
-collecter de données à caractère personnel.
-Déjà embarquée mais non fonctionnelle, `sentry.io` à besoin de l'accès Internet.
 
 ## L'application Pilldroid contient-elle des pisteurs ?
 

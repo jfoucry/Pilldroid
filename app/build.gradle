@@ -1,14 +1,6 @@
 //noinspection GradleCompatible
 apply plugin: 'com.android.application'
 
-ext.versionMajor = 0
-ext.versionMinor = 65
-ext.versionPatch = new Date().format("yyyyMMdd")
-ext.versionClassifier = null
-ext.isSnapshot = false
-ext.minimumSdkVersion = defaultMinSdkVersion
-ext.git_version= ("git rev-parse --short HEAD".execute().text.trim())
-
 // Try reading secrets from file
 def secretsPropertiesFile = rootProject.file("secrets.properties")
 def secretProperties = new Properties()
@@ -26,22 +18,26 @@ else {
 android {
     signingConfigs {
         release {
+            storeFile rootProject.file("android-signing-keystore.jks")
+            storePassword secretProperties['signing_keystore_password']
+            keyAlias secretProperties['signing_release_alias_key']
+            keyPassword secretProperties['signing_release_key_password']
         }
         prerelease {
-            storeFile file("../android-signing-keystore.jks")
+            storeFile rootProject.file("android-signing-keystore.jks")
             storePassword secretProperties['signing_keystore_password']
-            keyAlias secretProperties['signing_key_alias']
-            keyPassword secretProperties['signing_key_password']
+            keyAlias secretProperties['signing_pre-release_key_alias']
+            keyPassword secretProperties['signing_pre-release_key_password']
         }
     }
-    compileSdkVersion 29
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "net.foucry.pilldroid"
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
-        versionCode generateVersionCode() // 190010203
-        versionName generateVersionName() // 1.2.3-SNAPSHOT
+        versionCode 100
+        versionName "v0.100-beta"
         multiDexEnabled true
     }
 
@@ -55,6 +51,7 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
+            signingConfig signingConfigs.release
         }
         prerelease {
             minifyEnabled false
@@ -81,15 +78,11 @@ android {
     }
 
     compileOptions {
-        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
 
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    dexOptions {
-        incremental false
-        javaMaxHeapSize "4g"
-    }
+    buildToolsVersion '32.0.0'
 
     allprojects {
         tasks.withType(JavaCompile) {
@@ -112,40 +105,13 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.13.2'
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
-    implementation 'androidx.core:core:1.6.0'
+    implementation 'androidx.core:core:1.7.0'
 
-//    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
-
-    implementation 'io.sentry:sentry-android:5.4.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-}
-
-private Integer generateVersionCode() {
-    Integer versionCode = ext.minimumSdkVersion * 1000 + ext.versionMajor * 100 + ext.versionMinor
-    print "versionCode = " + versionCode +"\n"
-    return versionCode
-}
-
-private String generateVersionName() {
-    String versionName = "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
-    if (ext.versionClassifier == null && ext.isSnapshot) {
-        ext.versionClassifier = "SNAPSHOT"
-    }
-
-    if (ext.versionClassifier != null) {
-        versionName += "-" + ext.versionClassifier
-    }
-
-    if (ext.git_version != null) {
-        versionName += "-" + ext.git_version
-    }
-
-    print "versionName = " + versionName
-    return versionName
 }

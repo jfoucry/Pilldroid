@@ -3,22 +3,22 @@
     <string name="title_drug_detail">Détail Médicament</string>
     <string name="button_cancel">Annuler</string>
     <string name="button_ok">OK</string>
-    <string name="drug_presention_labal">Présentation</string>
+    <string name="drug_presentation_label">Présentation</string>
     <string name="drug_name_label">Nom</string>
-    <string name="drug_administationMode_label">Mode d\'adminitration</string>
+    <string name="drug_administrationMode_label">Mode d\'adminitration</string>
     <string name="msgNotFound">Médicament introuvable dans la base de données</string>
     <string name="about">À propos</string>
     <string name="help">Aide</string>
     <string name="drug_take_label">Prise</string>
-    <string name="drug_alertTherehold_label">Seuil critique</string>
-    <string name="drug_warningTherehold_label">Seuil d\'alerte</string>
+    <string name="drug_alertThreshold_label">Seuil critique</string>
+    <string name="drug_warningThreshold_label">Seuil d\'alerte</string>
     <string name="msgFound">Médicament trouvé dans la base de données</string>
     <string name="drug_current_stock_label">Stock courant</string>
     <string name="notification_text">Vous devez passer à la pharmacie</string>
     <string name="button_keyboard">Utilisez le clavier</string>
     <string name="detail_view">Vue de détail</string>
     <string name="save_button">Enrefistrez</string>
-    <string name="flashlighButton">Allumez/Éteignez le Flash</string>
+    <string name="flashlightButton">Allumez/Éteignez le Flash</string>
     <string name="enter_cip_13_here">Enter cip 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
 
@@ -42,12 +42,12 @@
     <string name="the_plus_icon">L\'icône Plus</string>
     <string name="slide4_desc">Pour trouver le CIP13</string>
     <string name="happy_face">Visage souriant</string>
-    <string name="barre_code_icone">Icône de code barre</string>
+    <string name="barcode_icon">Icône de code barre</string>
     <string name="qr_code_icon">icône de QR-Code</string>
     <string name="neutral_face">Visage neutre</string>
     <string name="unhappy_face">Visage grincheux</string>
     <string name="drug_info">Capture d\'écran sur la partie information du médicament</string>
-    <string name="tunables">Réglages</string>
+    <string name="tunable">Réglages</string>
     <string name="slide10_desc">Mettre la prise à zéro suspend le traitement et les calculs de stock</string>
     <string name="suspended_treatment_icon">Icône de traitemernt suspendu</string>
     <string name="slide11_desc">Pour enregistrer les changements, utilisez l\'icône de sauvegarde</string>
@@ -64,4 +64,6 @@
     <string name="label">Libellé</string>
     <string name="drug_list">Attributs d\'un médicament</string>
     <string name="notInterpreted">Le code barre ne peut pas être interprété</string>
+    <string name="cancelled_scan">Scan annulé</string>
+    <string name="missing_camera_permission">Permission appareil photo manquante</string>
 </resources>

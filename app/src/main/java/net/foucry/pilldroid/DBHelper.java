@@ -161,7 +161,7 @@ class DBHelper extends SQLiteOpenHelper {
             drug.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
         }
         // Log
-        Log.d(TAG, "getDrug("+id+")" + drug.toString());
+        Log.d(TAG, "getDrug("+id+")" + drug);
 
         assert cursor != null;
         cursor.close();
@@ -212,7 +212,7 @@ class DBHelper extends SQLiteOpenHelper {
         assert cursor != null;
         cursor.close();
 
-        Log.d(TAG, "getDrug(" + cip13 + ")" + drug.toString());
+        Log.d(TAG, "getDrug(" + cip13 + ")" + drug);
 
         return drug;
     }
@@ -274,10 +274,7 @@ class DBHelper extends SQLiteOpenHelper {
 
 
 
-        Log.d(TAG, "Before sort == " + drugs.toString());
-
-        /*drugs.sort(Comparator.comparing(Drug::getDateEndOfStock)
-                .thenComparing(Drug::getStock));*/
+        Log.d(TAG, "Before sort == " + drugs);
 
         drugs.sort(new Comparator<Drug>() {
             @Override
@@ -288,7 +285,7 @@ class DBHelper extends SQLiteOpenHelper {
                     return (int) (lhs.getStock() - rhs.getStock());
             }
         });
-        Log.d(TAG, "After sort " + drugs.toString());
+        Log.d(TAG, "After sort " + drugs);
 
         // Move drug with prise = 0 at the end of the list
         // todo: If some drug moved, must redo all the loop
@@ -320,7 +317,7 @@ class DBHelper extends SQLiteOpenHelper {
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Create ContentValues to add columnm/value
+        // Create ContentValues to add column/value
         ContentValues values = new ContentValues();
         values.put(KEY_ID,              drug.getId());
         values.put(KEY_CIS,             drug.getCis());
@@ -336,14 +333,14 @@ class DBHelper extends SQLiteOpenHelper {
 
         String[] selectionArgs = { String.valueOf(drug.getId()) };
 
-        db.update(TABLE_DRUG,           // table
-                values,                         // column/value
-                KEY_ID + " = ?",       // selections
+        db.update(TABLE_DRUG,                       // table
+                values,                             // column/value
+                KEY_ID + " = ?",        // selections
                 selectionArgs);
 
         // Close DB
         db.close();
-        Log.d(TAG, "values == " + values.toString());
+        Log.d(TAG, "values == " + values);
     }
 
     /**

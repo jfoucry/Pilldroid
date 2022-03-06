@@ -13,7 +13,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.List;
 
-
 /**
  * Created by jacques on 17/09/16.
  */
@@ -89,7 +88,7 @@ public class PillDroidJobService extends JobService {
         Log.d(TAG, "schedule notification");
         createNotificationChannel();
         Intent intent = new Intent(this, DrugListActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,PendingIntent.FLAG_MUTABLE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "PillDroid")
                 .setSmallIcon(R.drawable.ic_pill_alarm)
                 .setContentTitle(getString(R.string.app_name))
@@ -114,23 +113,21 @@ public class PillDroidJobService extends JobService {
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         String CHANNEL_ID = "PillDroid";
         NotificationChannel channel;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel = new NotificationChannel(CHANNEL_ID, name, importance);
 
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            try {
-                notificationManager.createNotificationChannel(channel);
-            } catch (Exception e) {
-                // This will catch any exception, because they are all descended from Exception
-                Log.e(TAG, e.toString());
-                //At the level Exception Class handle the error in Exception Table
-                // Exception Create That Error  Object and throw it
-                //E.g: FileNotFoundException ,etc
-                e.printStackTrace();
-            }
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        try {
+            notificationManager.createNotificationChannel(channel);
+        } catch (Exception e) {
+            // This will catch any exception, because they are all descended from Exception
+            Log.e(TAG, e.toString());
+            //At the level Exception Class handle the error in Exception Table
+            // Exception Create That Error  Object and throw it
+            //E.g: FileNotFoundException ,etc
+            e.printStackTrace();
         }
     }
 }

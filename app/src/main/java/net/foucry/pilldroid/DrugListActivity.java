@@ -1,11 +1,14 @@
 package net.foucry.pilldroid;
 
+import static net.foucry.pilldroid.UtilDate.date2String;
+import static net.foucry.pilldroid.Utils.intRandomExclusive;
+
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,16 +32,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.client.android.Intents;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static net.foucry.pilldroid.UtilDate.date2String;
-import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -53,11 +53,16 @@ public class DrugListActivity extends AppCompatActivity {
      * device.
      */
 
-    // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launchtime
+    // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launch time
     final Boolean DEMO = false;
     final Boolean DBDEMO = false;
 
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+    public final String BARCODE_FORMAT_NAME = "Barcode Format name";
+    public final String BARCODE_CONTENT = "Barcode Content";
+
+    private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
+
 
     /**
      * Start tutorial
@@ -74,8 +79,8 @@ public class DrugListActivity extends AppCompatActivity {
             nm.cancelAll();
         }
 
-        // tuto
-        Log.i(TAG, "Launch tuto");
+        // tutorial
+        Log.i(TAG, "Launch tutorial");
         startActivity(new Intent(this, WelcomeActivity.class));
     }
 
@@ -93,8 +98,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     private SimpleItemRecyclerViewAdapter mAdapter;
 
-    public void constructDrugsList()
-    {
+    public void constructDrugsList() {
         dbHelper = new DBHelper(getApplicationContext());
 
         if (!(drugs == null)) {
@@ -109,15 +113,14 @@ public class DrugListActivity extends AppCompatActivity {
         setupRecyclerView((RecyclerView) mRecyclerView);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_drug_list);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            dbHelper = new DBHelper(this);
-        }
+        dbHelper = new DBHelper(this);
         dbDrug = new DBDrugs(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -139,10 +142,10 @@ public class DrugListActivity extends AppCompatActivity {
                 // String presentation,double stock, double prise, int warn, int alert
 
                 // Limit for randoms generator
-                final int min_stock=5;
-                final int max_stock=50;
-                final int min_prise=0;
-                final int max_prise=3;
+                final int min_stock = 5;
+                final int max_stock = 50;
+                final int min_prise = 0;
+                final int max_prise = 3;
 
                 dbHelper.addDrug(new Drug("60000011", "3400930000011", "Médicament test 01", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
@@ -177,6 +180,68 @@ public class DrugListActivity extends AppCompatActivity {
             }
         }
 
+        mBarcodeScannerLauncher = registerForActivityResult(new PilldroidScanContract(),
+                result -> {
+                    if (result.getContents() == null) {
+                        Intent originalIntent = result.getOriginalIntent();
+                        Bundle bundle = originalIntent.getExtras();
+                        if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                            Log.d(TAG, "Missing camera permission");
+                            Toast.makeText(this, R.string.missing_camera_permission, Toast.LENGTH_LONG).show();
+                        } else {
+                            Log.d(TAG, "bundle == " + bundle.getInt("returnCode"));
+                            int returnCode = bundle.getInt("returnCode");
+                            int resultCode = bundle.getInt("resultCode");
+
+                            if (resultCode != 1) {
+                                if (returnCode == 3) {
+                                    if (BuildConfig.DEBUG) {
+                                        Toast.makeText(this, "Keyboard input",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                    Log.d(TAG, "Keyboard Input");
+                                    showInputDialog();
+                                } else if (returnCode == 2) {
+                                    Toast.makeText(this, R.string.cancelled_scan, Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Log.d(TAG, "Scanned");
+                                if (BuildConfig.DEBUG) {
+                                    Toast.makeText(this, "Scanned: " + bundle.getString(BARCODE_FORMAT_NAME),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                                String cip13;
+
+                                // Handle successful scan
+
+                                Log.d(TAG, "formatName = " + bundle.getString(BARCODE_FORMAT_NAME));
+
+                                switch (bundle.getString(BARCODE_FORMAT_NAME)) {
+                                    case "CODE_128":
+                                    case "EAN_13":  //CODE_128 || EAN 13
+                                        cip13 = bundle.getString(BARCODE_CONTENT);
+                                        break;
+                                    case "CODE_39":
+                                        cip13 = dbDrug.getCIP13FromCIP7(bundle.getString(BARCODE_CONTENT));
+                                        break;
+                                    case "DATA_MATRIX":
+                                        cip13 = bundle.getString(BARCODE_CONTENT).substring(4, 17);
+                                        break;
+                                    default:
+                                        scanNotOK();
+                                        return;
+                                }
+
+                                // Get Drug from database
+                                final Drug scannedDrug = dbDrug.getDrugByCIP13(cip13);
+
+                                // add Drug to prescription database
+                                askToAddInDB(scannedDrug);
+                            }
+                        }
+                    }
+                });
+
         constructDrugsList();
     }
 
@@ -202,9 +267,27 @@ public class DrugListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /*if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }*/
+        if (requestCode == CUSTOMIZED_REQUEST_CODE) {
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode +
+                        "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
+            }
+            Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
+            constructDrugsList();
+        }
+    }
+
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause really!");
+        Log.d(TAG, "onPause");
         AlarmReceiver.scheduleAlarm(this);
     }
 
@@ -212,89 +295,24 @@ public class DrugListActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    /** scanNow
-     *
-     * @param view
-     *  call ZXing Library to scan a new QR/EAN code
-     */
-    public void scanNow(View view) {
-        new IntentIntegrator(this).setOrientationLocked(false).setCaptureActivity(CustomScannerActivity.class).initiateScan();
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
-        }
-        if (requestCode == CUSTOMIZED_REQUEST_CODE) {
-            if (BuildConfig.DEBUG) { Toast.makeText(this, "REQUEST_CODE = " + requestCode +
-                    "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show(); }
-            Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-            constructDrugsList();
-        } else {
-            IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+    // Launch scan
+    public void onButtonClick() {
+        Log.d(TAG, "add medication");
+        ScanOptions options = new ScanOptions();
+        options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
+                ScanOptions.CODE_128);
+        options.setCameraId(0);  // Use a specific camera of the device
+        options.setBeepEnabled(true);
+        options.setBarcodeImageEnabled(true);
+        //options.setTimeout(3600);
+        options.setCaptureActivity(CustomScannerActivity.class);
+        options.setBeepEnabled(true);
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
+        options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
 
-            if (BuildConfig.DEBUG) { Toast.makeText(this, "REQUEST_CODE = " + requestCode,
-                    Toast.LENGTH_LONG).show(); }
-
-            Log.d(TAG, "REQUEST_CODE = " + requestCode + "resultCode = " + resultCode);
-            if (result.getContents() == null) {
-                Intent originalIntent = result.getOriginalIntent();
-                if (originalIntent == null) {
-                    if (resultCode == 3) {
-                        if(BuildConfig.DEBUG) { Toast.makeText(this, "Keyboard input",
-                                Toast.LENGTH_SHORT).show(); }
-                        Log.d(TAG, "Keyboard Input");
-                        showInputDialog();
-                    } else {
-                        Log.d(TAG, "Cancelled scan");
-                        Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-                    }
-                    if(BuildConfig.DEBUG) { Toast.makeText(this, "Cancelled",
-                            Toast.LENGTH_LONG).show(); }
-                } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                    Log.d(TAG, "Cancelled scan due to missing camera permission");
-                    Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-                    Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
-                }
-            } else {
-                Log.d(TAG, "Scanned");
-                Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-                Log.d(TAG, "result.getContents = " + result.getContents());
-                Log.d(TAG, "format = " + result.getFormatName());
-
-                if (BuildConfig.DEBUG) { Toast.makeText(this, "Scanned: " +
-                        result.getContents(), Toast.LENGTH_LONG).show(); }
-
-                String cip13;
-
-                // Handle successful scan
-
-                Log.d(TAG, "formatName = " + result.getFormatName());
-
-                switch (result.getFormatName()) {
-                    case "CODE_128":
-                    case "EAN_13":  //CODE_128 || EAN 13
-                        cip13 = result.getContents();
-                        break;
-                    case "CODE_39":
-                        cip13 = dbDrug.getCIP13FromCIP7(result.getContents());
-                        break;
-                    case "DATA_MATRIX":
-                        cip13 = result.getContents().substring(4, 17);
-                        break;
-                    default:
-                        scanNotOK();
-                        return;
-                }
-
-                // Get Drug from database
-                final Drug scannedDrug = dbDrug.getDrugByCIP13(cip13);
-                    askToAddInDB(scannedDrug);
-            }
-        }
+        Log.d(TAG, "scanOptions == " +  options);
+        mBarcodeScannerLauncher.launch(options);
     }
 
     /**
@@ -316,7 +334,7 @@ public class DrugListActivity extends AppCompatActivity {
                     String cip13 = editText.getText().toString();
 
                     Drug aDrug = dbDrug.getDrugByCIP13(cip13);
-                        askToAddInDB(aDrug);
+                    askToAddInDB(aDrug);
                 })
                 .setNegativeButton("Cancel",
                         (dialog, id) -> dialog.cancel());
@@ -346,6 +364,7 @@ public class DrugListActivity extends AppCompatActivity {
     /**
      * Ask if the drug found in the database should be include in the
      * user database
+     *
      * @param aDrug Drug- drug to be added
      */
     private void askToAddInDB(Drug aDrug) {
@@ -375,8 +394,7 @@ public class DrugListActivity extends AppCompatActivity {
     /**
      * Tell user that the barre code cannot be interpreted
      */
-    private void scanNotOK()
-    {
+    private void scanNotOK() {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setTitle(getString(R.string.app_name));
 
@@ -389,10 +407,12 @@ public class DrugListActivity extends AppCompatActivity {
 
     /**
      * Add New drug to the user database
+     *
      * @param aDrug Drug - drug to be added
      */
-    private void addDrugToList(Drug aDrug)
-    {
+
+    @SuppressWarnings("deprecation")
+    private void addDrugToList(Drug aDrug) {
         aDrug.setDateEndOfStock();
         mAdapter.addItem(aDrug);
 
@@ -400,11 +420,24 @@ public class DrugListActivity extends AppCompatActivity {
         Context context = this;
         Intent intent = new Intent(context, DrugDetailActivity.class);
         intent.putExtra("drug", aDrug);
+
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
-     /**
-     * setupRecyclerView (list of drugs
+
+    private String getAppName() {
+        PackageManager packageManager = getApplicationContext().getPackageManager();
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
+        } catch (final PackageManager.NameNotFoundException ignored) {
+        }
+        return (String) ((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
+    }
+
+    /**
+     * setupRecyclerView (list of drugs)
+     *
      * @param recyclerView RecyclerView
      */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -413,21 +446,13 @@ public class DrugListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    private String getAppName() {
-        PackageManager packageManager = getApplicationContext().getPackageManager();
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
-        } catch (final PackageManager.NameNotFoundException ignored) {}
-        return (String)((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
-    }
-
     /**
      * SimpleItemRecyclerViewAdapter
      */
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Drug> mValues;
+
         SimpleItemRecyclerViewAdapter(List<Drug> items) {
             mValues = items;
         }
@@ -452,6 +477,7 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         @Override
+        @SuppressWarnings("deprecation")
         public void onBindViewHolder(final ViewHolder holder, int dummy) {
             final int position = holder.getBindingAdapterPosition();
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy", Locale.getDefault());
@@ -473,6 +499,19 @@ public class DrugListActivity extends AppCompatActivity {
             if (mValues.get(position).getTake() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
                 holder.mIconView.setImageResource(R.drawable.ic_suspended_pill);
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Drug drug = mValues.get(position);
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, DrugDetailActivity.class);
+                        intent.putExtra("drug", drug);
+                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+
+                    }
+                });
             } else {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getTake());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
@@ -486,19 +525,21 @@ public class DrugListActivity extends AppCompatActivity {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_ok);
                     holder.mIconView.setImageResource(R.drawable.ok_stock_vect);
                 }
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Drug drug = mValues.get(position);
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, DrugDetailActivity.class);
+                        intent.putExtra("drug", drug);
+                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+
+                    }
+                });
             }
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Drug drugCourant = mValues.get(position);
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, DrugDetailActivity.class);
-                    intent.putExtra("drug", drugCourant);
-                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
-                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                }
-            });
         }
 
         @Override
@@ -511,8 +552,7 @@ public class DrugListActivity extends AppCompatActivity {
             final TextView mContentView;
             final TextView mEndOfStock;
             final ImageView mIconView;
-
-            Drug mItem;
+            public Drug mItem;
 
             ViewHolder(View view) {
                 super(view);

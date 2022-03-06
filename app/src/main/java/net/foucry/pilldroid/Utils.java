@@ -1,11 +1,20 @@
 package net.foucry.pilldroid;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
 public class Utils {
-    private static final String TAG = UtilDate.class.getName();
+    private static final String TAG = Utils.class.getName();
+
+    public static final int SELECT_BARCODE_REQUEST = 2;
+    public static final int BARCODE_SCAN = 3;
 
     public static void CopyStream(InputStream is, OutputStream os)
     {
@@ -20,8 +29,10 @@ public class Utils {
                   break;
               os.write(bytes, 0, count);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        catch(Exception ignored){}
+
     }
 
     /**
@@ -34,5 +45,4 @@ public class Utils {
         Random r = new Random();
         return r.nextInt(max - min) +max;
     }
-
 }
