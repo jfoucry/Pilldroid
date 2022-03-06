@@ -317,7 +317,7 @@ class DBHelper extends SQLiteOpenHelper {
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Create ContentValues to add columnm/value
+        // Create ContentValues to add column/value
         ContentValues values = new ContentValues();
         values.put(KEY_ID,              drug.getId());
         values.put(KEY_CIS,             drug.getCis());
@@ -333,9 +333,9 @@ class DBHelper extends SQLiteOpenHelper {
 
         String[] selectionArgs = { String.valueOf(drug.getId()) };
 
-        db.update(TABLE_DRUG,           // table
-                values,                         // column/value
-                KEY_ID + " = ?",       // selections
+        db.update(TABLE_DRUG,                       // table
+                values,                             // column/value
+                KEY_ID + " = ?",        // selections
                 selectionArgs);
 
         // Close DB
