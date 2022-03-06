@@ -3,6 +3,7 @@ package net.foucry.pilldroid;
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -78,8 +79,8 @@ public class DrugListActivity extends AppCompatActivity {
             nm.cancelAll();
         }
 
-        // tuto
-        Log.i(TAG, "Launch tuto");
+        // tutorial
+        Log.i(TAG, "Launch tutorial");
         startActivity(new Intent(this, WelcomeActivity.class));
     }
 
@@ -112,6 +113,7 @@ public class DrugListActivity extends AppCompatActivity {
         setupRecyclerView((RecyclerView) mRecyclerView);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,7 +192,7 @@ public class DrugListActivity extends AppCompatActivity {
                             Log.d(TAG, "bundle == " + bundle.getInt("returnCode"));
                             int returnCode = bundle.getInt("returnCode");
                             int resultCode = bundle.getInt("resultCode");
-                            //Todo: copy code form old method to switch between returnCode
+
                             if (resultCode != 1) {
                                 if (returnCode == 3) {
                                     if (BuildConfig.DEBUG) {
@@ -232,11 +234,14 @@ public class DrugListActivity extends AppCompatActivity {
 
                                 // Get Drug from database
                                 final Drug scannedDrug = dbDrug.getDrugByCIP13(cip13);
+
+                                // add Drug to prescription database
                                 askToAddInDB(scannedDrug);
                             }
                         }
                     }
                 });
+
         constructDrugsList();
     }
 
@@ -260,6 +265,24 @@ public class DrugListActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /*if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }*/
+        if (requestCode == CUSTOMIZED_REQUEST_CODE) {
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(this, "REQUEST_CODE = " + requestCode +
+                        "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
+            }
+            Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
+            constructDrugsList();
+        }
     }
 
     public void onPause() {
@@ -387,6 +410,8 @@ public class DrugListActivity extends AppCompatActivity {
      *
      * @param aDrug Drug - drug to be added
      */
+
+    @SuppressWarnings("deprecation")
     private void addDrugToList(Drug aDrug) {
         aDrug.setDateEndOfStock();
         mAdapter.addItem(aDrug);
@@ -395,19 +420,9 @@ public class DrugListActivity extends AppCompatActivity {
         Context context = this;
         Intent intent = new Intent(context, DrugDetailActivity.class);
         intent.putExtra("drug", aDrug);
+
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-    }
-
-    /**
-     * setupRecyclerView (list of drugs
-     *
-     * @param recyclerView RecyclerView
-     */
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        mAdapter = new SimpleItemRecyclerViewAdapter(drugs);
-        recyclerView.setAdapter(mAdapter);
     }
 
     private String getAppName() {
@@ -418,6 +433,17 @@ public class DrugListActivity extends AppCompatActivity {
         } catch (final PackageManager.NameNotFoundException ignored) {
         }
         return (String) ((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
+    }
+
+    /**
+     * setupRecyclerView (list of drugs)
+     *
+     * @param recyclerView RecyclerView
+     */
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
+        mAdapter = new SimpleItemRecyclerViewAdapter(drugs);
+        recyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -451,6 +477,7 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         @Override
+        @SuppressWarnings("deprecation")
         public void onBindViewHolder(final ViewHolder holder, int dummy) {
             final int position = holder.getBindingAdapterPosition();
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy", Locale.getDefault());
@@ -472,6 +499,19 @@ public class DrugListActivity extends AppCompatActivity {
             if (mValues.get(position).getTake() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
                 holder.mIconView.setImageResource(R.drawable.ic_suspended_pill);
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Drug drug = mValues.get(position);
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, DrugDetailActivity.class);
+                        intent.putExtra("drug", drug);
+                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+
+                    }
+                });
             } else {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getTake());
                 if (remainingStock <= mValues.get(position).getAlertThreshold()) {
@@ -485,19 +525,21 @@ public class DrugListActivity extends AppCompatActivity {
                     holder.mView.setBackgroundResource(R.drawable.gradient_bg_ok);
                     holder.mIconView.setImageResource(R.drawable.ok_stock_vect);
                 }
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Drug drug = mValues.get(position);
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, DrugDetailActivity.class);
+                        intent.putExtra("drug", drug);
+                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+
+                    }
+                });
             }
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Drug drugCourant = mValues.get(position);
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, DrugDetailActivity.class);
-                    intent.putExtra("drug", drugCourant);
-                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
-                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                }
-            });
         }
 
         @Override
@@ -510,6 +552,7 @@ public class DrugListActivity extends AppCompatActivity {
             final TextView mContentView;
             final TextView mEndOfStock;
             final ImageView mIconView;
+            public Drug mItem;
 
             ViewHolder(View view) {
                 super(view);
