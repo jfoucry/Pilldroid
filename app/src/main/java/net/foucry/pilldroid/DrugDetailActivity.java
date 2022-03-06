@@ -29,24 +29,24 @@ public class DrugDetailActivity extends AppCompatActivity {
 
     Drug drug;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle extras = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
 
         /* fetching the string passed with intent using ‘extras’*/
 
-        assert extras != null;
-        drug = (Drug) extras.getSerializable("drug");
+        assert bundle != null;
+        drug = (Drug) bundle.getSerializable("drug");
 
         assert drug != null;
         Log.d(TAG, "drug == " + drug);
 
+        /* fetching the string passed with intent using ‘bundle’*/
+
         setContentView(R.layout.activity_drug_detail);
         Toolbar toolbar = findViewById(detail_toolbar);
-
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
