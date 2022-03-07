@@ -30,6 +30,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -122,10 +123,12 @@ public class DrugListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Create Room database
-        PilldroidDatabase prescription = Room.databaseBuilder(this, PilldroidDatabase.class, "prescription")
-          .allowMainThreadQueries()
-          .build();
+        PilldroidDatabase prescription = Room
+                .databaseBuilder(getApplicationContext(), PilldroidDatabase.class, "prescriptions")
+                .allowMainThreadQueries()
+                .build();
 
+        // Set view content
         setContentView(R.layout.activity_drug_list);
 
         dbHelper = new DBHelper(this);
@@ -148,23 +151,23 @@ public class DrugListActivity extends AppCompatActivity {
 
           final int min_stock = 5;
           final int max_stock = 50;
-          final int min_prise = 0;
-          final int max_prise = 3;
+          final int min_take = 0;
+          final int max_take = 3;
 
           for(int i=1; i < 11; i++) {
-            Medic medic = new Medic();
-            medic.setName=("Medicament test "+ i);
-            medic.setCip13=("340093000001"+i);
-            medic.setCis=("6000001"+i);
-            medic.setAdministration_mode=("oral");
-            medic.setPresentation=i("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
-            setStock=intRandomExclusive(min_stock,max_stock);
-            setTake=intRandomExclusive(min_take, max_take);
-            setWarning=14;
-            setAlert=7;
-            setLastDate=UtilDate.dateAtNoon(new Date()).getTime();
+              Medic medic = new Medic(i);
+              medic.setName("Medicament test " + i);
+              medic.setCip13("340093000001" + i);
+              medic.setCis("6000001" + i);
+              medic.setAdministration_mode("oral");
+              medic.setPresentation("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
+              medic.setStock((long) intRandomExclusive(min_stock, max_stock));
+              medic.setTake((long) intRandomExclusive(min_take, max_take));
+              medic.setWarning(14);
+              medic.setAlert(7);
+              medic.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
 
-            medicDAO.insert(item);
+              medicDAO.insert(medic);
           }
           List<Medic> prescriptions = medicDAO.getMedics();
           System.out.println(prescriptions);
