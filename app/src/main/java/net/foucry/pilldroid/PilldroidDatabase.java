@@ -1,10 +1,10 @@
 package net.foucry.pilldroid;
 
-import android.arch.persistence.root.Database;
-import android.arch.persistence.root.RoomDatabase;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
 
 import net.foucry.pilldroid.dao.MedicDAO;
-import net.foucry.pilldroid.model.Medic;
+import net.foucry.pilldroid.models.Medic;
 
 @Database(entities = {Medic.class}, version = 1)
 
