@@ -39,6 +39,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import net.foucry.pilldroid.dao.MedicDAO;
+import net.foucry.pilldroid.models.Medic;
+
 /**
  * An activity representing a list of Drugs is activity
  * has different presentations for handset and tablet-size devices. On
@@ -118,6 +121,11 @@ public class DrugListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Create Room database
+        PilldroidDatabase prescription = Room.databaseBuilder(this, PilldroidDatabase.class, "prescription")
+          .allowMainThreadQueries()
+          .build();
+
         setContentView(R.layout.activity_drug_list);
 
         dbHelper = new DBHelper(this);
@@ -136,6 +144,31 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         if (DEMO) {
+          MedicDAO medicDAO = prescription.getMedicDAO();
+
+          final int min_stock = 5;
+          final int max_stock = 50;
+          final int min_prise = 0;
+          final int max_prise = 3;
+
+          for(int i=1; i < 11; i++) {
+            Medic medic = new Medic();
+            medic.setName=("Medicament test "+ i);
+            medic.setCip13=("340093000001"+i);
+            medic.setCis=("6000001"+i);
+            medic.setAdministration_mode=("oral");
+            medic.setPresentation=i("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
+            setStock=intRandomExclusive(min_stock,max_stock);
+            setTake=intRandomExclusive(min_take, max_take);
+            setWarning=14;
+            setAlert=7;
+            setLastDate=UtilDate.dateAtNoon(new Date()).getTime();
+
+            medicDAO.insert(item);
+          }
+          List<Medic> prescriptions = medicDAO.getMedics();
+          System.out.println(prescriptions);
+/*
             if (dbHelper.getCount() == 0) {
 
                 // String cis, String cip13, String nom, String mode_administration,
@@ -177,7 +210,7 @@ public class DrugListActivity extends AppCompatActivity {
                 dbHelper.addDrug(new Drug("60000010", "3400930000010", "Médicament test 10", "orale",
                         "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
                         intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-            }
+            }*/
         }
 
         mBarcodeScannerLauncher = registerForActivityResult(new PilldroidScanContract(),
