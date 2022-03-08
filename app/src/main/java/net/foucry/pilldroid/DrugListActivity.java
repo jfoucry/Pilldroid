@@ -58,7 +58,7 @@ public class DrugListActivity extends AppCompatActivity {
      */
 
     // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launch time
-    final Boolean DEMO = false;
+    final Boolean DEMO = true;
     final Boolean DBDEMO = false;
 
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
@@ -155,7 +155,7 @@ public class DrugListActivity extends AppCompatActivity {
           final int max_take = 3;
 
           for(int i=1; i < 11; i++) {
-              Medic medic = new Medic(i);
+              Medic medic = new Medic();
               medic.setName("Medicament test " + i);
               medic.setCip13("340093000001" + i);
               medic.setCis("6000001" + i);
@@ -167,7 +167,7 @@ public class DrugListActivity extends AppCompatActivity {
               medic.setAlert(7);
               medic.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
 
-              medicDAO.insert(medic);
+              medicDAO.insertAll(medic);
           }
           List<Medic> prescriptions = medicDAO.getMedics();
           System.out.println(prescriptions);
