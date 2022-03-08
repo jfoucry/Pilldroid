@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface MedicDAO {
   @Insert
-  void insert(Medic... medics);
+  void insertAll(Medic... medics);
 
   @Update
   void update(Medic... medics);
@@ -25,8 +25,8 @@ public interface MedicDAO {
   @Query("SELECT * FROM medics")
   List<Medic> getMedics();
 
-  @Query("SELECT * FROM medics WHERE id = :id")
-  Medic getMedicBy(Long id);
+/*  @Query("SELECT * FROM medics WHERE id = :id")
+  Medic getMedicBy(Long id);*/
 
   @Query("SELECT * FROM medics WHERE cip13 = :cip13")
   Medic getMedicByCIP13(String cip13);
