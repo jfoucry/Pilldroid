@@ -39,6 +39,11 @@ android {
         versionCode 100
         versionName "v0.100-beta"
         multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -102,9 +107,12 @@ sourceSets {
     }
 }
 dependencies {
-    implementation 'androidx.room:room-common:2.4.2'
-    annotationProcessor 'androidx.room:room-compiler:2.4.2'
-    def room_version = "2.4.2"
+    implementation "androidx.room:room-common:2.4.2"
+    annotationProcessor "androidx.room:room-compiler:2.4.2"
+    implementation "androidx.room:room-testing:2.4.2"
+    implementation "androidx.room:room-rxjava3:2.4.2"
+    implementation "androidx.room:room-runtime:2.4.2"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.13.2'
 
@@ -112,13 +120,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation "androidx:room:room-runtime:$room_version"
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
     implementation 'androidx.core:core:1.7.0'
-
-    implementation "androidx:room:room-runtime:$room_version"
-    implementation "androidx.room:room-rxjava3:$room_version"
-    testImplementation "androidx.room:room-testing:$room_version"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }
