@@ -7,8 +7,7 @@ import androidx.annotation.NonNull;
 @Entity(tableName = "medics")
 public class Medic {
   @PrimaryKey
-  @NonNull private final Integer id;
-  private String  cis;
+  @NonNull private String  cis;
   private String  cip13;
   private String  name;
   private String  administration_mode;
@@ -19,9 +18,10 @@ public class Medic {
   private Integer alert;
   private Long    last_update;
 
-  public Medic(@NonNull Integer id) {
+
+/*  public Medic(@NonNull Integer id) {
     this.id = id;
-  }
+  }*/
 
   public void setCis(String cis)
 {
@@ -65,12 +65,12 @@ public void setLast_update(Long last_update) {
   this.last_update = last_update;
 }
 
-@NonNull
-Integer getId() {
+//@NonNull
+/*public Integer getId() {
   return  this.id;
-}
+}*/
 
-String getCis() {
+public String getCis() {
   return this.cis;
 }
 
