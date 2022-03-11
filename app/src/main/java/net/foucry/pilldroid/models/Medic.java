@@ -1,8 +1,13 @@
 package net.foucry.pilldroid.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
+
+import net.foucry.pilldroid.UtilDate;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity(tableName = "medics")
 public class Medic {
@@ -12,8 +17,8 @@ public class Medic {
   private String  name;
   private String  administration_mode;
   private String  presentation;
-  private Long    stock;
-  private Long    take;
+  private Double  stock;
+  private Double  take;
   private Integer warning;
   private Integer alert;
   private Long    last_update;
@@ -28,7 +33,6 @@ public class Medic {
   this.cis = cis;
 }
 
-
   public void setCip13(String cip13) {
     this.cip13 = cip13;
   }
@@ -37,31 +41,30 @@ public class Medic {
     this.name = name;
   }
 
-public void setAdministration_mode(String administration_mode) {
-
+  public void setAdministration_mode(String administration_mode) {
   this.administration_mode = administration_mode;
-}
+  }
 
-public void setPresentation(String presentation) {
+  public void setPresentation(String presentation) {
   this.presentation = presentation;
 }
-public void setStock(Long stock) {
+  public void setStock(Double stock) {
   this.stock = stock;
 }
 
-public void setTake(Long take) {
+  public void setTake(Double take) {
   this.take = take;
 }
 
-public void setWarning(Integer warning) {
+  public void setWarning(Integer warning) {
   this.warning = warning;
 }
 
-public void setAlert(Integer alert) {
+  public void setAlert(Integer alert) {
   this.alert = alert;
 }
 
-public void setLast_update(Long last_update) {
+  public void setLast_update(Long last_update) {
   this.last_update = last_update;
 }
 
@@ -70,7 +73,8 @@ public void setLast_update(Long last_update) {
   return  this.id;
 }*/
 
-public String getCis() {
+@NonNull
+  public String getCis() {
   return this.cis;
 }
 
@@ -94,11 +98,11 @@ public String getCis() {
     return presentation;
   }
 
-  public Long getStock() {
+  public Double getStock() {
     return stock;
   }
 
-  public Long getTake() {
+  public Double getTake() {
     return take;
   }
 
@@ -108,6 +112,30 @@ public String getCis() {
 
   public Long getLast_update() {
     return last_update;
+  }
+
+  public int getAlertThreshold() {
+    return this.alert;
+  }
+
+  public int getWarnThreshold() {
+  return this.warning;
+  }
+
+  public Date getDateEndOfStock() {
+    int numberDayOfTake;
+    if (this.getTake() > 0) {
+      numberDayOfTake = (int) Math.floor(this.getStock() / this.getTake());
+    } else {
+      numberDayOfTake = 0;
+    }
+
+    Date aDate = UtilDate.dateAtNoon(new Date());
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(aDate);
+    calendar.add(Calendar.DAY_OF_YEAR, numberDayOfTake);
+
+    return calendar.getTime();
   }
 }
 

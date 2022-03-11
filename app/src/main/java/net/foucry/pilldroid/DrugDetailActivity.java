@@ -17,6 +17,9 @@ import java.util.Date;
 
 import static net.foucry.pilldroid.R.id.detail_toolbar;
 
+import net.foucry.pilldroid.dao.MedicDAO;
+import net.foucry.pilldroid.models.Medic;
+
 /**
  * An activity representing a single Drug detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -27,7 +30,7 @@ public class DrugDetailActivity extends AppCompatActivity {
 
     private static final String TAG = DrugDetailActivity.class.getName();
 
-    Drug drug;
+    Medic aMedic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,10 @@ public class DrugDetailActivity extends AppCompatActivity {
         /* fetching the string passed with intent using ‘extras’*/
 
         assert bundle != null;
-        drug = (Drug) bundle.getSerializable("drug");
+        aMedic = (Medic) bundle.getSerializable("medic");
 
-        assert drug != null;
-        Log.d(TAG, "drug == " + drug);
+        assert aMedic != null;
+        Log.d(TAG, "aMedic == " + aMedic);
 
         /* fetching the string passed with intent using ‘bundle’*/
 
@@ -69,7 +72,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setTitle(drug.getName());
+            actionBar.setTitle(aMedic.getName());
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -114,9 +117,12 @@ public class DrugDetailActivity extends AppCompatActivity {
     private void getMDrugChanges() {
         Log.d(TAG, "Time to save new values");
 
+        PilldroidDatabase prescriptions = null;
         DBHelper dbHelper = new DBHelper(this);
+        assert false;
+        MedicDAO medicDAO = prescriptions.getMedicDAO();
 
-        Drug newDrug = dbHelper.getDrugByCIP13(drug.getCip13());
+        Medic newMedic = medicDAO.getMedicByCIP13(aMedic.getCip13());
 
         View stockView;
         View takeView;
@@ -139,18 +145,19 @@ public class DrugDetailActivity extends AppCompatActivity {
         TextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
 
-        newDrug.setStock(Double.parseDouble(stockValue));
-        newDrug.setTake(Double.parseDouble(takeValue));
-        newDrug.setWarnThreshold(Integer.parseInt(warningValue));
-        newDrug.setAlertThreshold(Integer.parseInt(alertValue));
-        newDrug.setDateEndOfStock();
+        newMedic.setStock(Double.parseDouble(stockValue));
+        newMedic.setTake(Double.parseDouble(takeValue));
+        newMedic.setWarning(Integer.parseInt(warningValue));
+        newMedic.setAlert(Integer.parseInt(alertValue));
+        newMedic.getDateEndOfStock();
 
-        if (drug.equals(newDrug)) {
-            Log.d(TAG, "drug and newDrug are Equals");
+        if (aMedic.equals(newMedic)) {
+            Log.d(TAG, "medic and newMedic are Equals");
         } else {
-            Log.d(TAG, "drug and newDrug are NOT Equals");
-            newDrug.setDateLastUpdate(new Date().getTime());
-            dbHelper.updateDrug(newDrug);
+            Log.d(TAG, "medic and newMedic are NOT Equals");
+            newMedic.setLast_update(new Date().getTime());
+            medicDAO.update(newMedic);
+            //dbHelper.updateDrug(newDrug);
         }
     }
 }

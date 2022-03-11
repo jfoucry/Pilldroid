@@ -12,7 +12,7 @@ import java.util.Locale;
 /**
  * Created by jacques on 05/05/16.
  */
-class UtilDate {
+public class UtilDate {
 
     private static final String TAG = UtilDate.class.getName();
 
@@ -21,7 +21,7 @@ class UtilDate {
      * @return date the same date as input but at noon (12:00:00 PM)
      * set date time at Noon
      */
-    static Date dateAtNoon(Date aDate) {
+    public static Date dateAtNoon(Date aDate) {
 
         Log.d(TAG, "dateAtNoon " + aDate);
 

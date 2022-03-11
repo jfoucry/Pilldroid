@@ -1,5 +1,7 @@
 package net.foucry.pilldroid.dao;
 
+import static net.foucry.pilldroid.UtilDate.dateAtNoon;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -8,12 +10,15 @@ import androidx.room.Update;
 
 import net.foucry.pilldroid.models.Medic;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Dao
 public interface MedicDAO {
   @Insert
-  void insertAll(Medic... medics);
+  void insert(Medic... medics);
+
 
   @Update
   void update(Medic... medics);
@@ -23,7 +28,7 @@ public interface MedicDAO {
 
 
   @Query("SELECT * FROM medics")
-  List<Medic> getMedics();
+  List<Medic> getAllMedics();
 
 /*  @Query("SELECT * FROM medics WHERE id = :id")
   Medic getMedicBy(Long id);*/
@@ -34,3 +39,5 @@ public interface MedicDAO {
   @Query("SELECT count(*) FROM medics")
   int getMedicCount();
 }
+
+
