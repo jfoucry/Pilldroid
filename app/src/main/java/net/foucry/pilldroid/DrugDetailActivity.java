@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import static net.foucry.pilldroid.R.id.detail_toolbar;
@@ -37,16 +38,9 @@ public class DrugDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getIntent().getExtras();
-
-        /* fetching the string passed with intent using ‘extras’*/
-
         assert bundle != null;
-        aMedic = (Medic) bundle.getSerializable("medic");
-
-        assert aMedic != null;
+        aMedic = (Medic) bundle.get("medic");
         Log.d(TAG, "aMedic == " + aMedic);
-
-        /* fetching the string passed with intent using ‘bundle’*/
 
         setContentView(R.layout.activity_drug_detail);
         Toolbar toolbar = findViewById(detail_toolbar);
@@ -87,9 +81,11 @@ public class DrugDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
+            /*Bundle arguments = new Bundle();
+            arguments.putSerializable("medic",
+                    getIntent().getExtras());*/
             Bundle arguments = new Bundle();
-            arguments.putSerializable("drug",
-                    getIntent().getSerializableExtra("drug"));
+            arguments.putSerializable("medic", aMedic);
             DrugDetailFragment fragment = new DrugDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -145,8 +141,8 @@ public class DrugDetailActivity extends AppCompatActivity {
         TextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
 
-        newMedic.setStock(Double.parseDouble(stockValue));
-        newMedic.setTake(Double.parseDouble(takeValue));
+        newMedic.setStock(Float.parseFloat(stockValue));
+        newMedic.setTake(Float.parseFloat(takeValue));
         newMedic.setWarning(Integer.parseInt(warningValue));
         newMedic.setAlert(Integer.parseInt(alertValue));
         newMedic.getDateEndOfStock();
