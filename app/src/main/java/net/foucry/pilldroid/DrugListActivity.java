@@ -36,14 +36,13 @@ import androidx.room.Room;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
 
-import java.io.Serializable;
+import net.foucry.pilldroid.dao.MedicDAO;
+import net.foucry.pilldroid.models.Medic;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import net.foucry.pilldroid.dao.MedicDAO;
-import net.foucry.pilldroid.models.Medic;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -65,7 +64,6 @@ public class DrugListActivity extends AppCompatActivity {
     private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
     private static final String TAG = DrugListActivity.class.getName();
 
-    private DBHelper dbHelper;
     private DBDrugs dbDrug;
     public PilldroidDatabase prescriptions;
     public PilldroidDatabase medications;
@@ -114,7 +112,7 @@ public class DrugListActivity extends AppCompatActivity {
         // Set view content
         setContentView(R.layout.activity_drug_list);
 
-        dbHelper = new DBHelper(this);
+        DBHelper dbHelper = new DBHelper(this);
         dbDrug = new DBDrugs(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -157,49 +155,6 @@ public class DrugListActivity extends AppCompatActivity {
               System.out.println(prescriptions);
               Log.d(TAG, "prescriptions ==" + prescriptions);
           }
-/*
-            if (dbHelper.getCount() == 0) {
-
-                // String cis, String cip13, String nom, String mode_administration,
-                // String presentation,double stock, double prise, int warn, int alert
-
-                // Limit for randoms generator
-                final int min_stock = 5;
-                final int max_stock = 50;
-                final int min_prise = 0;
-                final int max_prise = 3;
-
-                dbHelper.addDrug(new Drug("60000011", "3400930000011", "Médicament test 01", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000012", "3400930000012", "Médicament test 02", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000013", "3400930000013", "Médicament test 03", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000014", "3400930000014", "Médicament test 04", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000015", "3400930000015", "Médicament test 05", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000016", "3400930000016", "Médicament test 06", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000017", "3400930000017", "Médicament test 07", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000018", "3400930000018", "Médicament test 08", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000019", "3400930000019", "Médicament test 09", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000010", "3400930000010", "Médicament test 10", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-            }*/
         }
 
         mBarcodeScannerLauncher = registerForActivityResult(new PilldroidScanContract(),
@@ -274,15 +229,6 @@ public class DrugListActivity extends AppCompatActivity {
         MedicDAO medicDAO = prescriptions.getMedicDAO();
         medics = medicDAO.getAllMedics();
 
-        /*dbHelper = new DBHelper(getApplicationContext());
-
-        if (!(drugs == null)) {
-            if (!drugs.isEmpty()) {
-                drugs.clear();
-            }
-        }
-        drugs = dbHelper.getAllDrugs();*/
-
         View mRecyclerView = findViewById(R.id.drug_list);
         assert mRecyclerView != null;
         setupRecyclerView((RecyclerView) mRecyclerView);
@@ -312,11 +258,6 @@ public class DrugListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /*if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
-        }*/
         if (requestCode == CUSTOMIZED_REQUEST_CODE) {
             if (BuildConfig.DEBUG) {
                 Toast.makeText(this, "REQUEST_CODE = " + requestCode +

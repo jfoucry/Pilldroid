@@ -1,5 +1,7 @@
 package net.foucry.pilldroid;
 
+import static net.foucry.pilldroid.R.id.detail_toolbar;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,13 +15,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import static net.foucry.pilldroid.R.id.detail_toolbar;
-
 import net.foucry.pilldroid.dao.MedicDAO;
 import net.foucry.pilldroid.models.Medic;
+
+import java.util.Date;
 
 /**
  * An activity representing a single Drug detail screen. This
@@ -81,9 +80,6 @@ public class DrugDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            /*Bundle arguments = new Bundle();
-            arguments.putSerializable("medic",
-                    getIntent().getExtras());*/
             Bundle arguments = new Bundle();
             arguments.putSerializable("medic", aMedic);
             DrugDetailFragment fragment = new DrugDetailFragment();
@@ -114,7 +110,6 @@ public class DrugDetailActivity extends AppCompatActivity {
         Log.d(TAG, "Time to save new values");
 
         PilldroidDatabase prescriptions = null;
-        DBHelper dbHelper = new DBHelper(this);
         assert false;
         MedicDAO medicDAO = prescriptions.getMedicDAO();
 

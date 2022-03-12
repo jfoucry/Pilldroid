@@ -1,7 +1,5 @@
 package net.foucry.pilldroid.dao;
 
-import static net.foucry.pilldroid.UtilDate.dateAtNoon;
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -10,8 +8,6 @@ import androidx.room.Update;
 
 import net.foucry.pilldroid.models.Medic;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Dao

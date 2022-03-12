@@ -25,11 +25,7 @@ public class Medic implements Serializable {
   private Long    last_update;
 
 
-/*  public Medic(@NonNull Integer id) {
-    this.id = id;
-  }*/
-
-  public void setCis(String cis)
+  public void setCis(@NonNull String cis)
 {
   this.cis = cis;
 }
@@ -69,12 +65,7 @@ public class Medic implements Serializable {
   this.last_update = last_update;
 }
 
-//@NonNull
-/*public Integer getId() {
-  return  this.id;
-}*/
-
-@NonNull
+  @NonNull
   public String getCis() {
   return this.cis;
 }
