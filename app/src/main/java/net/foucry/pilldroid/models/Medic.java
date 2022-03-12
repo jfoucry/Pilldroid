@@ -6,19 +6,20 @@ import androidx.room.PrimaryKey;
 
 import net.foucry.pilldroid.UtilDate;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
 @Entity(tableName = "medics")
-public class Medic {
+public class Medic implements Serializable {
   @PrimaryKey
   @NonNull private String  cis;
   private String  cip13;
   private String  name;
   private String  administration_mode;
   private String  presentation;
-  private Double  stock;
-  private Double  take;
+  private Float  stock;
+  private Float  take;
   private Integer warning;
   private Integer alert;
   private Long    last_update;
@@ -48,11 +49,11 @@ public class Medic {
   public void setPresentation(String presentation) {
   this.presentation = presentation;
 }
-  public void setStock(Double stock) {
+  public void setStock(Float stock) {
   this.stock = stock;
 }
 
-  public void setTake(Double take) {
+  public void setTake(Float take) {
   this.take = take;
 }
 
@@ -98,11 +99,11 @@ public class Medic {
     return presentation;
   }
 
-  public Double getStock() {
+  public Float getStock() {
     return stock;
   }
 
-  public Double getTake() {
+  public Float getTake() {
     return take;
   }
 
