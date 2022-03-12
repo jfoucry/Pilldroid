@@ -36,6 +36,7 @@ import androidx.room.Room;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -131,29 +132,31 @@ public class DrugListActivity extends AppCompatActivity {
         if (DEMO) {
           MedicDAO medicDAO = prescriptions.getMedicDAO();
 
-          final int min_stock = 5;
-          final int max_stock = 50;
-          final int min_take = 0;
-          final int max_take = 3;
+          if (medicDAO.getMedicCount() == 0) {
+              final int min_stock = 5;
+              final int max_stock = 50;
+              final int min_take = 0;
+              final int max_take = 3;
 
-          for(int i=1; i < 11; i++) {
-              Medic medic = new Medic();
-              medic.setName("Medicament test " + i);
-              medic.setCip13("340093000001" + i);
-              medic.setCis("6000001" + i);
-              medic.setAdministration_mode("oral");
-              medic.setPresentation("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
-              medic.setStock((double) intRandomExclusive(min_stock, max_stock));
-              medic.setTake((double) intRandomExclusive(min_take, max_take));
-              medic.setWarning(14);
-              medic.setAlert(7);
-              medic.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
+              for (int i = 1; i < 9; i++) {
+                  Medic medic = new Medic();
+                  medic.setName("Medicament test " + i);
+                  medic.setCip13("340093000001" + i);
+                  medic.setCis("6000001" + i);
+                  medic.setAdministration_mode("oral");
+                  medic.setPresentation("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
+                  medic.setStock((float) intRandomExclusive(min_stock, max_stock));
+                  medic.setTake((float) intRandomExclusive(min_take, max_take));
+                  medic.setWarning(14);
+                  medic.setAlert(7);
+                  medic.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
 
-              medicDAO.insert(medic);
+                  medicDAO.insert(medic);
+              }
+              List<Medic> prescriptions = medicDAO.getAllMedics();
+              System.out.println(prescriptions);
+              Log.d(TAG, "prescriptions ==" + prescriptions);
           }
-          List<Medic> prescriptions = medicDAO.getAllMedics();
-          System.out.println(prescriptions);
-          Log.d(TAG, "prescriptions ==" + prescriptions);
 /*
             if (dbHelper.getCount() == 0) {
 
@@ -575,7 +578,7 @@ public class DrugListActivity extends AppCompatActivity {
                         Medic medic = mValues.get(position);
                         Context context = v.getContext();
                         Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("medic", (Parcelable) medic);
+                        intent.putExtra("medic", medic);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
