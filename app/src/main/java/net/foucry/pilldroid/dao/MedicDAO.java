@@ -19,19 +19,14 @@ public interface MedicDAO {
   @Insert
   void insert(Medic... medics);
 
-
   @Update
   void update(Medic... medics);
 
   @Delete
   void delete(Medic medic);
 
-
   @Query("SELECT * FROM medics")
   List<Medic> getAllMedics();
-
-/*  @Query("SELECT * FROM medics WHERE id = :id")
-  Medic getMedicBy(Long id);*/
 
   @Query("SELECT * FROM medics WHERE cip13 = :cip13")
   Medic getMedicByCIP13(String cip13);
