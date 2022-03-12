@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.Random;
 
 public class Utils {
@@ -44,5 +45,13 @@ public class Utils {
     static int intRandomExclusive(int min, int max) {
         Random r = new Random();
         return r.nextInt(max - min) +max;
+    }
+
+    public static String fmt(double d)
+    {
+        if(d == (long) d)
+            return String.format(Locale.getDefault(),"%d",(long)d);
+        else
+            return String.format("%s",d);
     }
 }
