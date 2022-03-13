@@ -45,7 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         prefManager.setFirstTimeLaunch(false);
-        setContentView(R.layout.WelcomeActivity);
+        setContentView(R.layout.welcome_activity);
 
         setFullScreen();
 

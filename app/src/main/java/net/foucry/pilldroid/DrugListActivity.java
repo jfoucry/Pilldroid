@@ -108,7 +108,7 @@ public class DrugListActivity extends AppCompatActivity {
                 .build();
 
         // Set view content
-        setContentView(R.layout.DrugListActivity);
+        setContentView(R.layout.drug_list_activity);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
