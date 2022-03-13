@@ -38,7 +38,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_custom_scanner);
+        setContentView(R.layout.CustomScannerActivty);
 
         //barcodeScannerView.setTorchListener(this);
 

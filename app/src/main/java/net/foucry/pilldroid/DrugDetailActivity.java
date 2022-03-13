@@ -41,7 +41,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         aMedic = (Medic) bundle.get("medic");
         Log.d(TAG, "aMedic == " + aMedic);
 
-        setContentView(R.layout.activity_drug_detail);
+        setContentView(R.layout.DrugDetailActivity);
         Toolbar toolbar = findViewById(detail_toolbar);
 
         if (toolbar != null) {

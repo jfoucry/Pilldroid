@@ -55,7 +55,6 @@ import java.util.Locale;
 public class DrugListActivity extends AppCompatActivity {
     // Used for dev and debug
     final Boolean DEMO = true;
-    final Boolean DBDEMO = false;
 
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
     public final String BARCODE_FORMAT_NAME = "Barcode Format name";
@@ -64,7 +63,6 @@ public class DrugListActivity extends AppCompatActivity {
     private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
     private static final String TAG = DrugListActivity.class.getName();
 
-    private DBDrugs dbDrug;
     public PilldroidDatabase prescriptions;
     public PilldroidDatabase medications;
 
@@ -110,21 +108,13 @@ public class DrugListActivity extends AppCompatActivity {
                 .build();
 
         // Set view content
-        setContentView(R.layout.activity_drug_list);
-
-        DBHelper dbHelper = new DBHelper(this);
-        dbDrug = new DBDrugs(this);
+        setContentView(R.layout.DrugListActivity);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
-        }
-
-        // Added to drop database each the app is launch.
-        if (DBDEMO) {
-            dbHelper.dropDrug();
         }
 
         if (DEMO) {
@@ -190,16 +180,12 @@ public class DrugListActivity extends AppCompatActivity {
                                 String cip13;
 
                                 // Handle successful scan
-
                                 Log.d(TAG, "formatName = " + bundle.getString(BARCODE_FORMAT_NAME));
 
                                 switch (bundle.getString(BARCODE_FORMAT_NAME)) {
                                     case "CODE_128":
                                     case "EAN_13":  //CODE_128 || EAN 13
                                         cip13 = bundle.getString(BARCODE_CONTENT);
-                                        break;
-                                    case "CODE_39":
-                                        cip13 = dbDrug.getCIP13FromCIP7(bundle.getString(BARCODE_CONTENT));
                                         break;
                                     case "DATA_MATRIX":
                                         cip13 = bundle.getString(BARCODE_CONTENT).substring(4, 17);
@@ -210,7 +196,6 @@ public class DrugListActivity extends AppCompatActivity {
                                 }
 
                                 // Get Drug from database
-                                //final Drug scannedDrug = dbDrug.getDrugByCIP13(cip13);
                                 MedicDAO medicationDAO = medications.getMedicDAO();
                                 final Medic scannedMedication = medicationDAO.getMedicByCIP13(cip13);
 
@@ -258,14 +243,7 @@ public class DrugListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CUSTOMIZED_REQUEST_CODE) {
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode +
-                        "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
-            }
-            Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-            constructDrugsList();
-        }
+        constructDrugsList();
     }
 
     public void onPause() {
@@ -283,8 +261,7 @@ public class DrugListActivity extends AppCompatActivity {
     public void onButtonClick() {
         Log.d(TAG, "add medication");
         ScanOptions options = new ScanOptions();
-        options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
-                ScanOptions.CODE_128);
+        options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_128);
         options.setCameraId(0);  // Use a specific camera of the device
         options.setBeepEnabled(true);
         options.setBarcodeImageEnabled(true);
