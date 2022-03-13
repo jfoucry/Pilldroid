@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:showIn="@layout/WelcomeActivity">
+    tools:showIn="@layout/welcome_activity">
 
 
     <androidx.viewpager.widget.ViewPager
@@ -44,5 +44,4 @@
         android:background="@null"
         android:text="@string/skip"
         android:textColor="@android:color/white"/>
-
 </RelativeLayout>
