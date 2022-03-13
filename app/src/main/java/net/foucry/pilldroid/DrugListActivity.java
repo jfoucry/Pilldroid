@@ -79,6 +79,36 @@ public class DrugListActivity extends AppCompatActivity {
                 .createFromAsset("drugs.db")
                 .build();
 
+        // Manually migrate old database to room
+        MedicDAO medicDAO = prescriptions.getMedicDAO();
+        DBHelper dbHelper = new DBHelper(this);
+        if (dbHelper.getCount() !=0) {
+            List<Drug> drugs=dbHelper.getAllDrugs();
+
+            for (int count=1; count==dbHelper.getCount(); count++) {
+                Drug drug = drugs.get(count);
+                Medic medic = new Medic();
+
+                if(medicDAO.getMedicByCIP13(drug.getCip13()) == null) {
+                    medic.setName(drug.getName());
+                    medic.setCip13(drug.getCip13());
+                    medic.setCis(drug.getCis());
+                    medic.setPresentation(drug.getPresentation());
+                    medic.setAdministration_mode(drug.getAdministration_mode());
+                    medic.setStock((float) drug.getStock());
+                    medic.setTake((float) drug.getTake());
+                    medic.setWarning(drug.getWarnThreshold());
+                    medic.setAlert(drug.getAlertThreshold());
+                    medic.setLast_update(drug.getDateLastUpdate());
+
+                    medicDAO.insert(medic);
+                }
+                else {
+                    Log.i(TAG, "Already in the database");
+                }
+            }
+            dbHelper.dropDrug();
+        }
         // remove old notification
         Log.d(TAG, "Remove old notification and old job");
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -226,7 +256,18 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        int id = item.getItemId();
+        if (id == R.id.about) {
+            startActivity(new Intent(this, About.class));
+            return true;
+        } else if (id == R.id.help) {
+            PrefManager prefManager = new PrefManager(this);
+            prefManager.setFirstTimeLaunch(true);
+
+            startActivity(new Intent(this, WelcomeActivity.class));
+            return true;
+        }
+        /*switch (item.getItemId()) {
             case R.id.about:
                 startActivity(new Intent(this, About.class));
                 return true;
@@ -236,7 +277,7 @@ public class DrugListActivity extends AppCompatActivity {
 
                 startActivity(new Intent(this, WelcomeActivity.class));
                 return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
