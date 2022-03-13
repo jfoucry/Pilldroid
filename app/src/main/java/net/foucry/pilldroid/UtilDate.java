@@ -41,7 +41,7 @@ public class UtilDate {
      * @param days number of days to remove to the ate
      * @param date date before day removing
      * @return date
-     * Substract days to date and return a new date
+     * Subtract days to date and return a new date
      */
     static Date removeDaysToDate(int days, Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -90,7 +90,7 @@ public class UtilDate {
     }
 
     /**
-     * Convert dateInMilliseconds into string formated date
+     * Convert dateInMilliseconds into string formatted date
      * @param dateInMilliseconds long
      * @return formatted Date String
      */

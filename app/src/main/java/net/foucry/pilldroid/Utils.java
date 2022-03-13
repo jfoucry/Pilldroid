@@ -7,7 +7,7 @@ public class Utils {
     private static final String TAG = Utils.class.getName();
 
     /**
-     * Return a random number between twovalues - use to gənerate a false demo DB
+     * Return a random number between two values - use to generate a false demo DB
      * @param min minimal value accepted
      * @param max maximum value accepted
      * @return int random number
