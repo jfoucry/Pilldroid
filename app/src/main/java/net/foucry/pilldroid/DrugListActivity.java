@@ -324,7 +324,7 @@ public class DrugListActivity extends AppCompatActivity {
             });
 
     // Launch scan
-    public void onButtonClick() {
+    public void onButtonClick(View v) {
         Log.d(TAG, "add medication");
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
