@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.google.zxing.client.android.Intents;
-import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import net.foucry.pilldroid.dao.MedicDAO;
@@ -235,7 +234,6 @@ public class DrugListActivity extends AppCompatActivity {
                         }
                     }
                 });
-
         constructDrugsList();
     }
 
@@ -285,33 +283,6 @@ public class DrugListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
     }
-
-    /** Register the launcher and result handler
-     * ActivityResultLauncher
-     */
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
-            result -> {
-                if(result.getContents() == null) {
-                    Intent originalIntent = result.getOriginalIntent();
-                    if (originalIntent == null) {
-                        Log.d(TAG, "Cancelled Scan");
-                        Toast.makeText(DrugListActivity.this, "Cancelled",
-                                Toast.LENGTH_LONG).show();
-                    } else if (originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                        Log.d(TAG, "Cancelled scan due missing camera permission");
-                        Toast.makeText(DrugListActivity.this, "Cancelled due missing camera persmission",
-                            Toast.LENGTH_LONG).show();
-                    } else if (originalIntent.hasExtra(Intents.Scan.TIMEOUT)) {
-                        Log.d(TAG, "Cancelled due timeout");
-                        Toast.makeText(DrugListActivity.this, "Cancelled due timeout",
-                                Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Log.d(TAG, "Scanned");
-                    Toast.makeText(DrugListActivity.this, "Scanned: " + result.getContents(),
-                        Toast.LENGTH_LONG).show();
-                }
-            });
 
     // Launch scan
     public void onButtonClick(View v) {
