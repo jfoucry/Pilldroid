@@ -1,5 +1,7 @@
 package net.foucry.pilldroid;
 
+import static net.foucry.pilldroid.R.id.detail_toolbar;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +15,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.Date;
+import net.foucry.pilldroid.dao.MedicDAO;
+import net.foucry.pilldroid.models.Medic;
 
-import static net.foucry.pilldroid.R.id.detail_toolbar;
+import java.util.Date;
 
 /**
  * An activity representing a single Drug detail screen. This
@@ -27,25 +30,18 @@ public class DrugDetailActivity extends AppCompatActivity {
 
     private static final String TAG = DrugDetailActivity.class.getName();
 
-    Drug drug;
+    Medic aMedic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getIntent().getExtras();
-
-        /* fetching the string passed with intent using ‘extras’*/
-
         assert bundle != null;
-        drug = (Drug) bundle.getSerializable("drug");
+        aMedic = (Medic) bundle.get("medic");
+        Log.d(TAG, "aMedic == " + aMedic);
 
-        assert drug != null;
-        Log.d(TAG, "drug == " + drug);
-
-        /* fetching the string passed with intent using ‘bundle’*/
-
-        setContentView(R.layout.activity_drug_detail);
+        setContentView(R.layout.drug_detail_activity);
         Toolbar toolbar = findViewById(detail_toolbar);
 
         if (toolbar != null) {
@@ -69,7 +65,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setTitle(drug.getName());
+            actionBar.setTitle(aMedic.getName());
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -85,8 +81,7 @@ public class DrugDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putSerializable("drug",
-                    getIntent().getSerializableExtra("drug"));
+            arguments.putSerializable("medic", aMedic);
             DrugDetailFragment fragment = new DrugDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -114,9 +109,11 @@ public class DrugDetailActivity extends AppCompatActivity {
     private void getMDrugChanges() {
         Log.d(TAG, "Time to save new values");
 
-        DBHelper dbHelper = new DBHelper(this);
+        PilldroidDatabase prescriptions = null;
+        assert false;
+        MedicDAO medicDAO = prescriptions.getMedicDAO();
 
-        Drug newDrug = dbHelper.getDrugByCIP13(drug.getCip13());
+        Medic newMedic = medicDAO.getMedicByCIP13(aMedic.getCip13());
 
         View stockView;
         View takeView;
@@ -139,18 +136,19 @@ public class DrugDetailActivity extends AppCompatActivity {
         TextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
 
-        newDrug.setStock(Double.parseDouble(stockValue));
-        newDrug.setTake(Double.parseDouble(takeValue));
-        newDrug.setWarnThreshold(Integer.parseInt(warningValue));
-        newDrug.setAlertThreshold(Integer.parseInt(alertValue));
-        newDrug.setDateEndOfStock();
+        newMedic.setStock(Float.parseFloat(stockValue));
+        newMedic.setTake(Float.parseFloat(takeValue));
+        newMedic.setWarning(Integer.parseInt(warningValue));
+        newMedic.setAlert(Integer.parseInt(alertValue));
+        newMedic.getDateEndOfStock();
 
-        if (drug.equals(newDrug)) {
-            Log.d(TAG, "drug and newDrug are Equals");
+        if (aMedic.equals(newMedic)) {
+            Log.d(TAG, "medic and newMedic are Equals");
         } else {
-            Log.d(TAG, "drug and newDrug are NOT Equals");
-            newDrug.setDateLastUpdate(new Date().getTime());
-            dbHelper.updateDrug(newDrug);
+            Log.d(TAG, "medic and newMedic are NOT Equals");
+            newMedic.setLast_update(new Date().getTime());
+            medicDAO.update(newMedic);
+            //dbHelper.updateDrug(newDrug);
         }
     }
 }

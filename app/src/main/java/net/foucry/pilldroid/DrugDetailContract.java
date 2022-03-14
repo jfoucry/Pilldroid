@@ -3,7 +3,6 @@ package net.foucry.pilldroid;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;

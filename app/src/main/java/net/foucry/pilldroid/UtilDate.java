@@ -12,7 +12,7 @@ import java.util.Locale;
 /**
  * Created by jacques on 05/05/16.
  */
-class UtilDate {
+public class UtilDate {
 
     private static final String TAG = UtilDate.class.getName();
 
@@ -21,7 +21,7 @@ class UtilDate {
      * @return date the same date as input but at noon (12:00:00 PM)
      * set date time at Noon
      */
-    static Date dateAtNoon(Date aDate) {
+    public static Date dateAtNoon(Date aDate) {
 
         Log.d(TAG, "dateAtNoon " + aDate);
 
@@ -41,7 +41,7 @@ class UtilDate {
      * @param days number of days to remove to the ate
      * @param date date before day removing
      * @return date
-     * Substract days to date and return a new date
+     * Subtract days to date and return a new date
      */
     static Date removeDaysToDate(int days, Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -90,7 +90,7 @@ class UtilDate {
     }
 
     /**
-     * Convert dateInMilliseconds into string formated date
+     * Convert dateInMilliseconds into string formatted date
      * @param dateInMilliseconds long
      * @return formatted Date String
      */

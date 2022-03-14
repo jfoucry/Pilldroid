@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,10 +31,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import net.foucry.pilldroid.dao.MedicDAO;
+import net.foucry.pilldroid.models.Medic;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,38 +54,69 @@ import java.util.Locale;
  * item details side-by-side using two vertical panes.
  */
 public class DrugListActivity extends AppCompatActivity {
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-
-    // TODO: Change DEMO/DBDEMO form static to non-static. In order to create fake data at only at launch time
+    // Used for dev and debug
     final Boolean DEMO = false;
-    final Boolean DBDEMO = false;
 
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
     public final String BARCODE_FORMAT_NAME = "Barcode Format name";
     public final String BARCODE_CONTENT = "Barcode Content";
 
     private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
+    private static final String TAG = DrugListActivity.class.getName();
 
+    public PilldroidDatabase prescriptions;
+    public PilldroidDatabase medications;
 
-    /**
-     * Start tutorial
-     */
+    private List<Medic> medics;         // used for prescriptions
 
+    private SimpleItemRecyclerViewAdapter mAdapter;
 
     @Override
     public void onStart() {
         super.onStart();
 
+        medications = Room
+                .databaseBuilder(getApplicationContext(), PilldroidDatabase.class, "medications")
+                .createFromAsset("drugs.db")
+                .build();
+
+        // Manually migrate old database to room
+        MedicDAO medicDAO = prescriptions.getMedicDAO();
+        DBHelper dbHelper = new DBHelper(this);
+        if (dbHelper.getCount() !=0) {
+            List<Drug> drugs=dbHelper.getAllDrugs();
+            for (int count=0; count < dbHelper.getCount(); count++) {
+                Drug drug = drugs.get(count);
+                Medic medic = new Medic();
+
+                if(medicDAO.getMedicByCIP13(drug.getCip13()) == null) {
+                    medic.setName(drug.getName());
+                    medic.setCip13(drug.getCip13());
+                    medic.setCis(drug.getCis());
+                    medic.setPresentation(drug.getPresentation());
+                    medic.setAdministration_mode(drug.getAdministration_mode());
+                    medic.setStock((float) drug.getStock());
+                    medic.setTake((float) drug.getTake());
+                    medic.setWarning(drug.getWarnThreshold());
+                    medic.setAlert(drug.getAlertThreshold());
+                    medic.setLast_update(drug.getDateLastUpdate());
+
+                    medicDAO.insert(medic);
+                }
+                else {
+                    Log.i(TAG, "Already in the database");
+                }
+            }
+            dbHelper.dropDrug();
+        }
+        // remove old notification
         Log.d(TAG, "Remove old notification and old job");
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (nm != null) {
             nm.cancelAll();
         }
 
-        // tutorial
+        // start tutorial
         Log.i(TAG, "Launch tutorial");
         startActivity(new Intent(this, WelcomeActivity.class));
     }
@@ -90,39 +126,19 @@ public class DrugListActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private static final String TAG = DrugListActivity.class.getName();
-
-    private DBHelper dbHelper;
-    private DBDrugs dbDrug;
-
-    private List<Drug> drugs;
-
-    private SimpleItemRecyclerViewAdapter mAdapter;
-
-    public void constructDrugsList() {
-        dbHelper = new DBHelper(getApplicationContext());
-
-        if (!(drugs == null)) {
-            if (!drugs.isEmpty()) {
-                drugs.clear();
-            }
-        }
-        drugs = dbHelper.getAllDrugs();
-
-        View mRecyclerView = findViewById(R.id.drug_list);
-        assert mRecyclerView != null;
-        setupRecyclerView((RecyclerView) mRecyclerView);
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_drug_list);
+        // Create Room database
+        prescriptions = Room
+                .databaseBuilder(getApplicationContext(), PilldroidDatabase.class, "prescriptions")
+                .allowMainThreadQueries()
+                .build();
 
-        dbHelper = new DBHelper(this);
-        dbDrug = new DBDrugs(this);
+        // Set view content
+        setContentView(R.layout.drug_list_activity);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
@@ -131,54 +147,34 @@ public class DrugListActivity extends AppCompatActivity {
             toolbar.setTitle(getTitle());
         }
 
-        // Added to drop database each the app is launch.
-        if (DBDEMO) {
-            dbHelper.dropDrug();
-        }
-
         if (DEMO) {
-            if (dbHelper.getCount() == 0) {
+          MedicDAO medicDAO = prescriptions.getMedicDAO();
 
-                // String cis, String cip13, String nom, String mode_administration,
-                // String presentation,double stock, double prise, int warn, int alert
+          if (medicDAO.getMedicCount() == 0) {
+              final int min_stock = 5;
+              final int max_stock = 50;
+              final int min_take = 0;
+              final int max_take = 3;
 
-                // Limit for randoms generator
-                final int min_stock = 5;
-                final int max_stock = 50;
-                final int min_prise = 0;
-                final int max_prise = 3;
+              for (int i = 1; i < 9; i++) {
+                  Medic medic = new Medic();
+                  medic.setName("Medicament test " + i);
+                  medic.setCip13("340093000001" + i);
+                  medic.setCis("6000001" + i);
+                  medic.setAdministration_mode("oral");
+                  medic.setPresentation("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
+                  medic.setStock((float) intRandomExclusive(min_stock, max_stock));
+                  medic.setTake((float) intRandomExclusive(min_take, max_take));
+                  medic.setWarning(14);
+                  medic.setAlert(7);
+                  medic.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
 
-                dbHelper.addDrug(new Drug("60000011", "3400930000011", "Médicament test 01", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000012", "3400930000012", "Médicament test 02", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000013", "3400930000013", "Médicament test 03", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000014", "3400930000014", "Médicament test 04", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000015", "3400930000015", "Médicament test 05", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000016", "3400930000016", "Médicament test 06", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000017", "3400930000017", "Médicament test 07", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000018", "3400930000018", "Médicament test 08", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000019", "3400930000019", "Médicament test 09", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-                dbHelper.addDrug(new Drug("60000010", "3400930000010", "Médicament test 10", "orale",
-                        "plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)",
-                        intRandomExclusive(min_stock, max_stock), intRandomExclusive(min_prise, max_prise), 14, 7, UtilDate.dateAtNoon(new Date()).getTime()));
-            }
+                  medicDAO.insert(medic);
+              }
+              List<Medic> prescriptions = medicDAO.getAllMedics();
+              System.out.println(prescriptions);
+              Log.d(TAG, "prescriptions ==" + prescriptions);
+          }
         }
 
         mBarcodeScannerLauncher = registerForActivityResult(new PilldroidScanContract(),
@@ -214,16 +210,12 @@ public class DrugListActivity extends AppCompatActivity {
                                 String cip13;
 
                                 // Handle successful scan
-
                                 Log.d(TAG, "formatName = " + bundle.getString(BARCODE_FORMAT_NAME));
 
                                 switch (bundle.getString(BARCODE_FORMAT_NAME)) {
                                     case "CODE_128":
                                     case "EAN_13":  //CODE_128 || EAN 13
                                         cip13 = bundle.getString(BARCODE_CONTENT);
-                                        break;
-                                    case "CODE_39":
-                                        cip13 = dbDrug.getCIP13FromCIP7(bundle.getString(BARCODE_CONTENT));
                                         break;
                                     case "DATA_MATRIX":
                                         cip13 = bundle.getString(BARCODE_CONTENT).substring(4, 17);
@@ -234,10 +226,11 @@ public class DrugListActivity extends AppCompatActivity {
                                 }
 
                                 // Get Drug from database
-                                final Drug scannedDrug = dbDrug.getDrugByCIP13(cip13);
+                                MedicDAO medicationDAO = medications.getMedicDAO();
+                                final Medic scannedMedication = medicationDAO.getMedicByCIP13(cip13);
 
                                 // add Drug to prescription database
-                                askToAddInDB(scannedDrug);
+                                askToAddInDB(scannedMedication);
                             }
                         }
                     }
@@ -246,6 +239,15 @@ public class DrugListActivity extends AppCompatActivity {
         constructDrugsList();
     }
 
+    public void constructDrugsList() {
+
+        MedicDAO medicDAO = prescriptions.getMedicDAO();
+        medics = medicDAO.getAllMedics();
+
+        View mRecyclerView = findViewById(R.id.drug_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
+    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -254,16 +256,16 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                startActivity(new Intent(this, About.class));
-                return true;
-            case R.id.help:
-                PrefManager prefManager = new PrefManager(this);
-                prefManager.setFirstTimeLaunch(true);
+        int id = item.getItemId();
+        if (id == R.id.about) {
+            startActivity(new Intent(this, About.class));
+            return true;
+        } else if (id == R.id.help) {
+            PrefManager prefManager = new PrefManager(this);
+            prefManager.setFirstTimeLaunch(true);
 
-                startActivity(new Intent(this, WelcomeActivity.class));
-                return true;
+            startActivity(new Intent(this, WelcomeActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -271,19 +273,7 @@ public class DrugListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /*if (requestCode != CUSTOMIZED_REQUEST_CODE && requestCode != IntentIntegrator.REQUEST_CODE) {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
-        }*/
-        if (requestCode == CUSTOMIZED_REQUEST_CODE) {
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(this, "REQUEST_CODE = " + requestCode +
-                        "RESULT_CODE = " + resultCode, Toast.LENGTH_LONG).show();
-            }
-            Log.d(TAG, "REQUEST_CODE = " + requestCode + " RESULT_CODE = " + resultCode);
-            constructDrugsList();
-        }
+        constructDrugsList();
     }
 
     public void onPause() {
@@ -327,8 +317,7 @@ public class DrugListActivity extends AppCompatActivity {
     public void onButtonClick(View v) {
         Log.d(TAG, "add medication");
         ScanOptions options = new ScanOptions();
-        options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_39,
-                ScanOptions.CODE_128);
+        options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_128);
         options.setCameraId(0);  // Use a specific camera of the device
         options.setBeepEnabled(true);
         options.setBarcodeImageEnabled(true);
@@ -360,8 +349,10 @@ public class DrugListActivity extends AppCompatActivity {
                 .setPositiveButton("OK", (dialog, id) -> {
                     String cip13 = editText.getText().toString();
 
-                    Drug aDrug = dbDrug.getDrugByCIP13(cip13);
-                    askToAddInDB(aDrug);
+                    MedicDAO medicationsDAO = medications.getMedicDAO();
+                    Medic aMedic = medicationsDAO.getMedicByCIP13(cip13);
+                    //Medic aMedic = medications.getDrugByCIP13(cip13);
+                    askToAddInDB(aMedic);
                 })
                 .setNegativeButton("Cancel",
                         (dialog, id) -> dialog.cancel());
@@ -392,14 +383,14 @@ public class DrugListActivity extends AppCompatActivity {
      * Ask if the drug found in the database should be include in the
      * user database
      *
-     * @param aDrug Drug- drug to be added
+     * @param aMedic Medic- medication to be added
      */
-    private void askToAddInDB(Drug aDrug) {
+    private void askToAddInDB(Medic aMedic) {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setTitle(getString(R.string.app_name));
 
-        if (aDrug != null) {
-            String msg = aDrug.getName() + " " + getString(R.string.msgFound);
+        if (aMedic != null) {
+            String msg = aMedic.getName() + " " + getString(R.string.msgFound);
 
             dlg.setMessage(msg);
             dlg.setNegativeButton(getString(R.string.button_cancel), (dialog, which) -> {
@@ -407,7 +398,7 @@ public class DrugListActivity extends AppCompatActivity {
             });
             dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
                 // Add Drug to DB then try to show it
-                addDrugToList(aDrug);
+                addDrugToList(aMedic);
             });
         } else {
             dlg.setMessage(getString(R.string.msgNotFound));
@@ -435,18 +426,18 @@ public class DrugListActivity extends AppCompatActivity {
     /**
      * Add New drug to the user database
      *
-     * @param aDrug Drug - drug to be added
+     * @param aMedic Medic - medication to be added
      */
 
     @SuppressWarnings("deprecation")
-    private void addDrugToList(Drug aDrug) {
-        aDrug.setDateEndOfStock();
-        mAdapter.addItem(aDrug);
+    private void addDrugToList(Medic aMedic) {
+        aMedic.getDateEndOfStock();
+        mAdapter.addItem(aMedic);
 
         Log.d(TAG, "Call DrugDetailActivity");
         Context context = this;
         Intent intent = new Intent(context, DrugDetailActivity.class);
-        intent.putExtra("drug", aDrug);
+        intent.putExtra("medic", (Parcelable) aMedic);
 
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
@@ -469,27 +460,29 @@ public class DrugListActivity extends AppCompatActivity {
      */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        mAdapter = new SimpleItemRecyclerViewAdapter(drugs);
+        mAdapter = new SimpleItemRecyclerViewAdapter(medics);
         recyclerView.setAdapter(mAdapter);
     }
 
     /**
      * SimpleItemRecyclerViewAdapter
      */
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class SimpleItemRecyclerViewAdapter extends
+            RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Drug> mValues;
+        private final List<Medic> mValues;
 
-        SimpleItemRecyclerViewAdapter(List<Drug> items) {
+        SimpleItemRecyclerViewAdapter(List<Medic> items) {
             mValues = items;
         }
 
-        void addItem(Drug scannedDrug) {
-            if (!dbHelper.isDrugExist(scannedDrug.getCip13())) {
-                mValues.add(scannedDrug);
+        void addItem(Medic scannedMedic) {
+            MedicDAO medicDAO = prescriptions.getMedicDAO();
+            if (medicDAO.getMedicByCIP13(scannedMedic.getCip13()) == null) {
+                mValues.add(scannedMedic);
                 //notifyDataSetChanged();
                 notifyItemInserted(mValues.size());
-                dbHelper.addDrug(scannedDrug);
+                medicDAO.insert(scannedMedic);
             } else {
                 Toast.makeText(getApplicationContext(), "already in the database", Toast.LENGTH_LONG).show();
             }
@@ -530,10 +523,10 @@ public class DrugListActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Drug drug = mValues.get(position);
+                        Medic aMedic = mValues.get(position);
                         Context context = v.getContext();
                         Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("drug", drug);
+                        intent.putExtra("medic", (Parcelable) aMedic);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
@@ -556,10 +549,10 @@ public class DrugListActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Drug drug = mValues.get(position);
+                        Medic medic = mValues.get(position);
                         Context context = v.getContext();
                         Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("drug", drug);
+                        intent.putExtra("medic", medic);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
@@ -579,7 +572,7 @@ public class DrugListActivity extends AppCompatActivity {
             final TextView mContentView;
             final TextView mEndOfStock;
             final ImageView mIconView;
-            public Drug mItem;
+            public Medic mItem;
 
             ViewHolder(View view) {
                 super(view);
