@@ -54,7 +54,7 @@ import java.util.Locale;
  */
 public class DrugListActivity extends AppCompatActivity {
     // Used for dev and debug
-    final Boolean DEMO = true;
+    final Boolean DEMO = false;
 
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
     public final String BARCODE_FORMAT_NAME = "Barcode Format name";
@@ -84,8 +84,7 @@ public class DrugListActivity extends AppCompatActivity {
         DBHelper dbHelper = new DBHelper(this);
         if (dbHelper.getCount() !=0) {
             List<Drug> drugs=dbHelper.getAllDrugs();
-
-            for (int count=1; count==dbHelper.getCount(); count++) {
+            for (int count=0; count < dbHelper.getCount(); count++) {
                 Drug drug = drugs.get(count);
                 Medic medic = new Medic();
 
@@ -267,17 +266,6 @@ public class DrugListActivity extends AppCompatActivity {
             startActivity(new Intent(this, WelcomeActivity.class));
             return true;
         }
-        /*switch (item.getItemId()) {
-            case R.id.about:
-                startActivity(new Intent(this, About.class));
-                return true;
-            case R.id.help:
-                PrefManager prefManager = new PrefManager(this);
-                prefManager.setFirstTimeLaunch(true);
-
-                startActivity(new Intent(this, WelcomeActivity.class));
-                return true;
-        }*/
         return super.onOptionsItemSelected(item);
     }
 
@@ -299,7 +287,7 @@ public class DrugListActivity extends AppCompatActivity {
 
 
     // Launch scan
-    public void onButtonClick() {
+    public void onButtonClick(View v) {
         Log.d(TAG, "add medication");
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_128);
