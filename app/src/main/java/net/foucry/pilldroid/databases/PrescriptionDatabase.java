@@ -1,4 +1,4 @@
-package net.foucry.pilldroid;
+package net.foucry.pilldroid.databases;
 
 import androidx.room.AutoMigration;
 import androidx.room.Database;
@@ -8,12 +8,8 @@ import net.foucry.pilldroid.dao.PrescriptionsDAO;
 import net.foucry.pilldroid.models.Prescription;
 
 @Database(
-        version = 3,
-        entities = {Prescription.class},
-        autoMigrations = {
-                @AutoMigration(from = 1, to = 2),
-                @AutoMigration(from = 2, to = 3),
-        }
+        version = 1,
+        entities = {Prescription.class}
 )
 
 public abstract class PrescriptionDatabase extends RoomDatabase {
