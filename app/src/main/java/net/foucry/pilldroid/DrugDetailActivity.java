@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
+import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Prescription;
 
 import java.util.Date;
@@ -111,7 +112,7 @@ public class DrugDetailActivity extends AppCompatActivity {
 
         PrescriptionDatabase prescriptions = null;
         assert false;
-        PrescriptionsDAO prescriptionsDAO = prescriptions.getMedicDAO();
+        PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
 
         Prescription newPrescription = prescriptionsDAO.getMedicByCIP13(aPrescription.getCip13());
 
