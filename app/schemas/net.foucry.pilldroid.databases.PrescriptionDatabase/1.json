@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5ac4c79044120e5fa2716c6a89eff9bf",
+    "identityHash": "46c4983931eaf7414e25dfd9e1a55e0f",
     "entities": [
       {
-        "tableName": "medics",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cis` TEXT NOT NULL, `cip13` TEXT, `name` TEXT, `administration_mode` TEXT, `presentation` TEXT, `stock` INTEGER, `take` INTEGER, `warning` INTEGER, `alert` INTEGER, `last_update` INTEGER, PRIMARY KEY(`cis`))",
+        "tableName": "prescriptions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cis` TEXT NOT NULL, `cip13` TEXT, `name` TEXT, `administration_mode` TEXT, `presentation` TEXT, `stock` REAL, `take` REAL, `warning` INTEGER, `alert` INTEGER, `last_update` INTEGER, PRIMARY KEY(`cis`))",
         "fields": [
           {
             "fieldPath": "cis",
@@ -41,13 +41,13 @@
           {
             "fieldPath": "stock",
             "columnName": "stock",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": false
           },
           {
             "fieldPath": "take",
             "columnName": "take",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": false
           },
           {
@@ -82,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5ac4c79044120e5fa2716c6a89eff9bf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '46c4983931eaf7414e25dfd9e1a55e0f')"
     ]
   }
 }
