@@ -37,7 +37,11 @@ import androidx.room.Room;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import net.foucry.pilldroid.dao.MedicinesDAO;
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
+import net.foucry.pilldroid.databases.MedicineDatabase;
+import net.foucry.pilldroid.databases.PrescriptionDatabase;
+import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
 
 import java.text.SimpleDateFormat;
@@ -65,7 +69,7 @@ public class DrugListActivity extends AppCompatActivity {
     private static final String TAG = DrugListActivity.class.getName();
 
     public PrescriptionDatabase prescriptions;
-    public PrescriptionDatabase medications;
+    public MedicineDatabase medicines;
 
     private List<Prescription> prescriptionList;         // used for prescriptions
 
@@ -88,8 +92,8 @@ public class DrugListActivity extends AppCompatActivity {
             );
         }
 
-        medications = Room
-                .databaseBuilder(getApplicationContext(), PrescriptionDatabase.class, "medications")
+        medicines = Room
+                .databaseBuilder(getApplicationContext(), MedicineDatabase.class, "medicines")
                 .createFromAsset("drugs.db")
                 .build();
 
@@ -239,11 +243,11 @@ public class DrugListActivity extends AppCompatActivity {
                                 }
 
                                 // Get Drug from database
-                                PrescriptionsDAO medicationDAO = medications.getMedicDAO(); // TODO
-                                final Prescription scannedMedication = medicationDAO.getMedicByCIP13(cip13);
+                                MedicinesDAO medicinesDAO = medicines.getMedicinesDAO(); // TODO
+                                final Medicine scannedMedicine = medicinesDAO.getMedicineByCIP13(cip13);
 
                                 // add Drug to prescription database
-                                askToAddInDB(scannedMedication);
+                                askToAddInDB(scannedMedicine);
                             }
                         }
                     }
@@ -334,10 +338,10 @@ public class DrugListActivity extends AppCompatActivity {
                 .setPositiveButton("OK", (dialog, id) -> {
                     String cip13 = editText.getText().toString();
 
-                    PrescriptionsDAO medicationsDAO = medications.getMedicDAO(); // TODO
-                    Prescription aPrescription = medicationsDAO.getMedicByCIP13(cip13);
+                    MedicinesDAO medicineDAO = medicines.getMedicinesDAO(); // TODO
+                    Medicine aMedicine = medicineDAO.getMedicineByCIP13(cip13);
                     //Prescription aPrescription = medications.getDrugByCIP13(cip13);
-                    askToAddInDB(aPrescription);
+                    askToAddInDB(aMedicine);
                 })
                 .setNegativeButton("Cancel",
                         (dialog, id) -> dialog.cancel());
@@ -368,14 +372,14 @@ public class DrugListActivity extends AppCompatActivity {
      * Ask if the drug found in the database should be include in the
      * user database
      *
-     * @param aPrescription Prescription- medication to be added
+     * @param aMedicine Prescription- medication to be added
      */
-    private void askToAddInDB(Prescription aPrescription) {
+    private void askToAddInDB(Medicine aMedicine) {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setTitle(getString(R.string.app_name));
 
-        if (aPrescription != null) {
-            String msg = aPrescription.getName() + " " + getString(R.string.msgFound);
+        if (aMedicine != null) {
+            String msg = aMedicine.getName() + " " + getString(R.string.msgFound);
 
             dlg.setMessage(msg);
             dlg.setNegativeButton(getString(R.string.button_cancel), (dialog, which) -> {
@@ -383,7 +387,7 @@ public class DrugListActivity extends AppCompatActivity {
             });
             dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
                 // Add Drug to DB then try to show it
-                addDrugToList(aPrescription);
+                addDrugToList(Utils.medicine2prescription(aMedicine));
             });
         } else {
             dlg.setMessage(getString(R.string.msgNotFound));
