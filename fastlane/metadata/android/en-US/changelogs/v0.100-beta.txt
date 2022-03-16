@@ -9,8 +9,8 @@ I made a lot a tests but there must stay some bugs.
 find the code.
 
 ## What is not implemented
-- removing of a medic from the list;
-- take medic reminder. It will be never been implemented (by me).
+- removing of a prescription from the list;
+- take prescription reminder. It will be never been implemented (by me).
 
 **ATTENTION**, Pilldroid does not manage creams, liquids
 (like insulin).
