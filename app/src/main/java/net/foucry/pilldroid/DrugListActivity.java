@@ -243,7 +243,7 @@ public class DrugListActivity extends AppCompatActivity {
                                 }
 
                                 // Get Drug from database
-                                MedicinesDAO medicinesDAO = medicines.getMedicinesDAO(); // TODO
+                                MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
                                 final Medicine scannedMedicine = medicinesDAO.getMedicineByCIP13(cip13);
 
                                 // add Drug to prescription database
@@ -338,7 +338,7 @@ public class DrugListActivity extends AppCompatActivity {
                 .setPositiveButton("OK", (dialog, id) -> {
                     String cip13 = editText.getText().toString();
 
-                    MedicinesDAO medicineDAO = medicines.getMedicinesDAO(); // TODO
+                    MedicinesDAO medicineDAO = medicines.getMedicinesDAO();
                     Medicine aMedicine = medicineDAO.getMedicineByCIP13(cip13);
                     //Prescription aPrescription = medications.getDrugByCIP13(cip13);
                     askToAddInDB(aMedicine);
