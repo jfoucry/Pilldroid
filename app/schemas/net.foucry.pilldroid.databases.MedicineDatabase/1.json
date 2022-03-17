@@ -2,17 +2,23 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "71fee21ecfa4bc2a534eca55c0f0cd49",
+    "identityHash": "96dc5c4ccb337047e323d613eb86bdd1",
     "entities": [
       {
-        "tableName": "medicines",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cis` TEXT NOT NULL, `cip13` TEXT, `cip7` TEXT, `administration_mode` TEXT, `name` TEXT, `presentation` TEXT, `label_group` TEXT, `generic_type` INTEGER, PRIMARY KEY(`cis`))",
+        "tableName": "drugs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `cis` TEXT, `cip13` TEXT, `cip7` TEXT, `administration_mode` TEXT, `name` TEXT, `presentation` TEXT, `label_group` TEXT, `generic_type` INTEGER, PRIMARY KEY(`_id`))",
         "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "cis",
             "columnName": "cis",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "cip13",
@@ -59,7 +65,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "cis"
+            "_id"
           ],
           "autoGenerate": false
         },
@@ -70,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '71fee21ecfa4bc2a534eca55c0f0cd49')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '96dc5c4ccb337047e323d613eb86bdd1')"
     ]
   }
 }
