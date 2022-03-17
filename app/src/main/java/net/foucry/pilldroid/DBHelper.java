@@ -41,7 +41,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     private static final String TAG = DBHelper.class.getName();
 
-    private static final String[] COLUMS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_TAKE,
+    private static final String[] COLUMNS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_TAKE,
             KEY_THRESHOLD_WARN, KEY_THRESHOLD_ALERT, KEY_LAST_UPDATE};
 
     DBHelper(Context context) {
@@ -114,7 +114,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Insert
         db.insert(TABLE_DRUG,   // table
-                null,           // colunms list not needed
+                null,           // columns list not needed
                 values);        // key/value
 
         // Close database
@@ -132,7 +132,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Build query
         Cursor cursor = db.query(TABLE_DRUG,                    // Which table
-                COLUMS,                                         // column names
+                COLUMNS,                                         // column names
                 " id = ?",                             // selections
                 new String[] { String.valueOf(id) },             // selections args
                 null,                                   // group by
@@ -173,7 +173,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     /**
      *
-     * @param cip13 drug id in French nomemclature
+     * @param cip13 drug id in French nomenclature
      * @return the drug object found in DB or null
      */
     public Drug getDrugByCIP13(String cip13) {
@@ -182,7 +182,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Build query
         Cursor cursor = db.query(TABLE_DRUG,            // Which table
-                COLUMS,                                 // column names
+                COLUMNS,                                 // column names
                 " cip13 = ?",                              // selections
                 new String[]{String.valueOf(cip13)},    // selections args
                 null,                                   // group by
