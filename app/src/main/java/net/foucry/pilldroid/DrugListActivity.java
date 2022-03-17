@@ -34,6 +34,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -79,7 +80,7 @@ public class DrugListActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        if(BuildConfig.DEBUG) {
+        if(net.foucry.pilldroid.BuildConfig.DEBUG) {
             String manufacturer = Build.MANUFACTURER;
             String model = Build.MODEL;
             int version = Build.VERSION.SDK_INT;
@@ -95,6 +96,7 @@ public class DrugListActivity extends AppCompatActivity {
         medicines = Room
                 .databaseBuilder(getApplicationContext(), MedicineDatabase.class, "medicines")
                 .createFromAsset("drugs.db")
+                .allowMainThreadQueries()
                 .build();
 
         // Manually migrate old database to room
@@ -133,9 +135,11 @@ public class DrugListActivity extends AppCompatActivity {
             nm.cancelAll();
         }
 
-        // start tutorial
-        Log.i(TAG, "Launch tutorial");
-        startActivity(new Intent(this, WelcomeActivity.class));
+        // start tutorial (only in non debug mode
+        if(!net.foucry.pilldroid.BuildConfig.DEBUG) {
+            Log.i(TAG, "Launch tutorial");
+            startActivity(new Intent(this, WelcomeActivity.class));
+        }
     }
 
     @Override
