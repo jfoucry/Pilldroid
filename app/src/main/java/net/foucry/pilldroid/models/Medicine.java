@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "medicines")
+@Entity(tableName = "drugs")
 public class Medicine {
     @PrimaryKey
-    @NonNull
+    @NonNull private Integer _id;
     private String  cis;
     private String  cip13;
     private String  cip7;
@@ -84,5 +84,14 @@ public class Medicine {
 
     public void setGeneric_type(Integer generic_type) {
         this.generic_type = generic_type;
+    }
+
+    @NonNull
+    public Integer get_id() {
+        return _id;
+    }
+
+    public void set_id(@NonNull Integer _id) {
+        this._id = _id;
     }
 }
