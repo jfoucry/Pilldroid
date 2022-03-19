@@ -1,11 +1,11 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "ed6d0a13273d73ba9fcec1f374251efa",
+    "version": 1,
+    "identityHash": "46c4983931eaf7414e25dfd9e1a55e0f",
     "entities": [
       {
-        "tableName": "medics",
+        "tableName": "prescriptions",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cis` TEXT NOT NULL, `cip13` TEXT, `name` TEXT, `administration_mode` TEXT, `presentation` TEXT, `stock` REAL, `take` REAL, `warning` INTEGER, `alert` INTEGER, `last_update` INTEGER, PRIMARY KEY(`cis`))",
         "fields": [
           {
@@ -82,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ed6d0a13273d73ba9fcec1f374251efa')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '46c4983931eaf7414e25dfd9e1a55e0f')"
     ]
   }
 }

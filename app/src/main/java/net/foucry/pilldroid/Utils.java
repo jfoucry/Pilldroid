@@ -1,5 +1,11 @@
 package net.foucry.pilldroid;
 
+import androidx.room.Database;
+
+import net.foucry.pilldroid.models.Medicine;
+import net.foucry.pilldroid.models.Prescription;
+
+import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
@@ -23,5 +29,22 @@ public class Utils {
             return String.format(Locale.getDefault(),"%d",(long)d);
         else
             return String.format("%s",d);
+    }
+
+    public static Prescription medicine2prescription(Medicine aMedicine) {
+        Prescription aPrescription = new Prescription();
+
+        aPrescription.setName(aMedicine.getName());
+        aPrescription.setCis(aMedicine.getCis());
+        aPrescription.setCip13(aMedicine.getCip13());
+        aPrescription.setPresentation(aMedicine.getPresentation());
+        aPrescription.setAdministration_mode(aMedicine.getAdministration_mode());
+        aPrescription.setStock(0F);
+        aPrescription.setAlert(7);
+        aPrescription.setTake(0F);
+        aPrescription.setWarning(14);
+        aPrescription.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
+
+        return aPrescription;
     }
 }

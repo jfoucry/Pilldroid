@@ -10,16 +10,16 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-@Entity(tableName = "medics")
-public class Medic implements Serializable {
+@Entity(tableName = "prescriptions")
+public class Prescription implements Serializable {
   @PrimaryKey
   @NonNull private String  cis;
   private String  cip13;
   private String  name;
   private String  administration_mode;
   private String  presentation;
-  private Float  stock;
-  private Float  take;
+  private Float   stock;
+  private Float   take;
   private Integer warning;
   private Integer alert;
   private Long    last_update;

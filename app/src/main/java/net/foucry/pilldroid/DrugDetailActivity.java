@@ -15,8 +15,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import net.foucry.pilldroid.dao.MedicDAO;
-import net.foucry.pilldroid.models.Medic;
+import net.foucry.pilldroid.dao.PrescriptionsDAO;
+import net.foucry.pilldroid.databases.PrescriptionDatabase;
+import net.foucry.pilldroid.models.Prescription;
 
 import java.util.Date;
 
@@ -30,7 +31,7 @@ public class DrugDetailActivity extends AppCompatActivity {
 
     private static final String TAG = DrugDetailActivity.class.getName();
 
-    Medic aMedic;
+    Prescription aPrescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +39,8 @@ public class DrugDetailActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
-        aMedic = (Medic) bundle.get("medic");
-        Log.d(TAG, "aMedic == " + aMedic);
+        aPrescription = (Prescription) bundle.get("prescription");
+        Log.d(TAG, "aPrescription == " + aPrescription);
 
         setContentView(R.layout.drug_detail_activity);
         Toolbar toolbar = findViewById(detail_toolbar);
@@ -65,7 +66,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setTitle(aMedic.getName());
+            actionBar.setTitle(aPrescription.getName());
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -81,7 +82,7 @@ public class DrugDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putSerializable("medic", aMedic);
+            arguments.putSerializable("prescription", aPrescription);
             DrugDetailFragment fragment = new DrugDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -109,11 +110,11 @@ public class DrugDetailActivity extends AppCompatActivity {
     private void getMDrugChanges() {
         Log.d(TAG, "Time to save new values");
 
-        PilldroidDatabase prescriptions = null;
+        PrescriptionDatabase prescriptions = null;
         assert false;
-        MedicDAO medicDAO = prescriptions.getMedicDAO();
+        PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
 
-        Medic newMedic = medicDAO.getMedicByCIP13(aMedic.getCip13());
+        Prescription newPrescription = prescriptionsDAO.getMedicByCIP13(aPrescription.getCip13());
 
         View stockView;
         View takeView;
@@ -136,18 +137,18 @@ public class DrugDetailActivity extends AppCompatActivity {
         TextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
 
-        newMedic.setStock(Float.parseFloat(stockValue));
-        newMedic.setTake(Float.parseFloat(takeValue));
-        newMedic.setWarning(Integer.parseInt(warningValue));
-        newMedic.setAlert(Integer.parseInt(alertValue));
-        newMedic.getDateEndOfStock();
+        newPrescription.setStock(Float.parseFloat(stockValue));
+        newPrescription.setTake(Float.parseFloat(takeValue));
+        newPrescription.setWarning(Integer.parseInt(warningValue));
+        newPrescription.setAlert(Integer.parseInt(alertValue));
+        newPrescription.getDateEndOfStock();
 
-        if (aMedic.equals(newMedic)) {
-            Log.d(TAG, "medic and newMedic are Equals");
+        if (aPrescription.equals(newPrescription)) {
+            Log.d(TAG, "medic and newPrescription are Equals");
         } else {
-            Log.d(TAG, "medic and newMedic are NOT Equals");
-            newMedic.setLast_update(new Date().getTime());
-            medicDAO.update(newMedic);
+            Log.d(TAG, "medic and newPrescription are NOT Equals");
+            newPrescription.setLast_update(new Date().getTime());
+            prescriptionsDAO.update(newPrescription);
             //dbHelper.updateDrug(newDrug);
         }
     }

@@ -9,8 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,11 +33,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
 
-import net.foucry.pilldroid.dao.MedicDAO;
-import net.foucry.pilldroid.models.Medic;
+import net.foucry.pilldroid.dao.MedicinesDAO;
+import net.foucry.pilldroid.dao.PrescriptionsDAO;
+import net.foucry.pilldroid.databases.MedicineDatabase;
+import net.foucry.pilldroid.databases.PrescriptionDatabase;
+import net.foucry.pilldroid.models.Medicine;
+import net.foucry.pilldroid.models.Prescription;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,10 +68,10 @@ public class DrugListActivity extends AppCompatActivity {
     private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
     private static final String TAG = DrugListActivity.class.getName();
 
-    public PilldroidDatabase prescriptions;
-    public PilldroidDatabase medications;
+    public PrescriptionDatabase prescriptions;
+    public MedicineDatabase medicines;
 
-    private List<Medic> medics;         // used for prescriptions
+    private List<Prescription> prescriptionList;         // used for prescriptions
 
     private SimpleItemRecyclerViewAdapter mAdapter;
 
@@ -74,33 +79,47 @@ public class DrugListActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        medications = Room
-                .databaseBuilder(getApplicationContext(), PilldroidDatabase.class, "medications")
+        if(net.foucry.pilldroid.BuildConfig.DEBUG) {
+            String manufacturer = Build.MANUFACTURER;
+            String model = Build.MODEL;
+            int version = Build.VERSION.SDK_INT;
+            String versionRelease = Build.VERSION.RELEASE;
+
+            Log.e(TAG, "manufacturer " + manufacturer
+                    + " \n model " + model
+                    + " \n version " + version
+                    + " \n versionRelease " + versionRelease
+            );
+        }
+
+        medicines = Room
+                .databaseBuilder(getApplicationContext(), MedicineDatabase.class, "medicines")
                 .createFromAsset("drugs.db")
+                .allowMainThreadQueries()
                 .build();
 
         // Manually migrate old database to room
-        MedicDAO medicDAO = prescriptions.getMedicDAO();
+        PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         DBHelper dbHelper = new DBHelper(this);
         if (dbHelper.getCount() !=0) {
             List<Drug> drugs=dbHelper.getAllDrugs();
             for (int count=0; count < dbHelper.getCount(); count++) {
                 Drug drug = drugs.get(count);
-                Medic medic = new Medic();
+                Prescription prescription = new Prescription();
 
-                if(medicDAO.getMedicByCIP13(drug.getCip13()) == null) {
-                    medic.setName(drug.getName());
-                    medic.setCip13(drug.getCip13());
-                    medic.setCis(drug.getCis());
-                    medic.setPresentation(drug.getPresentation());
-                    medic.setAdministration_mode(drug.getAdministration_mode());
-                    medic.setStock((float) drug.getStock());
-                    medic.setTake((float) drug.getTake());
-                    medic.setWarning(drug.getWarnThreshold());
-                    medic.setAlert(drug.getAlertThreshold());
-                    medic.setLast_update(drug.getDateLastUpdate());
+                if(prescriptionsDAO.getMedicByCIP13(drug.getCip13()) == null) {
+                    prescription.setName(drug.getName());
+                    prescription.setCip13(drug.getCip13());
+                    prescription.setCis(drug.getCis());
+                    prescription.setPresentation(drug.getPresentation());
+                    prescription.setAdministration_mode(drug.getAdministration_mode());
+                    prescription.setStock((float) drug.getStock());
+                    prescription.setTake((float) drug.getTake());
+                    prescription.setWarning(drug.getWarnThreshold());
+                    prescription.setAlert(drug.getAlertThreshold());
+                    prescription.setLast_update(drug.getDateLastUpdate());
 
-                    medicDAO.insert(medic);
+                    prescriptionsDAO.insert(prescription);
                 }
                 else {
                     Log.i(TAG, "Already in the database");
@@ -115,9 +134,11 @@ public class DrugListActivity extends AppCompatActivity {
             nm.cancelAll();
         }
 
-        // start tutorial
-        Log.i(TAG, "Launch tutorial");
-        startActivity(new Intent(this, WelcomeActivity.class));
+        // start tutorial (only in non debug mode
+        if(!net.foucry.pilldroid.BuildConfig.DEBUG) {
+            Log.i(TAG, "Launch tutorial");
+            startActivity(new Intent(this, WelcomeActivity.class));
+        }
     }
 
     @Override
@@ -132,7 +153,7 @@ public class DrugListActivity extends AppCompatActivity {
 
         // Create Room database
         prescriptions = Room
-                .databaseBuilder(getApplicationContext(), PilldroidDatabase.class, "prescriptions")
+                .databaseBuilder(getApplicationContext(), PrescriptionDatabase.class, "prescriptions")
                 .allowMainThreadQueries()
                 .build();
 
@@ -147,30 +168,30 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         if (DEMO) {
-          MedicDAO medicDAO = prescriptions.getMedicDAO();
+          PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
 
-          if (medicDAO.getMedicCount() == 0) {
+          if (prescriptionsDAO.getMedicCount() == 0) {
               final int min_stock = 5;
               final int max_stock = 50;
               final int min_take = 0;
               final int max_take = 3;
 
               for (int i = 1; i < 9; i++) {
-                  Medic medic = new Medic();
-                  medic.setName("Medicament test " + i);
-                  medic.setCip13("340093000001" + i);
-                  medic.setCis("6000001" + i);
-                  medic.setAdministration_mode("oral");
-                  medic.setPresentation("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
-                  medic.setStock((float) intRandomExclusive(min_stock, max_stock));
-                  medic.setTake((float) intRandomExclusive(min_take, max_take));
-                  medic.setWarning(14);
-                  medic.setAlert(7);
-                  medic.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
+                  Prescription prescription = new Prescription();
+                  prescription.setName("Medicament test " + i);
+                  prescription.setCip13("340093000001" + i);
+                  prescription.setCis("6000001" + i);
+                  prescription.setAdministration_mode("oral");
+                  prescription.setPresentation("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
+                  prescription.setStock((float) intRandomExclusive(min_stock, max_stock));
+                  prescription.setTake((float) intRandomExclusive(min_take, max_take));
+                  prescription.setWarning(14);
+                  prescription.setAlert(7);
+                  prescription.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
 
-                  medicDAO.insert(medic);
+                  prescriptionsDAO.insert(prescription);
               }
-              List<Medic> prescriptions = medicDAO.getAllMedics();
+              List<Prescription> prescriptions = prescriptionsDAO.getAllMedics();
               System.out.println(prescriptions);
               Log.d(TAG, "prescriptions ==" + prescriptions);
           }
@@ -225,11 +246,11 @@ public class DrugListActivity extends AppCompatActivity {
                                 }
 
                                 // Get Drug from database
-                                MedicDAO medicationDAO = medications.getMedicDAO();
-                                final Medic scannedMedication = medicationDAO.getMedicByCIP13(cip13);
+                                MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
+                                final Medicine scannedMedicine = medicinesDAO.getMedicineByCIP13(cip13);
 
                                 // add Drug to prescription database
-                                askToAddInDB(scannedMedication);
+                                askToAddInDB(scannedMedicine);
                             }
                         }
                     }
@@ -239,8 +260,8 @@ public class DrugListActivity extends AppCompatActivity {
 
     public void constructDrugsList() {
 
-        MedicDAO medicDAO = prescriptions.getMedicDAO();
-        medics = medicDAO.getAllMedics();
+        PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
+        prescriptionList = prescriptionsDAO.getAllMedics();
 
         View mRecyclerView = findViewById(R.id.drug_list);
         assert mRecyclerView != null;
@@ -320,10 +341,10 @@ public class DrugListActivity extends AppCompatActivity {
                 .setPositiveButton("OK", (dialog, id) -> {
                     String cip13 = editText.getText().toString();
 
-                    MedicDAO medicationsDAO = medications.getMedicDAO();
-                    Medic aMedic = medicationsDAO.getMedicByCIP13(cip13);
-                    //Medic aMedic = medications.getDrugByCIP13(cip13);
-                    askToAddInDB(aMedic);
+                    MedicinesDAO medicineDAO = medicines.getMedicinesDAO();
+                    Medicine aMedicine = medicineDAO.getMedicineByCIP13(cip13);
+                    //Prescription aPrescription = medications.getDrugByCIP13(cip13);
+                    askToAddInDB(aMedicine);
                 })
                 .setNegativeButton("Cancel",
                         (dialog, id) -> dialog.cancel());
@@ -354,14 +375,14 @@ public class DrugListActivity extends AppCompatActivity {
      * Ask if the drug found in the database should be include in the
      * user database
      *
-     * @param aMedic Medic- medication to be added
+     * @param aMedicine Prescription- medication to be added
      */
-    private void askToAddInDB(Medic aMedic) {
+    private void askToAddInDB(Medicine aMedicine) {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setTitle(getString(R.string.app_name));
 
-        if (aMedic != null) {
-            String msg = aMedic.getName() + " " + getString(R.string.msgFound);
+        if (aMedicine != null) {
+            String msg = aMedicine.getName() + " " + getString(R.string.msgFound);
 
             dlg.setMessage(msg);
             dlg.setNegativeButton(getString(R.string.button_cancel), (dialog, which) -> {
@@ -369,7 +390,7 @@ public class DrugListActivity extends AppCompatActivity {
             });
             dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
                 // Add Drug to DB then try to show it
-                addDrugToList(aMedic);
+                addDrugToList(Utils.medicine2prescription(aMedicine));
             });
         } else {
             dlg.setMessage(getString(R.string.msgNotFound));
@@ -397,18 +418,18 @@ public class DrugListActivity extends AppCompatActivity {
     /**
      * Add New drug to the user database
      *
-     * @param aMedic Medic - medication to be added
+     * @param aPrescription Prescription - medication to be added
      */
 
     @SuppressWarnings("deprecation")
-    private void addDrugToList(Medic aMedic) {
-        aMedic.getDateEndOfStock();
-        mAdapter.addItem(aMedic);
+    private void addDrugToList(Prescription aPrescription) {
+        aPrescription.getDateEndOfStock();
+        mAdapter.addItem(aPrescription);
 
         Log.d(TAG, "Call DrugDetailActivity");
         Context context = this;
         Intent intent = new Intent(context, DrugDetailActivity.class);
-        intent.putExtra("medic", (Parcelable) aMedic);
+        intent.putExtra("prescription", aPrescription);
 
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
@@ -431,7 +452,7 @@ public class DrugListActivity extends AppCompatActivity {
      */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        mAdapter = new SimpleItemRecyclerViewAdapter(medics);
+        mAdapter = new SimpleItemRecyclerViewAdapter(prescriptionList);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -441,19 +462,19 @@ public class DrugListActivity extends AppCompatActivity {
     public class SimpleItemRecyclerViewAdapter extends
             RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Medic> mValues;
+        private final List<Prescription> mValues;
 
-        SimpleItemRecyclerViewAdapter(List<Medic> items) {
+        SimpleItemRecyclerViewAdapter(List<Prescription> items) {
             mValues = items;
         }
 
-        void addItem(Medic scannedMedic) {
-            MedicDAO medicDAO = prescriptions.getMedicDAO();
-            if (medicDAO.getMedicByCIP13(scannedMedic.getCip13()) == null) {
-                mValues.add(scannedMedic);
+        void addItem(Prescription scannedPrescription) {
+            PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
+            if (prescriptionsDAO.getMedicByCIP13(scannedPrescription.getCip13()) == null) {
+                mValues.add(scannedPrescription);
                 //notifyDataSetChanged();
                 notifyItemInserted(mValues.size());
-                medicDAO.insert(scannedMedic);
+                prescriptionsDAO.insert(scannedPrescription);
             } else {
                 Toast.makeText(getApplicationContext(), "already in the database", Toast.LENGTH_LONG).show();
             }
@@ -494,10 +515,10 @@ public class DrugListActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Medic aMedic = mValues.get(position);
+                        Prescription aPrescription = mValues.get(position);
                         Context context = v.getContext();
                         Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("medic", (Parcelable) aMedic);
+                        intent.putExtra("prescription",  aPrescription);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
@@ -520,10 +541,10 @@ public class DrugListActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Medic medic = mValues.get(position);
+                        Prescription prescription = mValues.get(position);
                         Context context = v.getContext();
                         Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("medic", medic);
+                        intent.putExtra("prescription", prescription);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
@@ -543,7 +564,7 @@ public class DrugListActivity extends AppCompatActivity {
             final TextView mContentView;
             final TextView mEndOfStock;
             final ImageView mIconView;
-            public Medic mItem;
+            public Prescription mItem;
 
             ViewHolder(View view) {
                 super(view);
