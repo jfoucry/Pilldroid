@@ -11,7 +11,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -430,7 +429,7 @@ public class DrugListActivity extends AppCompatActivity {
         Log.d(TAG, "Call DrugDetailActivity");
         Context context = this;
         Intent intent = new Intent(context, DrugDetailActivity.class);
-        intent.putExtra("medic", (Parcelable) aPrescription);
+        intent.putExtra("prescription", aPrescription);
 
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
@@ -519,7 +518,7 @@ public class DrugListActivity extends AppCompatActivity {
                         Prescription aPrescription = mValues.get(position);
                         Context context = v.getContext();
                         Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("medic", (Parcelable) aPrescription);
+                        intent.putExtra("prescription",  aPrescription);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 

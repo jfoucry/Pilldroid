@@ -39,7 +39,7 @@ public class DrugDetailActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
-        aPrescription = (Prescription) bundle.get("medic");
+        aPrescription = (Prescription) bundle.get("prescription");
         Log.d(TAG, "aPrescription == " + aPrescription);
 
         setContentView(R.layout.drug_detail_activity);
@@ -82,7 +82,7 @@ public class DrugDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putSerializable("medic", aPrescription);
+            arguments.putSerializable("prescription", aPrescription);
             DrugDetailFragment fragment = new DrugDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
