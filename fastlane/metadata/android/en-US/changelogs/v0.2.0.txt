@@ -7,9 +7,9 @@ I made a lot a tests but there must stay some bugs.
 ## What's new
 
 A lot of things under the surface :
-- Add an alert about non responsibility ot the author in case of trouble;
+- Add an alert about non responsibility of the author in case of trouble;
 - Using `Room` to manage databases;
-- Migration of the old database to the new one, you should be see anything;
+- Migration of the old database to the new one, you should not see anything;
 - Code cleaning.
 
 ## What should work.
@@ -27,4 +27,4 @@ do not stress me it will be unproductive.
 
 Pilldroid will available only from [f-droid](https://f-droid.org)
 
-You can reach me and discuss on [Pilldroid](mailto://jacques+pilldroid@foucry.net).
+You can reach me and discuss on [Pilldroid](mailto:jacques+pilldroid@foucry.net).
