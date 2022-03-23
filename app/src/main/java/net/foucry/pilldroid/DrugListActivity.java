@@ -246,16 +246,13 @@ public class DrugListActivity extends AppCompatActivity {
                                     Toast.makeText(this, R.string.cancelled_scan, Toast.LENGTH_LONG).show();
                                 }
                             } else {
-                                Log.d(TAG, "Scanned");
+                                Log.d(TAG, "Scanned formatName = " + bundle.getString(BARCODE_FORMAT_NAME));
                                 if (BuildConfig.DEBUG) {
                                     Toast.makeText(this, "Scanned: " + bundle.getString(BARCODE_FORMAT_NAME),
                                             Toast.LENGTH_LONG).show();
                                 }
+
                                 String cip13;
-
-                                // Handle successful scan
-                                Log.d(TAG, "formatName = " + bundle.getString(BARCODE_FORMAT_NAME));
-
                                 switch (bundle.getString(BARCODE_FORMAT_NAME)) {
                                     case "CODE_128":
                                     case "EAN_13":  //CODE_128 || EAN 13
