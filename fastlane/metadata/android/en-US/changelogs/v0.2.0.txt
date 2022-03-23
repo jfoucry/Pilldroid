@@ -1,0 +1,30 @@
+# v0.2.0 – New semantic version number (VMajor.Minor.Patch)
+
+**REMENBER** Pilldroid is a French people user only.
+
+I made a lot a tests but there must stay some bugs.
+
+## What's new
+
+A lot of things under the surface :
+- Add an alert about non responsability ot the author in case of trouble;
+- Using `Room` to manage databases;
+- Migration of the old database to the new one, you should be see anything;
+- Code cleaning.
+
+## What should work.
+- QR-code scan on a dark background. The library have an option for that.
+
+
+**WARNING**, Pilldroid does not manage creams, liquids
+(like insulin).
+
+Thanks to use [github](https://github/jfoucry/pilldroid) for bugs
+reports and new features.
+
+> I made Pilldroid on my free time which is not expandable. Please
+do not stress me it will be unproductive.
+
+Pilldroid will available only from [f-droid](https://f-droid.org)
+
+You can reach me and discuss on [Pilldroid](mailto://jacques+pilldroid@foucry.net).
