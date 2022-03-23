@@ -68,4 +68,6 @@
     <string name="notInterpreted">Barre code cannot be interpreted</string>
     <string name="cancelled_scan">Scan canceled</string>
     <string name="missing_camera_permission">Missing camera permission</string>
+    <string name="Yes">Yes, I understood</string>
+    <string name="understood">I understood that de developer of app_name cannot be responsible ot your medication management. IT\'S YOU OWN RESPONSIBILITY.</string>
 </resources>
