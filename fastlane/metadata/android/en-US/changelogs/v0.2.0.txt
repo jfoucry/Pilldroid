@@ -1,13 +1,13 @@
 # v0.2.0 – New semantic version number (VMajor.Minor.Patch)
 
-**REMENBER** Pilldroid is a French people user only.
+**REMEMBER** Pilldroid is a French people user only.
 
 I made a lot a tests but there must stay some bugs.
 
 ## What's new
 
 A lot of things under the surface :
-- Add an alert about non responsability ot the author in case of trouble;
+- Add an alert about non responsibility ot the author in case of trouble;
 - Using `Room` to manage databases;
 - Migration of the old database to the new one, you should be see anything;
 - Code cleaning.
