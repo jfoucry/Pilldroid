@@ -66,4 +66,6 @@
     <string name="notInterpreted">Le code barre ne peut pas être interprété</string>
     <string name="cancelled_scan">Scan annulé</string>
     <string name="missing_camera_permission">Permission appareil photo manquante</string>
+    <string name="Yes">Oui, j\'ai compris</string>
+    <string name="understood">Je comprend que le développeur de app_name n\'est pas responsable de la gestion de vos médicaments. CELA RELÈVE DE VOTRE SEULE RESPONSABILITË.</string>
 </resources>

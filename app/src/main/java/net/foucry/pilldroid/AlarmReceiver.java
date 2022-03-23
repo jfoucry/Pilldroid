@@ -148,4 +148,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (BuildConfig.DEBUG) { Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show(); }
     }
+
+    public static Boolean isAlarmScheduled(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        return alarmManager.getNextAlarmClock() != null;
+    }
 }
