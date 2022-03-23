@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
         private static final String PREF_NAME = "Pildroid-Prefs";
         private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
         private static final String DATABASE_VERSION = "DatabaseVersion";
+        private static final String IS_UNDERSTOOD = "IsUnderStood";
 
         public PrefManager(Context context) {
             pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -35,10 +36,17 @@ import android.content.SharedPreferences;
             editor.apply();
         }
 
+        public void setUnderstood(boolean isUnderstood) {
+            editor = pref.edit();
+            editor.putBoolean(IS_UNDERSTOOD, isUnderstood);
+            editor.apply();
+        }
+
         public boolean isFirstTimeLaunch() {
             return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
         }
         public int getDatabaseVersion() {
             return  pref.getInt(DATABASE_VERSION, 0);
         }
+        public boolean isUnderstood() {return pref.getBoolean(IS_UNDERSTOOD, false); }
     }
