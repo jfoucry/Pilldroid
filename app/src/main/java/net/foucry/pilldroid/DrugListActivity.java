@@ -79,7 +79,7 @@ public class DrugListActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        if(net.foucry.pilldroid.BuildConfig.DEBUG) {
+        if(BuildConfig.DEBUG) {
             String manufacturer = Build.MANUFACTURER;
             String model = Build.MODEL;
             int version = Build.VERSION.SDK_INT;
@@ -92,9 +92,16 @@ public class DrugListActivity extends AppCompatActivity {
             );
         }
 
+        // Create medicines Room database from drugs.db files
         medicines = Room
                 .databaseBuilder(getApplicationContext(), MedicineDatabase.class, "medicines")
                 .createFromAsset("drugs.db")
+                .allowMainThreadQueries()
+                .build();
+
+        // Create prescriptions Room database
+        prescriptions = Room
+                .databaseBuilder(getApplicationContext(), PrescriptionDatabase.class, "prescriptions")
                 .allowMainThreadQueries()
                 .build();
 
@@ -134,11 +141,19 @@ public class DrugListActivity extends AppCompatActivity {
             nm.cancelAll();
         }
 
-        // start tutorial (only in non debug mode
-        if(!net.foucry.pilldroid.BuildConfig.DEBUG) {
+        // start tutorial (only in non debug mode)
+       // if(!net.foucry.pilldroid.BuildConfig.DEBUG) {
             Log.i(TAG, "Launch tutorial");
             startActivity(new Intent(this, WelcomeActivity.class));
+       // }
+
+        PrefManager prefManager = new PrefManager(this);
+        if (!prefManager.isUnderstood()) {
+            askForComprehensive();
+            prefManager.setUnderstood(true);
         }
+
+
     }
 
     @Override
@@ -146,9 +161,18 @@ public class DrugListActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+
+        if (!AlarmReceiver.isAlarmScheduled(this)){
+            AlarmReceiver.scheduleAlarm(this);
+        }
+
+    }
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Create Room database
@@ -295,12 +319,6 @@ public class DrugListActivity extends AppCompatActivity {
         constructDrugsList();
     }
 
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
-        AlarmReceiver.scheduleAlarm(this);
-    }
-
     public void onResume() {
         super.onResume();
     }
@@ -343,7 +361,6 @@ public class DrugListActivity extends AppCompatActivity {
 
                     MedicinesDAO medicineDAO = medicines.getMedicinesDAO();
                     Medicine aMedicine = medicineDAO.getMedicineByCIP13(cip13);
-                    //Prescription aPrescription = medications.getDrugByCIP13(cip13);
                     askToAddInDB(aMedicine);
                 })
                 .setNegativeButton("Cancel",
@@ -416,6 +433,21 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     /**
+     * askForCompréhensive
+     */
+    private void askForComprehensive() {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle(getString(R.string.app_name));
+
+        dlg.setMessage(R.string.understood);
+        dlg.setPositiveButton(R.string.Yes, (dialog, which) -> {
+            // Nothing to do just dismiss dialog
+        });
+        dlg.show();
+    }
+
+
+    /**
      * Add New drug to the user database
      *
      * @param aPrescription Prescription - medication to be added
@@ -434,17 +466,6 @@ public class DrugListActivity extends AppCompatActivity {
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
-
-    private String getAppName() {
-        PackageManager packageManager = getApplicationContext().getPackageManager();
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
-        } catch (final PackageManager.NameNotFoundException ignored) {
-        }
-        return (String) ((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
-    }
-
     /**
      * setupRecyclerView (list of drugs)
      *
@@ -580,5 +601,15 @@ public class DrugListActivity extends AppCompatActivity {
                 return super.toString() + " '" + mContentView.getText() + "'";
             }
         }
+    }
+
+    private String getAppName() {
+        PackageManager packageManager = getApplicationContext().getPackageManager();
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
+        } catch (final PackageManager.NameNotFoundException ignored) {
+        }
+        return (String) ((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
     }
 }
