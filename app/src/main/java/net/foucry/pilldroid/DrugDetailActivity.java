@@ -55,7 +55,7 @@ public class DrugDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "Click on save icon");
 
-                getMDrugChanges();
+                getDrugChanges();
                 setResult(1);
                 finish();
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
@@ -107,11 +107,10 @@ public class DrugDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getMDrugChanges() {
+    private void getDrugChanges() {
         Log.d(TAG, "Time to save new values");
 
-        PrescriptionDatabase prescriptions = null;
-        assert false;
+        PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(this);
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
 
         Prescription newPrescription = prescriptionsDAO.getMedicByCIP13(aPrescription.getCip13());

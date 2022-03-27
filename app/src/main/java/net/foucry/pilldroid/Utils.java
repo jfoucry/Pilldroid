@@ -1,7 +1,5 @@
 package net.foucry.pilldroid;
 
-import androidx.room.Database;
-
 import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
 

@@ -93,17 +93,10 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         // Create medicines Room database from drugs.db files
-        medicines = Room
-                .databaseBuilder(getApplicationContext(), MedicineDatabase.class, "medicines")
-                .createFromAsset("drugs.db")
-                .allowMainThreadQueries()
-                .build();
+        medicines = MedicineDatabase.getInstanceDatabase(this);
 
         // Create prescriptions Room database
-        prescriptions = Room
-                .databaseBuilder(getApplicationContext(), PrescriptionDatabase.class, "prescriptions")
-                .allowMainThreadQueries()
-                .build();
+        prescriptions = PrescriptionDatabase.getInstanceDatabase(this);
 
         // Manually migrate old database to room
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
