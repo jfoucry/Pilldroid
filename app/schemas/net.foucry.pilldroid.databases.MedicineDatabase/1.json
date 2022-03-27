@@ -1,0 +1,82 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "96dc5c4ccb337047e323d613eb86bdd1",
+    "entities": [
+      {
+        "tableName": "drugs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `cis` TEXT, `cip13` TEXT, `cip7` TEXT, `administration_mode` TEXT, `name` TEXT, `presentation` TEXT, `label_group` TEXT, `generic_type` INTEGER, PRIMARY KEY(`_id`))",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cis",
+            "columnName": "cis",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cip13",
+            "columnName": "cip13",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cip7",
+            "columnName": "cip7",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "administration_mode",
+            "columnName": "administration_mode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "presentation",
+            "columnName": "presentation",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "label_group",
+            "columnName": "label_group",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "generic_type",
+            "columnName": "generic_type",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '96dc5c4ccb337047e323d613eb86bdd1')"
+    ]
+  }
+}
