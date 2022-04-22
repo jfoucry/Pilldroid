@@ -12,7 +12,7 @@ find the code.
 - removing of a prescription from the list;
 - take prescription reminder. It will be never been implemented (by me).
 
-**ATTENTION**, Pilldroid does not manage creams, liquids
+**WARNING**, Pilldroid does not manage creams, liquids
 (like insulin).
 
 Thanks to use [github](https://github/jfoucry/pilldroid) for bugs
