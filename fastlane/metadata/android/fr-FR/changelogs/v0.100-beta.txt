@@ -4,7 +4,7 @@ Malgré de nombreux tests et une utilisation quotidienne,
 tout est à tester.
 
 ## Ce qui ne fonctionne pas
-- le scan de QR-code sur fond foncé. La blibliothèque utilisée n'arrive
+- le scan de QR-code sur fond foncé. La bibliothèque utilisée n'arrive
 pas à les repérer.
 
 ## Ce qui n'est pas implémenté
@@ -17,7 +17,7 @@ pas à les repérer.
 Merci d'utiliser [github](https://github/jfoucry/pilldroid) pour
 les rapports de bogues et demandes de fonctionnalités.
 
-> Je fais Pilldroid sur mon temps libre et accesible. Il est inutile
+> Je fais Pilldroid sur mon temps libre et accessible. Il est inutile
 et contre productif de me « mettre la pression ».
 
 Pilldroid ne sera diffusé que par [f-droid](https://f-droid.org)
