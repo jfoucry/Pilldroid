@@ -1,6 +1,6 @@
 # beta-0.100 – First public release
 
-**REMENBER** Pilldroid is a French people user only.
+**REMEMBER** Pilldroid is a French people user only.
 
 I made a lot a tests but there must stay some bugs.
 
