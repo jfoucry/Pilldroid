@@ -36,8 +36,8 @@ android {
         applicationId "net.foucry.pilldroid"
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
-        versionCode 20
-        versionName "v0.2.0"
+        versionCode 200
+        versionName "v0.200-beta"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
