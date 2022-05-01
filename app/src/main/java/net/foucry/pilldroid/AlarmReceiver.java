@@ -41,7 +41,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (BuildConfig.DEBUG) { Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show(); }
         createNotificationChannel(context);
-        DBHelper dbHelper = new DBHelper(context);
+        DBHelper dbHelper = new DBHelper(context); // TODO use room
         dbHelper.getAllDrugs();
 
         List<Drug> drugs = dbHelper.getAllDrugs();
