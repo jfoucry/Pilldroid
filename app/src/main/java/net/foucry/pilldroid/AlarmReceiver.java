@@ -14,6 +14,10 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import net.foucry.pilldroid.dao.PrescriptionsDAO;
+import net.foucry.pilldroid.databases.PrescriptionDatabase;
+import net.foucry.pilldroid.models.Prescription;
+
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -41,24 +45,24 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (BuildConfig.DEBUG) { Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show(); }
         createNotificationChannel(context);
-        DBHelper dbHelper = new DBHelper(context);
-        dbHelper.getAllDrugs();
-
-        List<Drug> drugs = dbHelper.getAllDrugs();
-
-        Drug firstDrug = null;
+        PrescriptionDatabase prescriptions = null;
+        assert false;
+        PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
+        List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
+        Prescription firstPrescription = null ;
+        //List<Drug> drugs = dbHelper.getAllDrugs();
 
         try {
-            firstDrug = drugs.get(0);
+            firstPrescription = prescriptionList.get(1);
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
             e.printStackTrace();
         }
 
-        if (firstDrug != null) {
-            if (firstDrug.getTake() != 0) {
-                if(firstDrug.getStock() <= firstDrug.getAlertThreshold()) {
+        if (firstPrescription != null) {
+            if (firstPrescription.getTake() != 0) {
+                if(firstPrescription.getStock() <= firstPrescription.getAlertThreshold()) {
                     notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     Intent notificationIntent = new Intent(context, DrugListActivity.class);
@@ -81,7 +85,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     notificationManager.notify(notificationId, builder.build());
                 } else
                 {
-                    double dummy = (firstDrug.getStock() - firstDrug.getAlertThreshold());
+                    double dummy = (firstPrescription.getStock() - firstPrescription.getAlertThreshold());
                     Log.d(TAG, "no notification scheduled " + dummy);
                 }
             }
