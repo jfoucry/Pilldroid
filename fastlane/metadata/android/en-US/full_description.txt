@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <strong>Pilldroid</strong> is a theoretical prescriptions manager. It for French people
 only.
 
