@@ -1,4 +1,4 @@
-# v0.2.0 – Nouvelle numérotation sémantique (VMajor.Minor.Patch)
+# v0.200 – Nouvelle numérotation sémantique (VMajor.Minor.Patch)
 
 Malgré de nombreux tests et une utilisation quotidienne,
 tout est à tester.
@@ -26,4 +26,4 @@ et contre-productif de me « mettre la pression ».
 
 Pilldroid ne sera diffusé que par [f-droid](https://f-droid.org)
 
-Vous pouvez m'écrire pour discuter de [Pildroid](mailto://jacques+pilldroid@foucry.net).
+Vous pouvez m'écrire pour discuter de [Pildroid](mailto:jacques+pilldroid@foucry.net).
