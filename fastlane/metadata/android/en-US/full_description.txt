@@ -1,9 +1,12 @@
-<strong>Pilldroid</strong> is a theorical medics manager. It for French people
+<strong>Pilldroid</strong> is a theoretical prescriptions manager. It for French people
 only.
 
 <strong>Why for french people only?</strong>
-<p>Pilldroid use a medics databases that come from French governement website, with
-medics which are refund by french health care national insurance (Sécurité
+<p>Pilldroid use a prescriptions databases that come from French government website, with
+<strong>Pilldroid</strong> is a theoretical prescriptions manager. It for French people
+only.
+
+prescriptions which are refund by french health care national insurance (Sécurité
 Sociale).</p>
 
 <strong>What is the Pilldroid's license?</strong>
