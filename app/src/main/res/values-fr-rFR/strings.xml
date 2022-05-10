@@ -34,11 +34,11 @@
     <string name="slide9_Pilldroid">Les valeurs sont modifiables, le stock est recalculé tous les jours</string>
     <string name="slide10_Pilldroid">Traitement suspendu, la prise est à zéro, le stock n\'est plus calculé</string>
     <string name="slide11_Pilldroid">Sauvegarder vos modifications</string>
-    <string name="slide12_Pilldroid">Merci d\'utiliser PillDroid</string>
+    <string name="slide12_Pilldroid">Merci d\'utiliser Pilldroid</string>
     <string name="slide1_desc">Le gestionnaire de stock théorique de médicaments</string>
     <string name="slide2_desc">Pour ajouter un médicament dans le stock</string>
     <string name="slide3_desc">Pour obtenir le CIP 13</string>
-    <string name="pilldroid_icon">Icône de PillDroid</string>
+    <string name="pilldroid_icon">Icône de Pilldroid</string>
     <string name="the_plus_icon">L\'icône Plus</string>
     <string name="slide4_desc">Pour obtenir le CIP 13</string>
     <string name="happy_face">Visage souriant</string>
