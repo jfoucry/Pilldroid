@@ -1,15 +1,17 @@
-<strong>Pilldroid</strong> is a theoretical prescriptions manager. It for French people
-only.
+<p><strong>Pilldroid</strong> is a theoretical prescriptions manager.</p>
 
-<strong>Why for french people only?</strong>
-<p>Pilldroid use a prescriptions databases that come from French government website, with
-<strong>Pilldroid</strong> is a theoretical prescriptions manager. It for French people
-only.
+<p><em>It for French people only.</em></p>
 
-prescriptions which are refund by french health care national insurance (Sécurité
-Sociale).</p>
-
-<strong>What is the Pilldroid's license?</strong>
-Pilldroid is distributed under the <a
-href="https://tldrlegal.com/license/bsd-3-clause-license-(revised)">BSD 3-Clause
-revised</a></p>
+<p>
+  <ul>
+    <li><strong>Why for french people only?</strong>
+          Pilldroid use a prescription database that come from French government website, with
+          prescriptions which are refund by french health care national insurance (Sécurité
+          Sociale).</li>
+    <li><strong>What is the Pilldroid's license?</strong>
+          Pilldroid is distributed under the <a
+          href="https://tldrlegal.com/license/bsd-3-clause-license-(revised)">BSD 3-Clause
+          revised</a>
+    </li>
+  </ul>
+</p>

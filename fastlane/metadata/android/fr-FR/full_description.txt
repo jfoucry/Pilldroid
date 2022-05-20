@@ -1,13 +1,13 @@
 <p><strong>Pilldroid</strong> est un gestionnaire théorique de stock médicaments.</p>
 
-<strong>Pourquoi <em>théorique</em> ?</strong>
-<p>*Pilldroid* n'a aucun moyen de savoir si vous avez réellement pris vos médicaments.
+<p><strong>Pourquoi <em>théorique</em> ?</strong>
+<strrong>Pilldroid</strong> n'a aucun moyen de savoir si vous avez réellement pris vos médicaments.
 C'est de votre responsabilité et Pilldroid ne vous le demande pas.</p>
 
-<strong>Pour en savoir plus</strong>
 <p>
+<strong>Pour en savoir plus</strong>
 <ul>
-<li>Pour tout savoir sur *Pilldroid*, consultez le <a href="https://pilldroid.foucry.net">site web du projet</a></li>
+<li>Pour tout savoir sur <strong>Pilldroid</strong>, consultez le <a href="https://pilldroid.foucry.net">site web du projet</a></li>
 <li><a href="mailto:pilldroid@foucry.net">Contactez l'auteur par mail</a></li>
 </ul>
 </p>
