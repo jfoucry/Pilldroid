@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +74,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     private List<Prescription> prescriptionList;         // used for prescriptions
 
-    private SimpleItemRecyclerViewAdapter mAdapter;
+    private RecyclerViewAdapter mAdapter;
 
     @Override
     public void onStart() {
@@ -463,19 +464,19 @@ public class DrugListActivity extends AppCompatActivity {
      */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        mAdapter = new SimpleItemRecyclerViewAdapter(prescriptionList);
+        mAdapter = new RecyclerViewAdapter(prescriptionList);
         recyclerView.setAdapter(mAdapter);
     }
 
     /**
      * SimpleItemRecyclerViewAdapter
      */
-    public class SimpleItemRecyclerViewAdapter extends
-            RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class RecyclerViewAdapter extends
+            RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
         private final List<Prescription> mValues;
 
-        SimpleItemRecyclerViewAdapter(List<Prescription> items) {
+        RecyclerViewAdapter(List<Prescription> items) {
             mValues = items;
         }
 
