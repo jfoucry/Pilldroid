@@ -9,6 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
+    android:fitsSystemWindows="true"
     tools:context="net.foucry.pilldroid.DrugListActivity">
 
     <!--
