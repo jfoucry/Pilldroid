@@ -18,19 +18,15 @@ else {
 android {
     signingConfigs {
         release {
-            storeFile rootProject.file("android-signing-keystore.jks")
-            storePassword secretProperties['signing_keystore_password']
-            keyAlias secretProperties['signing_release_alias_key']
-            keyPassword secretProperties['signing_release_key_password']
         }
         prerelease {
-            storeFile rootProject.file("android-signing-keystore.jks")
+            storeFile file("../android-signing-keystore.jks")
             storePassword secretProperties['signing_keystore_password']
-            keyAlias secretProperties['signing_pre-release_key_alias']
-            keyPassword secretProperties['signing_pre-release_key_password']
+            keyAlias secretProperties['signing_key_alias']
+            keyPassword secretProperties['signing_key_password']
         }
     }
-    compileSdkVersion 31
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "net.foucry.pilldroid"
@@ -87,7 +83,7 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    buildToolsVersion '32.0.0'
+    buildToolsVersion = "32.0.0"
 
     allprojects {
         tasks.withType(JavaCompile) {
