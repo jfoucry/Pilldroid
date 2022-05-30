@@ -1,5 +1,7 @@
 package net.foucry.pilldroid;
 
+import static net.foucry.pilldroid.R.id.detail_toolbar;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +15,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.Date;
+import net.foucry.pilldroid.dao.PrescriptionsDAO;
+import net.foucry.pilldroid.databases.PrescriptionDatabase;
+import net.foucry.pilldroid.models.Prescription;
 
-import static net.foucry.pilldroid.R.id.detail_toolbar;
+import java.util.Date;
 
 /**
  * An activity representing a single Drug detail screen. This
@@ -27,26 +31,19 @@ public class DrugDetailActivity extends AppCompatActivity {
 
     private static final String TAG = DrugDetailActivity.class.getName();
 
-    Drug drug;
-
+    Prescription aPrescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle extras = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
+        aPrescription = (Prescription) bundle.get("prescription");
+        Log.d(TAG, "aPrescription == " + aPrescription);
 
-        /* fetching the string passed with intent using ‘extras’*/
-
-        assert extras != null;
-        drug = (Drug) extras.getSerializable("drug");
-
-        assert drug != null;
-        Log.d(TAG, "drug == " + drug.toString());
-
-        setContentView(R.layout.activity_drug_detail);
+        setContentView(R.layout.drug_detail_activity);
         Toolbar toolbar = findViewById(detail_toolbar);
-
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -58,7 +55,7 @@ public class DrugDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "Click on save icon");
 
-                getMDrugChanges();
+                getDrugChanges();
                 setResult(1);
                 finish();
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
@@ -69,7 +66,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setTitle(drug.getName());
+            actionBar.setTitle(aPrescription.getName());
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -85,8 +82,7 @@ public class DrugDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putSerializable("drug",
-                    getIntent().getSerializableExtra("drug"));
+            arguments.putSerializable("prescription", aPrescription);
             DrugDetailFragment fragment = new DrugDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -111,12 +107,13 @@ public class DrugDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getMDrugChanges() {
+    private void getDrugChanges() {
         Log.d(TAG, "Time to save new values");
 
-        DBHelper dbHelper = new DBHelper(this);
+        PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(this);
+        PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
 
-        Drug newDrug = dbHelper.getDrugByCIP13(drug.getCip13());
+        Prescription newPrescription = prescriptionsDAO.getMedicByCIP13(aPrescription.getCip13());
 
         View stockView;
         View takeView;
@@ -139,18 +136,19 @@ public class DrugDetailActivity extends AppCompatActivity {
         TextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
 
-        newDrug.setStock(Double.parseDouble(stockValue));
-        newDrug.setTake(Double.parseDouble(takeValue));
-        newDrug.setWarnThreshold(Integer.parseInt(warningValue));
-        newDrug.setAlertThreshold(Integer.parseInt(alertValue));
-        newDrug.setDateEndOfStock();
+        newPrescription.setStock(Float.parseFloat(stockValue));
+        newPrescription.setTake(Float.parseFloat(takeValue));
+        newPrescription.setWarning(Integer.parseInt(warningValue));
+        newPrescription.setAlert(Integer.parseInt(alertValue));
+        newPrescription.getDateEndOfStock();
 
-        if (drug.equals(newDrug)) {
-            Log.d(TAG, "drug and newDrug are Equals");
+        if (aPrescription.equals(newPrescription)) {
+            Log.d(TAG, "medic and newPrescription are Equals");
         } else {
-            Log.d(TAG, "drug and newDrug are NOT Equals");
-            newDrug.setDateLastUpdate(new Date().getTime());
-            dbHelper.updateDrug(newDrug);
+            Log.d(TAG, "medic and newPrescription are NOT Equals");
+            newPrescription.setLast_update(new Date().getTime());
+            prescriptionsDAO.update(newPrescription);
+            //dbHelper.updateDrug(newDrug);
         }
     }
 }

@@ -165,7 +165,7 @@ public class Drug implements Serializable {
     }
 
     void newStock() {
-        Log.d(TAG, "current drug = " + this.toString());
+        Log.d(TAG, "current drug = " + this);
 
         Date lastUpdate = new Date(getDateLastUpdate());
 

@@ -2,16 +2,20 @@ package net.foucry.pilldroid;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
@@ -41,10 +45,9 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         prefManager.setFirstTimeLaunch(false);
-        // Making notification bar transparent
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        setContentView(R.layout.welcome_activity);
 
-        setContentView(R.layout.activity_welcome);
+        setFullScreen();
 
         viewPager   = findViewById(R.id.view_pager);
         dotsLayout  = findViewById(R.id.layoutDots);
@@ -90,7 +93,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // checking for last page
                 // if last page home screen will be launched
-                int current = getItem(+1);
+                int current = getItem();
                 if (current < layouts.length) {
                     // move to next screen
                     viewPager.setCurrentItem(current);
@@ -118,8 +121,8 @@ public class WelcomeActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(ContextCompat.getColor(this, R.color.dot_light));
     }
 
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
+    private int getItem() {
+        return viewPager.getCurrentItem() + 1;
     }
 
     void launchHomeScreen() {
@@ -129,7 +132,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     //  viewpager change listener
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+    final ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {
@@ -167,6 +170,28 @@ public class WelcomeActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
     }
 
+    @SuppressWarnings("deprecation")
+    private void setFullScreen(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setDecorFitsSystemWindows(false);
+            WindowInsetsController controller = getWindow().getInsetsController();
+            if(controller != null) {
+                controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            }
+        }
+        else {
+            //noinspection
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
+    }
+
     /**
      * View pager adapter
      */
@@ -175,8 +200,9 @@ public class WelcomeActivity extends AppCompatActivity {
         public MyViewPagerAdapter() {
         }
 
+        @NonNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             LayoutInflater layoutInflater = getLayoutInflater();
 
             View view = layoutInflater.inflate(layouts[position], container, false);
@@ -191,13 +217,13 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object obj) {
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object obj) {
             return view == obj;
         }
 
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(ViewGroup container, int position, @NonNull Object object) {
             View view = (View) object;
             container.removeView(view);
         }

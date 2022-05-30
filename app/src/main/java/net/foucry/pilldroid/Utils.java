@@ -1,31 +1,17 @@
 package net.foucry.pilldroid;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import net.foucry.pilldroid.models.Medicine;
+import net.foucry.pilldroid.models.Prescription;
+
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 public class Utils {
-    private static final String TAG = UtilDate.class.getName();
-
-    public static void CopyStream(InputStream is, OutputStream os)
-    {
-        final int buffer_size=1024;
-        try
-        {
-            byte[] bytes=new byte[buffer_size];
-            for(;;)
-            {
-              int count=is.read(bytes, 0, buffer_size);
-              if(count==-1)
-                  break;
-              os.write(bytes, 0, count);
-            }
-        }
-        catch(Exception ignored){}
-    }
+    private static final String TAG = Utils.class.getName();
 
     /**
-     * Return a random number between twovalues - use to gənerate a false demo DB
+     * Return a random number between two values - use to generate a false demo DB
      * @param min minimal value accepted
      * @param max maximum value accepted
      * @return int random number
@@ -35,4 +21,28 @@ public class Utils {
         return r.nextInt(max - min) +max;
     }
 
+    public static String fmt(double d)
+    {
+        if(d == (long) d)
+            return String.format(Locale.getDefault(),"%d",(long)d);
+        else
+            return String.format("%s",d);
+    }
+
+    public static Prescription medicine2prescription(Medicine aMedicine) {
+        Prescription aPrescription = new Prescription();
+
+        aPrescription.setName(aMedicine.getName());
+        aPrescription.setCis(aMedicine.getCis());
+        aPrescription.setCip13(aMedicine.getCip13());
+        aPrescription.setPresentation(aMedicine.getPresentation());
+        aPrescription.setAdministration_mode(aMedicine.getAdministration_mode());
+        aPrescription.setStock(0F);
+        aPrescription.setAlert(7);
+        aPrescription.setTake(0F);
+        aPrescription.setWarning(14);
+        aPrescription.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
+
+        return aPrescription;
+    }
 }

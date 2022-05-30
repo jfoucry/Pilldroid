@@ -41,7 +41,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     private static final String TAG = DBHelper.class.getName();
 
-    private static final String[] COLUMS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_TAKE,
+    private static final String[] COLUMNS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_TAKE,
             KEY_THRESHOLD_WARN, KEY_THRESHOLD_ALERT, KEY_LAST_UPDATE};
 
     DBHelper(Context context) {
@@ -114,7 +114,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Insert
         db.insert(TABLE_DRUG,   // table
-                null,           // colunms list not needed
+                null,           // columns list not needed
                 values);        // key/value
 
         // Close database
@@ -132,7 +132,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Build query
         Cursor cursor = db.query(TABLE_DRUG,                    // Which table
-                COLUMS,                                         // column names
+                COLUMNS,                                         // column names
                 " id = ?",                             // selections
                 new String[] { String.valueOf(id) },             // selections args
                 null,                                   // group by
@@ -161,7 +161,7 @@ class DBHelper extends SQLiteOpenHelper {
             drug.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
         }
         // Log
-        Log.d(TAG, "getDrug("+id+")" + drug.toString());
+        Log.d(TAG, "getDrug("+id+")" + drug);
 
         assert cursor != null;
         cursor.close();
@@ -173,7 +173,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     /**
      *
-     * @param cip13 drug id in French nomemclature
+     * @param cip13 drug id in French nomenclature
      * @return the drug object found in DB or null
      */
     public Drug getDrugByCIP13(String cip13) {
@@ -182,7 +182,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Build query
         Cursor cursor = db.query(TABLE_DRUG,            // Which table
-                COLUMS,                                 // column names
+                COLUMNS,                                 // column names
                 " cip13 = ?",                              // selections
                 new String[]{String.valueOf(cip13)},    // selections args
                 null,                                   // group by
@@ -212,7 +212,7 @@ class DBHelper extends SQLiteOpenHelper {
         assert cursor != null;
         cursor.close();
 
-        Log.d(TAG, "getDrug(" + cip13 + ")" + drug.toString());
+        Log.d(TAG, "getDrug(" + cip13 + ")" + drug);
 
         return drug;
     }
@@ -274,10 +274,7 @@ class DBHelper extends SQLiteOpenHelper {
 
 
 
-        Log.d(TAG, "Before sort == " + drugs.toString());
-
-        /*drugs.sort(Comparator.comparing(Drug::getDateEndOfStock)
-                .thenComparing(Drug::getStock));*/
+        Log.d(TAG, "Before sort == " + drugs);
 
         drugs.sort(new Comparator<Drug>() {
             @Override
@@ -288,7 +285,7 @@ class DBHelper extends SQLiteOpenHelper {
                     return (int) (lhs.getStock() - rhs.getStock());
             }
         });
-        Log.d(TAG, "After sort " + drugs.toString());
+        Log.d(TAG, "After sort " + drugs);
 
         // Move drug with prise = 0 at the end of the list
         // todo: If some drug moved, must redo all the loop
@@ -320,7 +317,7 @@ class DBHelper extends SQLiteOpenHelper {
         // Get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Create ContentValues to add columnm/value
+        // Create ContentValues to add column/value
         ContentValues values = new ContentValues();
         values.put(KEY_ID,              drug.getId());
         values.put(KEY_CIS,             drug.getCis());
@@ -336,14 +333,14 @@ class DBHelper extends SQLiteOpenHelper {
 
         String[] selectionArgs = { String.valueOf(drug.getId()) };
 
-        db.update(TABLE_DRUG,           // table
-                values,                         // column/value
-                KEY_ID + " = ?",       // selections
+        db.update(TABLE_DRUG,                       // table
+                values,                             // column/value
+                KEY_ID + " = ?",        // selections
                 selectionArgs);
 
         // Close DB
         db.close();
-        Log.d(TAG, "values == " + values.toString());
+        Log.d(TAG, "values == " + values);
     }
 
     /**

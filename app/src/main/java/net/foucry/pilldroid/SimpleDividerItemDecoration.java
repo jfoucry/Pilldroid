@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -16,7 +16,8 @@ public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     private final Drawable mDivider;
 
     SimpleDividerItemDecoration(Context context) {
-        mDivider = context.getDrawable(R.drawable.line_divider);
+        //mDivider = context.getDrawable(R.drawable.line_divider);
+        mDivider = AppCompatResources.getDrawable(context, R.drawable.line_divider);
     }
 
     @Override

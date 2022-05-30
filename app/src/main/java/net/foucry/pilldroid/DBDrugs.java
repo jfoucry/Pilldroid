@@ -46,9 +46,10 @@ class DBDrugs extends SQLiteOpenHelper {
 
     public boolean isDBFileExist(File database)
     {
-        try {
+        try  {
             myContext.getDatabasePath(String.valueOf(database));
-        } catch (final Exception exception) {
+        }
+        catch (final Exception e){
             return false;
         }
         return true;
@@ -108,9 +109,8 @@ class DBDrugs extends SQLiteOpenHelper {
 
     @Override
     public synchronized void close() {
-        if (myDataBase != null) {
-            myDataBase.close();
-        }
+        assert false;
+        myDataBase.close();
     }
 
     /**
@@ -154,7 +154,7 @@ class DBDrugs extends SQLiteOpenHelper {
             drug.setAlertThreshold(7);
 
             // Log
-            Log.d(TAG, "getDrug(" + cip13 + ")" + drug.toString());
+            Log.d(TAG, "getDrug(" + cip13 + ")" + drug);
 
             // Return drug
 
@@ -222,7 +222,7 @@ class DBDrugs extends SQLiteOpenHelper {
             drug.setAlertThreshold(7);
 
             // Log
-            Log.d(TAG, "getDrug(" + cip7 + ")" + drug.toString());
+            Log.d(TAG, "getDrug(" + cip7 + ")" + drug);
 
             // Return drug
 

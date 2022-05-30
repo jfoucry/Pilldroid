@@ -9,6 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
+    android:fitsSystemWindows="true"
     tools:context="net.foucry.pilldroid.DrugListActivity">
 
     <!--
@@ -17,8 +18,7 @@
     
     -->
 
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/drug_list"
         android:name="net.foucry.pilldroid.MedicamentListFragment"
         android:layout_width="@dimen/item_width"

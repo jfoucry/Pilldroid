@@ -13,12 +13,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:allowBackup="true">
         <activity
             android:name=".DrugListActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true">
             <intent-filter>
@@ -30,7 +30,8 @@
             android:name=".DrugDetailActivity"
             android:label="@string/title_drug_detail"
             android:parentActivityName=".DrugListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.foucry.pilldroid.DrugListActivity" />
@@ -59,7 +60,5 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <meta-data android:name="io.sentry.dsn" android:value="https://ba17f240b58144e398c862bb953256ef@o755123.ingest.sentry.io/5792286" />
     </application>
-
 </manifest>

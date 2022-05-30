@@ -8,28 +8,28 @@
     <string name="help">Help</string>
     <string name="notification_text">You have to go to the pharmacy</string>
     <string name="drug_name_label">Name</string>
-    <string name="drug_presention_labal">Presentation</string>
-    <string name="drug_administationMode_label">Administration mode</string>
+    <string name="drug_presentation_label">Presentation</string>
+    <string name="drug_administrationMode_label">Administration mode</string>
     <string name="drug_current_stock_label">Current stock</string>
     <string name="drug_take_label">Take</string>
-    <string name="drug_warningTherehold_label">Alert therehold</string>
-    <string name="drug_alertTherehold_label">Critical therehold</string>
+    <string name="drug_warningThreshold_label">Alert threshold</string>
+    <string name="drug_alertThreshold_label">Critical threshold</string>
     <string name="button_keyboard">"Use the keyboard"</string>
     <string name="detail_view">Detail view</string>
     <string name="save_button">Save</string>
-    <string name="flashlighButton">Toggle Flash</string>
-    <string name="enter_cip_13_here">Enter cip 13 here..</string>
+    <string name="flashlightButton">Toggle Flash</string>
+    <string name="enter_cip_13_here">Enter CIP 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
-    <string name="channel_description" translatable="false">PillDroid_NotificationChannel</string>
-    <string name="channel_name" translatable="false">PillDroidChannel</string>
+    <string name="channel_description" translatable="false">Pilldroid_NotificationChannel</string>
+    <string name="channel_name" translatable="false">PilldroidChannel</string>
 
     <!-- slides strings -->
     <string name="slide1_Pilldroid">Welcome on Pilldroid</string>
-    <string name="slide1_desc">The theorical Pill Stock Manager</string>
+    <string name="slide1_desc">The theoretical Pill Stock Manager</string>
     <string name="slide2_Pilldroid">To add a med, tap on the "Plus" button</string>
     <string name="slide2_desc">You\'ll add a drug to the database</string>
     <string name="slide3_Pilldroid">You can scan classic barcode</string>
-    <string name="slide3_desc">called cip13</string>
+    <string name="slide3_desc">called CIP13</string>
     <string name="slide4_Pilldroid">Or QRCode</string>
     <string name="slide5_Pilldroid">Green background, happy face</string>
     <string name="slide6_Pilldroid">Orange background, neutral face</string>
@@ -39,16 +39,16 @@
     <string name="slide10_Pilldroid">Treatment suspended</string>
     <string name="slide11_Pilldroid">save icon</string>
     <string name="slide12_Pilldroid">Thanks</string>
-    <string name="pilldroid_icon">PillDroid Icon</string>
+    <string name="pilldroid_icon">Pilldroid Icon</string>
     <string name="the_plus_icon">The plus icon</string>
     <string name="slide4_desc">In order to find the CIP13</string>
     <string name="happy_face">Happy face</string>
-    <string name="barre_code_icone">Barre code icon</string>
+    <string name="barcode_icon">Barre code icon</string>
     <string name="qr_code_icon">qr-code icon</string>
     <string name="neutral_face">neutral face</string>
     <string name="unhappy_face">unhappy face</string>
     <string name="drug_info">Drug info screenshot</string>
-    <string name="tunables">Tunables</string>
+    <string name="tunable">Tunable</string>
     <string name="slide10_desc">Take to 0 to suspend treatment</string>
     <string name="suspended_treatment_icon">Treatment suspended icon</string>
     <string name="slide11_desc">To save changes</string>
@@ -65,5 +65,9 @@
     <string name="Value">Value</string>
     <string name="label">Label</string>
     <string name="drug_list">Drug\'s attributes</string>
-    <string name="notInterpreted">Barre code cannot be intrepreted</string>
+    <string name="notInterpreted">Barre code cannot be interpreted</string>
+    <string name="cancelled_scan">Scan canceled</string>
+    <string name="missing_camera_permission">Missing camera permission</string>
+    <string name="Yes">Yes, I understood</string>
+    <string name="understood">I understood that de developer of app_name cannot be responsible ot your medication management. IT\'S YOU OWN RESPONSIBILITY.</string>
 </resources>

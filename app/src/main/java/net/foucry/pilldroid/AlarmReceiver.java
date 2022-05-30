@@ -14,6 +14,10 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import net.foucry.pilldroid.dao.PrescriptionsDAO;
+import net.foucry.pilldroid.databases.PrescriptionDatabase;
+import net.foucry.pilldroid.models.Prescription;
+
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -41,24 +45,24 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (BuildConfig.DEBUG) { Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show(); }
         createNotificationChannel(context);
-        DBHelper dbHelper = new DBHelper(context);
-        dbHelper.getAllDrugs();
-
-        List<Drug> drugs = dbHelper.getAllDrugs();
-
-        Drug firstDrug = null;
+        PrescriptionDatabase prescriptions = null;
+        assert false;
+        PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
+        List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
+        Prescription firstPrescription = null ;
+        //List<Drug> drugs = dbHelper.getAllDrugs();
 
         try {
-            firstDrug = drugs.get(0);
+            firstPrescription = prescriptionList.get(1);
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
             e.printStackTrace();
         }
 
-        if (firstDrug != null) {
-            if (firstDrug.getTake() != 0) {
-                if(firstDrug.getStock() <= firstDrug.getAlertThreshold()) {
+        if (firstPrescription != null) {
+            if (firstPrescription.getTake() != 0) {
+                if(firstPrescription.getStock() <= firstPrescription.getAlertThreshold()) {
                     notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     Intent notificationIntent = new Intent(context, DrugListActivity.class);
@@ -81,7 +85,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     notificationManager.notify(notificationId, builder.build());
                 } else
                 {
-                    double dummy = (firstDrug.getStock() - firstDrug.getAlertThreshold());
+                    double dummy = (firstPrescription.getStock() - firstPrescription.getAlertThreshold());
                     Log.d(TAG, "no notification scheduled " + dummy);
                 }
             }
@@ -96,26 +100,24 @@ public class AlarmReceiver extends BroadcastReceiver {
         String description = context.getString(R.string.channel_description);
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         String CHANNEL_ID = "PillDroid";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            channel.enableLights(true);
-            channel.setLightColor(R.color.led);
-            channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            try {
-                notificationManager.createNotificationChannel(channel);
-            } catch (Exception e) {
-                // This will catch any exception, because they are all descended from Exception
-                Log.e(TAG, e.toString());
-                //At the level Exception Class handle the error in Exception Table
-                // Exception Create That Error  Object and throw it
-                //E.g: FileNotFoundException ,etc
-                e.printStackTrace();
-            }
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        channel.enableLights(true);
+        channel.setLightColor(R.color.led);
+        channel.enableVibration(true);
+        channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        try {
+            notificationManager.createNotificationChannel(channel);
+        } catch (Exception e) {
+            // This will catch any exception, because they are all descended from Exception
+            Log.e(TAG, e.toString());
+            //At the level Exception Class handle the error in Exception Table
+            // Exception Create That Error  Object and throw it
+            //E.g: FileNotFoundException ,etc
+            e.printStackTrace();
         }
     }
     public static void scheduleAlarm(Context context) {
@@ -149,5 +151,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
 
         if (BuildConfig.DEBUG) { Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show(); }
+    }
+
+    public static Boolean isAlarmScheduled(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        return alarmManager.getNextAlarmClock() != null;
     }
 }

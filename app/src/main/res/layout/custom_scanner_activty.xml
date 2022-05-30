@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="example.zxing.CustomScannerActivity">
+    tools:context="net.foucry.pilldroid.CustomScannerActivity">
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/zxing_barcode_scanner"
@@ -22,7 +22,7 @@
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginBottom="@dimen/fab_margin"
             android:backgroundTint="@android:color/transparent"
-            android:contentDescription="@string/flashlighButton"
+            android:contentDescription="@string/flashlightButton"
             android:onClick="switchFlashlight"
             android:src="@drawable/ic_baseline_highlight_24" />
     </com.journeyapps.barcodescanner.DecoratedBarcodeView>
