@@ -50,7 +50,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
         Prescription firstPrescription = null ;
-        //List<Drug> drugs = dbHelper.getAllDrugs();
 
         try {
             firstPrescription = prescriptionList.get(1);
