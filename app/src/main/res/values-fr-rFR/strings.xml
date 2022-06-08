@@ -68,4 +68,6 @@
     <string name="missing_camera_permission">Autorisation appareil photo manquante</string>
     <string name="Yes">Oui, j\'ai compris</string>
     <string name="understood">Je comprends que le développeur de app_name n\'est pas responsable de la gestion de vos médicaments. CELA RELÈVE DE VOTRE SEULE RESPONSABILITË.</string>
+    <string name="Undo">Annuler</string>
+    <string name="trash_icon">Icone de poubelle</string>
 </resources>

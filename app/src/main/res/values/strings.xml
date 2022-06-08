@@ -70,4 +70,6 @@
     <string name="missing_camera_permission">Missing camera permission</string>
     <string name="Yes">Yes, I understood</string>
     <string name="understood">I understood that de developer of app_name cannot be responsible ot your medication management. IT\'S YOU OWN RESPONSIBILITY.</string>
+    <string name="Undo">Undo</string>
+    <string name="trash_icon">Trash icon</string>
 </resources>
