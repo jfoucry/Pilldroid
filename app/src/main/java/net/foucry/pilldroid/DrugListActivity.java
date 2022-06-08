@@ -525,9 +525,9 @@ public class DrugListActivity extends AppCompatActivity {
                                     (float) itemView.getBottom(), p);
 
                             int xMarkLeft = itemView.getLeft() + xMarkMargin;
-                            int xMarkRight = 170;  // Arbitrary value cannot find a way to make correct calculation
+                            int xMarkRight = itemView.getLeft() + xMarkMargin + intrinsicWidth;
                             int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-                            int xMarkBottom = itemView.getTop() + intrinsicHeight +xMarkTop;
+                            int xMarkBottom = xMarkTop + intrinsicHeight;// +xMarkTop;
                             icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
 
                             icon.draw(c);
@@ -540,7 +540,7 @@ public class DrugListActivity extends AppCompatActivity {
                             int xMarkRight = itemView.getRight() - xMarkMargin;
                             int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
                             int xMarkBottom = xMarkTop + intrinsicHeight;
-                            icon.setBounds(xMarkLeft, xMarkTop + 16, xMarkRight, xMarkBottom);
+                            icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
 
                             icon.draw(c);
                          }
