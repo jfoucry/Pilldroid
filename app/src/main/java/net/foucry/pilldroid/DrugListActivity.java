@@ -489,7 +489,7 @@ public class DrugListActivity extends AppCompatActivity {
                     prescriptionList.remove(position);
                     mAdapter.notifyItemRemoved(position);
                     // Remove item form database
-                    PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();;
+                    PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
                     prescriptionsDAO.delete(prescription);
                 } else {
                     // Call DetailView
@@ -539,11 +539,9 @@ public class DrugListActivity extends AppCompatActivity {
                             int xMarkRight = itemView.getLeft() + xMarkMargin + intrinsicWidth;
                             int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
                             int xMarkBottom = xMarkTop + intrinsicHeight;// +xMarkTop;
+                            assert icon != null;
                             icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
 
-                            icon.draw(c);
-
-                            // TODO : goto edit details
                         } else {
                             p.setColor(getColor(R.color.bg_screen4));
                             // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
@@ -557,9 +555,8 @@ public class DrugListActivity extends AppCompatActivity {
                             int xMarkBottom = xMarkTop + intrinsicHeight;
                             icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
 
-                            icon.draw(c);
-                            // TODO : remove prescription from database
-                         }
+                        }
+                        icon.draw(c);
 
                         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                     }
