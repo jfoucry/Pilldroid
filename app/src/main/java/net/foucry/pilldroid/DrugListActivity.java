@@ -484,7 +484,6 @@ public class DrugListActivity extends AppCompatActivity {
 
                 Prescription prescription = prescriptionList.get(position);
 
-
                 if (direction == ItemTouchHelper.LEFT) {
                     prescriptionList.remove(position);
                     mAdapter.notifyItemRemoved(position);
