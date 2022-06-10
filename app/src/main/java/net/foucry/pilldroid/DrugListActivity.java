@@ -485,9 +485,20 @@ public class DrugListActivity extends AppCompatActivity {
                 Prescription prescription = prescriptionList.get(position);
 
 
-                // TODO: remove item form database
-                prescriptionList.remove(position);
-                mAdapter.notifyItemRemoved(position);
+                if (direction == ItemTouchHelper.LEFT) {
+                    prescriptionList.remove(position);
+                    mAdapter.notifyItemRemoved(position);
+                    // Remove item form database
+                    PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();;
+                    prescriptionsDAO.delete(prescription);
+                } else {
+                    // Call DetailView
+                    Intent intent = new Intent(getApplicationContext(), DrugDetailActivity.class);
+                    intent.putExtra("prescription",  prescription);
+                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                }
+
+
 
                 Snackbar.make(recyclerView, prescription.getName(),
                         Snackbar.LENGTH_LONG).setAction(R.string.Undo, new View.OnClickListener() {
@@ -506,7 +517,6 @@ public class DrugListActivity extends AppCompatActivity {
                         View itemView = viewHolder.itemView;
 
                         Paint p = new Paint();
-                        p.setColor(getColor(R.color.bg_screen4));
                         Drawable icon;
                         icon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_trash_can_outline);
 
@@ -517,9 +527,10 @@ public class DrugListActivity extends AppCompatActivity {
                         int intrinsicHeight = icon.getIntrinsicHeight();
                         int itemHeight = itemView.getBottom() - itemView.getTop();
 
-
-
                         if (dX > 0) {
+                            p.setColor(getColor(R.color.bg_screen3));
+                            icon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_edit_black_48dp);
+
                             // Draw Rect with varying right side, equal to displacement dX
                             c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
                                     (float) itemView.getBottom(), p);
@@ -531,10 +542,14 @@ public class DrugListActivity extends AppCompatActivity {
                             icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
 
                             icon.draw(c);
+
+                            // TODO : goto edit details
                         } else {
+                            p.setColor(getColor(R.color.bg_screen4));
                             // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
                             c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
                                     (float) itemView.getRight(), (float) itemView.getBottom(), p);
+
 
                             int xMarkLeft = itemView.getRight() - xMarkMargin - intrinsicWidth;
                             int xMarkRight = itemView.getRight() - xMarkMargin;
@@ -543,6 +558,7 @@ public class DrugListActivity extends AppCompatActivity {
                             icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
 
                             icon.draw(c);
+                            // TODO : remove prescription from database
                          }
 
                         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
