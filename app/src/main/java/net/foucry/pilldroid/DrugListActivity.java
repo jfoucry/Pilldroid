@@ -9,6 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,9 +33,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -73,7 +79,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     private List<Prescription> prescriptionList;         // used for prescriptions
 
-    private SimpleItemRecyclerViewAdapter mAdapter;
+    private RecyclerViewAdapter mAdapter;
 
     @Override
     public void onStart() {
@@ -463,19 +469,110 @@ public class DrugListActivity extends AppCompatActivity {
      */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
-        mAdapter = new SimpleItemRecyclerViewAdapter(prescriptionList);
+        mAdapter = new RecyclerViewAdapter(prescriptionList);
         recyclerView.setAdapter(mAdapter);
-    }
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, (ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT)) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getBindingAdapterPosition();
+
+                Prescription prescription = prescriptionList.get(position);
+
+                if (direction == ItemTouchHelper.LEFT) {
+                    prescriptionList.remove(position);
+                    mAdapter.notifyItemRemoved(position);
+                    // Remove item form database
+                    PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
+                    prescriptionsDAO.delete(prescription);
+                } else {
+                    // Call DetailView
+                    Intent intent = new Intent(getApplicationContext(), DrugDetailActivity.class);
+                    intent.putExtra("prescription",  prescription);
+                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                }
+
+
+
+                Snackbar.make(recyclerView, prescription.getName(),
+                        Snackbar.LENGTH_LONG).setAction(R.string.Undo, new View.OnClickListener() {
+                            @Override
+                    public void onClick(View v) {
+                                prescriptionList.add(position, prescription);
+                                mAdapter.notifyItemInserted(position);
+                            }
+                        }).show();
+                }
+
+                @Override
+                public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                    if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                        // Get RecyclerView item from the ViewHolder
+                        View itemView = viewHolder.itemView;
+
+                        Paint p = new Paint();
+                        Drawable icon;
+                        icon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_trash_can_outline);
+
+                        int xMarkMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.fab_margin);
+
+                        assert icon != null;
+                        int intrinsicWidth = icon.getIntrinsicWidth();
+                        int intrinsicHeight = icon.getIntrinsicHeight();
+                        int itemHeight = itemView.getBottom() - itemView.getTop();
+
+                        if (dX > 0) {
+                            p.setColor(getColor(R.color.bg_screen3));
+                            icon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_edit_black_48dp);
+
+                            // Draw Rect with varying right side, equal to displacement dX
+                            c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
+                                    (float) itemView.getBottom(), p);
+
+                            int xMarkLeft = itemView.getLeft() + xMarkMargin;
+                            int xMarkRight = itemView.getLeft() + xMarkMargin + intrinsicWidth;
+                            int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+                            int xMarkBottom = xMarkTop + intrinsicHeight;// +xMarkTop;
+                            assert icon != null;
+                            icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+
+                        } else {
+                            p.setColor(getColor(R.color.bg_screen4));
+                            // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
+                            c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
+                                    (float) itemView.getRight(), (float) itemView.getBottom(), p);
+
+
+                            int xMarkLeft = itemView.getRight() - xMarkMargin - intrinsicWidth;
+                            int xMarkRight = itemView.getRight() - xMarkMargin;
+                            int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+                            int xMarkBottom = xMarkTop + intrinsicHeight;
+                            icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+
+                        }
+                        icon.draw(c);
+
+                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                    }
+                }
+        }).attachToRecyclerView(recyclerView);
+
+     }
 
     /**
      * SimpleItemRecyclerViewAdapter
      */
-    public class SimpleItemRecyclerViewAdapter extends
-            RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class RecyclerViewAdapter extends
+            RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
         private final List<Prescription> mValues;
 
-        SimpleItemRecyclerViewAdapter(List<Prescription> items) {
+        RecyclerViewAdapter(List<Prescription> items) {
             mValues = items;
         }
 
