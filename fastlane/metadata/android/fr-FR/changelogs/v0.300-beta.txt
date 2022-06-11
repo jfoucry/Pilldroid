@@ -1,6 +1,6 @@
 # v0.300-beta - Nouvelles fonctionnalités
 
-- La gestion de la liste des prescriptions (les médicaments que vous permet) à été revue ;
+- La gestion de la liste des prescriptions (les médicaments que vous prenez) à été revue ;
     - un glissement de la droite vers la gauche supprime le médicament de la liste ET de
     la base données ;
     - un glissement de la gauche vers la droite permet de modifier les détails du médicament,
@@ -9,7 +9,7 @@
 Ces changements vont vous permettre de supprimer les médicaments dont la prise est à zéro (0)
 depuis longtemps et que vous ne prendrez plus.
 Ils vont également me permettre d'avancer sur la prochaine étape qui est de plus présenter les noms
-des médicaments, mais la molécule (doliprane, efferalgant, daflagant deviendront paracétamol).
+des médicaments, mais la molécule (doliprane, efferalgan, dafalgan deviendront paracétamol).
 Je vous en dirais plus prochainement.
 
 Merci de me faire des retours sur ces nouveautés, [Pilldroid](mailto:jacques+pilldroid@foucry.net)
@@ -17,7 +17,7 @@ Merci de me faire des retours sur ces nouveautés, [Pilldroid](mailto:jacques+pi
 
 # v0.201-beta - déverminage dans  `alarmReceiver`
 
-L'`alarmReceiver` utilisait encore l'anciennt base de données qui devait être vide. J'utilise désormais la gestion`room`
+L'`alarmReceiver` utilisait encore l'ancienne base de données qui devait être vide. J'utilise désormais la gestion `room`
 pour la base données.
 
 # v0.200 – Nouvelle numérotation sémantique (VMajor.Minor.Patch)
