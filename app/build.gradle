@@ -26,14 +26,14 @@ android {
             keyPassword secretProperties['signing_key_password']
         }
     }
-    compileSdkVersion 29
+    compileSdk 31
 
     defaultConfig {
         applicationId "net.foucry.pilldroid"
         minSdkVersion defaultMinSdkVersion
         targetSdkVersion defaultTargetSdkVersion
-        versionCode 201
-        versionName "v0.201-beta"
+        versionCode 300
+        versionName "v0.300-beta"
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
