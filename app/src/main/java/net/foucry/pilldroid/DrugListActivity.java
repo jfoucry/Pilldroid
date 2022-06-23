@@ -292,7 +292,7 @@ public class DrugListActivity extends AppCompatActivity {
 
             if (currentPrescription.getTake() == 0) {
                 prescriptionList.remove(currentPrescription);
-                prescriptionList.add(prescriptionList.size(), currentPrescription);
+                prescriptionList.add(prescriptionList.size()-1, currentPrescription);
             }
         }
 
