@@ -1,7 +1,7 @@
 <p><strong>Pilldroid</strong> est un gestionnaire théorique de stock médicaments.</p>
 
 <p><strong>Pourquoi <em>théorique</em> ?</strong>
-<strrong>Pilldroid</strong> n'a aucun moyen de savoir si vous avez réellement pris vos médicaments.
+<strong>Pilldroid</strong> n'a aucun moyen de savoir si vous avez réellement pris vos médicaments.
 C'est de votre responsabilité et Pilldroid ne vous le demande pas.</p>
 
 <p>
