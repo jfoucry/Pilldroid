@@ -53,6 +53,7 @@ import net.foucry.pilldroid.models.Prescription;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 
 /**
@@ -282,6 +283,18 @@ public class DrugListActivity extends AppCompatActivity {
 
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         prescriptionList = prescriptionsDAO.getAllMedics();
+
+        ListIterator<Prescription> listIterator = prescriptionList.listIterator();
+        Prescription currentPrescription;
+
+        while (listIterator.hasNext()) {
+            currentPrescription = listIterator.next();
+
+            if (currentPrescription.getTake() == 0) {
+                prescriptionList.remove(currentPrescription);
+                prescriptionList.add(prescriptionList.size(), currentPrescription);
+            }
+        }
 
         View mRecyclerView = findViewById(R.id.drug_list);
         assert mRecyclerView != null;
