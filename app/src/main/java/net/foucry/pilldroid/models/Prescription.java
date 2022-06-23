@@ -24,7 +24,7 @@ public class Prescription implements Serializable {
   private Integer alert;
   private Long    last_update;
   private String  label_group;
-  private Integer genetic_type;
+  private Integer generic_type;
 
   public void setCis(@NonNull String cis)
 {
@@ -122,12 +122,12 @@ public class Prescription implements Serializable {
     this.label_group = label_group;
   }
 
-  public Integer getGenetic_type() {
-    return genetic_type;
+  public Integer getGeneric_type() {
+    return generic_type;
   }
 
-  public void setGenetic_type(Integer genetic_type) {
-    this.genetic_type = genetic_type;
+  public void setGeneric_type(Integer generic_type) {
+    this.generic_type = generic_type;
   }
   public Date getDateEndOfStock() {
     int numberDayOfTake;
