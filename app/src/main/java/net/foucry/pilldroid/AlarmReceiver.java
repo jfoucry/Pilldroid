@@ -45,8 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (BuildConfig.DEBUG) { Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show(); }
         createNotificationChannel(context);
-        PrescriptionDatabase prescriptions = null;
-        assert false;
+        PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(context.getApplicationContext());
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
         Prescription firstPrescription = null ;

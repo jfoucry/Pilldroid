@@ -51,6 +51,7 @@ import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -279,9 +280,30 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     public void constructDrugsList() {
-
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         prescriptionList = prescriptionsDAO.getAllMedics();
+
+        Prescription currentPrescription;
+
+        // Sorting list by dateEndOfStock
+        prescriptionList.sort(new Comparator<>() {
+            @Override
+            public int compare(Prescription lhs, Prescription rhs) {
+                if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
+                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+                else
+                    return (int) (lhs.getStock() - rhs.getStock());
+            }
+        });
+
+        // Move Prescription with take==0 to the end of the list
+        for (int i=0 ; i < prescriptionList.size(); i++ ){
+            currentPrescription = prescriptionList.get(i);
+            if (currentPrescription.getTake() == 0) {
+                prescriptionList.remove(currentPrescription);
+                prescriptionList.add(prescriptionList.size(), currentPrescription);
+            }
+        }
 
         View mRecyclerView = findViewById(R.id.drug_list);
         assert mRecyclerView != null;
@@ -479,6 +501,7 @@ public class DrugListActivity extends AppCompatActivity {
             }
 
             @Override
+            @SuppressWarnings("deprecation")
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getBindingAdapterPosition();
 
@@ -496,8 +519,6 @@ public class DrugListActivity extends AppCompatActivity {
                     intent.putExtra("prescription",  prescription);
                     startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                 }
-
-
 
                 Snackbar.make(recyclerView, prescription.getName(),
                         Snackbar.LENGTH_LONG).setAction(R.string.Undo, new View.OnClickListener() {
@@ -568,7 +589,7 @@ public class DrugListActivity extends AppCompatActivity {
      * SimpleItemRecyclerViewAdapter
      */
     public class RecyclerViewAdapter extends
-            RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+        RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
         private final List<Prescription> mValues;
 
@@ -614,7 +635,6 @@ public class DrugListActivity extends AppCompatActivity {
             holder.mContentView.setText(mValues.get(position).getName());
             holder.mEndOfStock.setText(dateEndOfStock);
 
-
             // Test to change background programmatically
             if (mValues.get(position).getTake() == 0) {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
@@ -659,7 +679,6 @@ public class DrugListActivity extends AppCompatActivity {
                     }
                 });
             }
-
         }
 
         @Override
