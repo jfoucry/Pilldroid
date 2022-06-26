@@ -26,7 +26,6 @@ import java.util.List;
 public class AlarmReceiver extends BroadcastReceiver {
 
     private static final String TAG = AlarmManager.class.getName();
-
     NotificationManager notificationManager;
 
     @Override
@@ -48,6 +47,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(context.getApplicationContext());
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
+
+        prescriptionList = Utils.sortPrescriptionList(prescriptionList);
         Prescription firstPrescription = null ;
 
         try {
@@ -88,7 +89,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
         }
-
     }
 
     private void createNotificationChannel(Context context) {

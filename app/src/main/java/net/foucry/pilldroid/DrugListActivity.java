@@ -286,7 +286,7 @@ public class DrugListActivity extends AppCompatActivity {
         Prescription currentPrescription;
 
         // Sorting list by dateEndOfStock
-        prescriptionList.sort(new Comparator<>() {
+        /*prescriptionList.sort(new Comparator<>() {
             @Override
             public int compare(Prescription lhs, Prescription rhs) {
                 if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
@@ -294,11 +294,12 @@ public class DrugListActivity extends AppCompatActivity {
                 else
                     return (int) (lhs.getStock() - rhs.getStock());
             }
-        });
+        });*/
+        prescriptionList = Utils.sortPrescriptionList(prescriptionList);
 
         // Move Prescription with take==0 to the end of the list
         for (int i=0 ; i < prescriptionList.size(); i++ ){
-            currentPrescription = prescriptionList.get(i);
+            currentPrescription = (Prescription) prescriptionList.get(i);
             if (currentPrescription.getTake() == 0) {
                 prescriptionList.remove(currentPrescription);
                 prescriptionList.add(prescriptionList.size(), currentPrescription);
