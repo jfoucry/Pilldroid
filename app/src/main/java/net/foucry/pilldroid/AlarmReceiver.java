@@ -48,6 +48,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
 
+        Prescription currentPrescription;
+        for (int i=0; i < prescriptionList.size(); i++) {
+            currentPrescription = prescriptionList.get(i);
+            currentPrescription.newStock();
+        }
+
         prescriptionList = Utils.sortPrescriptionList(prescriptionList);
         Prescription firstPrescription = null ;
 
