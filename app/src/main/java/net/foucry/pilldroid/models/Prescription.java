@@ -1,5 +1,9 @@
 package net.foucry.pilldroid.models;
 
+import static net.foucry.pilldroid.UtilDate.nbOfDaysBetweenDateAndToday;
+
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -12,6 +16,7 @@ import java.util.Date;
 
 @Entity(tableName = "prescriptions")
 public class Prescription implements Serializable {
+  private static final String TAG = Prescription.class.getName();;
   @PrimaryKey
   @NonNull private String  cis;
   private String  cip13;
@@ -143,6 +148,18 @@ public class Prescription implements Serializable {
     calendar.add(Calendar.DAY_OF_YEAR, numberDayOfTake);
 
     return calendar.getTime();
+  }
+
+  public void newStock() {
+    Log.d(TAG, "current drug = " + this);
+
+    Date lastUpdate = new Date(getLast_update());
+    int numberOfDays = nbOfDaysBetweenDateAndToday(lastUpdate);
+    if (numberOfDays > 0) {
+      double takeDuringPeriod = this.take * numberOfDays;
+      setStock((float) (getStock() - takeDuringPeriod));
+      setLast_update(new Date().getTime());
+    }
   }
 }
 
