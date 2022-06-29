@@ -18,6 +18,10 @@ else {
 android {
     signingConfigs {
         release {
+            storeFile file("../android-signing-keystore.jks")
+            storePassword secretProperties['signing_keystore_password']
+            keyAlias secretProperties['signing_key_alias']
+            keyPassword secretProperties['signing_key_password']
         }
         prerelease {
             storeFile file("../android-signing-keystore.jks")
