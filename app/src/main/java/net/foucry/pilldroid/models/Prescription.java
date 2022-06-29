@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity(tableName = "prescriptions")
 public class Prescription implements Serializable {
   @PrimaryKey
-  private String  cis;
+  @NonNull private String  cis;
   private String  cip13;
   private String  name;
   private String  administration_mode;
