@@ -51,7 +51,6 @@ import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
 
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -286,15 +285,7 @@ public class DrugListActivity extends AppCompatActivity {
         Prescription currentPrescription;
 
         // Sorting list by dateEndOfStock
-        prescriptionList.sort(new Comparator<>() {
-            @Override
-            public int compare(Prescription lhs, Prescription rhs) {
-                if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
-                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-                else
-                    return (int) (lhs.getStock() - rhs.getStock());
-            }
-        });
+        Utils.sortPrescriptionList(prescriptionList);
 
         // Move Prescription with take==0 to the end of the list
         for (int i=0 ; i < prescriptionList.size(); i++ ){
