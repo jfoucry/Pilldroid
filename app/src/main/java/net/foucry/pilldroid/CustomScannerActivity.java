@@ -3,7 +3,6 @@ package net.foucry.pilldroid;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,8 +16,6 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.ViewfinderView;
-
-import java.util.Random;
 
 /**
  * Custom Scanner Activity extending from Activity to display a custom layout form scanner view.

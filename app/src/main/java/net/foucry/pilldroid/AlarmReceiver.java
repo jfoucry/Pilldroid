@@ -50,8 +50,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
         Prescription firstPrescription = null ;
 
+        // Sorting list by dateEndOfStock
+        Utils.sortPrescriptionList(prescriptionList);
+
         try {
-            firstPrescription = prescriptionList.get(1);
+            firstPrescription = prescriptionList.get(0);
         }
         catch (Exception e){
             Log.e(TAG, e.toString());
@@ -122,18 +125,22 @@ public class AlarmReceiver extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         Date today;
         Date tomorrow;
-
-        calendar.set(Calendar.HOUR_OF_DAY, 11);
-        today = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        tomorrow = calendar.getTime();
-
         LocalTime todayNow = LocalTime.now();
 
-        if (todayNow.isBefore(LocalTime.NOON)) {
-            calendar.setTimeInMillis(today.getTime());
+        if (BuildConfig.DEBUG) {
+            calendar.add(Calendar.MINUTE, 2);
+            Date nextSchedule = calendar.getTime();
+            calendar.setTimeInMillis(nextSchedule.getTime());
         } else {
-            calendar.setTimeInMillis(tomorrow.getTime());
+            calendar.set(Calendar.HOUR_OF_DAY, 11);
+            today = calendar.getTime();
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            tomorrow = calendar.getTime();
+            if (todayNow.isBefore(LocalTime.NOON)) {
+                calendar.setTimeInMillis(today.getTime());
+            } else {
+                calendar.setTimeInMillis(tomorrow.getTime());
+            }
         }
 
         PendingIntent alarmIntent;

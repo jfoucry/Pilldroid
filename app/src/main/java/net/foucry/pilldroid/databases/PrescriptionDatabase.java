@@ -12,9 +12,6 @@ import androidx.room.migration.AutoMigrationSpec;
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
 import net.foucry.pilldroid.models.Prescription;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 @Database(
     version = 2,
     entities = {Prescription.class},

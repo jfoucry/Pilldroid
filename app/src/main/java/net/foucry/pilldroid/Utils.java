@@ -3,7 +3,9 @@ package net.foucry.pilldroid;
 import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
 
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -44,5 +46,17 @@ public class Utils {
         aPrescription.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
 
         return aPrescription;
+    }
+
+    public static void sortPrescriptionList(List<Prescription> prescriptionList) {
+        prescriptionList.sort(new Comparator<>() {
+            @Override
+            public int compare(Prescription lhs, Prescription rhs) {
+                if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
+                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+                else
+                    return (int) (lhs.getStock() - rhs.getStock());
+            }
+        });
     }
 }
