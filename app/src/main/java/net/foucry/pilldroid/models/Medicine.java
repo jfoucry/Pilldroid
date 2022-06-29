@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "drugs")
 public class Medicine {
     @PrimaryKey
-    @NonNull private Integer _id;
+    private Integer _id;
     private String  cis;
     private String  cip13;
     private String  cip7;

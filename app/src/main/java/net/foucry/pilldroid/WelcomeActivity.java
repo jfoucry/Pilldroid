@@ -170,7 +170,6 @@ public class WelcomeActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
     }
 
-    @SuppressWarnings("deprecation")
     private void setFullScreen(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             getWindow().setDecorFitsSystemWindows(false);
