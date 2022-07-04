@@ -1,0 +1,117 @@
+//noinspection GradleCompatible
+apply plugin: 'com.android.application'
+
+// Try reading secrets from file
+def secretsPropertiesFile = rootProject.file("secrets.properties")
+def secretProperties = new Properties()
+
+if (secretsPropertiesFile.exists()) {
+    secretProperties.load(new FileInputStream(secretsPropertiesFile))
+}
+// Otherwise read from environment variables, this happens in CI
+else {
+    secretProperties.setProperty("signing_keystore_password", "${System.getenv('signing_keystore_password')}")
+    secretProperties.setProperty("signing_key_password", "${System.getenv('signing_key_password')}")
+    secretProperties.setProperty("signing_key_alias", "${System.getenv('signing_key_alias')}")
+}
+
+android {
+    signingConfigs {
+        release {
+            storeFile rootProject.file("android-signing-keystore.jks")
+            storePassword secretProperties['signing_keystore_password']
+            keyAlias secretProperties['signing_release_alias_key']
+            keyPassword secretProperties['signing_release_key_password']
+        }
+        prerelease {
+            storeFile rootProject.file("android-signing-keystore.jks")
+            storePassword secretProperties['signing_keystore_password']
+            keyAlias secretProperties['signing_pre-release_key_alias']
+            keyPassword secretProperties['signing_pre-release_key_password']
+        }
+    }
+    compileSdkVersion 31
+
+    defaultConfig {
+        applicationId "net.foucry.pilldroid"
+        minSdkVersion defaultMinSdkVersion
+        targetSdkVersion defaultTargetSdkVersion
+        versionCode 100
+        versionName "v0.100-beta"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            applicationIdSuffix ".debug"
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.release
+        }
+        prerelease {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.prerelease
+        }
+    }
+    flavorDimensions "version"
+    productFlavors {
+        dev {
+            resValue "string", "app_name", "PillDroid dev"
+            dimension ="version"
+        }
+
+        product {
+            resValue "string", "app_name", "PillDroid"
+            dimension ="version"
+        }
+        preproduct {
+            resValue "string", "app_name", "PillDroid Pre-Release"
+            dimension ="version"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    buildToolsVersion '32.0.0'
+
+    allprojects {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            exclude 'net/foucry/pilldroid/scanActivity.java'
+        }
+    }
+}
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.13.2'
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+    implementation 'androidx.core:core:1.7.0'
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+}

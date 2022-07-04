@@ -1,0 +1,34 @@
+# v0.201-beta - deverminage dans `alarmReceiver`
+
+`alarmReceiver` utilisait l'ancienne base de données qui *doit* être vide. J'utilise maintenant
+la base de données gérée par `room`
+
+# v0.200 – Nouvelle numérotation sémantique (VMajor.Minor.Patch)
+
+Malgré de nombreux tests et une utilisation quotidienne,
+tout est à tester.
+
+## Nouveautés
+
+Pas grand-chose de visible pour les personnes utilisatrices :
+- Ajout d'une demande explicite de non-responsabilité de l'auteur en cas de problème ;
+- Utilisation de `Room` pour gérer les bases de données ;
+- Migration de l'ancienne base de données à la nouvelle, vous ne devriez rien voir ;
+- Nettoyage du code.
+
+## Ce qui devrait fonctionner
+- le scan de QR-code sur un fond foncé. La bibliothèque utilisée a un paramètre pour cela.
+
+
+**ATTENTION**, Pilldroid ne sait pas gérer les crèmes, les liquides
+(l'insuline par exemple).
+
+Merci d'utiliser [github](https://github/jfoucry/pilldroid) pour
+rapporter des bogues et demander des fonctionnalités.
+
+> Je fais Pilldroid sur mon temps libre et accessible. Il est inutile
+et contre-productif de me « mettre la pression ».
+
+Pilldroid ne sera diffusé que par [f-droid](https://f-droid.org) (pour l'instant)
+
+Vous pouvez m'écrire pour discuter de [Pilldroid](mailto:jacques+pilldroid@foucry.net).

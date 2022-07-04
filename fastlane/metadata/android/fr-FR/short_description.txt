@@ -1,0 +1,1 @@
+Pilldroid est un gestionnaire théorique de stock de médicaments.

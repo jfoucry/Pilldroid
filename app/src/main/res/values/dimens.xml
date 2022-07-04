@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="app_bar_height">75dp</dimen>
+    <dimen name="item_width">200dp</dimen>
+    <dimen name="fab_height">48dp</dimen>
+    <dimen name="fab_width">48dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- Slide dimens -->
+    <dimen name="dots_height">75dp</dimen>
+    <dimen name="dots_margin_bottom">20dp</dimen>
+    <dimen name="img_width_height">240dp</dimen>
+    <dimen name="slide_title">30sp</dimen>
+    <dimen name="slide_desc">16sp</dimen>
+    <dimen name="desc_padding">40dp</dimen>
+    <dimen name="title_padding">20dp</dimen>
+    <dimen name="screen_shot_height">250dp</dimen>
+
+</resources>

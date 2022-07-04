@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- slide bg -->
+    <color name="bg_screen1">#4f91ff</color>
+    <color name="bg_screen2">#fb9c25</color>
+    <color name="bg_screen3">#5ab55d</color>
+    <color name="bg_screen4">#FF0000</color>
+    <color name="bg_screen5">#7F7F7F</color>
+
+
+    <color name="dot_light">#7f7f5d</color>
+    <color name="dot_dark">#000000</color>
+
+    <color name="led">#31f623</color>
+    <color name="grey">#777</color>
+</resources>

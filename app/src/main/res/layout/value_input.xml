@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:background="@drawable/list_selector"
+    android:weightSum="1">
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/value"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@id/value"
+        android:gravity="center_vertical"
+        android:paddingStart="5dp"
+        android:paddingEnd="25dp"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#040404"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/value"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/rounded_corner"
+        android:ems="10"
+        android:gravity="end|fill_vertical"
+        android:inputType="numberDecimal"
+        android:labelFor="@id/value"
+        android:paddingEnd="25dp"
+        android:paddingStart="5dp"
+        android:hint="@string/zero"
+        android:textColorHint="@color/grey"
+        android:textAlignment="gravity"
+        android:importantForAutofill="no"
+        tools:ignore="LabelFor" />
+
+</RelativeLayout>

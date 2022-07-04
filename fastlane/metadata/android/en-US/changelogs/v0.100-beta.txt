@@ -1,0 +1,26 @@
+# beta-0.100 – First public release
+
+**REMEMBER** Pilldroid is a French people user only.
+
+I made a lot a tests but there must stay some bugs.
+
+## What is not working
+- QR-code scan on a dark background. The library I use does not
+find the code.
+
+## What is not implemented
+- removing of a prescription from the list;
+- take prescription reminder. It will be never been implemented (by me).
+
+**WARNING**, Pilldroid does not manage creams, liquids
+(like insulin).
+
+Thanks to use [github](https://github/jfoucry/pilldroid) for bugs
+reports and new features.
+
+> I made Pilldroid on my free time which is not expandable. Please
+do not stress me it will be unproductive.
+
+Pilldroid will available only from [f-droid](https://f-droid.org)
+
+You can reach me and discuss on [Pilldroid](mailto://jacques+pilldroid@foucry.net).
