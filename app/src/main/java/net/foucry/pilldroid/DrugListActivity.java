@@ -361,7 +361,7 @@ public class DrugListActivity extends AppCompatActivity {
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = promptView.findViewById(R.id.edittext);
-        editText.setHint("1234567890123");
+        editText.setHint("340093xxxxxxx");
         // setup a dialog window
 
         alertDialogBuilder.setCancelable(false)
