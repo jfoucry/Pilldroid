@@ -69,5 +69,5 @@
     <string name="Yes">Oui, j\'ai compris</string>
     <string name="understood">Je comprends que le développeur de Pilldroid n\'est pas responsable de la gestion de vos médicaments. CELA RELÈVE DE VOTRE SEULE RESPONSABILITÉ.</string>
     <string name="Undo">Annuler</string>
-    <string name="trash_icon">Icone de poubelle</string>
+    <string name="trash_icon">Icône de poubelle</string>
 </resources>
