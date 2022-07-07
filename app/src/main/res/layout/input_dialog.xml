@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="10dp"
+    tools:ignore="MissingDefaultResource">
 
     <TextView
         android:id="@+id/textView"
@@ -14,11 +16,32 @@
 
     <EditText
         android:id="@+id/edittext"
-        android:layout_width="fill_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_cip_13_here"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:autofillHints="@string/enter_cip_13_here"
         android:background="@drawable/rounded_corner"
+        android:hint="@string/enter_cip_13_here"
         android:inputType="number"
+        android:minHeight="48dp"
         android:padding="10dp"
-        android:autofillHints="@string/enter_cip_13_here" />
-</LinearLayout>
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/startcip13"
+        android:layout_width="100dp"
+        android:layout_height="32dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_toStartOf="@+id/edittext"
+        android:ems="10"
+        android:text="34009"
+        android:textAlignment="viewEnd"
+        android:textSize="24dp" />
+</RelativeLayout>

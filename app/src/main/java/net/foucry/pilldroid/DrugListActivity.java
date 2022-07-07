@@ -361,13 +361,12 @@ public class DrugListActivity extends AppCompatActivity {
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = promptView.findViewById(R.id.edittext);
-        editText.setHint("340093xxxxxxx");
         // setup a dialog window
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", (dialog, id) -> {
-                    String cip13 = editText.getText().toString();
-
+                    //String cip13 = editText.getText().toString();
+                    String cip13 = "34009" + editText.getText().toString();
                     MedicinesDAO medicineDAO = medicines.getMedicinesDAO();
                     Medicine aMedicine = medicineDAO.getMedicineByCIP13(cip13);
                     askToAddInDB(aMedicine);
@@ -380,18 +379,14 @@ public class DrugListActivity extends AppCompatActivity {
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
             @Override
             public void afterTextChanged(Editable s) {
-                alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 13);
+                alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
             }
         });
         alert.show();
