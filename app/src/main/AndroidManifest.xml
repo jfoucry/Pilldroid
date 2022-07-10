@@ -51,9 +51,6 @@
             android:parentActivityName=".DrugListActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".CustomScannerActivity" />
-<!--        <service
-            android:name=".PillDroidJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />-->
         <receiver android:name="net.foucry.pilldroid.AlarmReceiver"
             android:exported="false">
             <intent-filter>
