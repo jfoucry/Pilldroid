@@ -50,8 +50,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(context.getApplicationContext());
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
-        Prescription firstPrescription = null ;
+        Prescription firstPrescription = null;
+        Prescription currentPrescription;
 
+        for (int i=0 ; i < prescriptionList.size(); i++ ) {
+            currentPrescription = prescriptionList.get(i);
+            currentPrescription.newStock();
+            prescriptionsDAO.update(currentPrescription);
+        }
         // Sorting list by dateEndOfStock
         Utils.sortPrescriptionList(prescriptionList);
 

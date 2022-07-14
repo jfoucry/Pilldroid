@@ -1,5 +1,9 @@
 package net.foucry.pilldroid.models;
 
+import static net.foucry.pilldroid.UtilDate.nbOfDaysBetweenDateAndToday;
+
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -129,6 +133,7 @@ public class Prescription implements Serializable {
   public void setGeneric_type(Integer generic_type) {
     this.generic_type = generic_type;
   }
+
   public Date getDateEndOfStock() {
     int numberDayOfTake;
     if (this.getTake() > 0) {
@@ -143,6 +148,17 @@ public class Prescription implements Serializable {
     calendar.add(Calendar.DAY_OF_YEAR, numberDayOfTake);
 
     return calendar.getTime();
+  }
+
+  public void newStock() {
+    Date lastUpdate = new Date(getLast_update());
+
+    int numberOfDays = UtilDate.nbOfDaysBetweenDateAndToday(lastUpdate);
+    if (numberOfDays > 0) {
+      double takeDuringPeriod = this.take * numberOfDays;
+      setStock((float) (getStock() - takeDuringPeriod));
+      setLast_update(new Date().getTime());
+    }
   }
 }
 
