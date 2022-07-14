@@ -151,8 +151,6 @@ public class DrugListActivity extends AppCompatActivity {
             askForComprehensive();
             prefManager.setUnderstood(true);
         }
-
-
     }
 
     @Override
@@ -288,7 +286,7 @@ public class DrugListActivity extends AppCompatActivity {
         Utils.sortPrescriptionList(prescriptionList);
 
         // Move Prescription with take==0 to the end of the list
-        for (int i=0 ; i < prescriptionList.size(); i++ ){
+        for (int i=0 ; i < prescriptionList.size(); i++ ) {
             currentPrescription = prescriptionList.get(i);
             if (currentPrescription.getTake() == 0) {
                 prescriptionList.remove(currentPrescription);
