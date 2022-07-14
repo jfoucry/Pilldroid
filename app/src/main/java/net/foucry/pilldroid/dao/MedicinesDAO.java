@@ -12,7 +12,7 @@ public interface MedicinesDAO {
     @Query("SELECT * FROM drugs")
     List<Medicine> getAllMedicines();
 
-    @Query("SELECT * FROM drugs WHERE cip13 = :cip13")
+    @Query("SELECT COALESCE(label_group,name), * FROM drugs WHERE cip13 = :cip13")
     Medicine getMedicineByCIP13(String cip13);
 
     @Query("SELECT count(*) FROM drugs")

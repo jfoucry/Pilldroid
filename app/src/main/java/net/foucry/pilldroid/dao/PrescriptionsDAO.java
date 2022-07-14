@@ -21,10 +21,10 @@ public interface PrescriptionsDAO {
   @Delete
   void delete(Prescription prescription);
 
-  @Query("SELECT * FROM prescriptions")
+  @Query("SELECT COALESCE(label_group,name), * FROM prescriptions")
   List<Prescription> getAllMedics();
 
-  @Query("SELECT * FROM prescriptions WHERE cip13 = :cip13")
+  @Query("SELECT COALESCE(label_group,name), * FROM prescriptions WHERE cip13 = :cip13")
   Prescription getMedicByCIP13(String cip13);
 
   @Query("SELECT count(*) FROM prescriptions")
