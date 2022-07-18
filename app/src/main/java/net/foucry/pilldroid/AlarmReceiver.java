@@ -59,6 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             prescriptionsDAO.update(currentPrescription);
         }
         // Sorting list by dateEndOfStock
+        prescriptionList = prescriptionsDAO.getAllMedics();     // Reread the database
         Utils.sortPrescriptionList(prescriptionList);
 
         try {
