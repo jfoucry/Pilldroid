@@ -1,9 +1,5 @@
 package net.foucry.pilldroid.models;
 
-import static net.foucry.pilldroid.UtilDate.nbOfDaysBetweenDateAndToday;
-
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
