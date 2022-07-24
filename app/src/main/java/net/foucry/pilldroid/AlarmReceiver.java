@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.google.zxing.client.android.BuildConfig;
+//import com.google.zxing.client.android.BuildConfig;
 
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
 import net.foucry.pilldroid.databases.PrescriptionDatabase;
@@ -137,7 +137,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         LocalTime todayNow = LocalTime.now();
 
         if (BuildConfig.DEBUG) {
-            calendar.add(Calendar.MINUTE, 2);
+                                                                                                                                                                                                                                              calendar.add(Calendar.MINUTE, 2);
             Date nextSchedule = calendar.getTime();
             calendar.setTimeInMillis(nextSchedule.getTime());
         } else {
@@ -159,10 +159,19 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+        if (BuildConfig.DEBUG) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
+                    AlarmManager.ELAPSED_REALTIME, alarmIntent);
+        } else {
+
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()),
+                    AlarmManager.INTERVAL_DAY, alarmIntent);
+        }
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
+        }
 
         if (BuildConfig.DEBUG) { Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show(); }
     }
