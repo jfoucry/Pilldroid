@@ -39,7 +39,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -49,11 +48,13 @@ import net.foucry.pilldroid.databases.MedicineDatabase;
 import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
-
+import net.foucry.pilldroid.BuildConfig;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+//import com.google.zxing.client.android.BuildConfig;
 
 /**
  * An activity representing a list of Drugs is activity
