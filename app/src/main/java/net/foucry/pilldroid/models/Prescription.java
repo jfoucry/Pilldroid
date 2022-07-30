@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import net.foucry.pilldroid.BuildConfig;
 import net.foucry.pilldroid.UtilDate;
 
 import java.io.Serializable;
@@ -138,18 +137,22 @@ public class Prescription implements Serializable {
     }
 
     public Date getDateEndOfStock() {
-        int numberDayOfTake;
-        if (this.getTake() > 0) {
-            numberDayOfTake = (int) Math.floor(this.getStock() / this.getTake());
-        } else {
-            numberDayOfTake = 0;
-        }
-
         Date aDate = UtilDate.dateAtNoon(new Date());
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(aDate);
-        calendar.add(Calendar.DAY_OF_YEAR, numberDayOfTake);
 
+        int numberDayOfTake = 0;
+        if (getTake() > 0) {
+            calendar.setTime(aDate);
+            numberDayOfTake = (int) Math.floor(this.getStock() / this.getTake());
+            calendar.add(Calendar.DAY_OF_YEAR, numberDayOfTake);
+        } else {
+            calendar.set(Calendar.YEAR, 9999);
+            calendar.set(Calendar.DAY_OF_YEAR, 1);
+            calendar.set(Calendar.MONTH, 1);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+        }
         return calendar.getTime();
     }
 
@@ -158,10 +161,10 @@ public class Prescription implements Serializable {
 
         int numberOfDays = UtilDate.nbOfDaysBetweenDateAndToday(lastUpdate);
 
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             numberOfDays = 1;
             Log.d(TAG, "Set NumberOfDays = 1");
-        }
+        }*/
 
         if (numberOfDays > 0) {
             double takeDuringPeriod = this.take * numberOfDays;
