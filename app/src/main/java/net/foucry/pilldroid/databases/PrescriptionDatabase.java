@@ -44,7 +44,6 @@ public abstract class PrescriptionDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
-
     public static void destroyInstance() {
         INSTANCE = null;
     }
