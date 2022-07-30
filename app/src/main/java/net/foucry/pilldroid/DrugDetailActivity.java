@@ -148,7 +148,6 @@ public class DrugDetailActivity extends AppCompatActivity {
             Log.d(TAG, "medic and newPrescription are NOT Equals");
             newPrescription.setLast_update(new Date().getTime());
             prescriptionsDAO.update(newPrescription);
-            //dbHelper.updateDrug(newDrug);
         }
     }
 }
