@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-//import com.google.zxing.client.android.BuildConfig;
+import com.google.zxing.client.android.BuildConfig;
 
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
 import net.foucry.pilldroid.databases.PrescriptionDatabase;
@@ -61,7 +61,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Sorting list by dateEndOfStock
         prescriptionList = prescriptionsDAO.getAllMedics();     // Reread the database
         Utils.sortPrescriptionList(prescriptionList);
-
+        //Utils.rearrangePrescriptionList(prescriptionList);
         try {
             firstPrescription = prescriptionList.get(0);
         }
@@ -100,7 +100,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
         }
-
     }
 
     private void createNotificationChannel(Context context) {
@@ -136,11 +135,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         Date tomorrow;
         LocalTime todayNow = LocalTime.now();
 
-        if (BuildConfig.DEBUG) {
-                                                                                                                                                                                                                                              calendar.add(Calendar.MINUTE, 2);
+        /*if (BuildConfig.DEBUG) {
             Date nextSchedule = calendar.getTime();
             calendar.setTimeInMillis(nextSchedule.getTime());
-        } else {
+        } else {*/
             calendar.set(Calendar.HOUR_OF_DAY, 11);
             today = calendar.getTime();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -150,7 +148,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             } else {
                 calendar.setTimeInMillis(tomorrow.getTime());
             }
-        }
+        //}
 
         PendingIntent alarmIntent;
 
@@ -159,26 +157,21 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
                     AlarmManager.ELAPSED_REALTIME, alarmIntent);
-        } else {
+        } else {*/
 
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()),
                     AlarmManager.INTERVAL_DAY, alarmIntent);
-        }
+        //}
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
-        if (BuildConfig.DEBUG) {
-            Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_LONG).show();
-        }
-
         if (BuildConfig.DEBUG) { Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show(); }
     }
 
     public static Boolean isAlarmScheduled(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
         return alarmManager.getNextAlarmClock() != null;
     }
 }
