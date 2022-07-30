@@ -48,13 +48,13 @@ import net.foucry.pilldroid.databases.MedicineDatabase;
 import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
-import net.foucry.pilldroid.BuildConfig;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-//import com.google.zxing.client.android.BuildConfig;
+import com.google.zxing.client.android.BuildConfig;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -283,19 +283,21 @@ public class DrugListActivity extends AppCompatActivity {
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         prescriptionList = prescriptionsDAO.getAllMedics();
 
-        Prescription currentPrescription;
+        //Prescription currentPrescription;
 
         // Sorting list by dateEndOfStock
         Utils.sortPrescriptionList(prescriptionList);
 
         // Move Prescription with take==0 to the end of the list
-        for (int i=0 ; i < prescriptionList.size(); i++ ){
+        //Utils.rearrangePrescriptionList(prescriptionList);
+        /*for (int i=0 ; i < prescriptionList.size(); i++ ){
             currentPrescription = prescriptionList.get(i);
+            //currentPrescription.newStock();
             if (currentPrescription.getTake() == 0) {
                 prescriptionList.remove(currentPrescription);
                 prescriptionList.add(prescriptionList.size(), currentPrescription);
             }
-        }
+        }*/
 
         View mRecyclerView = findViewById(R.id.drug_list);
         assert mRecyclerView != null;
@@ -598,7 +600,7 @@ public class DrugListActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.drug_list_content, parent, false);
             return new ViewHolder(view);
@@ -606,7 +608,7 @@ public class DrugListActivity extends AppCompatActivity {
 
         @Override
         @SuppressWarnings("deprecation")
-        public void onBindViewHolder(final ViewHolder holder, int dummy) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, int dummy) {
             final int position = holder.getBindingAdapterPosition();
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE d MMMM yyyy", Locale.getDefault());
             String dateEndOfStock = date2String(mValues.get(position).getDateEndOfStock(), dateFormat);
@@ -620,7 +622,11 @@ public class DrugListActivity extends AppCompatActivity {
 
             holder.mItem = mValues.get(position);
             holder.mContentView.setText(mValues.get(position).getName());
-            holder.mEndOfStock.setText(dateEndOfStock);
+            if (mValues.get(position).getTake() > 0) {
+                holder.mEndOfStock.setText(dateEndOfStock);
+            } else {
+                holder.mEndOfStock.setText("");
+            }
 
             // Test to change background programmatically
             if (mValues.get(position).getTake() == 0) {
@@ -662,7 +668,6 @@ public class DrugListActivity extends AppCompatActivity {
                         intent.putExtra("prescription", prescription);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-
                     }
                 });
             }
