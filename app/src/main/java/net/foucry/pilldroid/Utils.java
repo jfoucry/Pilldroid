@@ -59,4 +59,15 @@ public class Utils {
             }
         });
     }
+
+    public static void rearrangePrescriptionList(List<Prescription> prescriptionList) {
+        Prescription currentPrescription = null;
+        for (int i=0 ; i < prescriptionList.size(); i++ ){
+            currentPrescription = prescriptionList.get(i);
+            if (currentPrescription.getTake() == 0) {
+                prescriptionList.remove(currentPrescription);
+                prescriptionList.add(prescriptionList.size(), currentPrescription);
+            }
+        }
+    }
 }
