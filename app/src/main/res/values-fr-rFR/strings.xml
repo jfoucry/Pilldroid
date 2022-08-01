@@ -19,7 +19,7 @@
     <string name="detail_view">Vue de détail</string>
     <string name="save_button">Enregistrer</string>
     <string name="flashlightButton">Allumer/Eteindre le Flash</string>
-    <string name="enter_cip_13_here">Saisir le code CIP 13 ici..</string>
+    <string name="enter_cip_13_here">Saisir la fin du code CIP 13 ici..</string>
     <string name="enter_cip_13">Saisir le code CIP 13</string>
 
     <!-- Slide Strings -->

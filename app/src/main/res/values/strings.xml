@@ -18,7 +18,7 @@
     <string name="detail_view">Detail view</string>
     <string name="save_button">Save</string>
     <string name="flashlightButton">Toggle Flash</string>
-    <string name="enter_cip_13_here">Enter CIP 13 here..</string>
+    <string name="enter_cip_13_here">Enter end of CIP 13 here..</string>
     <string name="enter_cip_13">Enter CIP 13</string>
     <string name="channel_description" translatable="false">Pilldroid_NotificationChannel</string>
     <string name="channel_name" translatable="false">PilldroidChannel</string>
@@ -43,7 +43,7 @@
     <string name="the_plus_icon">The plus icon</string>
     <string name="slide4_desc">In order to find the CIP13</string>
     <string name="happy_face">Happy face</string>
-    <string name="barcode_icon">Barre code icon</string>
+    <string name="barcode_icon">Bar code icon</string>
     <string name="qr_code_icon">qr-code icon</string>
     <string name="neutral_face">neutral face</string>
     <string name="unhappy_face">unhappy face</string>
@@ -65,7 +65,7 @@
     <string name="Value">Value</string>
     <string name="label">Label</string>
     <string name="drug_list">Drug\'s attributes</string>
-    <string name="notInterpreted">Barre code cannot be interpreted</string>
+    <string name="notInterpreted">Bar code cannot be interpreted</string>
     <string name="cancelled_scan">Scan canceled</string>
     <string name="missing_camera_permission">Missing camera permission</string>
     <string name="Yes">Yes, I understood</string>

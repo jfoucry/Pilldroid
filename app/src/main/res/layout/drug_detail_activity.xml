@@ -51,7 +51,6 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="?attr/actionBarSize"
         android:layout_marginEnd="@dimen/fab_margin"
-        android:backgroundTint="@android:color/transparent"
         android:contentDescription="@string/save_button"
         android:src="@drawable/ic_save_black_24dp"
         app:backgroundTint="@android:color/transparent"/>
