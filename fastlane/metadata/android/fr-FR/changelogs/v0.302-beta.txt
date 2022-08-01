@@ -1,0 +1,76 @@
+# V0.302-beta - bugs fix and small interface changes
+
+- Résolution de la bogue qui empéchait la calcul dv stock et l'émission de l'alarme,
+ bogue qui est apparu dans la version v0.201-beta. Je suis désolé pour cette bogue et le temps
+ que j'ai mis à la corriger ;
+- Suppression de vieux code et vieux commentaires ;
+- Changement dans le dialogue de saisie d'un CIP13, vous n'avez plvs qve les 7
+  derniers chiffres à entrer;
+- Changement dans l'apparence de la saisie des valeurs, j'ai supprimer les coins arrondis.
+
+De nombreux autres bogues restent présentes, mais je ne les ai pas encore trouvé.
+
+Une nouvelle fois, veuille accepter mes excuses pour cette bogue.
+
+Ce serait sympa de me faire une petit coucou :
+Twitter: pillroid-app
+Mastodon: @lovisix@social.zdx.fr
+Mail: pilldroid@foucry.net
+
+# v0.301-beta - Correction de bogues
+
+- Une bogue majeur faisait que le calcul du stock était plus réalisé à l'appel de Pilldroid
+en tâche de fond. Cette bogue est corrigé, sous réserve de l'apparition d'autres bogues.
+Merci pour votre aide et votre patience. Un petit mot fait toujours plaisir.
+
+# v0.300-beta - Nouvelles fonctionnalités
+
+- La gestion de la liste des prescriptions (les médicaments que vous prenez) à été revue ;
+    - un glissement de la droite vers la gauche supprime le médicament de la liste ET de
+    la base données ;
+    - un glissement de la gauche vers la droite permet de modifier les détails du médicament,
+    tout comme le tapotage sur la flèche à la droite de la ligne.
+
+Ces changements vont vous permettre de supprimer les médicaments dont la prise est à zéro (0)
+depuis longtemps et que vous ne prendrez plus.
+Ils vont également me permettre d'avancer sur la prochaine étape qui est de plus présenter les noms
+des médicaments, mais la molécule (doliprane, efferalgan, dafalgan deviendront paracétamol).
+Je vous en dirais plus prochainement.
+
+Merci de me faire des retours sur ces nouveautés, [Pilldroid](mailto:jacques+pilldroid@foucry.net)
+[Pilldroid](mailto:pilldroid@foucry.net)ou pilldroid@foucry.net.
+
+# v0.201-beta - déverminage dans  `alarmReceiver`
+
+L'`alarmReceiver` utilisait encore l'ancienne base de données qui devait être vide. J'utilise désormais la gestion `room`
+pour la base données.
+
+# v0.200 – Nouvelle numérotation sémantique (VMajor.Minor.Patch)
+
+Malgré de nombreux tests et une utilisation quotidienne,
+tout est à tester.
+
+## Nouveautés
+
+Pas grand-chose de visible pour les personnes utilisatrices :
+- Ajout d'une demande explicite de non-responsabilité de l'auteur en cas de problème ;
+- Utilisation de `Room` pour gérer les bases de données ;
+- Migration de l'ancienne base de données à la nouvelle, vous ne devriez rien voir ;
+- Nettoyage du code.
+
+## Ce qui devrait fonctionner
+- le scan de QR-code sur un fond foncé. La bibliothèque utilisée a un paramètre pour cela.
+
+
+**ATTENTION**, Pilldroid ne sait pas gérer les crèmes, les liquides
+(l'insuline par exemple).
+
+Merci d'utiliser [github](https://github/jfoucry/pilldroid) pour
+rapporter des bogues et demander des fonctionnalités.
+
+> Je fais Pilldroid sur mon temps libre et accessible. Il est inutile
+et contre-productif de me « mettre la pression ».
+
+Pilldroid ne sera diffusé que par [f-droid](https://f-droid.org) (pour l'instant)
+
+Vous pouvez m'écrire pour discuter de [Pilldroid](mailto:jacques+pilldroid@foucry.net).
