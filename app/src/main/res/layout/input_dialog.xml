@@ -16,13 +16,12 @@
 
     <EditText
         android:id="@+id/edittext"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="16dp"
         android:autofillHints="@string/enter_cip_13_here"
-        android:background="@drawable/rounded_corner"
         android:hint="@string/enter_cip_13_here"
         android:inputType="number"
         android:minHeight="48dp"
@@ -31,13 +30,13 @@
 
     <TextView
         android:id="@+id/startcip13"
-        android:layout_width="100dp"
-        android:layout_height="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="29dp"
         android:layout_marginTop="52dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="39dp"
         android:layout_marginBottom="16dp"
         android:layout_toStartOf="@+id/edittext"
         android:ems="10"

@@ -29,7 +29,6 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/rounded_corner"
         android:ems="10"
         android:gravity="end|fill_vertical"
         android:inputType="numberDecimal"
