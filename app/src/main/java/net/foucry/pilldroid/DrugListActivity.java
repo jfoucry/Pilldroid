@@ -283,21 +283,8 @@ public class DrugListActivity extends AppCompatActivity {
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         prescriptionList = prescriptionsDAO.getAllMedics();
 
-        //Prescription currentPrescription;
-
         // Sorting list by dateEndOfStock
         Utils.sortPrescriptionList(prescriptionList);
-
-        // Move Prescription with take==0 to the end of the list
-        //Utils.rearrangePrescriptionList(prescriptionList);
-        /*for (int i=0 ; i < prescriptionList.size(); i++ ){
-            currentPrescription = prescriptionList.get(i);
-            //currentPrescription.newStock();
-            if (currentPrescription.getTake() == 0) {
-                prescriptionList.remove(currentPrescription);
-                prescriptionList.add(prescriptionList.size(), currentPrescription);
-            }
-        }*/
 
         View mRecyclerView = findViewById(R.id.drug_list);
         assert mRecyclerView != null;
