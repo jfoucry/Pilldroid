@@ -82,7 +82,7 @@ public class UtilDate {
      * @return int numbers of days between date and today
      * Number of days between date (older than today) and today
      */
-    static int nbOfDaysBetweenDateAndToday(Date date) {
+    public static int nbOfDaysBetweenDateAndToday(Date date) {
         Date oldDate = dateAtNoon(date); // Be sure that the old date is at Noon
         Date todayDate = dateAtNoon(new Date()); // Be sure that we use today at Noon
 

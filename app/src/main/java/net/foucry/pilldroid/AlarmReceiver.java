@@ -50,11 +50,17 @@ public class AlarmReceiver extends BroadcastReceiver {
         PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(context.getApplicationContext());
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         List<Prescription> prescriptionList = prescriptionsDAO.getAllMedics();
-        Prescription firstPrescription = null ;
+        Prescription firstPrescription = null;
+        Prescription currentPrescription;
 
+        for (int i=0 ; i < prescriptionList.size(); i++ ) {
+            currentPrescription = prescriptionList.get(i);
+            currentPrescription.newStock();
+            prescriptionsDAO.update(currentPrescription);
+        }
         // Sorting list by dateEndOfStock
+        prescriptionList = prescriptionsDAO.getAllMedics();     // Reread the database
         Utils.sortPrescriptionList(prescriptionList);
-
         try {
             firstPrescription = prescriptionList.get(0);
         }
@@ -93,7 +99,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
         }
-
     }
 
     private void createNotificationChannel(Context context) {
@@ -129,11 +134,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         Date tomorrow;
         LocalTime todayNow = LocalTime.now();
 
-        if (BuildConfig.DEBUG) {
-            calendar.add(Calendar.MINUTE, 2);
+        /*if (BuildConfig.DEBUG) {
             Date nextSchedule = calendar.getTime();
             calendar.setTimeInMillis(nextSchedule.getTime());
-        } else {
+        } else {*/
             calendar.set(Calendar.HOUR_OF_DAY, 11);
             today = calendar.getTime();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -143,7 +147,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             } else {
                 calendar.setTimeInMillis(tomorrow.getTime());
             }
-        }
+        //}
 
         PendingIntent alarmIntent;
 
@@ -152,17 +156,21 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+        /*if (BuildConfig.DEBUG) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
+                    AlarmManager.ELAPSED_REALTIME, alarmIntent);
+        } else {*/
+
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()),
+                    AlarmManager.INTERVAL_DAY, alarmIntent);
+        //}
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
-
         if (BuildConfig.DEBUG) { Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show(); }
     }
 
     public static Boolean isAlarmScheduled(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
         return alarmManager.getNextAlarmClock() != null;
     }
 }

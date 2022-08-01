@@ -58,12 +58,6 @@ android {
             debuggable false
             signingConfig signingConfigs.release
         }
-        prerelease {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable false
-            signingConfig signingConfigs.prerelease
-        }
     }
     flavorDimensions "version"
     productFlavors {
@@ -74,10 +68,6 @@ android {
 
         product {
             resValue "string", "app_name", "PillDroid"
-            dimension ="version"
-        }
-        preproduct {
-            resValue "string", "app_name", "PillDroid Pre-Release"
             dimension ="version"
         }
     }
