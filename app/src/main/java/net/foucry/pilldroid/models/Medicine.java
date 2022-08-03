@@ -7,14 +7,15 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "drugs")
 public class Medicine {
     @PrimaryKey
-    @NonNull private Integer _id;
-    private String  cis;
-    private String  cip13;
-    private String  cip7;
-    private String  administration_mode;
-    private String  name;
-    private String  presentation;
-    private String  label_group;
+    @NonNull
+    private Integer _id;
+    private String cis;
+    private String cip13;
+    private String cip7;
+    private String administration_mode;
+    private String name;
+    private String presentation;
+    private String label_group;
     private Integer generic_type;
 
     public Medicine(@NonNull String cis) {

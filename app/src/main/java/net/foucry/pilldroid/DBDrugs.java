@@ -21,22 +21,18 @@ class DBDrugs extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
-    private static final String dbName      = "drugs.db";
+    private static final String dbName = "drugs.db";
+    private static final String TABLE_NAME = "drugs";
+    private static final String DRUG_CIS = "cis";
+    private static final String DRUG_CIP13 = "cip13";
+    private static final String DRUG_CIP7 = "cip7";
+    private static final String DRUG_ADMIN = "administration_mode";
+    private static final String DRUG_NAME = "name";
+    private static final String DRUG_PRES = "presentation";
+    private static final String[] COLUMNS_NAMES = {DRUG_CIS, DRUG_CIP13, DRUG_CIP7, DRUG_ADMIN, DRUG_NAME, DRUG_PRES};
+    private static final String TAG = DBDrugs.class.getName();
     private final Context myContext;
     private final SQLiteDatabase myDataBase = null;
-
-    private static final String TABLE_NAME  = "drugs";
-    private static final String DRUG_CIS    = "cis";
-    private static final String DRUG_CIP13  = "cip13";
-    private static final String DRUG_CIP7   = "cip7";
-    private static final String DRUG_ADMIN  = "administration_mode";
-    private static final String DRUG_NAME   = "name";
-    private static final String DRUG_PRES   = "presentation";
-
-    private static final String[] COLUMNS_NAMES = {DRUG_CIS, DRUG_CIP13, DRUG_CIP7, DRUG_ADMIN, DRUG_NAME, DRUG_PRES};
-
-    private static final String TAG = DBDrugs.class.getName();
-
 
 
     DBDrugs(Context context) {
@@ -44,12 +40,10 @@ class DBDrugs extends SQLiteOpenHelper {
         this.myContext = context;
     }
 
-    public boolean isDBFileExist(File database)
-    {
-        try  {
+    public boolean isDBFileExist(File database) {
+        try {
             myContext.getDatabasePath(String.valueOf(database));
-        }
-        catch (final Exception e){
+        } catch (final Exception e) {
             return false;
         }
         return true;
@@ -166,26 +160,24 @@ class DBDrugs extends SQLiteOpenHelper {
 
     String getCIP13FromCIP7(String cip7) {
 
-            String cip13 = null;
+        String cip13 = null;
 
-            try {
-                Cursor c = this.getReadableDatabase().rawQuery("SELECT cip13 FROM "+ TABLE_NAME + " where cip7 = "+cip7, null);
+        try {
+            Cursor c = this.getReadableDatabase().rawQuery("SELECT cip13 FROM " + TABLE_NAME + " where cip7 = " + cip7, null);
 
-                Log.d(TAG, "Cursor == " + DatabaseUtils.dumpCursorToString(c));
+            Log.d(TAG, "Cursor == " + DatabaseUtils.dumpCursorToString(c));
 
-                c.moveToFirst();
+            c.moveToFirst();
 
-                if(c.getCount()>0)
-                {
-                    cip13 = c.getString(0);
-                }
-                c.close();
-            } catch(Exception e)
-            {
-                e.printStackTrace();
+            if (c.getCount() > 0) {
+                cip13 = c.getString(0);
             }
-            return cip13;
+            c.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return cip13;
+    }
 
     Drug getDrugByCIP7(String cip7) {
         Log.d(TAG, "CIP7 - " + cip7);

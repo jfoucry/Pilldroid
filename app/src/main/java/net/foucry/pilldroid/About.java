@@ -2,15 +2,14 @@ package net.foucry.pilldroid;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.webkit.WebView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.webkit.WebView;
 
 /**
  * Created by jacques on 12/06/16.
  */
-public class About extends AppCompatActivity{
+public class About extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

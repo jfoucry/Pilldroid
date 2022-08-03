@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -54,8 +55,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.zxing.client.android.BuildConfig;
-
 /**
  * An activity representing a list of Drugs is activity
  * has different presentations for handset and tablet-size devices. On
@@ -65,19 +64,15 @@ import com.google.zxing.client.android.BuildConfig;
  * item details side-by-side using two vertical panes.
  */
 public class DrugListActivity extends AppCompatActivity {
-    // Used for dev and debug
-    final Boolean DEMO = false;
-
+    private static final String TAG = DrugListActivity.class.getName();
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
     public final String BARCODE_FORMAT_NAME = "Barcode Format name";
     public final String BARCODE_CONTENT = "Barcode Content";
-
-    private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
-    private static final String TAG = DrugListActivity.class.getName();
-
+    // Used for dev and debug
+    final Boolean DEMO = false;
     public PrescriptionDatabase prescriptions;
     public MedicineDatabase medicines;
-
+    private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
     private List<Prescription> prescriptionList;         // used for prescriptions
 
     private RecyclerViewAdapter mAdapter;
@@ -86,7 +81,7 @@ public class DrugListActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             String manufacturer = Build.MANUFACTURER;
             String model = Build.MODEL;
             int version = Build.VERSION.SDK_INT;
@@ -108,13 +103,13 @@ public class DrugListActivity extends AppCompatActivity {
         // Manually migrate old database to room
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
         DBHelper dbHelper = new DBHelper(this);
-        if (dbHelper.getCount() !=0) {
-            List<Drug> drugs=dbHelper.getAllDrugs();
-            for (int count=0; count < dbHelper.getCount(); count++) {
+        if (dbHelper.getCount() != 0) {
+            List<Drug> drugs = dbHelper.getAllDrugs();
+            for (int count = 0; count < dbHelper.getCount(); count++) {
                 Drug drug = drugs.get(count);
                 Prescription prescription = new Prescription();
 
-                if(prescriptionsDAO.getMedicByCIP13(drug.getCip13()) == null) {
+                if (prescriptionsDAO.getMedicByCIP13(drug.getCip13()) == null) {
                     prescription.setName(drug.getName());
                     prescription.setCip13(drug.getCip13());
                     prescription.setCis(drug.getCis());
@@ -127,8 +122,7 @@ public class DrugListActivity extends AppCompatActivity {
                     prescription.setLast_update(drug.getDateLastUpdate());
 
                     prescriptionsDAO.insert(prescription);
-                }
-                else {
+                } else {
                     Log.i(TAG, "Already in the database");
                 }
             }
@@ -142,10 +136,10 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         // start tutorial (only in non debug mode)
-       // if(!net.foucry.pilldroid.BuildConfig.DEBUG) {
-            Log.i(TAG, "Launch tutorial");
-            startActivity(new Intent(this, WelcomeActivity.class));
-       // }
+        // if(!net.foucry.pilldroid.BuildConfig.DEBUG) {
+        Log.i(TAG, "Launch tutorial");
+        startActivity(new Intent(this, WelcomeActivity.class));
+        // }
 
         PrefManager prefManager = new PrefManager(this);
         if (!prefManager.isUnderstood()) {
@@ -165,11 +159,12 @@ public class DrugListActivity extends AppCompatActivity {
         super.onPause();
         Log.d(TAG, "onPause");
 
-        if (!AlarmReceiver.isAlarmScheduled(this)){
+        if (!AlarmReceiver.isAlarmScheduled(this)) {
             AlarmReceiver.scheduleAlarm(this);
         }
 
     }
+
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -192,33 +187,33 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         if (DEMO) {
-          PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
+            PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
 
-          if (prescriptionsDAO.getMedicCount() == 0) {
-              final int min_stock = 5;
-              final int max_stock = 50;
-              final int min_take = 0;
-              final int max_take = 3;
+            if (prescriptionsDAO.getMedicCount() == 0) {
+                final int min_stock = 5;
+                final int max_stock = 50;
+                final int min_take = 0;
+                final int max_take = 3;
 
-              for (int i = 1; i < 9; i++) {
-                  Prescription prescription = new Prescription();
-                  prescription.setName("Medicament test " + i);
-                  prescription.setCip13("340093000001" + i);
-                  prescription.setCis("6000001" + i);
-                  prescription.setAdministration_mode("oral");
-                  prescription.setPresentation("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
-                  prescription.setStock((float) intRandomExclusive(min_stock, max_stock));
-                  prescription.setTake((float) intRandomExclusive(min_take, max_take));
-                  prescription.setWarning(14);
-                  prescription.setAlert(7);
-                  prescription.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
+                for (int i = 1; i < 9; i++) {
+                    Prescription prescription = new Prescription();
+                    prescription.setName("Medicament test " + i);
+                    prescription.setCip13("340093000001" + i);
+                    prescription.setCis("6000001" + i);
+                    prescription.setAdministration_mode("oral");
+                    prescription.setPresentation("plaquette(s) thermoformée(s) PVC PVDC aluminium de 10 comprimé(s)");
+                    prescription.setStock((float) intRandomExclusive(min_stock, max_stock));
+                    prescription.setTake((float) intRandomExclusive(min_take, max_take));
+                    prescription.setWarning(14);
+                    prescription.setAlert(7);
+                    prescription.setLast_update(UtilDate.dateAtNoon(new Date()).getTime());
 
-                  prescriptionsDAO.insert(prescription);
-              }
-              List<Prescription> prescriptions = prescriptionsDAO.getAllMedics();
-              System.out.println(prescriptions);
-              Log.d(TAG, "prescriptions ==" + prescriptions);
-          }
+                    prescriptionsDAO.insert(prescription);
+                }
+                List<Prescription> prescriptions = prescriptionsDAO.getAllMedics();
+                System.out.println(prescriptions);
+                Log.d(TAG, "prescriptions ==" + prescriptions);
+            }
         }
 
         mBarcodeScannerLauncher = registerForActivityResult(new PilldroidScanContract(),
@@ -336,7 +331,7 @@ public class DrugListActivity extends AppCompatActivity {
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
 
-        Log.d(TAG, "scanOptions == " +  options);
+        Log.d(TAG, "scanOptions == " + options);
         mBarcodeScannerLauncher.launch(options);
     }
 
@@ -369,10 +364,12 @@ public class DrugListActivity extends AppCompatActivity {
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -460,6 +457,7 @@ public class DrugListActivity extends AppCompatActivity {
         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
+
     /**
      * setupRecyclerView (list of drugs)
      *
@@ -470,7 +468,7 @@ public class DrugListActivity extends AppCompatActivity {
         mAdapter = new RecyclerViewAdapter(prescriptionList);
         recyclerView.setAdapter(mAdapter);
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, (ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT)) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, (ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT)) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -492,80 +490,90 @@ public class DrugListActivity extends AppCompatActivity {
                 } else {
                     // Call DetailView
                     Intent intent = new Intent(getApplicationContext(), DrugDetailActivity.class);
-                    intent.putExtra("prescription",  prescription);
+                    intent.putExtra("prescription", prescription);
                     startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                 }
 
                 Snackbar.make(recyclerView, prescription.getName(),
                         Snackbar.LENGTH_LONG).setAction(R.string.Undo, new View.OnClickListener() {
-                            @Override
+                    @Override
                     public void onClick(View v) {
-                                prescriptionList.add(position, prescription);
-                                mAdapter.notifyItemInserted(position);
-                            }
-                        }).show();
-                }
-
-                @Override
-                public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                    if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                        // Get RecyclerView item from the ViewHolder
-                        View itemView = viewHolder.itemView;
-
-                        Paint p = new Paint();
-                        Drawable icon;
-                        icon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_trash_can_outline);
-
-                        int xMarkMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.fab_margin);
-
-                        assert icon != null;
-                        int intrinsicWidth = icon.getIntrinsicWidth();
-                        int intrinsicHeight = icon.getIntrinsicHeight();
-                        int itemHeight = itemView.getBottom() - itemView.getTop();
-
-                        if (dX > 0) {
-                            p.setColor(getColor(R.color.bg_screen3));
-                            icon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_edit_black_48dp);
-
-                            // Draw Rect with varying right side, equal to displacement dX
-                            c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
-                                    (float) itemView.getBottom(), p);
-
-                            int xMarkLeft = itemView.getLeft() + xMarkMargin;
-                            int xMarkRight = itemView.getLeft() + xMarkMargin + intrinsicWidth;
-                            int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-                            int xMarkBottom = xMarkTop + intrinsicHeight;// +xMarkTop;
-                            assert icon != null;
-                            icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
-
-                        } else {
-                            p.setColor(getColor(R.color.bg_screen4));
-                            // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
-                            c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
-                                    (float) itemView.getRight(), (float) itemView.getBottom(), p);
-
-
-                            int xMarkLeft = itemView.getRight() - xMarkMargin - intrinsicWidth;
-                            int xMarkRight = itemView.getRight() - xMarkMargin;
-                            int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-                            int xMarkBottom = xMarkTop + intrinsicHeight;
-                            icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
-
-                        }
-                        icon.draw(c);
-
-                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                        prescriptionList.add(position, prescription);
+                        mAdapter.notifyItemInserted(position);
                     }
+                }).show();
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    // Get RecyclerView item from the ViewHolder
+                    View itemView = viewHolder.itemView;
+
+                    Paint p = new Paint();
+                    Drawable icon;
+                    icon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_trash_can_outline);
+
+                    int xMarkMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.fab_margin);
+
+                    assert icon != null;
+                    int intrinsicWidth = icon.getIntrinsicWidth();
+                    int intrinsicHeight = icon.getIntrinsicHeight();
+                    int itemHeight = itemView.getBottom() - itemView.getTop();
+
+                    if (dX > 0) {
+                        p.setColor(getColor(R.color.bg_screen3));
+                        icon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_edit_black_48dp);
+
+                        // Draw Rect with varying right side, equal to displacement dX
+                        c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,
+                                (float) itemView.getBottom(), p);
+
+                        int xMarkLeft = itemView.getLeft() + xMarkMargin;
+                        int xMarkRight = itemView.getLeft() + xMarkMargin + intrinsicWidth;
+                        int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+                        int xMarkBottom = xMarkTop + intrinsicHeight;// +xMarkTop;
+                        assert icon != null;
+                        icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+
+                    } else {
+                        p.setColor(getColor(R.color.bg_screen4));
+                        // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
+                        c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
+                                (float) itemView.getRight(), (float) itemView.getBottom(), p);
+
+
+                        int xMarkLeft = itemView.getRight() - xMarkMargin - intrinsicWidth;
+                        int xMarkRight = itemView.getRight() - xMarkMargin;
+                        int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+                        int xMarkBottom = xMarkTop + intrinsicHeight;
+                        icon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+
+                    }
+                    icon.draw(c);
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 }
+            }
         }).attachToRecyclerView(recyclerView);
 
-     }
+    }
+
+    private String getAppName() {
+        PackageManager packageManager = getApplicationContext().getPackageManager();
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
+        } catch (final PackageManager.NameNotFoundException ignored) {
+        }
+        return (String) ((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
+    }
 
     /**
      * SimpleItemRecyclerViewAdapter
      */
     public class RecyclerViewAdapter extends
-        RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+            RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
         private final List<Prescription> mValues;
 
@@ -626,7 +634,7 @@ public class DrugListActivity extends AppCompatActivity {
                         Prescription aPrescription = mValues.get(position);
                         Context context = v.getContext();
                         Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("prescription",  aPrescription);
+                        intent.putExtra("prescription", aPrescription);
                         startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                         overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
@@ -686,15 +694,5 @@ public class DrugListActivity extends AppCompatActivity {
                 return super.toString() + " '" + mContentView.getText() + "'";
             }
         }
-    }
-
-    private String getAppName() {
-        PackageManager packageManager = getApplicationContext().getPackageManager();
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = packageManager.getApplicationInfo(this.getPackageName(), 0);
-        } catch (final PackageManager.NameNotFoundException ignored) {
-        }
-        return (String) ((applicationInfo != null) ? packageManager.getApplicationLabel(applicationInfo) : "???");
     }
 }

@@ -29,8 +29,8 @@
 
         <include
             layout="@layout/drug_list"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 
@@ -45,11 +45,11 @@
         android:backgroundTint="@android:color/transparent"
         android:baselineAlignBottom="false"
         android:clickable="false"
+        android:contentDescription="@string/add_button"
         android:onClick="onButtonClick"
         android:src="@drawable/ic_add_circle_black_24dp"
         app:backgroundTint="@android:color/darker_gray"
         app:fabCustomSize="60dp"
         app:maxImageSize="60dp"
-        android:contentDescription="@string/add_button"
         tools:ignore="OnClick" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

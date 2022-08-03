@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/list_selector"
     android:orientation="horizontal"
     android:padding="10dp"
-    android:background="@drawable/list_selector"
     android:weightSum="1">
+
     <TextView
         android:id="@+id/label"
         android:layout_width="wrap_content"
@@ -31,14 +32,14 @@
         android:layout_alignParentEnd="true"
         android:ems="10"
         android:gravity="end|fill_vertical"
+        android:hint="@string/zero"
+        android:importantForAutofill="no"
         android:inputType="numberDecimal"
         android:labelFor="@id/value"
-        android:paddingEnd="25dp"
         android:paddingStart="5dp"
-        android:hint="@string/zero"
-        android:textColorHint="@color/grey"
+        android:paddingEnd="25dp"
         android:textAlignment="gravity"
-        android:importantForAutofill="no"
+        android:textColorHint="@color/grey"
         tools:ignore="LabelFor" />
 
 </RelativeLayout>

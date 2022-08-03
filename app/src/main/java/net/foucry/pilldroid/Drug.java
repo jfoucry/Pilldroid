@@ -1,14 +1,14 @@
 package net.foucry.pilldroid;
 
+import static net.foucry.pilldroid.UtilDate.dateAtNoon;
+import static net.foucry.pilldroid.UtilDate.nbOfDaysBetweenDateAndToday;
+
 import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
-
-import static net.foucry.pilldroid.UtilDate.dateAtNoon;
-import static net.foucry.pilldroid.UtilDate.nbOfDaysBetweenDateAndToday;
 
 /**
  * Created by jacques on 26/11/15.
@@ -56,86 +56,68 @@ public class Drug implements Serializable {
         return id;
     }
 
-    String getName() {
-        return name;
-    }
-
-    String getCip13() {
-        return cip13;
-    }
-
-    String getCis() {
-        return cis;
-    }
-
-    String getAdministration_mode() {
-        return administration_mode;
-    }
-
-    String getPresentation() {
-        return presentation;
-    }
-
-    double getStock() {
-        return stock;
-    }
-
-    double getTake() {
-        return take;
-    }
-
-    int getAlertThreshold() {
-        return alertThreshold;
-    }
-
-    int getWarnThreshold() {
-        return warnThreshold;
-    }
-
-    long getDateLastUpdate() {
-        return dateLastUpdate;
-    }
-
-    Date getDateEndOfStock() {
-        return dateEndOfStock;
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+
+    String getName() {
+        return name;
     }
 
     void setName(String name) {
         this.name = name;
     }
 
+    String getCip13() {
+        return cip13;
+    }
+
     void setCip13(String cip13) {
         this.cip13 = cip13;
+    }
+
+    String getCis() {
+        return cis;
     }
 
     void setCis(String cis) {
         this.cis = cis;
     }
 
+    String getAdministration_mode() {
+        return administration_mode;
+    }
+
     void setAdministration_mode(String administration_mode) {
         this.administration_mode = administration_mode;
+    }
+
+    String getPresentation() {
+        return presentation;
     }
 
     void setPresentation(String presentation) {
         this.presentation = presentation;
     }
 
+    double getStock() {
+        return stock;
+    }
+
     void setStock(double stock) {
         this.stock = stock;
+    }
+
+    double getTake() {
+        return take;
     }
 
     void setTake(double take) {
         this.take = take;
     }
 
-    void setWarnThreshold(int warn) {
-        if (warn == 0)
-            warn = 14;
-        this.warnThreshold = warn;
+    int getAlertThreshold() {
+        return alertThreshold;
     }
 
     void setAlertThreshold(int alert) {
@@ -144,8 +126,26 @@ public class Drug implements Serializable {
         this.alertThreshold = alert;
     }
 
+    int getWarnThreshold() {
+        return warnThreshold;
+    }
+
+    void setWarnThreshold(int warn) {
+        if (warn == 0)
+            warn = 14;
+        this.warnThreshold = warn;
+    }
+
+    long getDateLastUpdate() {
+        return dateLastUpdate;
+    }
+
     void setDateLastUpdate(long l) {
         this.dateLastUpdate = l;
+    }
+
+    Date getDateEndOfStock() {
+        return dateEndOfStock;
     }
 
     void setDateEndOfStock() {
@@ -176,6 +176,7 @@ public class Drug implements Serializable {
             setDateLastUpdate(new Date().getTime());
         }
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -23,13 +23,11 @@ import com.journeyapps.barcodescanner.ViewfinderView;
 public class CustomScannerActivity extends Activity implements DecoratedBarcodeView.TorchListener {
 
     private static final String TAG = CustomScannerActivity.class.getName();
-
+    final Bundle captureIntentBundle = new Bundle();
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
     private ImageButton switchFlashlightButton;
     private ViewfinderView viewfinderView;
-
-    final Bundle captureIntentBundle = new Bundle();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,7 +145,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     public void onKeyboard(View view) {
         Log.d(TAG, "onkeyboard");
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("returnCode",3);
+        resultIntent.putExtra("returnCode", 3);
         CustomScannerActivity.this.setResult(RESULT_OK, resultIntent);
         finish();
     }

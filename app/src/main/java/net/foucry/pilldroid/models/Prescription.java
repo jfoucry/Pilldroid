@@ -1,8 +1,5 @@
 package net.foucry.pilldroid.models;
 
-import android.util.Log;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -15,7 +12,7 @@ import java.util.Date;
 
 @Entity(tableName = "prescriptions")
 public class Prescription implements Serializable {
-    private static final String TAG = Prescription.class.getName();;
+    private static final String TAG = Prescription.class.getName();
     @PrimaryKey
     @NonNull
     private String cis;
@@ -31,85 +28,85 @@ public class Prescription implements Serializable {
     private String label_group;
     private Integer generic_type;
 
-    public void setCis(@NonNull String cis) {
-        this.cis = cis;
-    }
-
-    public void setCip13(String cip13) {
-        this.cip13 = cip13;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAdministration_mode(String administration_mode) {
-        this.administration_mode = administration_mode;
-    }
-
-    public void setPresentation(String presentation) {
-        this.presentation = presentation;
-    }
-
-    public void setStock(Float stock) {
-        this.stock = stock;
-    }
-
-    public void setTake(Float take) {
-        this.take = take;
-    }
-
-    public void setWarning(Integer warning) {
-        this.warning = warning;
-    }
-
-    public void setAlert(Integer alert) {
-        this.alert = alert;
-    }
-
-    public void setLast_update(Long last_update) {
-        this.last_update = last_update;
-    }
-
     @NonNull
     public String getCis() {
         return this.cis;
+    }
+
+    public void setCis(@NonNull String cis) {
+        this.cis = cis;
     }
 
     public Integer getWarning() {
         return warning;
     }
 
+    public void setWarning(Integer warning) {
+        this.warning = warning;
+    }
+
     public String getCip13() {
         return cip13;
+    }
+
+    public void setCip13(String cip13) {
+        this.cip13 = cip13;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getAdministration_mode() {
         return administration_mode;
+    }
+
+    public void setAdministration_mode(String administration_mode) {
+        this.administration_mode = administration_mode;
     }
 
     public String getPresentation() {
         return presentation;
     }
 
+    public void setPresentation(String presentation) {
+        this.presentation = presentation;
+    }
+
     public Float getStock() {
         return stock;
+    }
+
+    public void setStock(Float stock) {
+        this.stock = stock;
     }
 
     public Float getTake() {
         return take;
     }
 
+    public void setTake(Float take) {
+        this.take = take;
+    }
+
     public Integer getAlert() {
         return alert;
     }
 
+    public void setAlert(Integer alert) {
+        this.alert = alert;
+    }
+
     public Long getLast_update() {
         return last_update;
+    }
+
+    public void setLast_update(Long last_update) {
+        this.last_update = last_update;
     }
 
     public int getAlertThreshold() {

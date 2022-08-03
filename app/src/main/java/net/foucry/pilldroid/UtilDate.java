@@ -86,11 +86,12 @@ public class UtilDate {
         Date oldDate = dateAtNoon(date); // Be sure that the old date is at Noon
         Date todayDate = dateAtNoon(new Date()); // Be sure that we use today at Noon
 
-        return (int) (todayDate.getTime() - oldDate.getTime())/(86400*1000);
+        return (int) (todayDate.getTime() - oldDate.getTime()) / (86400 * 1000);
     }
 
     /**
      * Convert dateInMilliseconds into string formatted date
+     *
      * @param dateInMilliseconds long
      * @return formatted Date String
      */
