@@ -78,6 +78,7 @@ android {
     }
 
     buildToolsVersion = "32.0.0"
+    namespace 'net.foucry.pilldroid'
 
     allprojects {
         tasks.withType(JavaCompile) {
