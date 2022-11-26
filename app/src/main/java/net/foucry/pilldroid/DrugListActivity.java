@@ -349,14 +349,14 @@ public class DrugListActivity extends AppCompatActivity {
         // setup a dialog window
 
         alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("OK", (dialog, id) -> {
+                .setPositiveButton(R.string.button_ok, (dialog, id) -> {
                     //String cip13 = editText.getText().toString();
                     String cip13 = "34009" + editText.getText().toString();
                     MedicinesDAO medicineDAO = medicines.getMedicinesDAO();
                     Medicine aMedicine = medicineDAO.getMedicineByCIP13(cip13);
                     askToAddInDB(aMedicine);
                 })
-                .setNegativeButton("Cancel",
+                .setNegativeButton(R.string.button_cancel,
                         (dialog, id) -> dialog.cancel());
 
         // create an alert dialog
