@@ -109,7 +109,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
     implementation 'androidx.core:core:1.9.0'
