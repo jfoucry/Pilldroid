@@ -37,20 +37,20 @@ public class AlarmReceiver extends BroadcastReceiver {
         Date tomorrow;
         LocalTime todayNow = LocalTime.now();
 
-        /*if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Date nextSchedule = calendar.getTime();
             calendar.setTimeInMillis(nextSchedule.getTime());
-        } else {*/
-        calendar.set(Calendar.HOUR_OF_DAY, 11);
-        today = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        tomorrow = calendar.getTime();
-        if (todayNow.isBefore(LocalTime.NOON)) {
-            calendar.setTimeInMillis(today.getTime());
         } else {
-            calendar.setTimeInMillis(tomorrow.getTime());
+            calendar.set(Calendar.HOUR_OF_DAY, 11);
+            today = calendar.getTime();
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            tomorrow = calendar.getTime();
+            if (todayNow.isBefore(LocalTime.NOON)) {
+                calendar.setTimeInMillis(today.getTime());
+            } else {
+                calendar.setTimeInMillis(tomorrow.getTime());
+            }
         }
-        //}
 
         PendingIntent alarmIntent;
 
@@ -59,14 +59,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        /*if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
                     AlarmManager.ELAPSED_REALTIME, alarmIntent);
-        } else {*/
+        } else {
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
-        //}
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()),
+                    AlarmManager.INTERVAL_DAY, alarmIntent);
+        }
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
         if (BuildConfig.DEBUG) {

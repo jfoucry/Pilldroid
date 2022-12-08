@@ -164,8 +164,12 @@ public class Prescription implements Serializable {
         }*/
 
         if (numberOfDays > 0) {
+            float currentStock = 0;
+            float newStock = 0;
             double takeDuringPeriod = this.take * numberOfDays;
-            setStock((float) (getStock() - takeDuringPeriod));
+            currentStock = getStock();
+            newStock = (float) (currentStock - takeDuringPeriod);
+            setStock((float) newStock);
             setLast_update(new Date().getTime());
         }
     }
