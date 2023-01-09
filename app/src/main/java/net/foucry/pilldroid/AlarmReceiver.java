@@ -42,6 +42,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             calendar.setTimeInMillis(nextSchedule.getTime());
         } else {
             calendar.set(Calendar.HOUR_OF_DAY, 11);
+            calendar.set(Calendar.MINUTE, 15);
             today = calendar.getTime();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             tomorrow = calendar.getTime();
@@ -60,12 +61,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if (BuildConfig.DEBUG) {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
-                    AlarmManager.ELAPSED_REALTIME, alarmIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()), alarmIntent);
         } else {
-
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()),
-                    AlarmManager.INTERVAL_DAY, alarmIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()), alarmIntent);
         }
 
         Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
@@ -149,8 +147,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void createNotificationChannel(Context context) {
-
         Log.d(TAG, "start create notification channel");
+
         CharSequence name = context.getString(R.string.channel_name);
         String description = context.getString(R.string.channel_description);
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
