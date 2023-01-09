@@ -140,14 +140,6 @@ public class DrugListActivity extends AppCompatActivity {
         Log.i(TAG, "Launch tutorial");
         startActivity(new Intent(this, WelcomeActivity.class));
         // }
-
-        PrefManager prefManager = new PrefManager(this);
-        if (!prefManager.isUnderstood()) {
-            askForComprehensive();
-            prefManager.setUnderstood(true);
-        }
-
-
     }
 
     @Override
