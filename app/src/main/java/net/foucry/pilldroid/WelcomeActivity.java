@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
@@ -74,6 +75,12 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         prefManager.setFirstTimeLaunch(false);
+
+        if (!prefManager.isUnderstood()) {
+            askForComprehensive();
+            prefManager.setUnderstood(true);
+        }
+
         setContentView(R.layout.welcome_activity);
 
         setFullScreen();
@@ -110,28 +117,31 @@ public class WelcomeActivity extends AppCompatActivity {
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-        btnSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnSkip.setOnClickListener(v -> launchHomeScreen());
+
+        btnNext.setOnClickListener(v -> {
+            // checking for last page
+            // if last page home screen will be launched
+            int current = getItem();
+            if (current < layouts.length) {
+                // move to next screen
+                viewPager.setCurrentItem(current);
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+            } else {
                 launchHomeScreen();
             }
         });
+    }
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // checking for last page
-                // if last page home screen will be launched
-                int current = getItem();
-                if (current < layouts.length) {
-                    // move to next screen
-                    viewPager.setCurrentItem(current);
-                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-                } else {
-                    launchHomeScreen();
-                }
-            }
+    private void askForComprehensive() {
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle(getString(R.string.app_name));
+
+        dlg.setMessage(R.string.understood);
+        dlg.setPositiveButton(R.string.Yes, (dialog, which) -> {
+            // Nothing to do just dismiss dialog
         });
+        dlg.show();
     }
 
     private void addBottomDots(int currentPage) {
@@ -220,7 +230,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
         @Override
-        public void destroyItem(ViewGroup container, int position, @NonNull Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             View view = (View) object;
             container.removeView(view);
         }
