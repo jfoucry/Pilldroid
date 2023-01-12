@@ -3,9 +3,11 @@ package net.foucry.pilldroid;
 import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -29,7 +31,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -76,6 +80,16 @@ public class DrugListActivity extends AppCompatActivity {
     private List<Prescription> prescriptionList;         // used for prescriptions
 
     private RecyclerViewAdapter mAdapter;
+
+    // Register the permissions callback, which handles the user's response to the
+    // system permissions dialog. Save the return value, an instance of
+    // ActivityResultLauncher, as an instance variable.
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (!isGranted) {
+                    showAlertDialog();
+                }
+            });
 
     @Override
     public void onStart() {
@@ -140,6 +154,48 @@ public class DrugListActivity extends AppCompatActivity {
         Log.i(TAG, "Launch tutorial");
         startActivity(new Intent(this, WelcomeActivity.class));
         // }
+        checkPermissionRequest();
+
+    }
+
+    // is called if the permission is not given.
+    public void showAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("This app needs you to allow this " +
+                "permission in order to function.Will you allow it");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            alertDialogBuilder.setPositiveButton("Yes",
+                    (arg0, arg1) -> makePermissionRequest());
+        }
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private void makePermissionRequest() {
+        requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+    }
+
+    private void checkPermissionRequest() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) {
+            // continue running app
+
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+            showAlertDialog();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                makePermissionRequest();
+            }
+        }
     }
 
     @Override
@@ -414,21 +470,6 @@ public class DrugListActivity extends AppCompatActivity {
         });
         dlg.show();
     }
-
-    /**
-     * askForCompréhensive
-     */
-    private void askForComprehensive() {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle(getString(R.string.app_name));
-
-        dlg.setMessage(R.string.understood);
-        dlg.setPositiveButton(R.string.Yes, (dialog, which) -> {
-            // Nothing to do just dismiss dialog
-        });
-        dlg.show();
-    }
-
 
     /**
      * Add New drug to the user database
