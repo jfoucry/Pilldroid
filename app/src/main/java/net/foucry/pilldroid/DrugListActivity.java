@@ -154,7 +154,7 @@ public class DrugListActivity extends AppCompatActivity {
         Log.i(TAG, "Launch tutorial");
         startActivity(new Intent(this, WelcomeActivity.class));
         // }
-        checkPermissionRequest();
+//        checkPermissionRequest();
 
     }
 
@@ -319,6 +319,7 @@ public class DrugListActivity extends AppCompatActivity {
                         }
                     }
                 });
+        checkPermissionRequest();
         constructDrugsList();
     }
 
