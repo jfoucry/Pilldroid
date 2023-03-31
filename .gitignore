@@ -42,6 +42,7 @@ Thumbs.db
 *.apk
 *.ap_
 
+*~
 *.class
 gen/
 /android-signing-keystore.jks
