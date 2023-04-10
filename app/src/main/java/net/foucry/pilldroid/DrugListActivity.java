@@ -87,7 +87,7 @@ public class DrugListActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (!isGranted) {
-                    showAlertDialog();
+                    checkPermissionRequest();
                 }
             });
 
