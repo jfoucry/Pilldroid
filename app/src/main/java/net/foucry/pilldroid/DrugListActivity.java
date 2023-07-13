@@ -384,7 +384,7 @@ public class DrugListActivity extends AppCompatActivity {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dlg.setContentView(R.layout.mylayout);
+        dlg.setContentView(R.layout.custodialoglayout);
         dlg.setCancelable(false);
         TextView msg = dlg.findViewById(R.id.msg);
         String msgString;
