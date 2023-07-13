@@ -93,7 +93,7 @@ repositories {
 sourceSets {
     main {
         java {
-            exclude 'net/foucry/pilldroid/scanActivity.java'
+            exclude 'net/foucry/pilldroid/ViewDialog.java'
         }
     }
 }
