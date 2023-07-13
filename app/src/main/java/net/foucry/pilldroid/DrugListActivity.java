@@ -4,6 +4,7 @@ import static net.foucry.pilldroid.UtilDate.date2String;
 import static net.foucry.pilldroid.Utils.intRandomExclusive;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +25,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -336,7 +340,6 @@ public class DrugListActivity extends AppCompatActivity {
         View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DrugListActivity.this);
         alertDialogBuilder.setView(promptView);
-
         final EditText editText = promptView.findViewById(R.id.edittext);
         // setup a dialog window
 
@@ -378,24 +381,40 @@ public class DrugListActivity extends AppCompatActivity {
      * @param aMedicine Prescription- medication to be added
      */
     private void askToAddInDB(Medicine aMedicine) {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle(getString(R.string.app_name));
+        final Dialog dlg = new Dialog(this);
+        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dlg.setContentView(R.layout.mylayout);
+        dlg.setCancelable(false);
+        TextView msg = dlg.findViewById(R.id.msg);
+        String msgString;
+        ImageView icon = dlg.findViewById(R.id.image);
+        Button btn = (Button)dlg.findViewById(R.id.txtClose);
+        dlg.show();
 
         if (aMedicine != null) {
-            String msg = aMedicine.getName() + " " + getString(R.string.msgFound);
-
-            dlg.setMessage(msg);
-            dlg.setNegativeButton(getString(R.string.button_cancel), (dialog, which) -> {
-                // Nothing to do in case of cancel
-            });
-            dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
-                // Add Drug to DB then try to show it
-                addDrugToList(Utils.medicine2prescription(aMedicine));
+            msgString = aMedicine.getName() + " " + getString(R.string.msgFound);
+            msg.setText(msgString);
+            icon.setImageResource(R.drawable.tickmark);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    dlg.dismiss();
+                    finish();
+                }
             });
         } else {
-            dlg.setMessage(getString(R.string.msgNotFound));
-            dlg.setPositiveButton("OK", (dialog, which) -> {
-                // nothing to do to just dismiss dialog
+            msgString = getString(R.string.msgNotFound);
+            msg.setText(msgString);
+            icon.setImageResource(R.drawable.tickcross);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    dlg.dismiss();
+                    finish();
+                }
             });
         }
         dlg.show();
@@ -416,7 +435,7 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     /**
-     * askForCompréhensive
+     * askForComprehensive
      */
     private void askForComprehensive() {
         AlertDialog.Builder dlg = new AlertDialog.Builder(this);
