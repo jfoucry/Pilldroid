@@ -58,6 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -388,6 +389,8 @@ public class DrugListActivity extends AppCompatActivity {
         dlg.setCancelable(false);
         TextView msg = dlg.findViewById(R.id.msg);
         String msgString;
+        TextView cpl = dlg.findViewById(R.id.cpl);
+        String cplString;
         ImageView icon = dlg.findViewById(R.id.image);
         Button btn = (Button)dlg.findViewById(R.id.txtClose);
         dlg.show();
@@ -395,6 +398,10 @@ public class DrugListActivity extends AppCompatActivity {
         if (aMedicine != null) {
             msgString = aMedicine.getName() + " " + getString(R.string.msgFound);
             msg.setText(msgString);
+            cplString = getString(R.string.addInList);
+            if (cplString.equals("")) {
+                cpl.setEnabled(false);
+            }
             icon.setImageResource(R.drawable.tickmark);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -407,6 +414,7 @@ public class DrugListActivity extends AppCompatActivity {
         } else {
             msgString = getString(R.string.msgNotFound);
             msg.setText(msgString);
+            cpl.setText("");
             icon.setImageResource(R.drawable.tickcross);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override

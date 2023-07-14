@@ -143,12 +143,17 @@ public class WelcomeActivity extends AppCompatActivity {
         dlg.setCancelable(false);
         TextView msg = dlg.findViewById(R.id.msg);
         String msgString;
+        TextView cpl = dlg.findViewById(R.id.cpl);
+        String cplString = new String();
         ImageView icon = dlg.findViewById(R.id.image);
         Button btn = (Button)dlg.findViewById(R.id.txtClose);
         dlg.show();
 
         msgString = getString(R.string.understood);
         msg.setText(msgString);
+        if (cplString.equals("")) {
+            cpl.setEnabled(false);
+        }
         icon.setImageResource(R.drawable.pilldroid_icon);
         btn.setText(R.string.Yes);
         btn.setOnClickListener(new View.OnClickListener() {
