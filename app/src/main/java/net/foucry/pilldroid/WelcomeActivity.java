@@ -1,7 +1,9 @@
 package net.foucry.pilldroid;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,11 +14,11 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
@@ -134,14 +136,29 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void askForComprehensive() {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle(getString(R.string.app_name));
-
-        dlg.setMessage(R.string.understood);
-        dlg.setPositiveButton(R.string.Yes, (dialog, which) -> {
-            // Nothing to do just dismiss dialog
-        });
+        final Dialog dlg = new Dialog(this);
+        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dlg.setContentView(R.layout.custodialoglayout);
+        dlg.setCancelable(false);
+        TextView msg = dlg.findViewById(R.id.msg);
+        String msgString;
+        ImageView icon = dlg.findViewById(R.id.image);
+        Button btn = (Button)dlg.findViewById(R.id.txtClose);
         dlg.show();
+
+        msgString = getString(R.string.understood);
+        msg.setText(msgString);
+        icon.setImageResource(R.drawable.pilldroid_icon);
+        btn.setText(R.string.Yes);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dlg.dismiss();
+                finish();
+            }
+        });
     }
 
     private void addBottomDots(int currentPage) {
