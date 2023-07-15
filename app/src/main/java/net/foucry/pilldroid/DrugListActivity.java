@@ -58,7 +58,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -336,7 +335,7 @@ public class DrugListActivity extends AppCompatActivity {
      * show keyboardInput dialog
      */
     protected void showInputDialog() {
-        // get prompts.xml view
+        // gt prompts.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(DrugListActivity.this);
         View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DrugListActivity.this);
@@ -385,7 +384,7 @@ public class DrugListActivity extends AppCompatActivity {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dlg.setContentView(R.layout.custodialoglayout);
+        dlg.setContentView(R.layout.custom_dialog_layout_one_button);
         dlg.setCancelable(false);
         TextView msg = dlg.findViewById(R.id.msg);
         String msgString;
