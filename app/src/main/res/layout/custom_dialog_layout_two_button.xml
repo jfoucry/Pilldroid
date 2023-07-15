@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white">
+
+        <RelativeLayout
+        android:id="@+id/Two_buttonDialog"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:background="@drawable/background_dialog"
+            android:paddingBottom="@dimen/thirty_dp"
+            android:paddingLeft="@dimen/ten_dp"
+            android:paddingRight="@dimen/ten_dp"
+            android:paddingTop="@dimen/ten_dp">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="61dp"
+                android:layout_height="61dp"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/tickmark"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/msg_two_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="80dp"
+                android:layout_marginRight="12dp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/app_name"
+                android:textSize="16dp"
+                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+
+            <TextView
+                android:id="@+id/cpl_two_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_marginTop="115dp"
+                android:layout_marginRight="12dp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="@string/app_name"
+                android:textSize="16dp"
+                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="125dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/agreed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="38dp"
+                android:layout_marginBottom="38dp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeStepGranularity="2sp"
+                android:autoSizeTextType="uniform"
+                android:background="@drawable/rounded_btn"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Close"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText,RtlHardcoded,SpUsage"
+                style="?android:attr/buttonBarButtonStyle" />
+
+            <Space
+                android:layout_width="155dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/notagreed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="38dp"
+                android:layout_marginBottom="38dp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeStepGranularity="2sp"
+                android:autoSizeTextType="uniform"
+                android:background="@drawable/rounded_btn"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Close"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText,RtlHardcoded,SpUsage"
+                style="?android:attr/buttonBarButtonStyle" />
+        </LinearLayout>
+</RelativeLayout>
