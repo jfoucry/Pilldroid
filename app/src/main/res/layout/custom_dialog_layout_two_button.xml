@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white">
 
-        <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Two_buttonDialog"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="match_parent"
         android:background="@drawable/background_dialog"
-            android:paddingBottom="@dimen/thirty_dp"
-            android:paddingLeft="@dimen/ten_dp"
-            android:paddingRight="@dimen/ten_dp"
-            android:paddingTop="@dimen/ten_dp">
+        android:paddingLeft="@dimen/ten_dp"
+        android:paddingTop="@dimen/ten_dp"
+        android:paddingRight="@dimen/ten_dp"
+        android:paddingBottom="@dimen/thirty_dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_dialog"
+            android:orientation="vertical">
+        <ImageView
+            android:id="@+id/head_icon"
+            android:layout_width="61dp"
+            android:layout_height="61dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/tickmark"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="61dp"
-                android:layout_height="61dp"
-                android:layout_gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
-                android:src="@drawable/tickmark"
-                tools:ignore="ContentDescription" />
+        <TextView
+            android:id="@+id/msg_two_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="12dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/app_name"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
-            <TextView
-                android:id="@+id/msg_two_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
-                android:layout_marginTop="80dp"
-                android:layout_marginRight="12dp"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="@string/app_name"
-                android:textSize="16dp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
-
-            <TextView
-                android:id="@+id/cpl_two_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
-                android:layout_marginTop="115dp"
-                android:layout_marginRight="12dp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="@string/app_name"
-                android:textSize="16dp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/cpl_two_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="115dp"
+            android:layout_marginRight="12dp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="@string/app_name"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +83,7 @@
                 android:paddingRight="25dp"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Close"
+                android:text="@string/button_cancel"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage"
@@ -97,7 +108,7 @@
                 android:paddingRight="25dp"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Close"
+                android:text="@string/button_ok"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage"
