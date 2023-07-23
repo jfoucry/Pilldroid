@@ -30,6 +30,7 @@
                 android:layout_width="61dp"
                 android:layout_height="61dp"
                 android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="12dp"
                 android:src="@drawable/tickmark"
                 tools:ignore="ContentDescription" />
