@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -336,27 +337,30 @@ public class DrugListActivity extends AppCompatActivity {
      */
     protected void showInputDialog() {
         // gt prompts.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(DrugListActivity.this);
-        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DrugListActivity.this);
-        alertDialogBuilder.setView(promptView);
-        final EditText editText = promptView.findViewById(R.id.edittext);
+//        LayoutInflater layoutInflater = LayoutInflater.from(DrugListActivity.this);
+//        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DrugListActivity.this);
+//        alertDialogBuilder.setView(promptView);
+//        final EditText editText = promptView.findViewById(R.id.edittext);
         // setup a dialog window
 
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton(R.string.button_ok, (dialog, id) -> {
-                    //String cip13 = editText.getText().toString();
-                    String cip13 = "34009" + editText.getText().toString();
-                    MedicinesDAO medicineDAO = medicines.getMedicinesDAO();
-                    Medicine aMedicine = medicineDAO.getMedicineByCIP13(cip13);
-                    askToAddInDB(aMedicine);
-                })
-                .setNegativeButton(R.string.button_cancel,
-                        (dialog, id) -> dialog.cancel());
+        final Dialog dlg = new Dialog(this);
+        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dlg.setContentView(R.layout.input_dialog);
+        dlg.setCancelable(false);
 
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-
+        TextView title = dlg.findViewById(R.id.textView);
+        TextView prompt = dlg.findViewById(R.id.startcip13);
+        EditText editText = dlg.findViewById(R.id.edittext);
+        Button ok = (Button)dlg.findViewById(R.id.agreed);
+        Button notok = (Button)dlg.findViewById(R.id.notagreed);
+        ImageView icon = (ImageView)dlg.findViewById(R.id.head_icon);
+        title.setText(R.string.enter_cip_13);
+        prompt.setText(R.string.enter_cip_13_here);
+        ok.setEnabled(false);
+        String cip13 = "34009" + editText.getText().toString();
+        icon.setImageResource(R.drawable.pilldroid_icon);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -368,10 +372,28 @@ public class DrugListActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
+                //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
+                ok.setEnabled(s.length() == 8);
             }
         });
-        alert.show();
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+                finish();
+                MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
+                Medicine aMedicine = medicinesDAO.getMedicineByCIP13(cip13);
+                askToAddInDB(aMedicine);
+            }
+        });
+        notok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+                finish();
+            }
+        });
     }
 
     /**
@@ -408,6 +430,7 @@ public class DrugListActivity extends AppCompatActivity {
                     // TODO Auto-generated method stub
                     dlg.dismiss();
                     finish();
+                    addDrugToList(Utils.medicine2prescription(aMedicine));
                 }
             });
         } else {
