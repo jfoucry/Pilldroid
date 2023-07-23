@@ -16,7 +16,7 @@
     <dimen name="desc_padding">40dp</dimen>
     <dimen name="title_padding">20dp</dimen>
     <dimen name="screen_shot_height">250dp</dimen>
-    <dimen name="ten_dp">10</dimen>
-    <dimen name="thirty_dp">30</dimen>
+    <dimen name="ten_dp">10dp</dimen>
+    <dimen name="thirty_dp">30dp</dimen>
 
 </resources>
