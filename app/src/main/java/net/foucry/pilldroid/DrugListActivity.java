@@ -353,9 +353,9 @@ public class DrugListActivity extends AppCompatActivity {
         TextView title = dlg.findViewById(R.id.textView);
         TextView prompt = dlg.findViewById(R.id.startcip13);
         EditText editText = dlg.findViewById(R.id.edittext);
-        Button ok = (Button)dlg.findViewById(R.id.agreed);
-        Button notok = (Button)dlg.findViewById(R.id.notagreed);
-        ImageView icon = (ImageView)dlg.findViewById(R.id.head_icon);
+        Button ok = dlg.findViewById(R.id.agreed);
+        Button notok = dlg.findViewById(R.id.notagreed);
+        ImageView icon = dlg.findViewById(R.id.head_icon);
         title.setText(R.string.enter_cip_13);
         prompt.setText(R.string.enter_cip_13_here);
         ok.setEnabled(false);
@@ -413,7 +413,7 @@ public class DrugListActivity extends AppCompatActivity {
         TextView cpl = dlg.findViewById(R.id.cpl);
         String cplString;
         ImageView icon = dlg.findViewById(R.id.image);
-        Button btn = (Button)dlg.findViewById(R.id.txtClose);
+        Button btn = dlg.findViewById(R.id.txtClose);
         dlg.show();
 
         if (aMedicine != null) {
@@ -459,20 +459,6 @@ public class DrugListActivity extends AppCompatActivity {
 
         dlg.setMessage(R.string.notInterpreted);
         dlg.setPositiveButton("OK", (dialog, which) -> {
-            // Nothing to do just dismiss dialog
-        });
-        dlg.show();
-    }
-
-    /**
-     * askForComprehensive
-     */
-    private void askForComprehensive() {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle(getString(R.string.app_name));
-
-        dlg.setMessage(R.string.understood);
-        dlg.setPositiveButton(R.string.Yes, (dialog, which) -> {
             // Nothing to do just dismiss dialog
         });
         dlg.show();
