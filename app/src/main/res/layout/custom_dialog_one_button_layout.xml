@@ -30,10 +30,9 @@
                 android:layout_width="61dp"
                 android:layout_height="61dp"
                 android:layout_gravity="center"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="12dp"
                 android:src="@drawable/tickmark"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription,ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/msg"
@@ -70,12 +69,12 @@
                 android:autoSizeStepGranularity="2sp"
                 android:autoSizeTextType="uniform"
                 android:background="@drawable/rounded_btn"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
                 android:gravity="center"
                 android:maxLines="1"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
                 android:text="Close"
-                android:textColor="@color/white"
+                android:textColor="#212121"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
         </LinearLayout>
