@@ -146,7 +146,7 @@ public class WelcomeActivity extends AppCompatActivity {
         TextView cpl = dlg.findViewById(R.id.cpl);
         String cplString = "";
         ImageView icon = dlg.findViewById(R.id.image);
-        Button btn = (Button)dlg.findViewById(R.id.txtClose);
+        Button btn = dlg.findViewById(R.id.txtClose);
         dlg.show();
 
         msgString = getString(R.string.understood);

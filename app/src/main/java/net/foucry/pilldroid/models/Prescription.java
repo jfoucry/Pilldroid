@@ -169,7 +169,7 @@ public class Prescription implements Serializable {
             double takeDuringPeriod = this.take * numberOfDays;
             currentStock = getStock();
             newStock = (float) (currentStock - takeDuringPeriod);
-            setStock((float) newStock);
+            setStock(newStock);
             setLast_update(new Date().getTime());
         }
     }
