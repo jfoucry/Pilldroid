@@ -1,128 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
-    <androidx.cardview.widget.CardView
-    android:id="@+id/cardView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="12dp"
-    android:layout_marginRight="12dp"
-    android:layout_marginBottom="120dp"
-    app:cardCornerRadius="12dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardView"
+        android:layout_width="371dp"
+        android:layout_height="209dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background_dialog"
+        app:cardCornerRadius="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/notagreed"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_btn"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minWidth="100dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:text="@string/button_cancel"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            app:layout_constraintEnd_toStartOf="@+id/agreed"
+            app:layout_constraintStart_toEndOf="@+id/notagreed" />
+
+        <Button
+            android:id="@+id/agreed"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:background="@drawable/rounded_btn"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minWidth="100dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:text="@string/button_ok"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/notagreed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/notagreed"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+
+        <EditText
+            android:id="@+id/editcip13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:autofillHints="cip13"
+            android:ems="10"
+            android:hint="@string/enter_cip_13"
+            android:inputType="number"
+            android:labelFor="@id/editcip13"
+            android:minHeight="48dp"
+            android:textAlignment="textStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.416" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/enter_cip_13"
-        android:textStyle="bold"
-        android:textSize="24sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/textView4"
+            android:layout_width="55dp"
+            android:layout_height="33dp"
+            android:text="340009"
+            android:textAlignment="textEnd"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/editcip13"
+            app:layout_constraintHorizontal_bias="0.525"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.438" />
 
-    <TextView
-        android:id="@+id/startcip13"
-        android:layout_width="70dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="44dp"
-        android:text="34009"
-        android:textAlignment="viewEnd"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <EditText
-        android:id="@+id/edittext"
-        android:layout_width="301dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="32dp"
-        android:autofillHints="@string/enter_cip_13_here"
-
-        android:hint="@string/enter_cip_13_here"
-        android:inputType="number"
-        android:textColorHint="#546E7A"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="RelativeOverlap" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="125dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/agreed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="38dp"
-                android:autoSizeMaxTextSize="100sp"
-                android:autoSizeMinTextSize="12sp"
-                android:autoSizeStepGranularity="2sp"
-                android:autoSizeTextType="uniform"
-                android:background="@drawable/rounded_btn"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:gravity="center"
-                android:maxLines="1"
-                android:text="@string/button_cancel"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage"
-                style="?android:attr/buttonBarButtonStyle" />
-
-            <Space
-                android:layout_width="155dp"
-                android:layout_height="wrap_content" />
-            <Button
-                android:id="@+id/notagreed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="38dp"
-                android:layout_marginBottom="38dp"
-                android:autoSizeMaxTextSize="100sp"
-                android:autoSizeMinTextSize="12sp"
-                android:autoSizeStepGranularity="2sp"
-                android:autoSizeTextType="uniform"
-                android:background="@drawable/rounded_btn"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:gravity="center"
-                android:maxLines="1"
-                android:text="@string/button_ok"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage"
-                style="?android:attr/buttonBarButtonStyle" />
-        </LinearLayout>
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="94dp" />
-
-    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
