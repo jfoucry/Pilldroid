@@ -25,21 +25,12 @@
             android:background="@drawable/background_dialog"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/head_icon"
-                android:layout_width="61dp"
-                android:layout_height="61dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="12dp"
-                android:src="@drawable/tickmark"
-                tools:ignore="ContentDescription,ImageContrastCheck" />
-
             <TextView
                 android:id="@+id/msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="22dp"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginRight="12dp"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/app_name"
@@ -51,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="22dp"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginRight="12dp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="@string/app_name"
@@ -61,7 +52,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
@@ -102,4 +93,18 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="20dp" />
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/head_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="82dp"
+        android:background="@drawable/shadow_bg"
+        android:elevation="@dimen/ten_dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,Pilldroid icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>
