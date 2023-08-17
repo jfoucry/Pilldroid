@@ -139,7 +139,7 @@ public class WelcomeActivity extends AppCompatActivity {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dlg.setContentView(R.layout.custom_dialog_one_button_layout);
+        dlg.setContentView(R.layout.custome_dialog_layout_one_button);
         dlg.setCancelable(false);
         TextView msg = dlg.findViewById(R.id.msg);
         String msgString;
@@ -154,7 +154,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (cplString.equals("")) {
             cpl.setEnabled(false);
         }
-        icon.setImageResource(R.drawable.pilldroid_icon);
+        //icon.setImageResource(R.drawable.pilldroid_icon);
         btn.setText(R.string.Yes);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
