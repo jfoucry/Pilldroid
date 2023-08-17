@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,104 +8,91 @@
     tools:ignore="MissingDefaultResource">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginBottom="120dp"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_dialog"
-            android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginRight="12dp"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="@string/app_name"
-                android:textSize="16dp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+        <ImageView
+            android:layout_width="61dp"
+            android:layout_height="61dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shadow_bg"
+            android:src="@drawable/ic_launcher_foreground" />
 
-            <TextView
-                android:id="@+id/cpl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginRight="12dp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="@string/app_name"
-                android:textSize="16dp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/agreed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="170dp"
-                android:layout_marginBottom="38dp"
-                android:background="@drawable/rounded_btn"
-                android:text="@string/button_ok"
-                android:textAlignment="center"
-                android:textColor="#212121"
-                android:textSize="16sp" />
-
-            <Space
-                android:layout_width="155dp"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/notagreed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="170dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="38dp"
-                android:background="@drawable/rounded_btn"
-                android:text="@string/button_cancel"
-                android:textAlignment="center"
-                android:textColor="#212121"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
+        <TextView
+            android:id="@id/msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="20dp" />
-    </androidx.cardview.widget.CardView>
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="12dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/app_name"
+            android:textColor="@color/grey"
+            android:textSize="15dp"
+            android:labelFor="@+id/msg"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
-    <ImageView
-        android:id="@+id/head_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="82dp"
-        android:background="@drawable/shadow_bg"
-        android:elevation="@dimen/ten_dp"
-        android:src="@drawable/ic_launcher_foreground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription,Pilldroid icon" />
+        <TextView
+            android:id="@id/cpl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="12dp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="@string/app_version"
+            android:textColor="@color/grey"
+            android:textSize="14dp"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/agreed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="170dp"
+            android:layout_marginBottom="38dp"
+            android:background="@drawable/rounded_btn"
+            android:text="@string/button_ok"
+            android:textAlignment="center"
+            android:textColor="#212121"
+            android:textSize="16sp" />
+
+        <Space
+            android:layout_width="155dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/notagreed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="170dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="38dp"
+            android:background="@drawable/rounded_btn"
+            android:text="@string/button_cancel"
+            android:textAlignment="center"
+            android:textColor="#212121"
+            android:textSize="16sp" />
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
