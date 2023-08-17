@@ -337,64 +337,6 @@ public class DrugListActivity extends AppCompatActivity {
      * show keyboardInput dialog
      */
     protected void showInputDialog() {
-        // gt prompts.xml view
-//        LayoutInflater layoutInflater = LayoutInflater.from(DrugListActivity.this);
-//        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
-//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DrugListActivity.this);
-//        alertDialogBuilder.setView(promptView);
-//        final EditText editText = promptView.findViewById(R.id.edittext);
-        // setup a dialog window
-
-        /*final Dialog dlg = new Dialog(this);
-        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dlg.setContentView(R.layout.input_dialog);
-        dlg.setCancelable(false);
-
-        TextView title = dlg.findViewById(R.id.textView);
-        TextView prompt = dlg.findViewById(R.id.startcip13);
-        EditText editText = dlg.findViewById(R.id.edittext);
-        Button ok = dlg.findViewById(R.id.agreed);
-        Button notok = dlg.findViewById(R.id.notagreed);
-        ImageView icon = dlg.findViewById(R.id.head_icon);
-        title.setText(R.string.enter_cip_13);
-        prompt.setText(R.string.enter_cip_13_here);
-        ok.setEnabled(false);
-        String cip13 = "34009" + editText.getText().toString();
-        //icon.setImageResource(R.drawable.pilldroid_icon);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
-                ok.setEnabled(s.length() == 8);
-            }
-        });
-
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                finish();
-                MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
-                Medicine aMedicine = medicinesDAO.getMedicineByCIP13(cip13);
-                askToAddInDB(aMedicine);
-            }
-        });
-        notok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-                finish();
-            }
-        });*/
         final Dialog dialog = new Dialog(this);
         Window window = dialog.getWindow();
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -459,7 +401,7 @@ public class DrugListActivity extends AppCompatActivity {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dlg.setContentView(R.layout.custom_dialog_one_button_layout);
+        dlg.setContentView(R.layout.custome_dialog_layout_one_button);
         dlg.setCancelable(false);
         TextView msg = dlg.findViewById(R.id.msg);
         String msgString;
