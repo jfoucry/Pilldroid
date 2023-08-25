@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -338,7 +337,6 @@ public class DrugListActivity extends AppCompatActivity {
      */
     protected void showInputDialog() {
         final Dialog dialog = new Dialog(this);
-        Window window = dialog.getWindow();
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -352,8 +350,7 @@ public class DrugListActivity extends AppCompatActivity {
         //TextView  title = (TextView ) dialog.findViewById(R.id.title);
         final EditText editText=(EditText)dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
-        //title.setText(R.string.enter_cip_13);
-        //alert_title.setTextSize(20);
+
         ok.setText(R.string.button_ok);
         cancel.setText(R.string.button_cancel);
         editText.addTextChangedListener(new TextWatcher() {
@@ -401,7 +398,7 @@ public class DrugListActivity extends AppCompatActivity {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dlg.setContentView(R.layout.custome_dialog_layout_one_button);
+        dlg.setContentView(R.layout.custom_dialog_layout_one_button);
         dlg.setCancelable(false);
         TextView msg = dlg.findViewById(R.id.msg);
         String msgString;
