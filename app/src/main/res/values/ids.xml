@@ -23,4 +23,6 @@
   <item type="id" name="restart_preview"/>
   <item type="id" name="return_scan_result"/>
   <item type="id" name="startcip13" />
+  <item type="id" name="msg" />
+  <item type="id" name="cpl" />
 </resources>
