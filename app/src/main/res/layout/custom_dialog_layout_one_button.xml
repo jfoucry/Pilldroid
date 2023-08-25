@@ -54,9 +54,9 @@
                 android:layout_marginRight="12dp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="@string/app_version"
-                android:textColor="@color/grey"
+                android:textColor="#757575"
                 android:textSize="14dp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
 
             <Button
