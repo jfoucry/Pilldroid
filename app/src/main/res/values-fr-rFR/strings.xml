@@ -71,4 +71,7 @@
     <string name="Undo">Annuler</string>
     <string name="trash_icon">Icône de poubelle</string>
     <string name="addInList">Ajouter à votre liste de médicament</string>
+    <string name="backup">Backup</string>
+    <string name="export_prescriptions">Export</string>
+    <string name="import_prescriptions">Import</string>
 </resources>
