@@ -73,4 +73,7 @@
     <string name="Undo">Undo</string>
     <string name="trash_icon">Trash icon</string>
     <string name="addInList">add to your list of medicine</string>
+    <string name="backup">Backup</string>
+    <string name="export_prescriptions">Export</string>
+    <string name="import_prescriptions">Import</string>
 </resources>
