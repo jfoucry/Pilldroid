@@ -351,6 +351,8 @@ public class DrugListActivity extends AppCompatActivity {
         final EditText editText=(EditText)dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
 
+        // TODO change the color of ok button when the number of character is correct.
+
         ok.setText(R.string.button_ok);
         cancel.setText(R.string.button_cancel);
         editText.addTextChangedListener(new TextWatcher() {
