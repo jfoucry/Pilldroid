@@ -344,8 +344,8 @@ public class DrugListActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(true);
         dialog.setContentView(R.layout.input_dialog);
 
-        Button ok = (Button) dialog.findViewById(R.id.agreed);
-        Button cancel = (Button) dialog.findViewById(R.id.notagreed);
+        Button ok = dialog.findViewById(R.id.agreed);
+        Button cancel = dialog.findViewById(R.id.notagreed);
         ok.setEnabled(false);
         //TextView  title = (TextView ) dialog.findViewById(R.id.title);
         final EditText editText=(EditText)dialog.findViewById(R.id.editcip13);
