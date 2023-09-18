@@ -18,10 +18,6 @@ public class Medicine {
     private String label_group;
     private Integer generic_type;
 
-    public Medicine(@NonNull String cis) {
-        this.cis = cis;
-    }
-
     @NonNull
     public String getCis() {
         return cis;
