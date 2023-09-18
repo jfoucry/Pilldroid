@@ -431,7 +431,7 @@ public class DrugListActivity extends AppCompatActivity {
             msgString = getString(R.string.msgNotFound);
             msg.setText(msgString);
             cpl.setText("");
-            icon.setImageResource(R.drawable.tickcross);
+            icon.setImageResource(R.drawable.tickcross);  //TODO: Exception imageResource null Object reference
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
