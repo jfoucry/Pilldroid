@@ -347,6 +347,7 @@ public class DrugListActivity extends AppCompatActivity {
         Button ok = dialog.findViewById(R.id.agreed);
         Button cancel = dialog.findViewById(R.id.notagreed);
         ok.setEnabled(false);
+        ok.setBackground(getDrawable(R.drawable.rounded_btn_disabled));
         //TextView  title = (TextView ) dialog.findViewById(R.id.title);
         final EditText editText=(EditText)dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
@@ -362,12 +363,16 @@ public class DrugListActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
-                ok.setEnabled(s.length() == 8);
+                if (s.length() == 8) {
+                    ok.setEnabled(true);
+                    ok.setBackground(getDrawable(R.drawable.rounded_btn));
+                }
             }
         });
         ok.setOnClickListener(new View.OnClickListener() {
