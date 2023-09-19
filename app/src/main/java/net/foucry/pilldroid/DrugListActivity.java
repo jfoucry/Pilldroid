@@ -349,7 +349,7 @@ public class DrugListActivity extends AppCompatActivity {
         ok.setEnabled(false);
         ok.setBackground(getDrawable(R.drawable.rounded_btn_disabled));
         //TextView  title = (TextView ) dialog.findViewById(R.id.title);
-        final EditText editText=(EditText)dialog.findViewById(R.id.editcip13);
+        final EditText editText= dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
 
         // TODO change the color of ok button when the number of character is correct.
