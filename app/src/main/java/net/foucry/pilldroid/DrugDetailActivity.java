@@ -50,16 +50,13 @@ public class DrugDetailActivity extends AppCompatActivity {
         }
 
         ImageButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Click on save icon");
+        fab.setOnClickListener(v -> {
+            Log.d(TAG, "Click on save icon");
 
-                getDrugChanges();
-                setResult(1);
-                finish();
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-            }
+            getDrugChanges();
+            setResult(1);
+            finish();
+            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
         });
 
         // Show the Up button in the action bar.

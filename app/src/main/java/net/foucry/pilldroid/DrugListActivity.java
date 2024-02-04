@@ -375,21 +375,16 @@ public class DrugListActivity extends AppCompatActivity {
                 }
             }
         });
-        ok.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dialog.cancel();
-                Log.i("EditText Value",editText.getEditableText().toString());
-                MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
-                Medicine aMedicine = medicinesDAO.getMedicineByCIP13(cip13);
-                askToAddInDB(aMedicine);
-            }
+        ok.setOnClickListener(v -> {
+            dialog.cancel();
+            Log.i("EditText Value",editText.getEditableText().toString());
+            MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
+            Medicine aMedicine = medicinesDAO.getMedicineByCIP13(cip13);
+            askToAddInDB(aMedicine);
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-                Log.i(TAG, "dismiss dialog");
-            }
+        cancel.setOnClickListener(v -> {
+            dialog.cancel();
+            Log.i(TAG, "dismiss dialog");
         });
 
         dialog.show();
@@ -423,27 +418,21 @@ public class DrugListActivity extends AppCompatActivity {
                 cpl.setEnabled(false);
             }
             icon.setImageResource(R.drawable.tickmark);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    dlg.dismiss();
-                    finish();
-                    addDrugToList(Utils.medicine2prescription(aMedicine));
-                }
+            btn.setOnClickListener(v -> {
+                // TODO Auto-generated method stub
+                dlg.dismiss();
+                finish();
+                addDrugToList(Utils.medicine2prescription(aMedicine));
             });
         } else {
             msgString = getString(R.string.msgNotFound);
             msg.setText(msgString);
             cpl.setText("");
             icon.setImageResource(R.drawable.tickcross);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    dlg.dismiss();
-                    finish();
-                }
+            btn.setOnClickListener(v -> {
+                // TODO Auto-generated method stub
+                dlg.dismiss();
+                finish();
             });
         }
         dlg.show();
@@ -521,13 +510,10 @@ public class DrugListActivity extends AppCompatActivity {
                 }
 
                 Snackbar.make(recyclerView, prescription.getName(),
-                        Snackbar.LENGTH_LONG).setAction(R.string.Undo, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        prescriptionList.add(position, prescription);
-                        mAdapter.notifyItemInserted(position);
-                    }
-                }).show();
+                        Snackbar.LENGTH_LONG).setAction(R.string.Undo, v -> {
+                            prescriptionList.add(position, prescription);
+                            mAdapter.notifyItemInserted(position);
+                        }).show();
             }
 
             @Override
@@ -654,17 +640,14 @@ public class DrugListActivity extends AppCompatActivity {
                 holder.mView.setBackgroundResource(R.drawable.gradient_bg);
                 holder.mIconView.setImageResource(R.drawable.ic_suspended_pill);
 
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Prescription aPrescription = mValues.get(position);
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("prescription", aPrescription);
-                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
-                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                holder.mView.setOnClickListener(v -> {
+                    Prescription aPrescription = mValues.get(position);
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, DrugDetailActivity.class);
+                    intent.putExtra("prescription", aPrescription);
+                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
-                    }
                 });
             } else {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getTake());
@@ -680,16 +663,13 @@ public class DrugListActivity extends AppCompatActivity {
                     holder.mIconView.setImageResource(R.drawable.ok_stock_vect);
                 }
 
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Prescription prescription = mValues.get(position);
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, DrugDetailActivity.class);
-                        intent.putExtra("prescription", prescription);
-                        startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
-                        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                    }
+                holder.mView.setOnClickListener(v -> {
+                    Prescription prescription = mValues.get(position);
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, DrugDetailActivity.class);
+                    intent.putExtra("prescription", prescription);
+                    startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 });
             }
         }
