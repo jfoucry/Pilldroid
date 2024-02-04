@@ -19,7 +19,6 @@ ext {
     compileSdkVersion = '28'
     buildToolsVersion = '28.0.1'
     var = '3.4.2'
-    //buildToolsVersion1 = '29.0.3'
     defaultMinSdkVersion = 26
     defaultTargetSdkVersion = 30
     defaultVersionCode = 1
@@ -35,7 +34,7 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
 
