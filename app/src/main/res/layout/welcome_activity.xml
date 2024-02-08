@@ -21,8 +21,9 @@
         android:gravity="center"
         android:orientation="horizontal"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_next"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -30,11 +31,11 @@
         android:layout_marginBottom="@dimen/button_margin_bottom"
         android:background="@null"
         android:text="@string/next"
-        android:textColor="@android:color/white"
-        tools:ignore="RelativeOverlap,RtlSymmetry" />
+        android:textColor="@android:color/white" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_skip"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

@@ -51,5 +51,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:contentDescription="@string/save_button"
         app:srcCompat="@drawable/ic_save_black_24dp"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="@color/colorPrimary"
+        app:tint="@color/white"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
