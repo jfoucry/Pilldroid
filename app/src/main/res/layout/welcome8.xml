@@ -7,13 +7,13 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="@dimen/screen_shot_height"
         android:layout_height="@dimen/screen_shot_height"
         android:contentDescription="@string/drug_info"
         android:src="@drawable/info" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/title_padding"

@@ -21,7 +21,7 @@
         app:zxing_viewfinder_laser_visibility="true"
         app:zxing_viewfinder_mask="@color/grey" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/zxing_status_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
