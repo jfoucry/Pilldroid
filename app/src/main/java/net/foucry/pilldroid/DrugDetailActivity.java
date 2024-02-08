@@ -9,12 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.textview.MaterialTextView;
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
 import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Prescription;
@@ -125,15 +125,15 @@ public class DrugDetailActivity extends AppCompatActivity {
         String stockValue = stockTextView.getText().toString();
 
         takeView = findViewById(R.id.take_cell);
-        TextView takeTextView = takeView.findViewById(R.id.value);
+        MaterialTextView takeTextView = takeView.findViewById(R.id.value);
         String takeValue = takeTextView.getText().toString();
 
         alertView = findViewById(R.id.alert_cell);
-        TextView alertTextView = alertView.findViewById(R.id.value);
+        MaterialTextView alertTextView = alertView.findViewById(R.id.value);
         String alertValue = alertTextView.getText().toString();
 
         warningView = findViewById(R.id.warning_cell);
-        TextView warningTextView = warningView.findViewById(R.id.value);
+        MaterialTextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
 
         newPrescription.setStock(Float.parseFloat(stockValue));
