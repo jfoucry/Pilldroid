@@ -1,7 +1,5 @@
 package net.foucry.pilldroid;
 
-import static net.foucry.pilldroid.R.id.detail_toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import com.google.android.material.appbar.MaterialToolbar;
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
 import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Prescription;
@@ -43,7 +40,7 @@ public class DrugDetailActivity extends AppCompatActivity {
         Log.d(TAG, "aPrescription == " + aPrescription);
 
         setContentView(R.layout.drug_detail_activity);
-        Toolbar toolbar = findViewById(detail_toolbar);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);

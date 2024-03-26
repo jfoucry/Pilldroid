@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-
+import com.google.android.material.appbar.MaterialToolbar;
 import net.foucry.pilldroid.models.Prescription;
 
 /**
@@ -52,7 +50,7 @@ public class DrugDetailFragment extends Fragment {
 
             Activity activity = this.getActivity();
             assert activity != null;
-            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
+            MaterialToolbar appBarLayout = activity.findViewById(R.id.toolbar);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(prescription.getName());
             }
