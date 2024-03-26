@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,8 +27,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,9 +34,11 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,6 +71,7 @@ import java.util.Locale;
  */
 public class DrugListActivity extends AppCompatActivity {
     private static final String TAG = DrugListActivity.class.getName();
+    private static final int POST_NOTIFICATIONS_PERMISSION = 100;
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
     public final String BARCODE_FORMAT_NAME = "Barcode Format name";
     public final String BARCODE_CONTENT = "Barcode Content";
@@ -81,6 +83,39 @@ public class DrugListActivity extends AppCompatActivity {
     private List<Prescription> prescriptionList;         // used for prescriptions
 
     private RecyclerViewAdapter mAdapter;
+
+    // Register the permissions callback, which handles the user's response to the
+    // system permissions dialog. Save the return value, an instance of
+    // ActivityResultLauncher, as an instance variable.
+    /*private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // Permission is granted. Continue the action or workflow in your
+                    // app.
+                    Log.d(TAG, "Permission already granted");
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // features requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                    alertDialogBuilder.setMessage("This app will not run has expected without this permission");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        alertDialogBuilder.setPositiveButton("Yes",
+                                (arg0, arg1) -> makePermissionRequest());
+                    }
+
+                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });*/
 
     @Override
     public void onStart() {
@@ -140,12 +175,91 @@ public class DrugListActivity extends AppCompatActivity {
             nm.cancelAll();
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkForPermissions();
+        }
         // start tutorial (only in non debug mode)
         // if(!net.foucry.pilldroid.BuildConfig.DEBUG) {
         Log.i(TAG, "Launch tutorial");
-        startActivity(new Intent(this, WelcomeActivity.class));
+        //startActivity(new Intent(this, WelcomeActivity.class));
         // }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private void checkForPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION},
+                    POST_NOTIFICATIONS_PERMISSION);
+        } else {
+            Log.d(TAG,"Nothing to do");
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == POST_NOTIFICATIONS_PERMISSION) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "Permission granted");
+            } else {
+                showAlertDialog();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    // is called if the permission is not given.
+    public void showAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("This app requires your location to function!");
+        alertDialogBuilder.setPositiveButton("Try again",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            checkForPermissions();
+                        }
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("Settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                i.addCategory(Intent.CATEGORY_DEFAULT);
+                i.setData(Uri.parse("package:dk.redweb.intern.findetlokum"));
+                startActivity(i);
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+ /*   @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private void makePermissionRequest() {
+        requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+    }*/
+
+    /*private void checkPermissionRequest() {
+        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS);
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+        *//*if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) {*//*
+            // continue running app
+            Log.d(TAG, "Permission already granted");
+
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+            showAlertDialog();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                makePermissionRequest();
+            }
+        }
+    }*/
 
     @Override
     public void onStop() {
@@ -336,23 +450,29 @@ public class DrugListActivity extends AppCompatActivity {
      * show keyboardInput dialog
      */
     protected void showInputDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // get prompts.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(DrugListActivity.this);
+        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DrugListActivity.this);
+        alertDialogBuilder.setView(promptView);
 
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setContentView(R.layout.input_dialog);
+        final EditText editText = promptView.findViewById(R.id.edittext);
+        // setup a dialog window
 
-        Button ok = (Button) dialog.findViewById(R.id.agreed);
-        Button cancel = (Button) dialog.findViewById(R.id.notagreed);
-        ok.setEnabled(false);
-        //TextView  title = (TextView ) dialog.findViewById(R.id.title);
-        final EditText editText=(EditText)dialog.findViewById(R.id.editcip13);
-        String cip13 = String.valueOf(editText.getText());
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton(R.string.button_ok, (dialog, id) -> {
+                    //String cip13 = editText.getText().toString();
+                    String cip13 = "34009" + editText.getText().toString();
+                    MedicinesDAO medicineDAO = medicines.getMedicinesDAO();
+                    Medicine aMedicine = medicineDAO.getMedicineByCIP13(cip13);
+                    askToAddInDB(aMedicine);
+                })
+                .setNegativeButton(R.string.button_cancel,
+                        (dialog, id) -> dialog.cancel());
 
-        ok.setText(R.string.button_ok);
-        cancel.setText(R.string.button_cancel);
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -364,28 +484,10 @@ public class DrugListActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
-                ok.setEnabled(s.length() == 8);
+                alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
             }
         });
-        ok.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dialog.cancel();
-                Log.i("EditText Value",editText.getEditableText().toString());
-                MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
-                Medicine aMedicine = medicinesDAO.getMedicineByCIP13(cip13);
-                askToAddInDB(aMedicine);
-            }
-        });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-                Log.i(TAG, "dismiss dialog");
-            }
-        });
-
-        dialog.show();
+        alert.show();
     }
 
     /**
@@ -395,48 +497,24 @@ public class DrugListActivity extends AppCompatActivity {
      * @param aMedicine Prescription- medication to be added
      */
     private void askToAddInDB(Medicine aMedicine) {
-        final Dialog dlg = new Dialog(this);
-        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dlg.setContentView(R.layout.custom_dialog_layout_one_button);
-        dlg.setCancelable(false);
-        TextView msg = dlg.findViewById(R.id.msg);
-        String msgString;
-        TextView cpl = dlg.findViewById(R.id.cpl);
-        String cplString;
-        ImageView icon = dlg.findViewById(R.id.image);
-        Button btn = dlg.findViewById(R.id.txtClose);
-        dlg.show();
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle(getString(R.string.app_name));
 
         if (aMedicine != null) {
-            msgString = aMedicine.getName() + " " + getString(R.string.msgFound);
-            msg.setText(msgString);
-            cplString = getString(R.string.addInList);
-            if (cplString.equals("")) {
-                cpl.setEnabled(false);
-            }
-            icon.setImageResource(R.drawable.tickmark);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    dlg.dismiss();
-                    finish();
-                    addDrugToList(Utils.medicine2prescription(aMedicine));
-                }
+            String msg = aMedicine.getName() + " " + getString(R.string.msgFound);
+
+            dlg.setMessage(msg);
+            dlg.setNegativeButton(getString(R.string.button_cancel), (dialog, which) -> {
+                // Nothing to do in case of cancel
+            });
+            dlg.setPositiveButton(getString(R.string.button_ok), (dialog, which) -> {
+                // Add Drug to DB then try to show it
+                addDrugToList(Utils.medicine2prescription(aMedicine));
             });
         } else {
-            msgString = getString(R.string.msgNotFound);
-            msg.setText(msgString);
-            cpl.setText("");
-            icon.setImageResource(R.drawable.tickcross);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    dlg.dismiss();
-                    finish();
-                }
+            dlg.setMessage(getString(R.string.msgNotFound));
+            dlg.setPositiveButton("OK", (dialog, which) -> {
+                // nothing to do to just dismiss dialog
             });
         }
         dlg.show();
@@ -455,7 +533,6 @@ public class DrugListActivity extends AppCompatActivity {
         });
         dlg.show();
     }
-
 
     /**
      * Add New drug to the user database

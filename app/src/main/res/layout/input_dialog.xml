@@ -38,14 +38,14 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
-        <Space
+        <!--<Space
             android:id="@+id/space"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
             app:layout_constraintEnd_toStartOf="@+id/agreed"
             app:layout_constraintStart_toEndOf="@+id/notagreed" />
-
+-->
         <Button
             android:id="@+id/agreed"
             style="?android:attr/buttonBarButtonStyle"
@@ -68,10 +68,10 @@
             tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
         <EditText
-            android:id="@+id/editcip13"
+            android:id="@+id/edittext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="28dp"
+            android:layout_marginEnd="@dimen/desc_padding"
             android:autofillHints="cip13"
             android:ems="10"
             android:hint="@string/enter_cip_13"
@@ -104,12 +104,14 @@
             android:text="340009"
             android:textAlignment="textEnd"
             android:textSize="16sp"
+            android:layout_marginStart="@dimen/desc_padding"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/editcip13"
             app:layout_constraintHorizontal_bias="0.525"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.438" />
+            app:layout_constraintVertical_bias="0.438"
+            tools:ignore="UnknownId" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

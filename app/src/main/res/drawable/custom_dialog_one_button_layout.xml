@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraText">
+    <android:background:@drawable/background_dialog.xml/>
+    <android:orientation="vertical"/>
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="61dp"
+        android:layout_height="61dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/tickmark"
+        tools:ignore="ContentDescription,ImageContrastCheck" />
+</selector>
