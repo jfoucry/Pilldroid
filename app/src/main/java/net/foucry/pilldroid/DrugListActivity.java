@@ -43,6 +43,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
@@ -182,6 +183,8 @@ public class DrugListActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
+        FloatingActionButton mFloatingActionButton = findViewById(R.id.fab);
+        mFloatingActionButton.setOnClickListener(v-> onButtonClick());
 
         if (DEMO) {
             PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
@@ -315,7 +318,7 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     // Launch scan
-    public void onButtonClick(View v) {
+    public void onButtonClick() {
         Log.d(TAG, "add medication");
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_128);
@@ -330,6 +333,7 @@ public class DrugListActivity extends AppCompatActivity {
 
         Log.d(TAG, "scanOptions == " + options);
         mBarcodeScannerLauncher.launch(options);
+        return;
     }
 
     /**
