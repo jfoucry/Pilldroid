@@ -34,11 +34,10 @@ android {
 
     defaultConfig {
         applicationId "net.foucry.pilldroid"
-        minSdkVersion defaultMinSdkVersion
-        targetSdkVersion defaultTargetSdkVersion
+        minSdk defaultMinSdkVersion
+        targetSdk defaultTargetSdkVersion
         versionCode 302
         versionName "v0.302-beta"
-        multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -59,7 +58,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    flavorDimensions "version"
+    flavorDimensions = ["version"]
     productFlavors {
         dev {
             resValue "string", "app_name", "PillDroid dev"
@@ -77,7 +76,6 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    buildToolsVersion = "34.0.0"
     namespace 'net.foucry.pilldroid'
 
     allprojects {
