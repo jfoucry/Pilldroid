@@ -156,13 +156,10 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         //icon.setImageResource(R.drawable.pilldroid_icon);
         btn.setText(R.string.Yes);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                dlg.dismiss();
-                finish();
-            }
+        btn.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            dlg.dismiss();
+            finish();
         });
     }
 

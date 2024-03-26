@@ -270,14 +270,11 @@ class DBHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "Before sort == " + drugs);
 
-        drugs.sort(new Comparator<Drug>() {
-            @Override
-            public int compare(Drug lhs, Drug rhs) {
-                if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
-                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-                else
-                    return (int) (lhs.getStock() - rhs.getStock());
-            }
+        drugs.sort((lhs, rhs) -> {
+            if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
+                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+            else
+                return (int) (lhs.getStock() - rhs.getStock());
         });
         Log.d(TAG, "After sort " + drugs);
 

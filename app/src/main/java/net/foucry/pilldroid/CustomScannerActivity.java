@@ -57,19 +57,16 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
 
         //changeMaskColor(null);
         changeLaserVisibility(true);
-        barcodeScannerView.decodeSingle(new BarcodeCallback() {
-            @Override
-            public void barcodeResult(BarcodeResult result) {
-                Intent scanResult = new Intent();
-                //Bundle scanResultBundle = new Bundle();
-                scanResult.putExtra("Barcode Content", result.getText());
-                scanResult.putExtra("Barcode Format name", result.getBarcodeFormat().name());
-                scanResult.putExtra("returnCode", captureIntentBundle.getInt("returnCode"));
-                scanResult.putExtra("resultCode", 1);
-                CustomScannerActivity.this.setResult(RESULT_OK, scanResult);
-                Log.d(TAG, "scanResult == " + scanResult);
-                finish();
-            }
+        barcodeScannerView.decodeSingle(result -> {
+            Intent scanResult = new Intent();
+            //Bundle scanResultBundle = new Bundle();
+            scanResult.putExtra("Barcode Content", result.getText());
+            scanResult.putExtra("Barcode Format name", result.getBarcodeFormat().name());
+            scanResult.putExtra("returnCode", captureIntentBundle.getInt("returnCode"));
+            scanResult.putExtra("resultCode", 1);
+            CustomScannerActivity.this.setResult(RESULT_OK, scanResult);
+            Log.d(TAG, "scanResult == " + scanResult);
+            finish();
         });
     }
 
