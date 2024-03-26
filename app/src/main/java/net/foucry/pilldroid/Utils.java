@@ -49,14 +49,11 @@ public class Utils {
     }
 
     public static void sortPrescriptionList(List<Prescription> prescriptionList) {
-        prescriptionList.sort(new Comparator<>() {
-            @Override
-            public int compare(Prescription lhs, Prescription rhs) {
-                if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
-                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-                else
-                    return (int) (lhs.getStock() - rhs.getStock());
-            }
+        prescriptionList.sort((lhs, rhs) -> {
+            if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
+                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+            else
+                return (int) (lhs.getStock() - rhs.getStock());
         });
     }
 
