@@ -151,7 +151,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         msgString = getString(R.string.understood);
         msg.setText(msgString);
-        if (cplString.equals("")) {
+        if (cplString.isEmpty()) {
             cpl.setEnabled(false);
         }
         //icon.setImageResource(R.drawable.pilldroid_icon);

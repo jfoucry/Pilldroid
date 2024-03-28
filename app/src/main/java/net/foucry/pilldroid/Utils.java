@@ -3,7 +3,6 @@ package net.foucry.pilldroid;
 import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
