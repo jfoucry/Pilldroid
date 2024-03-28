@@ -89,6 +89,11 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     }
 
     @Override
+    public void onBackPressed(){
+        onCancel(this.getCurrentFocus());
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
