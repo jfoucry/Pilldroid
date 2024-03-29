@@ -6,13 +6,13 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="@dimen/img_width_height"
         android:layout_height="@dimen/img_width_height"
         android:contentDescription="@string/unhappy_face"
         android:src="@drawable/lower_stock_vect" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="349dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/title_padding"

@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/notagreed"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
             app:layout_constraintEnd_toStartOf="@+id/agreed"
             app:layout_constraintStart_toEndOf="@+id/notagreed" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/agreed"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.416" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -97,7 +97,7 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/ic_launcher_foreground" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView4"
             android:layout_width="55dp"
             android:layout_height="33dp"

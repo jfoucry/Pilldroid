@@ -9,13 +9,13 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="@dimen/img_width_height"
         android:layout_height="@dimen/img_width_height"
         android:contentDescription="@string/pilldroid_icon"
         android:src="@drawable/pilldroid_icon" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/slide1_Pilldroid"
@@ -23,7 +23,7 @@
         android:textSize="@dimen/slide_title"
         android:textStyle="bold" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="58dp"
         android:layout_marginTop="20dp"

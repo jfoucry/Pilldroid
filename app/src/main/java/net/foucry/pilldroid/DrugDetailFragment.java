@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 import net.foucry.pilldroid.models.Prescription;
 
 /**
@@ -72,34 +73,34 @@ public class DrugDetailFragment extends Fragment {
         if (prescription != null) {
             // Find each component of rootView
             nameView = detailView.findViewById(R.id.name_cell);
-            TextView nameLabel = nameView.findViewById(R.id.label);
-            TextView nameValue = nameView.findViewById(R.id.value);
+            MaterialTextView nameLabel = nameView.findViewById(R.id.label);
+            MaterialTextView nameValue = nameView.findViewById(R.id.value);
             nameLabel.setText(R.string.drug_name_label);
             nameValue.setText(prescription.getName());
 
             presentationView = detailView.findViewById(R.id.presentation_cell);
-            TextView presentationLabel = presentationView.findViewById(R.id.label);
-            TextView presentationValue = presentationView.findViewById(R.id.value);
+            MaterialTextView presentationLabel = presentationView.findViewById(R.id.label);
+            MaterialTextView presentationValue = presentationView.findViewById(R.id.value);
             presentationLabel.setText(R.string.drug_presentation_label);
             presentationValue.setText(prescription.getPresentation());
 
             adminModeView = detailView.findViewById(R.id.administration_cell);
-            TextView adminModeLabel = adminModeView.findViewById(R.id.label);
-            TextView adminModeValue = adminModeView.findViewById(R.id.value);
+            MaterialTextView adminModeLabel = adminModeView.findViewById(R.id.label);
+            MaterialTextView adminModeValue = adminModeView.findViewById(R.id.value);
             adminModeLabel.setText(R.string.drug_administrationMode_label);
             adminModeValue.setText(prescription.getAdministration_mode());
 
             stockView = detailView.findViewById(R.id.stock_cell);
-            TextView stockLibelle = (stockView.findViewById(R.id.label));
-            TextView stockValue = stockView.findViewById(R.id.value);
+            MaterialTextView stockLibelle = (stockView.findViewById(R.id.label));
+            TextInputEditText stockValue = stockView.findViewById(R.id.value);
             stockLibelle.setText(R.string.drug_current_stock_label);
             stockValue.setText(Utils.fmt(prescription.getStock()));
             stockValue.setHint(R.string.drug_current_stock_label);
             stockValue.setSelectAllOnFocus(true);
 
             takeView = detailView.findViewById(R.id.take_cell);
-            TextView takeLabel = takeView.findViewById(R.id.label);
-            TextView takeValue = (takeView.findViewById(R.id.value));
+            MaterialTextView takeLabel = takeView.findViewById(R.id.label);
+            TextInputEditText takeValue = (takeView.findViewById(R.id.value));
             takeLabel.setText(R.string.drug_take_label);
             //takeValue.setText(Double.toString(prescription.getTake()));
             takeValue.setText(Utils.fmt(prescription.getTake()));
@@ -107,8 +108,8 @@ public class DrugDetailFragment extends Fragment {
             takeValue.setSelectAllOnFocus(true);
 
             warningView = detailView.findViewById(R.id.warning_cell);
-            TextView warningLibelle = warningView.findViewById(R.id.label);
-            TextView warningValue = warningView.findViewById(R.id.value);
+            MaterialTextView warningLibelle = warningView.findViewById(R.id.label);
+            TextInputEditText warningValue = warningView.findViewById(R.id.value);
             warningLibelle.setText(R.string.drug_warningThreshold_label);
             //warningValue.setText(Integer.toString(prescription.getWarnThreshold()));
             warningValue.setText(Utils.fmt(prescription.getWarning()));
@@ -116,8 +117,8 @@ public class DrugDetailFragment extends Fragment {
             warningValue.setSelectAllOnFocus(true);
 
             alertView = detailView.findViewById(R.id.alert_cell);
-            TextView alertLibelle = alertView.findViewById(R.id.label);
-            TextView alertValue = alertView.findViewById(R.id.value);
+            MaterialTextView alertLibelle = alertView.findViewById(R.id.label);
+            TextInputEditText alertValue = alertView.findViewById(R.id.value);
             alertLibelle.setText(R.string.drug_alertThreshold_label);
             //alertValue.setText(Integer.toString(prescription.getAlertThreshold()));
             alertValue.setText(Utils.fmt(prescription.getAlert()));

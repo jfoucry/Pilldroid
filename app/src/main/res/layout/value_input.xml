@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/list_selector"
-    android:orientation="horizontal"
-    android:padding="10dp"
-    android:weightSum="1">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/white"
+  android:orientation="horizontal"
+  android:padding="10dp"
+  android:weightSum="1">
+    <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignBottom="@+id/inputLayout"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentTop="true"
+      android:layout_toStartOf="@id/inputLayout"
+      android:gravity="center_vertical"
+      android:paddingStart="5dp"
+      android:paddingEnd="25dp"
+      android:text="Medium Text"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="#040404"
+      android:textStyle="bold" />
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/inputLayout"
+      android:layout_width="200dp"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <TextView
-        android:id="@+id/label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/value"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/value"
-        android:gravity="center_vertical"
-        android:paddingStart="5dp"
-        android:paddingEnd="25dp"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#040404"
-        android:textStyle="bold" />
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/value"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:ems="10"
+          android:gravity="end|fill_vertical"
 
-    <EditText
-        android:id="@+id/value"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:ems="10"
-        android:gravity="end|fill_vertical"
-        android:hint="@string/zero"
-        android:importantForAutofill="no"
-        android:inputType="numberDecimal"
-        android:labelFor="@id/value"
-        android:paddingStart="5dp"
-        android:paddingEnd="25dp"
-        android:textAlignment="gravity"
-        android:textColorHint="@color/grey"
-        tools:ignore="LabelFor" />
+          android:importantForAutofill="no"
+          android:inputType="numberDecimal"
+          android:labelFor="@id/value"
+          android:paddingStart="5dp"
+          android:paddingEnd="25dp"
+          android:textAlignment="gravity"
+          android:textColorHint="@color/grey"
+          tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </RelativeLayout>

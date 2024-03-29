@@ -13,23 +13,23 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
 
 public class WelcomeActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private LinearLayout dotsLayout;
     private int[] layouts;
-    private Button btnSkip, btnNext;
+    private MaterialButton btnSkip, btnNext;
     //  viewpager change listener
     final ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
@@ -141,12 +141,12 @@ public class WelcomeActivity extends AppCompatActivity {
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.setContentView(R.layout.custom_dialog_layout_one_button);
         dlg.setCancelable(false);
-        TextView msg = dlg.findViewById(R.id.msg);
+        MaterialTextView msg = dlg.findViewById(R.id.msg);
         String msgString;
-        TextView cpl = dlg.findViewById(R.id.cpl);
+        MaterialTextView cpl = dlg.findViewById(R.id.cpl);
         String cplString = "";
-        ImageView icon = dlg.findViewById(R.id.image);
-        Button btn = dlg.findViewById(R.id.txtClose);
+        ShapeableImageView icon = dlg.findViewById(R.id.image);
+        MaterialButton btn = dlg.findViewById(R.id.txtClose);
         dlg.show();
 
         msgString = getString(R.string.understood);
@@ -164,11 +164,11 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void addBottomDots(int currentPage) {
-        TextView[] dots = new TextView[layouts.length];
+        MaterialTextView[] dots = new MaterialTextView[layouts.length];
 
         dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
-            dots[i] = new TextView(this);
+            dots[i] = new MaterialTextView(this);
             dots[i].setText("∙");
             dots[i].setTextSize(65);
             dots[i].setTextColor(ContextCompat.getColor(this, R.color.dot_dark));
