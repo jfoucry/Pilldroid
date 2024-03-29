@@ -47,4 +47,4 @@ Thumbs.db
 gen/
 /android-signing-keystore.jks
 /secrets.properties
-/java_pid9513.hprof
+*.hprof
