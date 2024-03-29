@@ -333,7 +333,6 @@ public class DrugListActivity extends AppCompatActivity {
 
         Log.d(TAG, "scanOptions == " + options);
         mBarcodeScannerLauncher.launch(options);
-        return;
     }
 
     /**
@@ -351,8 +350,8 @@ public class DrugListActivity extends AppCompatActivity {
         Button ok = dialog.findViewById(R.id.agreed);
         Button cancel = dialog.findViewById(R.id.notagreed);
         ok.setEnabled(false);
-        ok.setBackground(getDrawable(R.drawable.rounded_btn_disabled));
-        //TextView  title = (TextView ) dialog.findViewById(R.id.title);
+        ok.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_btn_disabled));
+        //TextView  title = dialog.findViewById(R.id.title);
         final EditText editText= dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
 
@@ -375,7 +374,7 @@ public class DrugListActivity extends AppCompatActivity {
                 //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
                 if (s.length() == 8) {
                     ok.setEnabled(true);
-                    ok.setBackground(getDrawable(R.drawable.rounded_btn));
+                    ok.setBackground(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn));
                 }
             }
         });
@@ -423,7 +422,7 @@ public class DrugListActivity extends AppCompatActivity {
             msgString = aMedicine.getName() + " " + getString(R.string.msgFound);
             msg.setText(msgString);
             cplString = getString(R.string.addInList);
-            if (cplString.equals("")) {
+            if (cplString.isEmpty()) {
                 cpl.setEnabled(false);
             }
             icon.setImageResource(R.drawable.tickmark);
