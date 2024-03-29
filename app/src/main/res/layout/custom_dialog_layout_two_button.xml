@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="61dp"
             android:layout_height="61dp"
             android:layout_gravity="center"
@@ -31,7 +31,7 @@
             android:background="@drawable/shadow_bg"
             android:src="@drawable/ic_launcher_foreground" />
 
-        <TextView
+        <com.google.android.material.card.MaterialCardView
             android:id="@id/msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:labelFor="@+id/msg"
             tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@id/cpl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/agreed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
             android:layout_width="155dp"
             android:layout_height="wrap_content" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/notagreed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,5 +94,5 @@
             android:textColor="#212121"
             android:textSize="16sp" />
     </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
