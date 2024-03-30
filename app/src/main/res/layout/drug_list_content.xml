@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="80dp"
-    android:orientation="horizontal">
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="80dp"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="horizontal">
 
     <!-- Drug's name-->
     <RelativeLayout
@@ -17,7 +19,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="5dp"
             android:contentDescription="@string/stockIcon"
-            android:src="@drawable/ok_stock_vect" />
+            app:srcCompat="@drawable/ok_stock_vect" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/value"
@@ -59,6 +61,6 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="10sp"
         android:contentDescription="@string/detail_view"
-        android:src="@drawable/ic_navigate_next_black_24dp" />
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
 
 </RelativeLayout>
