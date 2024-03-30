@@ -1,4 +1,4 @@
-# Pilldroid 
+# Pilldroid
 
 Pilldroid est une application de gestion de stock **théorique** de médicament à
 destination des personnes résidant en France.
