@@ -1,6 +1,6 @@
 # v0.300-beta - Nouvelles fonctionnalités
 
-- La gestion de la liste des prescriptions (les médicaments que vous prenez) à été revue ;
+- La gestion de la liste des prescriptions (les médicaments que vous prenez) a été revue ;
     - un glissement de la droite vers la gauche supprime le médicament de la liste ET de
     la base données ;
     - un glissement de la gauche vers la droite permet de modifier les détails du médicament,
@@ -8,9 +8,9 @@
 
 Ces changements vont vous permettre de supprimer les médicaments dont la prise est à zéro (0)
 depuis longtemps et que vous ne prendrez plus.
-Ils vont également me permettre d'avancer sur la prochaine étape qui est de plus présenter les noms
+Ils vont également me permettre d'avancer sur la prochaine étape qui est de plus présenté les noms
 des médicaments, mais la molécule (doliprane, efferalgan, dafalgan deviendront paracétamol).
-Je vous en dirais plus prochainement.
+Je vous en dirai plus prochainement.
 
 Merci de me faire des retours sur ces nouveautés, [Pilldroid](mailto:jacques+pilldroid@foucry.net)
 [Pilldroid](mailto:pilldroid@foucry.net)ou pilldroid@foucry.net.
