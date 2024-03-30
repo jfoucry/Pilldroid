@@ -27,24 +27,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -177,7 +177,7 @@ public class DrugListActivity extends AppCompatActivity {
         // Set view content
         setContentView(R.layout.drug_list_activity);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -346,11 +346,11 @@ public class DrugListActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(true);
         dialog.setContentView(R.layout.input_dialog);
 
-        Button ok = dialog.findViewById(R.id.agreed);
-        Button cancel = dialog.findViewById(R.id.notagreed);
+        MaterialButton ok = dialog.findViewById(R.id.agreed);
+        MaterialButton cancel = dialog.findViewById(R.id.notagreed);
         ok.setEnabled(false);
-        ok.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_btn_disabled));
-        //TextView  title = dialog.findViewById(R.id.title);
+        ok.setBackground(getDrawable(R.drawable.rounded_btn_disabled));
+        //MaterialTextView title = dialog.findViewById(R.id.title);
         final EditText editText= dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
 
@@ -404,12 +404,12 @@ public class DrugListActivity extends AppCompatActivity {
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.setContentView(R.layout.custom_dialog_layout_one_button);
         dlg.setCancelable(false);
-        TextView msg = dlg.findViewById(R.id.msg);
+        MaterialTextView msg = dlg.findViewById(R.id.msg);
         String msgString;
-        TextView cpl = dlg.findViewById(R.id.cpl);
+        MaterialTextView cpl = dlg.findViewById(R.id.cpl);
         String cplString;
-        ImageView icon = dlg.findViewById(R.id.image);
-        Button btn = dlg.findViewById(R.id.txtClose);
+        ShapeableImageView icon = dlg.findViewById(R.id.image);
+        MaterialButton btn = dlg.findViewById(R.id.txtClose);
         dlg.show();
 
         if (aMedicine != null) {
@@ -444,7 +444,7 @@ public class DrugListActivity extends AppCompatActivity {
      * Tell user that the barre code cannot be interpreted
      */
     private void scanNotOK() {
-        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this);
         dlg.setTitle(getString(R.string.app_name));
 
         dlg.setMessage(R.string.notInterpreted);
@@ -515,7 +515,8 @@ public class DrugListActivity extends AppCompatActivity {
                         Snackbar.LENGTH_LONG).setAction(R.string.Undo, v -> {
                             prescriptionList.add(position, prescription);
                             mAdapter.notifyItemInserted(position);
-                        }).show();
+                        }).setActionTextColor(getResources().getColor(R.color.bg_screen1))
+                        .show();
             }
 
             @Override
@@ -683,9 +684,9 @@ public class DrugListActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final View mView;
-            final TextView mContentView;
-            final TextView mEndOfStock;
-            final ImageView mIconView;
+            final MaterialTextView mContentView;
+            final MaterialTextView mEndOfStock;
+            final ShapeableImageView mIconView;
             public Prescription mItem;
 
             ViewHolder(View view) {
