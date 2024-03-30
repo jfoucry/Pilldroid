@@ -327,7 +327,6 @@ public class DrugListActivity extends AppCompatActivity {
         options.setBarcodeImageEnabled(true);
         options.setTimeout(60);
         options.setCaptureActivity(CustomScannerActivity.class);
-        options.setBeepEnabled(true);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
 

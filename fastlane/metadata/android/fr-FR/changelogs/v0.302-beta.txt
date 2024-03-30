@@ -1,12 +1,12 @@
 # V0.302-beta - bugs fix and small interface changes
 
-- Résolution de la bogue qui empéchait la calcul dv stock et l'émission de l'alarme,
+- Résolution de la bogue qui empêchait le calcul du stock et l'émission de l'alarme,
  bogue qui est apparu dans la version v0.201-beta. Je suis désolé pour cette bogue et le temps
  que j'ai mis à la corriger ;
 - Suppression de vieux code et vieux commentaires ;
-- Changement dans le dialogue de saisie d'un CIP13, vous n'avez plvs qve les 7
+- Changement dans le dialogue de saisie d'un CIP13, vous n'avez plus que les 7
   derniers chiffres à entrer;
-- Changement dans l'apparence de la saisie des valeurs, j'ai supprimer les coins arrondis.
+- Changement dans l'apparence de la saisie des valeurs, j'ai supprimé les coins arrondis.
 
 De nombreux autres bogues restent présentes, mais je ne les ai pas encore trouvé.
 
@@ -25,7 +25,7 @@ Merci pour votre aide et votre patience. Un petit mot fait toujours plaisir.
 
 # v0.300-beta - Nouvelles fonctionnalités
 
-- La gestion de la liste des prescriptions (les médicaments que vous prenez) à été revue ;
+- La gestion de la liste des prescriptions (les médicaments que vous prenez) a été revue ;
     - un glissement de la droite vers la gauche supprime le médicament de la liste ET de
     la base données ;
     - un glissement de la gauche vers la droite permet de modifier les détails du médicament,
@@ -33,9 +33,9 @@ Merci pour votre aide et votre patience. Un petit mot fait toujours plaisir.
 
 Ces changements vont vous permettre de supprimer les médicaments dont la prise est à zéro (0)
 depuis longtemps et que vous ne prendrez plus.
-Ils vont également me permettre d'avancer sur la prochaine étape qui est de plus présenter les noms
+Ils vont également me permettre d'avancer sur la prochaine étape qui est de plus présenté les noms
 des médicaments, mais la molécule (doliprane, efferalgan, dafalgan deviendront paracétamol).
-Je vous en dirais plus prochainement.
+Je vous en dirai plus prochainement.
 
 Merci de me faire des retours sur ces nouveautés, [Pilldroid](mailto:jacques+pilldroid@foucry.net)
 [Pilldroid](mailto:pilldroid@foucry.net)ou pilldroid@foucry.net.

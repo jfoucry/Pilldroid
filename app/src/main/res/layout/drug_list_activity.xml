@@ -45,7 +45,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:accessibilityHeading="true"
         android:contentDescription="@string/add_button"
-        android:src="@drawable/ic_add"
+        app:srcCompat="@drawable/ic_add"
         app:backgroundTint="@color/colorPrimary"
         app:tint="@color/white"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
