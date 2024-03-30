@@ -350,7 +350,7 @@ public class DrugListActivity extends AppCompatActivity {
         MaterialButton ok = dialog.findViewById(R.id.agreed);
         MaterialButton cancel = dialog.findViewById(R.id.notagreed);
         ok.setEnabled(false);
-        ok.setBackground(getDrawable(R.drawable.rounded_btn_disabled));
+        ok.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_btn_disabled));
         //MaterialTextView title = dialog.findViewById(R.id.title);
         final EditText editText= dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
