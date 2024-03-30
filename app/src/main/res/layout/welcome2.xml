@@ -11,7 +11,7 @@
         android:layout_width="@dimen/img_width_height"
         android:layout_height="@dimen/img_width_height"
         android:contentDescription="@string/the_plus_icon"
-        android:src="@drawable/ic_add_circle_black_24dp" />
+        android:src="@drawable/ic_add" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
