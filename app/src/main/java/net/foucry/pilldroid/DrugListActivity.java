@@ -403,11 +403,10 @@ public class DrugListActivity extends AppCompatActivity {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.setContentView(R.layout.custom_dialog_layout_one_button);
-        dlg.setCancelable(false);
+        dlg.setCancelable(true);
         MaterialTextView msg = dlg.findViewById(R.id.msg);
         String msgString;
         MaterialTextView cpl = dlg.findViewById(R.id.cpl);
-        String cplString;
         ShapeableImageView icon = dlg.findViewById(R.id.image);
         MaterialButton btn = dlg.findViewById(R.id.txtClose);
         dlg.show();
@@ -415,11 +414,9 @@ public class DrugListActivity extends AppCompatActivity {
         if (aMedicine != null) {
             msgString = aMedicine.getName() + " " + getString(R.string.msgFound);
             msg.setText(msgString);
-            cplString = getString(R.string.addInList);
-            if (cplString.isEmpty()) {
-                cpl.setEnabled(false);
-            }
+            cpl.setText(getString(R.string.addInList));
             icon.setImageResource(R.drawable.tickmark);
+            btn.setText(getString(R.string.Yes));
             btn.setOnClickListener(v -> {
                 // TODO Auto-generated method stub
                 dlg.dismiss();
@@ -431,6 +428,7 @@ public class DrugListActivity extends AppCompatActivity {
             msg.setText(msgString);
             cpl.setText("");
             icon.setImageResource(R.drawable.tickcross);
+            btn.setText(getString(R.string.button_close));
             btn.setOnClickListener(v -> {
                 // TODO Auto-generated method stub
                 dlg.dismiss();

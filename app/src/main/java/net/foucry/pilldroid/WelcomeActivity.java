@@ -144,18 +144,15 @@ public class WelcomeActivity extends AppCompatActivity {
         MaterialTextView msg = dlg.findViewById(R.id.msg);
         String msgString;
         MaterialTextView cpl = dlg.findViewById(R.id.cpl);
-        String cplString = "";
         ShapeableImageView icon = dlg.findViewById(R.id.image);
         MaterialButton btn = dlg.findViewById(R.id.txtClose);
         dlg.show();
 
         msgString = getString(R.string.understood);
         msg.setText(msgString);
-        if (cplString.isEmpty()) {
-            cpl.setEnabled(false);
-        }
+        cpl.setVisibility(View.GONE);
         //icon.setImageResource(R.drawable.pilldroid_icon);
-        btn.setText(R.string.Yes);
+        btn.setText(R.string.Yes_understood);
         btn.setOnClickListener(v -> {
             // TODO Auto-generated method stub
             dlg.dismiss();
