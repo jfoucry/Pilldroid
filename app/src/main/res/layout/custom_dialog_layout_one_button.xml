@@ -10,12 +10,12 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         app:cardCornerRadius="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -37,27 +37,27 @@
                 android:id="@id/msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
+                android:layout_marginStart="22dp"
                 android:layout_marginTop="18dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/app_name"
                 android:textColor="@color/grey"
                 android:textSize="15dp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                tools:ignore="HardcodedText,SpUsage"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@id/cpl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
+                android:layout_marginStart="22dp"
                 android:layout_marginTop="18dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="@string/app_version"
                 android:textColor="#757575"
                 android:textSize="14dp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+                tools:ignore="HardcodedText,SpUsage" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -74,12 +74,12 @@
                 android:background="@drawable/rounded_btn"
                 android:gravity="center"
                 android:maxLines="1"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
                 android:text="Close"
                 android:textColor="#212121"
                 android:textSize="16sp"
-                tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+                tools:ignore="HardcodedText,SpUsage" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
