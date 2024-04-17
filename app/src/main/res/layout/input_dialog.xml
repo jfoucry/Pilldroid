@@ -29,14 +29,14 @@
             android:gravity="center"
             android:maxLines="1"
             android:minWidth="100dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
             android:text="@string/button_cancel"
             android:textColor="#212121"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+            tools:ignore="HardcodedText,SpUsage" />
 
         <Space
             android:id="@+id/space"
@@ -56,8 +56,8 @@
             android:gravity="center"
             android:maxLines="1"
             android:minWidth="100dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
             android:text="@string/button_ok"
             android:textColor="#212121"
             android:textSize="16sp"
@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/notagreed"
             app:layout_constraintVertical_bias="0.0"
-            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+            tools:ignore="HardcodedText,SpUsage" />
 
         <EditText
             android:id="@+id/editcip13"
