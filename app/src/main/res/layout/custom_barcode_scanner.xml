@@ -43,12 +43,10 @@
         android:layout_margin="@dimen/fab_margin"
         android:accessibilityHeading="true"
         android:backgroundTint="@android:color/transparent"
-        android:clickable="false"
         android:contentDescription="@string/button_cancel"
         android:cropToPadding="false"
-        android:foregroundTint="@android:color/darker_gray"
-        android:onClick="onCancel"
-        app:srcCompat="@drawable/ic_cancel_black_24dp" />
+        app:background="@android:color/darker_gray"
+        android:src="@drawable/ic_cancel_black_24dp" />
 
     <ImageButton
         android:id="@+id/keyboard_button"
@@ -58,8 +56,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@android:color/transparent"
         android:contentDescription="@string/button_keyboard"
-        android:onClick="onKeyboard"
-        app:srcCompat="@drawable/ic_keyboard_black_24dp"
+        android:src="@drawable/ic_keyboard_black_24dp"
         tools:ignore="PrivateResource" />
 
 </merge>
