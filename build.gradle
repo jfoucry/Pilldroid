@@ -17,8 +17,6 @@ buildscript {
 }
 ext {
     compileSdkVersion = '28'
-    buildToolsVersion = '28.0.1'
-    var = '3.4.2'
     defaultMinSdkVersion = 26
     defaultTargetSdkVersion = 30
     defaultVersionCode = 1
@@ -38,5 +36,4 @@ tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
 
-dependencies {
-}
+dependencies {}
