@@ -373,7 +373,7 @@ public class DrugListActivity extends AppCompatActivity {
                 //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
                 if (s.length() == 8) {
                     ok.setEnabled(true);
-                    ok.setBackground(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn));
+                    ok.setBackground(ContextCompat.getDrawable(editText.getContext(), R.drawable.shadow_bg));
                 }
             }
         });
