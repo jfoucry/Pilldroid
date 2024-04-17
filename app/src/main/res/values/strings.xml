@@ -22,6 +22,7 @@
     <string name="enter_cip_13">Enter CIP 13</string>
     <string name="channel_description" translatable="false">Pilldroid_NotificationChannel</string>
     <string name="channel_name" translatable="false">PilldroidChannel</string>
+    <string name="button_close">Close</string>
 
     <!-- slides strings -->
     <string name="slide1_Pilldroid">Welcome on Pilldroid</string>
@@ -68,7 +69,8 @@
     <string name="notInterpreted">Bar code cannot be interpreted</string>
     <string name="cancelled_scan">Scan canceled</string>
     <string name="missing_camera_permission">Missing camera permission</string>
-    <string name="Yes">Yes, I understood</string>
+    <string name="Yes">Yes</string>
+    <string name="Yes_understood">Yes, I understood</string>
     <string name="understood">I understood that the developer of Pilldroid cannot be responsible of your medication management. IT\'S YOU OWN RESPONSIBILITY.</string>
     <string name="Undo">Undo</string>
     <string name="trash_icon">Trash icon</string>
