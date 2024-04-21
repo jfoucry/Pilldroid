@@ -195,6 +195,7 @@ public class WelcomeActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
     }
 
+    @SuppressWarnings("deprecation")
     private void setFullScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             getWindow().setDecorFitsSystemWindows(false);
@@ -204,7 +205,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
             }
         } else {
-            //noinspection
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
