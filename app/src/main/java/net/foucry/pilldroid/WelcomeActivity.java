@@ -156,7 +156,6 @@ public class WelcomeActivity extends AppCompatActivity {
         btn.setOnClickListener(v -> {
             // TODO Auto-generated method stub
             dlg.dismiss();
-            finish();
         });
     }
 
