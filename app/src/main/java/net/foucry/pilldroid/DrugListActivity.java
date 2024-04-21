@@ -354,7 +354,7 @@ public class DrugListActivity extends AppCompatActivity {
         final EditText editText= dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
 
-        // TODO change the color of ok button when the number of character is correct.
+        // TODO change the background color of ok button when the number of character is correct.
 
         ok.setText(R.string.button_ok);
         cancel.setText(R.string.button_cancel);
@@ -373,7 +373,10 @@ public class DrugListActivity extends AppCompatActivity {
                 //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
                 if (s.length() == 8) {
                     ok.setEnabled(true);
-                    ok.setBackground(ContextCompat.getDrawable(editText.getContext(), R.drawable.shadow_bg));
+                    ok.setBackground(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn));
+                } else {
+                    ok.setEnabled(false);
+                    ok.setBackground(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn_disabled));
                 }
             }
         });
