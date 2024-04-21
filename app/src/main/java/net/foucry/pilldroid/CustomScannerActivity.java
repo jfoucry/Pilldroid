@@ -1,6 +1,5 @@
 package net.foucry.pilldroid;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 
+import androidx.appcompat.app.AppCompatActivity;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.ViewfinderView;
@@ -18,7 +18,7 @@ import com.journeyapps.barcodescanner.ViewfinderView;
 /**
  * Custom Scanner Activity extending from Activity to display a custom layout form scanner view.
  */
-public class CustomScannerActivity extends Activity implements DecoratedBarcodeView.TorchListener {
+public class CustomScannerActivity extends AppCompatActivity implements DecoratedBarcodeView.TorchListener {
 
     private static final String TAG = CustomScannerActivity.class.getName();
     final Bundle captureIntentBundle = new Bundle();
