@@ -22,6 +22,7 @@
     <string name="enter_cip_13_here">Saisir la fin du code CIP 13 ici..</string>
     <string name="enter_cip_13">Saisir le code CIP 13</string>
     <string name="button_close">Fermer</string>
+    <string name="scan_label">Visez le code-barres pour le scanner</string>
 
     <!-- Slide Strings -->
     <string name="slide1_Pilldroid">Bienvenue dans Pilldroid</string>
