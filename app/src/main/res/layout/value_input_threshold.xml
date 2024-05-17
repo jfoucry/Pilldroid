@@ -37,7 +37,7 @@
           android:ems="10"
           android:gravity="end|fill_vertical"
           android:importantForAutofill="no"
-          android:inputType="numberDecimal"
+          android:inputType="numberSigned"
           android:labelFor="@id/value"
           android:paddingStart="5dp"
           android:paddingEnd="25dp"
