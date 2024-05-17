@@ -41,14 +41,14 @@
 
     <include
         android:id="@+id/warning_cell"
-        layout="@layout/value_input"
+        layout="@layout/value_input_threshold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <!--        android:layout_marginTop="15sp" />-->
 
     <include
         android:id="@+id/alert_cell"
-        layout="@layout/value_input"
+        layout="@layout/value_input_threshold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />

@@ -60,6 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -225,6 +226,7 @@ public class DrugListActivity extends AppCompatActivity {
                             Log.d(TAG, "Missing camera permission");
                             Toast.makeText(this, R.string.missing_camera_permission, Toast.LENGTH_LONG).show();
                         } else {
+                            assert bundle != null;
                             Log.d(TAG, "bundle == " + bundle.getInt("returnCode"));
                             int returnCode = bundle.getInt("returnCode");
                             int resultCode = bundle.getInt("resultCode");
@@ -248,13 +250,13 @@ public class DrugListActivity extends AppCompatActivity {
                                 }
 
                                 String cip13;
-                                switch (bundle.getString(BARCODE_FORMAT_NAME)) {
+                                switch (Objects.requireNonNull(bundle.getString(BARCODE_FORMAT_NAME))) {
                                     case "CODE_128":
                                     case "EAN_13":  //CODE_128 || EAN 13
                                         cip13 = bundle.getString(BARCODE_CONTENT);
                                         break;
                                     case "DATA_MATRIX":
-                                        cip13 = bundle.getString(BARCODE_CONTENT).substring(4, 17);
+                                        cip13 = Objects.requireNonNull(bundle.getString(BARCODE_CONTENT)).substring(4, 17);
                                         break;
                                     default:
                                         scanNotOK();
@@ -340,7 +342,7 @@ public class DrugListActivity extends AppCompatActivity {
     protected void showInputDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
@@ -349,9 +351,9 @@ public class DrugListActivity extends AppCompatActivity {
         MaterialButton ok = dialog.findViewById(R.id.agreed);
         MaterialButton cancel = dialog.findViewById(R.id.notagreed);
         ok.setEnabled(false);
-        ok.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_btn_disabled));
-        //MaterialTextView title = dialog.findViewById(R.id.title);
-        final EditText editText= dialog.findViewById(R.id.editcip13);
+        ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.rounded_btn_disabled)));
+        MaterialTextView title = dialog.findViewById(R.id.title);
+        final EditText editText = dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
 
         // TODO change the color of ok button when the number of character is correct.
@@ -373,7 +375,11 @@ public class DrugListActivity extends AppCompatActivity {
                 //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
                 if (s.length() == 8) {
                     ok.setEnabled(true);
-                    ok.setBackground(ContextCompat.getDrawable(editText.getContext(), R.drawable.shadow_bg));
+                    ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn)));
+                }
+                else {
+                    ok.setEnabled(false);
+                    ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn_disabled)));
                 }
             }
         });
@@ -401,7 +407,7 @@ public class DrugListActivity extends AppCompatActivity {
     private void askToAddInDB(Medicine aMedicine) {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.setContentView(R.layout.custom_dialog_layout_one_button);
         dlg.setCancelable(true);
         MaterialTextView msg = dlg.findViewById(R.id.msg);
