@@ -47,3 +47,7 @@ gen/
 /android-signing-keystore.jks
 /secrets.properties
 *.hprof
+
+# Other considerations
+*.html
+*~
