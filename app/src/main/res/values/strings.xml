@@ -23,6 +23,7 @@
     <string name="channel_description" translatable="false">Pilldroid_NotificationChannel</string>
     <string name="channel_name" translatable="false">PilldroidChannel</string>
     <string name="button_close">Close</string>
+    <string name="scan_label">Aim at the barcode to scan it</string>
 
     <!-- slides strings -->
     <string name="slide1_Pilldroid">Welcome on Pilldroid</string>
