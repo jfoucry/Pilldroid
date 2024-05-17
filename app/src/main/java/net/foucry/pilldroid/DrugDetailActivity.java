@@ -123,13 +123,14 @@ public class DrugDetailActivity extends AppCompatActivity {
         String takeValue = takeTextView.getText().toString();
 
         alertView = findViewById(R.id.alert_cell);
+        alertView.setContentDescription("R.string.Drug_warningThreshold_label");
         TextView alertTextView = alertView.findViewById(R.id.value);
         String alertValue = alertTextView.getText().toString();
 
         warningView = findViewById(R.id.warning_cell);
+        warningView.setContentDescription("R.string.drug_alertThreshold_label");
         TextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
-
         newPrescription.setStock(Float.parseFloat(stockValue));
         newPrescription.setTake(Float.parseFloat(takeValue));
         newPrescription.setWarning(Integer.parseInt(warningValue));
