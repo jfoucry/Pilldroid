@@ -3,9 +3,8 @@
 > I apologize. For know, even string exist in English, _Pilldroid_ is a French
 > only application. That because the global drugs database contain only French
 > drug's nommage. If you can find a way to provide another country global
-> database,feel free to [contact
-> me](mailto://pilldroid@foucry,net?Subject="Another database")
->
+> database,feel free to [contact me](mailto://pilldroid@foucry,net?Subject="Another database")
+
 Pilldroid est une application de gestion de stock **théorique** de médicament à
 destination des personnes résidant en France.
 
