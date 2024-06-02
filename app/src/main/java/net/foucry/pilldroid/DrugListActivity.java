@@ -27,19 +27,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -104,31 +108,32 @@ public class DrugListActivity extends AppCompatActivity {
 
         // Manually migrate old database to room
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
-        DBHelper dbHelper = new DBHelper(this);
-        if (dbHelper.getCount() != 0) {
-            List<Drug> drugs = dbHelper.getAllDrugs();
-            for (int count = 0; count < dbHelper.getCount(); count++) {
-                Drug drug = drugs.get(count);
-                Prescription prescription = new Prescription();
+        try (DBHelper dbHelper = new DBHelper(this)) {
+            if (dbHelper.getCount() != 0) {
+                List<Drug> drugs = dbHelper.getAllDrugs();
+                for (int count = 0; count < dbHelper.getCount(); count++) {
+                    Drug drug = drugs.get(count);
+                    Prescription prescription = new Prescription();
 
-                if (prescriptionsDAO.getMedicByCIP13(drug.getCip13()) == null) {
-                    prescription.setName(drug.getName());
-                    prescription.setCip13(drug.getCip13());
-                    prescription.setCis(drug.getCis());
-                    prescription.setPresentation(drug.getPresentation());
-                    prescription.setAdministration_mode(drug.getAdministration_mode());
-                    prescription.setStock((float) drug.getStock());
-                    prescription.setTake((float) drug.getTake());
-                    prescription.setWarning(drug.getWarnThreshold());
-                    prescription.setAlert(drug.getAlertThreshold());
-                    prescription.setLast_update(drug.getDateLastUpdate());
+                    if (prescriptionsDAO.getMedicByCIP13(drug.getCip13()) == null) {
+                        prescription.setName(drug.getName());
+                        prescription.setCip13(drug.getCip13());
+                        prescription.setCis(drug.getCis());
+                        prescription.setPresentation(drug.getPresentation());
+                        prescription.setAdministration_mode(drug.getAdministration_mode());
+                        prescription.setStock((float) drug.getStock());
+                        prescription.setTake((float) drug.getTake());
+                        prescription.setWarning(drug.getWarnThreshold());
+                        prescription.setAlert(drug.getAlertThreshold());
+                        prescription.setLast_update(drug.getDateLastUpdate());
 
-                    prescriptionsDAO.insert(prescription);
-                } else {
-                    Log.i(TAG, "Already in the database");
+                        prescriptionsDAO.insert(prescription);
+                    } else {
+                        Log.i(TAG, "Already in the database");
+                    }
                 }
+                dbHelper.dropDrug();
             }
-            dbHelper.dropDrug();
         }
         // remove old notification
         Log.d(TAG, "Remove old notification and old job");
@@ -173,14 +178,12 @@ public class DrugListActivity extends AppCompatActivity {
         // Set view content
         setContentView(R.layout.drug_list_activity);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
-        FloatingActionButton mFloatingActionButton = findViewById(R.id.fab);
-        mFloatingActionButton.setOnClickListener(v-> onButtonClick());
 
         if (DEMO) {
             PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
@@ -362,6 +365,7 @@ public class DrugListActivity extends AppCompatActivity {
         options.setBarcodeImageEnabled(true);
         options.setTimeout(60);
         options.setCaptureActivity(CustomScannerActivity.class);
+        options.setBeepEnabled(true);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
         options.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.INVERTED_SCAN);
 
@@ -381,11 +385,10 @@ public class DrugListActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(true);
         dialog.setContentView(R.layout.input_dialog);
 
-        MaterialButton ok = dialog.findViewById(R.id.agreed);
-        MaterialButton cancel = dialog.findViewById(R.id.notagreed);
+        Button ok = dialog.findViewById(R.id.agreed);
+        Button cancel = dialog.findViewById(R.id.notagreed);
         ok.setEnabled(false);
-        ok.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_btn_disabled));
-        //MaterialTextView title = dialog.findViewById(R.id.title);
+        //TextView  title = (TextView ) dialog.findViewById(R.id.title);
         final EditText editText= dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
 
@@ -400,16 +403,12 @@ public class DrugListActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
-                if (s.length() == 8) {
-                    ok.setEnabled(true);
-                    ok.setBackground(ContextCompat.getDrawable(editText.getContext(), R.drawable.shadow_bg));
-                }
+                ok.setEnabled(s.length() == 8);
             }
         });
         ok.setOnClickListener(v -> {
@@ -438,12 +437,13 @@ public class DrugListActivity extends AppCompatActivity {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.setContentView(R.layout.custom_dialog_layout_one_button);
-        dlg.setCancelable(true);
-        MaterialTextView msg = dlg.findViewById(R.id.msg);
+        dlg.setCancelable(false);
+        TextView msg = dlg.findViewById(R.id.msg);
         String msgString;
-        MaterialTextView cpl = dlg.findViewById(R.id.cpl);
-        ShapeableImageView icon = dlg.findViewById(R.id.image);
-        MaterialButton btn = dlg.findViewById(R.id.txtClose);
+        TextView cpl = dlg.findViewById(R.id.cpl);
+        String cplString;
+        ImageView icon = dlg.findViewById(R.id.image);
+        Button btn = dlg.findViewById(R.id.txtClose);
         dlg.show();
 
         if (aMedicine != null) {
@@ -453,14 +453,7 @@ public class DrugListActivity extends AppCompatActivity {
             if (cplString.isEmpty()) {
                 cpl.setEnabled(false);
             }
-            cpl.setText(getString(R.string.addInList));
             icon.setImageResource(R.drawable.tickmark);
-            btn.setOnClickListener(v -> {
-                // TODO Auto-generated method stub
-                dlg.dismiss();
-                finish();
-                addDrugToList(Utils.medicine2prescription(aMedicine));
-            btn.setText(getString(R.string.Yes));
             btn.setOnClickListener(v -> {
                 // TODO Auto-generated method stub
                 dlg.dismiss();
@@ -471,12 +464,6 @@ public class DrugListActivity extends AppCompatActivity {
             msgString = getString(R.string.msgNotFound);
             msg.setText(msgString);
             cpl.setText("");
-            icon.setImageResource(R.drawable.tickcross);
-            btn.setText(getString(R.string.button_close));
-            btn.setOnClickListener(v -> {
-                // TODO Auto-generated method stub
-                dlg.dismiss();
-                finish();
             icon.setImageResource(R.drawable.tickcross);  //TODO: Exception imageResource null Object reference
             btn.setOnClickListener(v -> {
                 // TODO Auto-generated method stub
@@ -491,7 +478,7 @@ public class DrugListActivity extends AppCompatActivity {
      * Tell user that the barre code cannot be interpreted
      */
     private void scanNotOK() {
-        MaterialAlertDialogBuilder dlg = new MaterialAlertDialogBuilder(this);
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
         dlg.setTitle(getString(R.string.app_name));
 
         dlg.setMessage(R.string.notInterpreted);
@@ -559,11 +546,6 @@ public class DrugListActivity extends AppCompatActivity {
                 }
 
                 Snackbar.make(recyclerView, prescription.getName(),
-                        Snackbar.LENGTH_LONG).setAction(R.string.Undo, v -> {
-                            prescriptionList.add(position, prescription);
-                            mAdapter.notifyItemInserted(position);
-                        }).setActionTextColor(getResources().getColor(R.color.bg_screen1))
-                        .show();
                         Snackbar.LENGTH_LONG).setAction(R.string.Undo, v -> {
                             prescriptionList.add(position, prescription);
                             mAdapter.notifyItemInserted(position);
@@ -702,7 +684,6 @@ public class DrugListActivity extends AppCompatActivity {
                     startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                     overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
-                    }
                 });
             } else {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getTake());
@@ -736,9 +717,9 @@ public class DrugListActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final View mView;
-            final MaterialTextView mContentView;
-            final MaterialTextView mEndOfStock;
-            final ShapeableImageView mIconView;
+            final TextView mContentView;
+            final TextView mEndOfStock;
+            final ImageView mIconView;
             public Prescription mItem;
 
             ViewHolder(View view) {
