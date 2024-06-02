@@ -38,11 +38,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.zxing.client.android.BuildConfig;
@@ -60,6 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -225,6 +221,7 @@ public class DrugListActivity extends AppCompatActivity {
                             Log.d(TAG, "Missing camera permission");
                             Toast.makeText(this, R.string.missing_camera_permission, Toast.LENGTH_LONG).show();
                         } else {
+                            assert bundle != null;
                             Log.d(TAG, "bundle == " + bundle.getInt("returnCode"));
                             int returnCode = bundle.getInt("returnCode");
                             int resultCode = bundle.getInt("resultCode");
@@ -248,13 +245,13 @@ public class DrugListActivity extends AppCompatActivity {
                                 }
 
                                 String cip13;
-                                switch (bundle.getString(BARCODE_FORMAT_NAME)) {
+                                switch (Objects.requireNonNull(bundle.getString(BARCODE_FORMAT_NAME))) {
                                     case "CODE_128":
                                     case "EAN_13":  //CODE_128 || EAN 13
                                         cip13 = bundle.getString(BARCODE_CONTENT);
                                         break;
                                     case "DATA_MATRIX":
-                                        cip13 = bundle.getString(BARCODE_CONTENT).substring(4, 17);
+                                        cip13 = Objects.requireNonNull(bundle.getString(BARCODE_CONTENT)).substring(4, 17);
                                         break;
                                     default:
                                         scanNotOK();
@@ -304,6 +301,44 @@ public class DrugListActivity extends AppCompatActivity {
             startActivity(new Intent(this, WelcomeActivity.class));
             return true;
         }
+        else if (id == R.id.export_prescription) {
+            final Dialog dlg = new Dialog(this);
+            dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dlg.setContentView(R.layout.custom_dialog_layout_one_button);
+            dlg.setCancelable(false);
+            TextView msg = dlg.findViewById(R.id.msg);
+            msg.setText("Demande de Backup");
+            TextView cpl = dlg.findViewById(R.id.cpl);
+            ImageView icon = dlg.findViewById(R.id.image);
+            Button btn = dlg.findViewById(R.id.txtClose);
+            btn.setText(R.string.button_ok);
+            btn.setOnClickListener(v -> {
+                dlg.dismiss();
+                finish();
+            });
+            dlg.show();
+
+        } else if (id == R.id.import_prescription) {
+            final Dialog dlg = new Dialog(this);
+            dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dlg.setContentView(R.layout.custom_dialog_layout_one_button);
+            dlg.setCancelable(false);
+            TextView msg = dlg.findViewById(R.id.msg);
+            msg.setText("Demande de Restauration");
+            TextView cpl = dlg.findViewById(R.id.cpl);
+            String cplString;
+            ImageView icon = dlg.findViewById(R.id.image);
+            Button btn = dlg.findViewById(R.id.txtClose);
+            btn.setText(R.string.button_ok);
+            btn.setOnClickListener(v -> {
+                dlg.dismiss();
+                finish();
+            });
+            dlg.show();
+
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -318,7 +353,7 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     // Launch scan
-    public void onButtonClick() {
+    public void onButtonClick(View v) {
         Log.d(TAG, "add medication");
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_128);
@@ -340,7 +375,7 @@ public class DrugListActivity extends AppCompatActivity {
     protected void showInputDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
@@ -401,7 +436,7 @@ public class DrugListActivity extends AppCompatActivity {
     private void askToAddInDB(Medicine aMedicine) {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dlg.setContentView(R.layout.custom_dialog_layout_one_button);
         dlg.setCancelable(true);
         MaterialTextView msg = dlg.findViewById(R.id.msg);
@@ -414,8 +449,17 @@ public class DrugListActivity extends AppCompatActivity {
         if (aMedicine != null) {
             msgString = aMedicine.getName() + " " + getString(R.string.msgFound);
             msg.setText(msgString);
+            cplString = getString(R.string.addInList);
+            if (cplString.isEmpty()) {
+                cpl.setEnabled(false);
+            }
             cpl.setText(getString(R.string.addInList));
             icon.setImageResource(R.drawable.tickmark);
+            btn.setOnClickListener(v -> {
+                // TODO Auto-generated method stub
+                dlg.dismiss();
+                finish();
+                addDrugToList(Utils.medicine2prescription(aMedicine));
             btn.setText(getString(R.string.Yes));
             btn.setOnClickListener(v -> {
                 // TODO Auto-generated method stub
@@ -429,6 +473,11 @@ public class DrugListActivity extends AppCompatActivity {
             cpl.setText("");
             icon.setImageResource(R.drawable.tickcross);
             btn.setText(getString(R.string.button_close));
+            btn.setOnClickListener(v -> {
+                // TODO Auto-generated method stub
+                dlg.dismiss();
+                finish();
+            icon.setImageResource(R.drawable.tickcross);  //TODO: Exception imageResource null Object reference
             btn.setOnClickListener(v -> {
                 // TODO Auto-generated method stub
                 dlg.dismiss();
@@ -515,6 +564,10 @@ public class DrugListActivity extends AppCompatActivity {
                             mAdapter.notifyItemInserted(position);
                         }).setActionTextColor(getResources().getColor(R.color.bg_screen1))
                         .show();
+                        Snackbar.LENGTH_LONG).setAction(R.string.Undo, v -> {
+                            prescriptionList.add(position, prescription);
+                            mAdapter.notifyItemInserted(position);
+                        }).show();
             }
 
             @Override
@@ -649,6 +702,7 @@ public class DrugListActivity extends AppCompatActivity {
                     startActivityForResult(intent, CUSTOMIZED_REQUEST_CODE);
                     overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
+                    }
                 });
             } else {
                 int remainingStock = (int) Math.floor(mValues.get(position).getStock() / mValues.get(position).getTake());
