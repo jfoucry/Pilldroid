@@ -455,7 +455,6 @@ public class DrugListActivity extends AppCompatActivity {
             }
             icon.setImageResource(R.drawable.tickmark);
             btn.setOnClickListener(v -> {
-                // TODO Auto-generated method stub
                 dlg.dismiss();
                 finish();
                 addDrugToList(Utils.medicine2prescription(aMedicine));
@@ -466,7 +465,6 @@ public class DrugListActivity extends AppCompatActivity {
             cpl.setText("");
             icon.setImageResource(R.drawable.tickcross);  //TODO: Exception imageResource null Object reference
             btn.setOnClickListener(v -> {
-                // TODO Auto-generated method stub
                 dlg.dismiss();
                 finish();
             });
