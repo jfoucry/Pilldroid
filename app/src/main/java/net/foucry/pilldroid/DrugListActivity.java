@@ -61,6 +61,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+;
+
 /**
  * An activity representing a list of Drugs is activity
  * has different presentations for handset and tablet-size devices. On
@@ -76,6 +78,8 @@ public class DrugListActivity extends AppCompatActivity {
     public final String BARCODE_CONTENT = "Barcode Content";
     // Used for dev and debug
     final Boolean DEMO = false;
+    final  private boolean enableLog = true;
+    final private boolean encryptBackup = true;
     public PrescriptionDatabase prescriptions;
     public MedicineDatabase medicines;
     private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
@@ -303,44 +307,11 @@ public class DrugListActivity extends AppCompatActivity {
 
             startActivity(new Intent(this, WelcomeActivity.class));
             return true;
-        }
-        else if (id == R.id.export_prescription) {
-            final Dialog dlg = new Dialog(this);
-            dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            dlg.setContentView(R.layout.custom_dialog_layout_one_button);
-            dlg.setCancelable(false);
-            TextView msg = dlg.findViewById(R.id.msg);
-            msg.setText("Demande de Backup");
-            TextView cpl = dlg.findViewById(R.id.cpl);
-            ImageView icon = dlg.findViewById(R.id.image);
-            Button btn = dlg.findViewById(R.id.txtClose);
-            btn.setText(R.string.button_ok);
-            btn.setOnClickListener(v -> {
-                dlg.dismiss();
-                finish();
-            });
-            dlg.show();
-
+        } else if (id == R.id.export_prescription) {
+            //backupPrescriptions();
+            // TODO: a changer ainsi que le menu.
         } else if (id == R.id.import_prescription) {
-            final Dialog dlg = new Dialog(this);
-            dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            dlg.setContentView(R.layout.custom_dialog_layout_one_button);
-            dlg.setCancelable(false);
-            TextView msg = dlg.findViewById(R.id.msg);
-            msg.setText("Demande de Restauration");
-            TextView cpl = dlg.findViewById(R.id.cpl);
-            String cplString;
-            ImageView icon = dlg.findViewById(R.id.image);
-            Button btn = dlg.findViewById(R.id.txtClose);
-            btn.setText(R.string.button_ok);
-            btn.setOnClickListener(v -> {
-                dlg.dismiss();
-                finish();
-            });
-            dlg.show();
-
+            //restorePrescriptions();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -389,10 +360,8 @@ public class DrugListActivity extends AppCompatActivity {
         Button cancel = dialog.findViewById(R.id.notagreed);
         ok.setEnabled(false);
         //TextView  title = (TextView ) dialog.findViewById(R.id.title);
-        final EditText editText= dialog.findViewById(R.id.editcip13);
+        final EditText editText = dialog.findViewById(R.id.editcip13);
         String cip13 = String.valueOf(editText.getText());
-
-        // TODO change the color of ok button when the number of character is correct.
 
         ok.setText(R.string.button_ok);
         cancel.setText(R.string.button_cancel);
@@ -413,7 +382,7 @@ public class DrugListActivity extends AppCompatActivity {
         });
         ok.setOnClickListener(v -> {
             dialog.cancel();
-            Log.i("EditText Value",editText.getEditableText().toString());
+            Log.i("EditText Value", editText.getEditableText().toString());
             MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
             Medicine aMedicine = medicinesDAO.getMedicineByCIP13(cip13);
             askToAddInDB(aMedicine);
@@ -545,9 +514,9 @@ public class DrugListActivity extends AppCompatActivity {
 
                 Snackbar.make(recyclerView, prescription.getName(),
                         Snackbar.LENGTH_LONG).setAction(R.string.Undo, v -> {
-                            prescriptionList.add(position, prescription);
-                            mAdapter.notifyItemInserted(position);
-                        }).show();
+                    prescriptionList.add(position, prescription);
+                    mAdapter.notifyItemInserted(position);
+                }).show();
             }
 
             @Override
