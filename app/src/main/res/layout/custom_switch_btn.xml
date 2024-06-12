@@ -1,0 +1,32 @@
+<com.google.android.material.button.MaterialButtonToggleGroup android:id="@+id/toggleGroup"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:checkedButton="@id/switch_btn_export"
+    app:singleSelection="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:id="@+id/switch_btn_export"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/export_prescriptions"
+        android:backgroundTint="@color/selected_backgroundf"
+        android:textColor="@color/white"
+        />
+
+    <Button
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:id="@+id/switch_btn_import"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/import_prescriptions"
+        android:backgroundTint="@color/unselected_backgroud"
+        android:textColor="@color/white"
+        />
+
+</com.google.android.material.button.MaterialButtonToggleGroup>
