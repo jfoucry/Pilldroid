@@ -18,6 +18,6 @@
 
     <color name="led">#31f623</color>
     <color name="grey">#777</color>
-    <color name="unselected_backgroud">#777777</color>
-    <color name="selected_backgroundf">#4f91ff</color>
+    <color name="unselected_background">#777777</color>
+    <color name="selected_background">#4f91ff</color>
 </resources>

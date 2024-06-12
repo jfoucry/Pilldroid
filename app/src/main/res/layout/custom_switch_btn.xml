@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="@string/export_prescriptions"
-        android:backgroundTint="@color/selected_backgroundf"
+        android:backgroundTint="@color/selected_background"
         android:textColor="@color/white"
         />
 
@@ -25,7 +25,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="@string/import_prescriptions"
-        android:backgroundTint="@color/unselected_backgroud"
+        android:backgroundTint="@color/unselected_background"
         android:textColor="@color/white"
         />
 
