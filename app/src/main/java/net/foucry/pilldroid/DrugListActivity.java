@@ -43,6 +43,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.client.android.BuildConfig;
 import com.google.zxing.client.android.Intents;
@@ -60,8 +61,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -189,6 +188,9 @@ public class DrugListActivity extends AppCompatActivity {
             toolbar.setTitle(getTitle());
         }
 
+        FloatingActionButton mFloatingActionButton = findViewById(R.id.fab);
+        mFloatingActionButton.setOnClickListener(v-> onButtonClick());
+
         if (DEMO) {
             PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
 
@@ -307,11 +309,9 @@ public class DrugListActivity extends AppCompatActivity {
 
             startActivity(new Intent(this, WelcomeActivity.class));
             return true;
-        } else if (id == R.id.export_prescription) {
+        } else if (id == R.id.ImportExport) {
             //backupPrescriptions();
             // TODO: a changer ainsi que le menu.
-        } else if (id == R.id.import_prescription) {
-            //restorePrescriptions();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -327,7 +327,7 @@ public class DrugListActivity extends AppCompatActivity {
     }
 
     // Launch scan
-    public void onButtonClick(View v) {
+    public void onButtonClick() {
         Log.d(TAG, "add medication");
         ScanOptions options = new ScanOptions();
         options.setDesiredBarcodeFormats(ScanOptions.DATA_MATRIX, ScanOptions.CODE_128);
@@ -377,7 +377,14 @@ public class DrugListActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
-                ok.setEnabled(s.length() == 8);
+                if (s.length() == 8) {
+                    ok.setEnabled(true);
+                    ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn)));
+                }
+                else {
+                    ok.setEnabled(false);
+                    ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn_disabled)));
+                }
             }
         });
         ok.setOnClickListener(v -> {

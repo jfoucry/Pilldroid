@@ -2,15 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/about"
         android:title="@string/about"/>
-    <item android:title="@string/backup">
-    <menu>
-        <item android:id="@+id/export_prescription"
-            android:title="@string/export_prescriptions"/>
-
-        <item android:id="@+id/import_prescription"
-            android:title="@string/import_prescriptions"/>
-    </menu>
-    </item>
+    <item android:id="@+id/ImportExport"
+        android:title="@string/import_export"/>
     <item android:id="@+id/help"
         android:title="@string/help"/>
 </menu>
