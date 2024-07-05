@@ -65,7 +65,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="28dp"
-            android:autofillHints="cip13"
             android:ems="10"
             android:inputType="number"
             android:labelFor="@id/startcip13"
