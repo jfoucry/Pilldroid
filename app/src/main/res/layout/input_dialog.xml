@@ -12,6 +12,7 @@
         android:layout_width="371dp"
         android:layout_height="209dp"
         android:layout_marginTop="16dp"
+        android:labelFor="@+id/cip13_input_dialog"
         android:background="@drawable/background_dialog"
         app:cardCornerRadius="25dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +23,7 @@
             android:id="@+id/notagreed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_btn"
             android:gravity="center"
@@ -34,16 +35,10 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/agreed"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="HardcodedText,SpUsage" />
-
-        <Space
-            android:id="@+id/space"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            app:layout_constraintEnd_toStartOf="@+id/agreed"
-            app:layout_constraintStart_toEndOf="@+id/notagreed" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/agreed"
@@ -100,6 +95,7 @@
             android:layout_width="55dp"
             android:layout_height="33dp"
             android:text="340009"
+            android:hint="@string/enter_cip_13_here"
             android:textAlignment="textEnd"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
