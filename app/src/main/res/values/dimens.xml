@@ -7,6 +7,7 @@
     <dimen name="fab_width">48dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
 
+    <dimen name="btn_radius">5dp</dimen>
     <!-- Slide dimens -->
     <dimen name="dots_height">75dp</dimen>
     <dimen name="dots_margin_bottom">20dp</dimen>

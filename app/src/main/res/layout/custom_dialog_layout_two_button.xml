@@ -1,99 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/materialCardView"
+        android:layout_width="368dp"
+        android:layout_height="237dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         app:cardCornerRadius="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="61dp"
-            android:layout_height="61dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/shadow_bg"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@id/msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="12dp"
             android:fontFamily="@font/opensans_semibold"
+            android:hints="@+id/msg"
             android:text="@string/app_name"
             android:textColor="@color/grey"
             android:textSize="15dp"
-            android:labelFor="@+id/msg"
-            tools:ignore="HardcodedText,SpUsage" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.057"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.347"
+            tools:ignore="HardcodedText,SpUsage"
+            tools:layout_conversion_absoluteHeight="21dp"
+            tools:layout_conversion_absoluteWidth="91dp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@id/cpl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="12dp"
             android:fontFamily="@font/opensans_regular"
             android:text="@string/app_version"
             android:textColor="@color/grey"
             android:textSize="14dp"
-            tools:ignore="HardcodedText,SpUsage" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:labelFor="@+id/cpl"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.046"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,SpUsage"
+            tools:layout_conversion_absoluteHeight="19dp"
+            tools:layout_conversion_absoluteWidth="24dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/notagreed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="170dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginBottom="38dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_btn"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minWidth="100dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
             android:text="@string/button_cancel"
-            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <Space
-            android:layout_width="100dp"
-            android:layout_height="wrap_content" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/agreed"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="HardcodedText,SpUsage" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/agreed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="170dp"
-            android:layout_marginBottom="38dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_btn"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minWidth="100dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
             android:text="@string/button_ok"
-            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/notagreed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/notagreed"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="HardcodedText,SpUsage" />
 
-    </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/shapeableImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/shadow_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_conversion_absoluteHeight="61dp"
+            tools:layout_conversion_absoluteWidth="61dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
