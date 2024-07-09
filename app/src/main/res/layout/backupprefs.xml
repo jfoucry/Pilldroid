@@ -2,147 +2,71 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/materialCardView"
-        android:layout_width="370dp"
-        android:layout_height="319dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        app:cardCornerRadius="@dimen/btn_radius"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35">
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/switch_btn_export"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_addFruit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="32dp"
+        android:src="@drawable/ic_add"
+        android:contentDescription="Add new Fruit" />
+
+    <LinearLayout
+        android:id="@+id/ll_properties"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_anchor="@+id/constraintLayout"
+        app:layout_anchorGravity="center">
+
+
+
+        <include layout="@layout/custom_switch_btn"/>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="68dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/selected_background"
-            android:gravity="center"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/export_prescriptions"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/switch_btn_import"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/switch_btn_import" />
+            android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/switch_btn_import"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/unselected_background"
-            android:gravity="center"
-            android:maxLines="1"
-            android:minWidth="100dp"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/import_prescriptions"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/switch_btn_export"
-            app:layout_constraintHorizontal_bias="0.99"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="93dp" />
+            <Button
+                android:id="@+id/btn_backup_location"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_btn"
+                android:text="Backup Location"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="@android:color/white" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/notagreed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/rounded_btn"
-            android:gravity="center"
-            android:maxLines="1"
-            android:minWidth="100dp"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/button_cancel"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/agreed"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="HardcodedText,SpUsage" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_backup_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="76dp"
-            android:layout_marginEnd="2dp"
-            android:background="@drawable/rounded_btn"
-            android:gravity="center"
-            android:maxLines="1"
-            android:minWidth="100dp"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/location"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_properties"
-            app:layout_constraintEnd_toStartOf="@+id/btn_properties"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_properties"
-            app:layout_constraintVertical_bias="0.0" />
+            <Button
+                android:id="@+id/btn_properties"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_btn"
+                android:text="Properties"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="@android:color/white" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_properties"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="68dp"
-            android:background="@drawable/rounded_btn"
-            android:gravity="center"
-            android:maxLines="1"
-            android:minWidth="100dp"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/properties"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="173dp" />
+        </LinearLayout>
+    </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/agreed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/rounded_btn"
-            android:gravity="center"
-            android:maxLines="1"
-            android:minWidth="100dp"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/button_ok"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/notagreed"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/notagreed"
-            app:layout_constraintVertical_bias="0.0"
-            tools:ignore="HardcodedText,SpUsage" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/shapeableImageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/shadow_bg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_absoluteHeight="61dp"
-            tools:layout_conversion_absoluteWidth="61dp" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
