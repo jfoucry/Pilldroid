@@ -87,7 +87,8 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
+        super.onBackPressed();
         onCancel(this.getCurrentFocus());
     }
 

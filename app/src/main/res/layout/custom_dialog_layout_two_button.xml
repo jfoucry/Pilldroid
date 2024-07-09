@@ -12,7 +12,7 @@
         android:layout_height="237dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
-        app:cardCornerRadius="11dp"
+        app:cardCornerRadius="@dimen/btn_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

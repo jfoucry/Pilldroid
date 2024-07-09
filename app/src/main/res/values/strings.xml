@@ -79,4 +79,6 @@
     <string name="import_export" translatable="false">Import/Export</string>
     <string name="import_prescriptions" translatable="false">Import</string>
     <string name="export_prescriptions" translatable="false">Export</string>
+    <string name="location">Location</string>
+    <string name="properties">Properties</string>
 </resources>

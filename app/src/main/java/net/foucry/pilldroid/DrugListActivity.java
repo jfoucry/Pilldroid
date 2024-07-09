@@ -310,8 +310,7 @@ public class DrugListActivity extends AppCompatActivity {
             startActivity(new Intent(this, WelcomeActivity.class));
             return true;
         } else if (id == R.id.ImportExport) {
-            //backupPrescriptions();
-            // TODO: a changer ainsi que le menu.
+            backupprefs();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -710,5 +709,34 @@ public class DrugListActivity extends AppCompatActivity {
                 return super.toString() + " '" + mContentView.getText() + "'";
             }
         }
+    }
+    void backupprefs() {
+        final Dialog dlg = new Dialog(this);
+        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dlg.setContentView(R.layout.backupprefs);
+        dlg.setCancelable(false);
+
+        Button btn_export = dlg.findViewById(R.id.switch_btn_export);
+        Button btn_import =  dlg.findViewById(R.id.switch_btn_import);
+        Button btn_location = dlg.findViewById(R.id.btn_backup_location);
+        Button btn_properties = dlg.findViewById(R.id.btn_properties);
+
+        btn_export.setEnabled(true);
+        btn_import.setEnabled(false);
+
+        Button ok = dlg.findViewById(R.id.ok_btn);
+        Button cancel = dlg.findViewById(R.id.cancel_btn);
+        ok.setOnClickListener(v -> {
+            dlg.cancel();
+            //TODO: manage the options
+            Log.i(TAG, "ok button");
+        });
+
+        cancel.setOnClickListener(v -> {
+            dlg.cancel();
+            Log.i(TAG, "dismiss dialog");
+        });
+        dlg.show();
     }
 }
