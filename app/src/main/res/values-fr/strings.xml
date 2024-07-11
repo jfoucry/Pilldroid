@@ -74,6 +74,6 @@
     <string name="Undo">Annuler</string>
     <string name="trash_icon">Icône de poubelle</string>
     <string name="addInList">Ajouter à votre liste de médicament</string>
-    <string name="location">Chemin</string>
+    <string name="location">Chemin </string>
     <string name="properties">Préférences</string>
 </resources>
