@@ -12,6 +12,7 @@
         android:layout_height="319dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
+        android:background="@color/white"
         app:cardCornerRadius="@dimen/btn_radius"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

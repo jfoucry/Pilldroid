@@ -725,8 +725,8 @@ public class DrugListActivity extends AppCompatActivity {
         btn_export.setEnabled(true);
         btn_import.setEnabled(false);
 
-        Button ok = dlg.findViewById(R.id.ok_btn);
-        Button cancel = dlg.findViewById(R.id.cancel_btn);
+        Button ok = dlg.findViewById(R.id.agreed);
+        Button cancel = dlg.findViewById(R.id.notagreed);
         ok.setOnClickListener(v -> {
             dlg.cancel();
             //TODO: manage the options
