@@ -42,6 +42,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -711,6 +712,8 @@ public class DrugListActivity extends AppCompatActivity {
         }
     }
     void backupprefs() {
+        Log.i(TAG, "backupprefs");
+
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -727,10 +730,13 @@ public class DrugListActivity extends AppCompatActivity {
 
         Button ok = dlg.findViewById(R.id.agreed);
         Button cancel = dlg.findViewById(R.id.notagreed);
+
+        PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(this);
+
+
         ok.setOnClickListener(v -> {
             dlg.cancel();
             //TODO: manage the options
-            Log.i(TAG, "ok button");
         });
 
         cancel.setOnClickListener(v -> {
@@ -738,5 +744,14 @@ public class DrugListActivity extends AppCompatActivity {
             Log.i(TAG, "dismiss dialog");
         });
         dlg.show();
+
+    Log.i(TAG, "ok button");
+    if ( btn_export.isEnabled() {
+        // TODO: call `make backup
+            prescriptions.backup();
+
+    } else {
+        // TODO: call restore backup
     }
+}
 }
