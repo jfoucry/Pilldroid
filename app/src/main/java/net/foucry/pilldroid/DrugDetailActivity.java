@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
 import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Prescription;
