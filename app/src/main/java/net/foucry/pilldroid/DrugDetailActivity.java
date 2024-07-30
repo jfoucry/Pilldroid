@@ -1,20 +1,17 @@
 package net.foucry.pilldroid;
 
-import static net.foucry.pilldroid.R.id.detail_toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import net.foucry.pilldroid.dao.PrescriptionsDAO;
 import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Prescription;
@@ -43,23 +40,20 @@ public class DrugDetailActivity extends AppCompatActivity {
         Log.d(TAG, "aPrescription == " + aPrescription);
 
         setContentView(R.layout.drug_detail_activity);
-        Toolbar toolbar = findViewById(detail_toolbar);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
 
-        ImageButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Click on save icon");
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            Log.d(TAG, "Click on save icon");
 
-                getDrugChanges();
-                setResult(1);
-                finish();
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-            }
+            getDrugChanges();
+            setResult(1);
+            finish();
+            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
         });
 
         // Show the Up button in the action bar.
@@ -129,13 +123,14 @@ public class DrugDetailActivity extends AppCompatActivity {
         String takeValue = takeTextView.getText().toString();
 
         alertView = findViewById(R.id.alert_cell);
+        alertView.setContentDescription("R.string.Drug_warningThreshold_label");
         TextView alertTextView = alertView.findViewById(R.id.value);
         String alertValue = alertTextView.getText().toString();
 
         warningView = findViewById(R.id.warning_cell);
+        warningView.setContentDescription("R.string.drug_alertThreshold_label");
         TextView warningTextView = warningView.findViewById(R.id.value);
         String warningValue = warningTextView.getText().toString();
-
         newPrescription.setStock(Float.parseFloat(stockValue));
         newPrescription.setTake(Float.parseFloat(takeValue));
         newPrescription.setWarning(Integer.parseInt(warningValue));

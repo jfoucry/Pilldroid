@@ -10,7 +10,6 @@ import android.text.format.DateUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -18,31 +17,27 @@ import java.util.List;
  */
 
 
-
 class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "prescription.db";
 
-    private static final String TABLE_DRUG          = "drug";
-    private static final String KEY_ID              = "id";
-    private static final String KEY_CIS             = "cis";
-    private static final String KEY_CIP13           = "cip13";
-    private static final String KEY_NAME            = "name";
-    private static final String KEY_ADMIN           = "administration_mode";
-    private static final String KEY_PRES            = "presentation";
-    private static final String KEY_STOCK           = "stock";
-    private static final String KEY_TAKE            = "take";
-    private static final String KEY_THRESHOLD_WARN  = "warning";
+    private static final String TABLE_DRUG = "drug";
+    private static final String KEY_ID = "id";
+    private static final String KEY_CIS = "cis";
+    private static final String KEY_CIP13 = "cip13";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_ADMIN = "administration_mode";
+    private static final String KEY_PRES = "presentation";
+    private static final String KEY_STOCK = "stock";
+    private static final String KEY_TAKE = "take";
+    private static final String KEY_THRESHOLD_WARN = "warning";
     private static final String KEY_THRESHOLD_ALERT = "alert";
-    private static final String KEY_LAST_UPDATE     = "last_update";
-
-    final List<Drug> drugs = new ArrayList<>();
-
+    private static final String KEY_LAST_UPDATE = "last_update";
     private static final String TAG = DBHelper.class.getName();
-
-    private static final String[] COLUMNS = {KEY_ID, KEY_CIS,KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_TAKE,
+    private static final String[] COLUMNS = {KEY_ID, KEY_CIS, KEY_CIP13, KEY_NAME, KEY_ADMIN, KEY_PRES, KEY_STOCK, KEY_TAKE,
             KEY_THRESHOLD_WARN, KEY_THRESHOLD_ALERT, KEY_LAST_UPDATE};
+    final List<Drug> drugs = new ArrayList<>();
 
     DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -53,7 +48,7 @@ class DBHelper extends SQLiteOpenHelper {
         String CREATE_DRUG_TABLE = "CREATE TABLE drug ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "cis TEXT, " +
-                "cip13 TEXT, "  +
+                "cip13 TEXT, " +
                 "name TEXT, " +
                 "administration_mode TEXT, " +
                 "presentation TEXT, " +
@@ -88,6 +83,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     /**
      * Split drug values into database record and record it to the DB
+     *
      * @param drug the drug object to be saved
      */
     void addDrug(Drug drug) {
@@ -123,6 +119,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     /**
      * return a drug from the DB with is id
+     *
      * @param id of the drug we looking for (not used)
      * @return return the found drug of null
      */
@@ -134,7 +131,7 @@ class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_DRUG,                    // Which table
                 COLUMNS,                                         // column names
                 " id = ?",                             // selections
-                new String[] { String.valueOf(id) },             // selections args
+                new String[]{String.valueOf(id)},             // selections args
                 null,                                   // group by
                 null,                                    // having
                 null,                                   // order by
@@ -161,7 +158,7 @@ class DBHelper extends SQLiteOpenHelper {
             drug.setDateLastUpdate(Long.parseLong(cursor.getString(10)));
         }
         // Log
-        Log.d(TAG, "getDrug("+id+")" + drug);
+        Log.d(TAG, "getDrug(" + id + ")" + drug);
 
         assert cursor != null;
         cursor.close();
@@ -172,7 +169,6 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
      * @param cip13 drug id in French nomenclature
      * @return the drug object found in DB or null
      */
@@ -218,7 +214,6 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
      * @return a Sorted and updated by dateEndOfStock List of All drugs presents in database
      */
 
@@ -262,43 +257,36 @@ class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         Drug currentDrug;
-        for (int position = 0 ; position < getCount() ; position++ ) {
+        for (int position = 0; position < getCount(); position++) {
             currentDrug = getItem(position);
 
-            if (!DateUtils.isToday(currentDrug.getDateLastUpdate()))
-            {
+            if (!DateUtils.isToday(currentDrug.getDateLastUpdate())) {
                 currentDrug.newStock();
                 updateDrug(currentDrug);
             }
         }
 
 
-
         Log.d(TAG, "Before sort == " + drugs);
 
-        drugs.sort(new Comparator<Drug>() {
-            @Override
-            public int compare(Drug lhs, Drug rhs) {
-                if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
-                    return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
-                else
-                    return (int) (lhs.getStock() - rhs.getStock());
-            }
+        drugs.sort((lhs, rhs) -> {
+            if (lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock()) != 0)
+                return lhs.getDateEndOfStock().compareTo(rhs.getDateEndOfStock());
+            else
+                return (int) (lhs.getStock() - rhs.getStock());
         });
         Log.d(TAG, "After sort " + drugs);
 
         // Move drug with prise = 0 at the end of the list
         // todo: If some drug moved, must redo all the loop
-        int position = 0 ;
-        for ( int nbOps = 0;  nbOps < getCount() ; nbOps ++ ) {
+        int position = 0;
+        for (int nbOps = 0; nbOps < getCount(); nbOps++) {
             currentDrug = getItem(position);
             double currentTake = currentDrug.getTake();
-            if (currentTake == 0)
-            {
+            if (currentTake == 0) {
                 drug = drugs.remove(position);
                 drugs.add(drug);
-            } else
-            {
+            } else {
                 position++;
             }
         }
@@ -306,7 +294,6 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
      * @param drug object to be updated in DB
      */
     public void updateDrug(Drug drug) {
@@ -319,19 +306,19 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Create ContentValues to add column/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ID,              drug.getId());
-        values.put(KEY_CIS,             drug.getCis());
-        values.put(KEY_CIP13,           drug.getCip13());
-        values.put(KEY_NAME,            drug.getName());
-        values.put(KEY_ADMIN,           drug.getAdministration_mode());
-        values.put(KEY_PRES,            drug.getPresentation());
-        values.put(KEY_STOCK,           drug.getStock());
-        values.put(KEY_TAKE,            drug.getTake());
-        values.put(KEY_THRESHOLD_WARN,  drug.getWarnThreshold());
+        values.put(KEY_ID, drug.getId());
+        values.put(KEY_CIS, drug.getCis());
+        values.put(KEY_CIP13, drug.getCip13());
+        values.put(KEY_NAME, drug.getName());
+        values.put(KEY_ADMIN, drug.getAdministration_mode());
+        values.put(KEY_PRES, drug.getPresentation());
+        values.put(KEY_STOCK, drug.getStock());
+        values.put(KEY_TAKE, drug.getTake());
+        values.put(KEY_THRESHOLD_WARN, drug.getWarnThreshold());
         values.put(KEY_THRESHOLD_ALERT, drug.getAlertThreshold());
-        values.put(KEY_LAST_UPDATE,     drug.getDateLastUpdate());
+        values.put(KEY_LAST_UPDATE, drug.getDateLastUpdate());
 
-        String[] selectionArgs = { String.valueOf(drug.getId()) };
+        String[] selectionArgs = {String.valueOf(drug.getId())};
 
         db.update(TABLE_DRUG,                       // table
                 values,                             // column/value
@@ -345,6 +332,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     /**
      * Delete a drug object in database
+     *
      * @param drug object to be delete in the DB
      */
     public void deleteDrug(Drug drug) {
@@ -353,18 +341,19 @@ class DBHelper extends SQLiteOpenHelper {
 
         // Delete record
         db.delete(TABLE_DRUG,           // table
-                KEY_ID+ " = ?",         // selections
-                new String[] { String.valueOf(drug.getId()) } );  // selections args
+                KEY_ID + " = ?",         // selections
+                new String[]{String.valueOf(drug.getId())});  // selections args
 
         // Close DB
         db.close();
 
         // log
-        Log.d(TAG, "delete drug "+ drug);
+        Log.d(TAG, "delete drug " + drug);
     }
 
     /**
      * Get count of all drug present in database
+     *
      * @return number of drug in DB
      */
     int getCount() {
@@ -389,15 +378,13 @@ class DBHelper extends SQLiteOpenHelper {
     boolean isDrugExist(String cip13) {
         boolean value = false;
         try {
-            Cursor c = this.getReadableDatabase().rawQuery("SELECT * FROM "+ TABLE_DRUG + " where cip13 = "+cip13, null);
+            Cursor c = this.getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_DRUG + " where cip13 = " + cip13, null);
 
-            if(c.getCount()>0)
-            {
+            if (c.getCount() > 0) {
                 value = true;
             }
             c.close();
-        } catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return value;

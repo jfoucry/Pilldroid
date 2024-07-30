@@ -12,23 +12,23 @@ import java.util.List;
 
 @Dao
 public interface PrescriptionsDAO {
-  @Insert
-  void insert(Prescription... prescriptions);
+    @Insert
+    void insert(Prescription... prescriptions);
 
-  @Update
-  void update(Prescription... prescriptions);
+    @Update
+    void update(Prescription... prescriptions);
 
-  @Delete
-  void delete(Prescription prescription);
+    @Delete
+    void delete(Prescription prescription);
 
-  @Query("SELECT * FROM prescriptions")
-  List<Prescription> getAllMedics();
+    @Query("SELECT * FROM prescriptions")
+    List<Prescription> getAllMedics();
 
-  @Query("SELECT * FROM prescriptions WHERE cip13 = :cip13")
-  Prescription getMedicByCIP13(String cip13);
+    @Query("SELECT * FROM prescriptions WHERE cip13 = :cip13")
+    Prescription getMedicByCIP13(String cip13);
 
-  @Query("SELECT count(*) FROM prescriptions")
-  int getMedicCount();
+    @Query("SELECT count(*) FROM prescriptions")
+    int getMedicCount();
 }
 
 

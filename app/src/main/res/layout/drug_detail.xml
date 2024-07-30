@@ -8,47 +8,47 @@
 
     <include
         android:id="@+id/name_cell"
+        layout="@layout/info_cell"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/info_cell" />
+        android:layout_height="match_parent" />
 
     <include
         android:id="@+id/presentation_cell"
+        layout="@layout/info_cell"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/info_cell"/>
-<!--        android:layout_marginTop="5sp" />-->
+        android:layout_height="match_parent" />
+    <!--        android:layout_marginTop="5sp" />-->
 
     <include
         android:id="@+id/administration_cell"
+        layout="@layout/info_cell"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/info_cell"/>
-<!--        android:layout_marginTop="5sp" />-->
+        android:layout_height="match_parent" />
+    <!--        android:layout_marginTop="5sp" />-->
 
     <include
         android:id="@+id/stock_cell"
+        layout="@layout/value_input"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/value_input"/>
-<!--        android:layout_marginTop="30sp" />-->
+        android:layout_height="wrap_content" />
+    <!--        android:layout_marginTop="30sp" />-->
 
     <include
         android:id="@+id/take_cell"
         layout="@layout/value_input"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <include
         android:id="@+id/warning_cell"
+        layout="@layout/value_input_threshold"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/value_input"/>
-<!--        android:layout_marginTop="15sp" />-->
+        android:layout_height="wrap_content" />
+    <!--        android:layout_marginTop="15sp" />-->
 
     <include
         android:id="@+id/alert_cell"
-        layout="@layout/value_input"
+        layout="@layout/value_input_threshold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />

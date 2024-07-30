@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="80dp"
-    android:orientation="horizontal">
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="80dp"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="horizontal">
 
     <!-- Drug's name-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/list_image"
             android:layout_width="50sp"
             android:layout_height="50sp"
-            android:layout_marginStart="5dp"
-            android:src="@drawable/ok_stock_vect"
-            android:contentDescription="@string/stockIcon"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentStart="true" />
+            android:layout_marginStart="5dp"
+            android:contentDescription="@string/stockIcon"
+            app:srcCompat="@drawable/ok_stock_vect" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/list_image"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/list_image"
             android:text="@string/drugName"
             android:textColor="#040404"
-            android:typeface="sans"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_alignTop="@+id/list_image"
-            android:layout_toEndOf="@+id/list_image"
-            android:layout_marginStart="5dp" />
+            android:typeface="sans" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/endOfStock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,13 +54,13 @@
     <!-- dateEndOfStock -->
 
     <!-- Rightend Arrow -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="10sp"
         android:contentDescription="@string/detail_view"
-        android:src="@drawable/ic_navigate_next_black_24dp" />
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
 
 </RelativeLayout>

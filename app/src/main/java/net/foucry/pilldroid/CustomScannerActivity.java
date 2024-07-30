@@ -1,6 +1,5 @@
 package net.foucry.pilldroid;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,8 +10,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 
-import com.journeyapps.barcodescanner.BarcodeCallback;
-import com.journeyapps.barcodescanner.BarcodeResult;
+import androidx.appcompat.app.AppCompatActivity;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.ViewfinderView;
@@ -20,16 +18,14 @@ import com.journeyapps.barcodescanner.ViewfinderView;
 /**
  * Custom Scanner Activity extending from Activity to display a custom layout form scanner view.
  */
-public class CustomScannerActivity extends Activity implements DecoratedBarcodeView.TorchListener {
+public class CustomScannerActivity extends AppCompatActivity implements DecoratedBarcodeView.TorchListener {
 
     private static final String TAG = CustomScannerActivity.class.getName();
-
+    final Bundle captureIntentBundle = new Bundle();
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
     private ImageButton switchFlashlightButton;
     private ViewfinderView viewfinderView;
-
-    final Bundle captureIntentBundle = new Bundle();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,19 +55,16 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
 
         //changeMaskColor(null);
         changeLaserVisibility(true);
-        barcodeScannerView.decodeSingle(new BarcodeCallback() {
-            @Override
-            public void barcodeResult(BarcodeResult result) {
-                Intent scanResult = new Intent();
-                //Bundle scanResultBundle = new Bundle();
-                scanResult.putExtra("Barcode Content", result.getText());
-                scanResult.putExtra("Barcode Format name", result.getBarcodeFormat().name());
-                scanResult.putExtra("returnCode", captureIntentBundle.getInt("returnCode"));
-                scanResult.putExtra("resultCode", 1);
-                CustomScannerActivity.this.setResult(RESULT_OK, scanResult);
-                Log.d(TAG, "scanResult == " + scanResult);
-                finish();
-            }
+        barcodeScannerView.decodeSingle(result -> {
+            Intent scanResult = new Intent();
+            //Bundle scanResultBundle = new Bundle();
+            scanResult.putExtra("Barcode Content", result.getText());
+            scanResult.putExtra("Barcode Format name", result.getBarcodeFormat().name());
+            scanResult.putExtra("returnCode", captureIntentBundle.getInt("returnCode"));
+            scanResult.putExtra("resultCode", 1);
+            CustomScannerActivity.this.setResult(RESULT_OK, scanResult);
+            Log.d(TAG, "scanResult == " + scanResult);
+            finish();
         });
     }
 
@@ -91,6 +84,11 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     protected void onDestroy() {
         super.onDestroy();
         capture.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed(){
+        onCancel(this.getCurrentFocus());
     }
 
     @Override
@@ -147,7 +145,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     public void onKeyboard(View view) {
         Log.d(TAG, "onkeyboard");
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("returnCode",3);
+        resultIntent.putExtra("returnCode", 3);
         CustomScannerActivity.this.setResult(RESULT_OK, resultIntent);
         finish();
     }

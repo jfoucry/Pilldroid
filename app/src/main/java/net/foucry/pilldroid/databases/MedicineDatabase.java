@@ -16,7 +16,7 @@ import net.foucry.pilldroid.models.Medicine;
 
 public abstract class MedicineDatabase extends RoomDatabase {
     private static MedicineDatabase INSTANCE;
-    public abstract MedicinesDAO getMedicinesDAO();
+
     public static MedicineDatabase getInstanceDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
@@ -32,4 +32,6 @@ public abstract class MedicineDatabase extends RoomDatabase {
     public static void destroyInstance() {
         INSTANCE = null;
     }
+
+    public abstract MedicinesDAO getMedicinesDAO();
 }

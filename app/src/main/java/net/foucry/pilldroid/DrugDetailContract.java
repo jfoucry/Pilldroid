@@ -13,7 +13,7 @@ public class DrugDetailContract extends ActivityResultContract<Intent, Integer> 
      * Create an intent that can be used for {@link Activity#startActivityForResult}
      *
      * @param context Context
-     * @param input Drug
+     * @param input   Drug
      */
     @NonNull
     @Override
@@ -26,8 +26,9 @@ public class DrugDetailContract extends ActivityResultContract<Intent, Integer> 
 
     /**
      * Convert result obtained from  to O
+     *
      * @param resultCode Integer
-     * @param intent Intent
+     * @param intent     Intent
      * @return Integer
      */
     @Override

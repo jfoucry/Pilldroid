@@ -12,27 +12,25 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:background="@color/ic_launcher_background"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/detail_toolbar" />
+            app:contentScrim="#0000"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/detail_toolbar"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
             app:layout_collapseMode="pin"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-    </com.google.android.material.appbar.AppBarLayout>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/white"/>
+</com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/drug_detail_container"
@@ -43,15 +41,18 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <ImageButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="@dimen/fab_width"
-        android:layout_height="@dimen/fab_height"
-        android:layout_gravity="end|bottom"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginBottom="?attr/actionBarSize"
-        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="normal"
+        android:layout_gravity="center|bottom"
+        android:scaleType="center"
+        android:layout_margin="@dimen/fab_margin"
         android:contentDescription="@string/save_button"
-        android:src="@drawable/ic_save_black_24dp"
-        app:backgroundTint="@android:color/transparent"/>
+        android:text="@string/save_button"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_save_black_24dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:iconTint="@color/white"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

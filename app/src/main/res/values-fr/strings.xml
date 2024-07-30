@@ -21,6 +21,8 @@
     <string name="flashlightButton">Allumer/Eteindre le Flash</string>
     <string name="enter_cip_13_here">Saisir la fin du code CIP 13 ici..</string>
     <string name="enter_cip_13">Saisir le code CIP 13</string>
+    <string name="button_close">Fermer</string>
+    <string name="scan_label">Visez le code-barres pour le scanner</string>
 
     <!-- Slide Strings -->
     <string name="slide1_Pilldroid">Bienvenue dans Pilldroid</string>
@@ -66,8 +68,13 @@
     <string name="notInterpreted">Le code barre ne peut pas être interprété</string>
     <string name="cancelled_scan">Scan annulé</string>
     <string name="missing_camera_permission">Autorisation appareil photo manquante</string>
-    <string name="Yes">Oui, j\'ai compris</string>
+    <string name="Yes">Oui</string>
+    <string name="Yes_understood">Oui, j\'ai compris</string>
     <string name="understood">Je comprends que le développeur de Pilldroid n\'est pas responsable de la gestion de vos médicaments. CELA RELÈVE DE VOTRE SEULE RESPONSABILITÉ.</string>
     <string name="Undo">Annuler</string>
     <string name="trash_icon">Icône de poubelle</string>
+    <string name="addInList">Ajouter à votre liste de médicament</string>
+    <string name="backup">Backup</string>
+    <string name="export_prescriptions">Export</string>
+    <string name="import_prescriptions">Import</string>
 </resources>

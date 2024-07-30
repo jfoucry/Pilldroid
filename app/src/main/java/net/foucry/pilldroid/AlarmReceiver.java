@@ -31,9 +31,54 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     NotificationManager notificationManager;
 
+    public static void scheduleAlarm(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        Date today;
+        Date tomorrow;
+        LocalTime todayNow = LocalTime.now();
+
+        if (BuildConfig.DEBUG) {
+            Date nextSchedule = calendar.getTime();
+            calendar.setTimeInMillis(nextSchedule.getTime());
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY, 11);
+            calendar.set(Calendar.MINUTE, 15);
+            today = calendar.getTime();
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            tomorrow = calendar.getTime();
+            if (todayNow.isBefore(LocalTime.NOON)) {
+                calendar.setTimeInMillis(today.getTime());
+            } else {
+                calendar.setTimeInMillis(tomorrow.getTime());
+            }
+        }
+
+        PendingIntent alarmIntent;
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        if (BuildConfig.DEBUG) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()), alarmIntent);
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()), alarmIntent);
+        }
+
+        Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static Boolean isAlarmScheduled(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        return alarmManager.getNextAlarmClock() != null;
+    }
+
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         // Show the toast  like in above screen shot
         Log.d(TAG, "onReceive");
 
@@ -45,7 +90,9 @@ public class AlarmReceiver extends BroadcastReceiver {
             scheduleAlarm(context);
         }
 
-        if (BuildConfig.DEBUG) { Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show(); }
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(context, "New stock calculated", Toast.LENGTH_LONG).show();
+        }
         createNotificationChannel(context);
         PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(context.getApplicationContext());
         PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
@@ -53,7 +100,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Prescription firstPrescription = null;
         Prescription currentPrescription;
 
-        for (int i=0 ; i < prescriptionList.size(); i++ ) {
+        for (int i = 0; i < prescriptionList.size(); i++) {
             currentPrescription = prescriptionList.get(i);
             currentPrescription.newStock();
             prescriptionsDAO.update(currentPrescription);
@@ -63,15 +110,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         Utils.sortPrescriptionList(prescriptionList);
         try {
             firstPrescription = prescriptionList.get(0);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
             e.printStackTrace();
         }
 
         if (firstPrescription != null) {
             if (firstPrescription.getTake() != 0) {
-                if(firstPrescription.getStock() <= firstPrescription.getAlertThreshold()) {
+                if (firstPrescription.getStock() <= firstPrescription.getAlertThreshold()) {
                     notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     Intent notificationIntent = new Intent(context, DrugListActivity.class);
@@ -92,8 +138,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
                     int notificationId = 666;
                     notificationManager.notify(notificationId, builder.build());
-                } else
-                {
+                } else {
                     double dummy = (firstPrescription.getStock() - firstPrescription.getAlertThreshold());
                     Log.d(TAG, "no notification scheduled " + dummy);
                 }
@@ -102,8 +147,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void createNotificationChannel(Context context) {
-
         Log.d(TAG, "start create notification channel");
+
         CharSequence name = context.getString(R.string.channel_name);
         String description = context.getString(R.string.channel_description);
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -127,50 +172,5 @@ public class AlarmReceiver extends BroadcastReceiver {
             //E.g: FileNotFoundException ,etc
             e.printStackTrace();
         }
-    }
-    public static void scheduleAlarm(Context context) {
-        Calendar calendar = Calendar.getInstance();
-        Date today;
-        Date tomorrow;
-        LocalTime todayNow = LocalTime.now();
-
-        /*if (BuildConfig.DEBUG) {
-            Date nextSchedule = calendar.getTime();
-            calendar.setTimeInMillis(nextSchedule.getTime());
-        } else {*/
-            calendar.set(Calendar.HOUR_OF_DAY, 11);
-            today = calendar.getTime();
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-            tomorrow = calendar.getTime();
-            if (todayNow.isBefore(LocalTime.NOON)) {
-                calendar.setTimeInMillis(today.getTime());
-            } else {
-                calendar.setTimeInMillis(tomorrow.getTime());
-            }
-        //}
-
-        PendingIntent alarmIntent;
-
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-        /*if (BuildConfig.DEBUG) {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,(calendar.getTimeInMillis()),
-                    AlarmManager.ELAPSED_REALTIME, alarmIntent);
-        } else {*/
-
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis()),
-                    AlarmManager.INTERVAL_DAY, alarmIntent);
-        //}
-
-        Log.d(TAG, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()));
-        if (BuildConfig.DEBUG) { Toast.makeText(context, "Alarm scheduled for " + UtilDate.convertDate(calendar.getTimeInMillis()), Toast.LENGTH_SHORT).show(); }
-    }
-
-    public static Boolean isAlarmScheduled(Context context) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        return alarmManager.getNextAlarmClock() != null;
     }
 }

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_selector">
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="10sp"
-        android:paddingEnd="10sp"
         android:paddingTop="5dp"
+        android:paddingEnd="10sp"
         android:text="@string/Value"
         android:textColor="#040404"
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,5 +30,10 @@
         android:text="@string/label"
         android:textColor="#0c4758"
         android:textStyle="italic" />
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="?android:attr/listDivider"
+      android:layout_below="@id/label"/>
 
 </RelativeLayout>

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg_screen4"
-    android:gravity="center"
-    android:orientation="vertical">
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:background="@color/bg_screen4"
+  android:gravity="center"
+  android:orientation="vertical">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="@dimen/img_width_height"
         android:layout_height="@dimen/img_width_height"
         android:contentDescription="@string/unhappy_face"
-        android:src="@drawable/lower_stock_vect" />
+        app:srcCompat="@drawable/lower_stock_vect" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="349dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/title_padding"

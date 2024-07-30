@@ -9,7 +9,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath 'com.android.tools.build:gradle:8.0.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -17,9 +17,6 @@ buildscript {
 }
 ext {
     compileSdkVersion = '28'
-    buildToolsVersion = '28.0.1'
-    var = '3.4.2'
-    //buildToolsVersion1 = '29.0.3'
     defaultMinSdkVersion = 26
     defaultTargetSdkVersion = 30
     defaultVersionCode = 1
@@ -35,9 +32,8 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
 
-dependencies {
-}
+dependencies {}
