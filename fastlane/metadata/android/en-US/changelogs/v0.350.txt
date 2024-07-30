@@ -1,0 +1,77 @@
+# V0.350-beta
+
+- Update drugs database in order to include new medicaments;
+- Small fix in about.html file
+
+# V0.302-beta - bugs fix and small interface changes
+
+- Fix schedule and stock calculation bug which appears in v0.201-beta. Sorry for the inconvenient
+and the time it took to fix it;
+- Remove unused code and old comments;
+- Change the input CIP13 dialog, you need the 7 last numbers;
+- Change the input values look, remove the rounded corners.
+
+Many other bugs are still present I guess, but I did not find them for now.
+
+Once again, I'm sorry for the inconvenient. Please drop me a line:
+Twitter: pillroid-app
+Mastodon: @lovisix@social.zdx.fr
+Mail: pilldroid@foucry.net
+
+# v0.301-beta - bugs fix
+
+- A major bug disallowed the new stock calculation when Pilldroid was called in background.
+This bug is now fixed, but other bugs could appears.
+Thanks for your help and patience. A small word always make me happy.
+
+# v0.300-beta - New features
+
+- The prescription list management have been revamp (the medics your taken);
+    - a swipe from right to left remove a medic from the list AND from the database;
+    - a swipe from left to right allow you to change the detail of the medic, exactly has taping
+    ont the right arrow.
+
+Those change allow you to remove medics with a take to zero (0) for a to long time and you'll never
+take again.
+They allow me to go to the next step of Pilldroid advancement. Instead of displaying the medic named,
+Pilldroid will display the molecule (doliprane, efferalgant, daflagant will be displyed has paracétamol).
+I will sais more soon.
+
+Thanks to make return of those new features, [Pilldroid](mailto:jacques+pilldroid@foucry.net)
+or [Pilldroid](mailto:pilldroid@foucry.net).
+
+# v0.201-beta - fix bug in `alarmReceiver`
+
+The `alarmReceiver` was still using the old database that *should* be empty. I use `room` database
+management now.
+
+# v0.200-beta – New semantic version number (VRelease.MajorMinorPatch)
+
+**REMEMBER** Pilldroid is a French people user only.
+
+I made a lot a tests but there must stay some bugs.
+
+## What's new
+
+A lot of things under the surface :
+- Add an alert about non responsibility of the author in case of trouble;
+- Using `Room` to manage databases;
+- Migration of the old database to the new one, you should not see anything;
+- Code cleaning.
+
+## What should work.
+- QR-code scan on a dark background. The library have an option for that.
+
+
+**WARNING**, Pilldroid does not manage creams, liquids
+(like insulin).
+
+Thanks to use [github](https://github/jfoucry/pilldroid) for bugs
+reports and new features.
+
+> I made Pilldroid on my free time which is not expandable. Please
+do not stress me it will be unproductive.
+
+Pilldroid will available only from [f-droid](https://f-droid.org)
+
+You can reach me and discuss on [Pilldroid](mailto:jacques+pilldroid@foucry.net).
