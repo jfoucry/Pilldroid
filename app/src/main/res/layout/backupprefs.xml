@@ -52,10 +52,9 @@
             android:paddingEnd="25dp"
             android:text="@string/import_prescriptions"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/switch_btn_export"
-            app:layout_constraintHorizontal_bias="0.99"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="93dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/switch_btn_export"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/switch_btn_export" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/notagreed"
@@ -110,8 +109,13 @@
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:text="@string/properties"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_backup_location"
+            app:layout_constraintEnd_toStartOf="@+id/btn_backup_location"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_backup_location"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="173dp" />
+            app:layout_constraintVertical_bias="0.0"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/agreed"
@@ -147,4 +151,3 @@
             tools:layout_conversion_absoluteWidth="61dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
