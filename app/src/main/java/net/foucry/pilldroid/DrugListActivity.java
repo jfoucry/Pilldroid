@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
@@ -39,11 +40,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.client.android.BuildConfig;
@@ -57,6 +61,8 @@ import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
 
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -73,13 +79,21 @@ import java.util.Objects;
  */
 public class DrugListActivity extends AppCompatActivity {
     private static final String TAG = DrugListActivity.class.getName();
+    private static final String SECRET_PASSWORD = ;
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
+
+    // Barcode Scanner usage
     public final String BARCODE_FORMAT_NAME = "Barcode Format name";
     public final String BARCODE_CONTENT = "Barcode Content";
     // Used for dev and debug
     final Boolean DEMO = false;
-    final  private boolean enableLog = true;
-    final private boolean encryptBackup = true;
+    // RoomBackup variables
+    private boolean enableLog = true;
+    private boolean encryptBackup = true;
+    private boolean useMaxFileCount;
+    private int storageLocation;
+
+    // Databases definition
     public PrescriptionDatabase prescriptions;
     public MedicineDatabase medicines;
     private ActivityResultLauncher<ScanOptions> mBarcodeScannerLauncher;
@@ -711,6 +725,7 @@ public class DrugListActivity extends AppCompatActivity {
             }
         }
     }
+
     void backupprefs() {
         Log.i(TAG, "backupprefs");
 
@@ -720,7 +735,7 @@ public class DrugListActivity extends AppCompatActivity {
         dlg.setContentView(R.layout.backupprefs);
         dlg.setCancelable(false);
 
-        Button btn_export = dlg.findViewById(R.id.switch_btn_export);
+        /*Button btn_export = dlg.findViewById(R.id.switch_btn_export);
         Button btn_import =  dlg.findViewById(R.id.switch_btn_import);
         Button btn_location = dlg.findViewById(R.id.btn_backup_location);
         Button btn_properties = dlg.findViewById(R.id.btn_properties);
@@ -731,9 +746,6 @@ public class DrugListActivity extends AppCompatActivity {
         Button ok = dlg.findViewById(R.id.agreed);
         Button cancel = dlg.findViewById(R.id.notagreed);
 
-        PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(this);
-
-
         ok.setOnClickListener(v -> {
             dlg.cancel();
             //TODO: manage the options
@@ -743,15 +755,182 @@ public class DrugListActivity extends AppCompatActivity {
             dlg.cancel();
             Log.i(TAG, "dismiss dialog");
         });
-        dlg.show();
+        dlg.show();*/
+
+        Button btn_export = findViewById(R.id.switch_btn_export);
+        Button btn_import = findViewById(R.id.switch_btn_import);
+        Button btn_properties = findViewById(R.id.btn_properties);
+        Button btn_backupLocation = findViewById(R.id.btn_backup_location);
+
+        /*recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        fruitViewModel = new ViewModelProvider(this).get(FruitViewModel.class);
+
+        fruitViewModel.getAllFruit().observe(this, adapter::submitList);
+
+        tvFruits.setText("Fruits List (Java Activity)");
+        btn_language.setText("switch to Kotlin");
+        btn_fragment_activity.setText("switch to Fragment");*/
+
+        String SHARED_PREFS = "prescriptionBackup";
+        final String spEncryptBackup = "encryptBackup";
+        final String spStorageLocation = "storageLocation";
+        final String spEnableLog = "enableLog";
+        final String spUseMaxFileCount = "useMaxFileCount";
+        final SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+        /*---------------------FAB Add Button--------------------------*/
+//        fab.setOnClickListener(v -> {
+//            Intent intent = new Intent(getApplicationContext(), ActivityAddEditFruit.class);
+//            openAddEditActivity.launch(intent);
+//        });
+
+        /*---------------------go to Kotlin MainActivity--------------------------*/
+//        btn_language.setOnClickListener(v -> {
+//            finish();
+//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//            startActivity(intent);
+//        });
+
+        /*---------------------go to Fragment class--------------------------*/
+//        btn_fragment_activity.setOnClickListener(v -> {
+//            finish();
+//            Intent intent = new Intent(getApplicationContext(), FragmentActivityJava.class);
+//            startActivity(intent);
+//        });
+
+        encryptBackup = sharedPreferences.getBoolean(spEncryptBackup, true);
+        storageLocation = sharedPreferences.getInt(spStorageLocation, 1);
+        enableLog = sharedPreferences.getBoolean(spEnableLog, true);
+        useMaxFileCount = sharedPreferences.getBoolean(spUseMaxFileCount, false);
+
+        final String[] multiItems = new String[] { "Encrypt Backup", "enable Log", "use maxFileCount = 5" };
+        final boolean[] checkedItems = new boolean[] { encryptBackup, enableLog, useMaxFileCount };
+        final String[] storageItems = new String[] { "Internal", "External", "Custom Dialog", "Custom File" };
+
+        /*---------------------set Properties--------------------------*/
+        btn_properties.setOnClickListener(v -> {
+            MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
+                    DrugListActivity.this);
+            materialAlertDialogBuilder.setTitle("Change Properties");
+            materialAlertDialogBuilder.setPositiveButton("Ok", null);
+
+            materialAlertDialogBuilder.setMultiChoiceItems(multiItems, checkedItems, (dialog, which, isChecked) -> {
+                switch (which) {
+                    case 0:
+                        encryptBackup = isChecked;
+                        sharedPreferences.edit().putBoolean(spEncryptBackup, encryptBackup).apply();
+                        break;
+                    case 1:
+                        enableLog = isChecked;
+                        sharedPreferences.edit().putBoolean(spEnableLog, enableLog).apply();
+                        break;
+                    case 2:
+                        useMaxFileCount = isChecked;
+                        sharedPreferences.edit().putBoolean(spUseMaxFileCount, useMaxFileCount).apply();
+                        break;
+                    default:
+                }
+            });
+            materialAlertDialogBuilder.show();
+
+        });
+
+        /*---------------------set Backup Location--------------------------*/
+        btn_backupLocation.setOnClickListener(v -> {
+            MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
+                    DrugListActivity.this);
+            materialAlertDialogBuilder.setTitle("Change Storage");
+            materialAlertDialogBuilder.setPositiveButton("Ok", null);
+
+            materialAlertDialogBuilder.setSingleChoiceItems(storageItems, storageLocation - 1, (dialog, which) -> {
+                switch (which) {
+                    case 0:
+                        storageLocation = RoomBackup.BACKUP_FILE_LOCATION_INTERNAL;
+                        sharedPreferences.edit().putInt(spStorageLocation, storageLocation).apply();
+                        break;
+                    case 1:
+                        storageLocation = RoomBackup.BACKUP_FILE_LOCATION_EXTERNAL;
+                        sharedPreferences.edit().putInt(spStorageLocation, storageLocation).apply();
+                        break;
+                    case 2:
+                        storageLocation = RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_DIALOG;
+                        sharedPreferences.edit().putInt(spStorageLocation, storageLocation).apply();
+                        break;
+                    case 3:
+                        storageLocation = RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_FILE;
+                        sharedPreferences.edit().putInt(spStorageLocation, storageLocation).apply();
+                        break;
+                }
+            });
+            materialAlertDialogBuilder.show();
+
+        });
 
     Log.i(TAG, "ok button");
-    if ( btn_export.isEnabled() {
+
+    PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(this);
+    final RoomBackup roomBackup = new RoomBackup(DrugListActivity.this);
+    if ( btn_export.isEnabled() ) {
         // TODO: call `make backup
-            prescriptions.backup();
+        roomBackup.backupLocation(storageLocation);
+        roomBackup.database(PrescriptionDatabase.getInstanceDatabase(this));
+        roomBackup.enableLogDebug(enableLog);
+        roomBackup.backupIsEncrypted(encryptBackup);
+        roomBackup.customEncryptPassword(DrugListActivity.SECRET_PASSWORD);
+        if (useMaxFileCount)
+            roomBackup.maxFileCount(5);
+        roomBackup.onCompleteListener((success, message, exitCode) -> {
+            Log.d(TAG, "oncomplete: " + success + "message: " + message + ",exitCode: " + exitCode);
+            if (success)
+                roomBackup.restartApp(new Intent(getApplicationContext(), DrugListActivity.class));
+        });
+        roomBackup.backup();
 
     } else {
         // TODO: call restore backup
+        //prescriptions.restore();
     }
 }
 }
+
+
+/*
+final RoomBackup roomBackup = new RoomBackup(MainActivityJava.this);
+        */
+/*---------------------Backup and Restore Database--------------------------*//*
+
+        btn_backup.setOnClickListener(v -> {
+        roomBackup.backupLocation(storageLocation);
+            roomBackup.backupLocationCustomFile(new File(this.getFilesDir() + "/databasebackup/geilesBackup.sqlite3"));
+        roomBackup.database(FruitDatabase.Companion.getInstance(getApplicationContext()));
+        roomBackup.enableLogDebug(enableLog);
+            roomBackup.backupIsEncrypted(encryptBackup);
+            roomBackup.customEncryptPassword(MainActivity.SECRET_PASSWORD);
+            if (useMaxFileCount)
+        roomBackup.maxFileCount(5);
+            roomBackup.onCompleteListener((success, message, exitCode) -> {
+        Log.d(TAG, "oncomplete: " + success + ", message: " + message + ", exitCode: " + exitCode);
+                if (success)
+        roomBackup.restartApp(new Intent(getApplicationContext(), MainActivityJava.class));
+        });
+        roomBackup.backup();
+
+        });
+
+                btn_restore.setOnClickListener(v -> {
+        roomBackup.backupLocation(storageLocation);
+            roomBackup.backupLocationCustomFile(new File(this.getFilesDir() + "/databasebackup/geilesBackup.sqlite3"));
+        roomBackup.database(FruitDatabase.Companion.getInstance(getApplicationContext()));
+        roomBackup.enableLogDebug(enableLog);
+            roomBackup.backupIsEncrypted(encryptBackup);
+            roomBackup.customEncryptPassword(MainActivity.SECRET_PASSWORD);
+            roomBackup.onCompleteListener((success, message, exitCode) -> {
+        Log.d(TAG, "oncomplete: " + success + ", message: " + message + ", exitCode: " + exitCode);
+                if (success)
+        roomBackup.restartApp(new Intent(getApplicationContext(), MainActivityJava.class));
+        });
+        roomBackup.restore();
+
+        });*/
