@@ -26,25 +26,33 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="68dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="76dp"
             android:layout_weight="1"
             android:backgroundTint="@color/selected_background"
+            android:bottomLeftRadius="0dp"
+            android:bottomRightRadius="10dp"
             android:gravity="center"
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:text="@string/export_prescriptions"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/switch_btn_import"
+            android:topLeftRadius="0dp"
+            android:topRightRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/switch_btn_import" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/switch_btn_import"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            android:layout_marginTop="100dp"
             android:layout_weight="1"
             android:backgroundTint="@color/unselected_background"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="0dp"
             android:gravity="center"
             android:maxLines="1"
             android:minWidth="100dp"
@@ -52,10 +60,10 @@
             android:paddingEnd="25dp"
             android:text="@string/import_prescriptions"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/switch_btn_export"
-            app:layout_constraintHorizontal_bias="0.99"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="0dp"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="93dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/notagreed"
@@ -73,36 +81,15 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/agreed"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="HardcodedText,SpUsage" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_backup_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="76dp"
-            android:layout_marginEnd="2dp"
-            android:background="@drawable/rounded_btn"
-            android:gravity="center"
-            android:maxLines="1"
-            android:minWidth="100dp"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/location"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_properties"
-            app:layout_constraintEnd_toStartOf="@+id/btn_properties"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_properties"
-            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_properties"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="68dp"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="100dp"
             android:background="@drawable/rounded_btn"
             android:gravity="center"
             android:maxLines="1"
@@ -110,14 +97,31 @@
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:text="@string/properties"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="173dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_backup_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            android:layout_marginBottom="100dp"
+            android:background="@drawable/rounded_btn"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minWidth="100dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:text="@string/location"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/agreed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_btn"
             android:gravity="center"
             android:maxLines="1"
@@ -127,22 +131,20 @@
             android:text="@string/button_ok"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/notagreed"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/notagreed"
-            app:layout_constraintVertical_bias="0.0"
             tools:ignore="HardcodedText,SpUsage" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/shapeableImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginBottom="256dp"
             android:background="@drawable/shadow_bg"
             android:foreground="@drawable/ic_launcher_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:layout_conversion_absoluteHeight="61dp"
             tools:layout_conversion_absoluteWidth="61dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
