@@ -40,12 +40,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -61,13 +58,14 @@ import net.foucry.pilldroid.databases.PrescriptionDatabase;
 import net.foucry.pilldroid.models.Medicine;
 import net.foucry.pilldroid.models.Prescription;
 
-import de.raphaelebner.roomdatabasebackup.core.RoomBackup;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import de.raphaelebner.roomdatabasebackup.core.RoomBackup;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -79,7 +77,6 @@ import java.util.Objects;
  */
 public class DrugListActivity extends AppCompatActivity {
     private static final String TAG = DrugListActivity.class.getName();
-    private static final String SECRET_PASSWORD = ;
     public final int CUSTOMIZED_REQUEST_CODE = 0x0000ffff;
 
     // Barcode Scanner usage
@@ -204,7 +201,7 @@ public class DrugListActivity extends AppCompatActivity {
         }
 
         FloatingActionButton mFloatingActionButton = findViewById(R.id.fab);
-        mFloatingActionButton.setOnClickListener(v-> onButtonClick());
+        mFloatingActionButton.setOnClickListener(v -> onButtonClick());
 
         if (DEMO) {
             PrescriptionsDAO prescriptionsDAO = prescriptions.getPrescriptionsDAO();
@@ -394,8 +391,7 @@ public class DrugListActivity extends AppCompatActivity {
                 if (s.length() == 8) {
                     ok.setEnabled(true);
                     ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn)));
-                }
-                else {
+                } else {
                     ok.setEnabled(false);
                     ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn_disabled)));
                 }
@@ -757,10 +753,7 @@ public class DrugListActivity extends AppCompatActivity {
         });
         dlg.show();*/
 
-        Button btn_export = findViewById(R.id.switch_btn_export);
-        Button btn_import = findViewById(R.id.switch_btn_import);
-        Button btn_properties = findViewById(R.id.btn_properties);
-        Button btn_backupLocation = findViewById(R.id.btn_backup_location);
+
 
         /*recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -800,17 +793,22 @@ public class DrugListActivity extends AppCompatActivity {
 //            startActivity(intent);
 //        });
 
+        Button btn_export = findViewById(R.id.switch_btn_export);
+        Button btn_import = findViewById(R.id.switch_btn_import);
+        Button btn_properties = findViewById(R.id.btn_properties);
+        Button btn_backupLocation = findViewById(R.id.btn_backup_location);
+
         encryptBackup = sharedPreferences.getBoolean(spEncryptBackup, true);
         storageLocation = sharedPreferences.getInt(spStorageLocation, 1);
         enableLog = sharedPreferences.getBoolean(spEnableLog, true);
         useMaxFileCount = sharedPreferences.getBoolean(spUseMaxFileCount, false);
 
-        final String[] multiItems = new String[] { "Encrypt Backup", "enable Log", "use maxFileCount = 5" };
-        final boolean[] checkedItems = new boolean[] { encryptBackup, enableLog, useMaxFileCount };
-        final String[] storageItems = new String[] { "Internal", "External", "Custom Dialog", "Custom File" };
+        final String[] multiItems = new String[]{"Encrypt Backup", "enable Log", "use maxFileCount = 5"};
+        final boolean[] checkedItems = new boolean[]{encryptBackup, enableLog, useMaxFileCount};
+        final String[] storageItems = new String[]{"Internal", "External", "Custom Dialog", "Custom File"};
 
         /*---------------------set Properties--------------------------*/
-        btn_properties.setOnClickListener(v -> {
+        btn_properties.setOnClickListener(v -> {   // TODO: Null pointer exception → application crash [should be the same with other button]
             MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
                     DrugListActivity.this);
             materialAlertDialogBuilder.setTitle("Change Properties");
@@ -868,31 +866,45 @@ public class DrugListActivity extends AppCompatActivity {
 
         });
 
-    Log.i(TAG, "ok button");
+        Log.i(TAG, "ok button");
 
-    PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(this);
-    final RoomBackup roomBackup = new RoomBackup(DrugListActivity.this);
-    if ( btn_export.isEnabled() ) {
-        // TODO: call `make backup
-        roomBackup.backupLocation(storageLocation);
-        roomBackup.database(PrescriptionDatabase.getInstanceDatabase(this));
-        roomBackup.enableLogDebug(enableLog);
-        roomBackup.backupIsEncrypted(encryptBackup);
-        roomBackup.customEncryptPassword(DrugListActivity.SECRET_PASSWORD);
-        if (useMaxFileCount)
-            roomBackup.maxFileCount(5);
-        roomBackup.onCompleteListener((success, message, exitCode) -> {
-            Log.d(TAG, "oncomplete: " + success + "message: " + message + ",exitCode: " + exitCode);
-            if (success)
-                roomBackup.restartApp(new Intent(getApplicationContext(), DrugListActivity.class));
-        });
-        roomBackup.backup();
+        PrescriptionDatabase prescriptions = PrescriptionDatabase.getInstanceDatabase(this);
+        final RoomBackup roomBackup = new RoomBackup(DrugListActivity.this);
+        if (btn_export.isEnabled()) {
+            btn_export.setOnClickListener(v -> {
+                roomBackup.backupLocation(storageLocation);
+                roomBackup.backupLocationCustomFile(new File(this.getFilesDir() + "/databasebackup/geilesBackup.sqlite3"));
+                roomBackup.database(PrescriptionDatabase.getInstanceDatabase(getApplicationContext()));
+                roomBackup.enableLogDebug(enableLog);
+                roomBackup.backupIsEncrypted(encryptBackup);
+                //roomBackup.customEncryptPassword(MainActivity.SECRET_PASSWORD);
+                if (useMaxFileCount)
+                    roomBackup.maxFileCount(5);
+                roomBackup.onCompleteListener((success, message, exitCode) -> {
+                    Log.d(TAG, "oncomplete: " + success + ", message: " + message + ", exitCode: " + exitCode);
+                    if (success)
+                        roomBackup.restartApp(new Intent(getApplicationContext(), DrugListActivity.class));
+                });
+                roomBackup.backup();
+            });
+        } else {
+            btn_import.setOnClickListener(v -> {
+                roomBackup.backupLocation(storageLocation);
+                roomBackup.backupLocationCustomFile(new File(this.getFilesDir() + "/databasebackup/geilesBackup.sqlite3"));
+                roomBackup.database(PrescriptionDatabase.getInstanceDatabase(getApplicationContext()));
+                roomBackup.enableLogDebug(enableLog);
+                roomBackup.backupIsEncrypted(encryptBackup);
+                //roomBackup.customEncryptPassword(MainActivity.SECRET_PASSWORD);
+                roomBackup.onCompleteListener((success, message, exitCode) -> {
+                    Log.d(TAG, "oncomplete: " + success + ", message: " + message + ", exitCode: " + exitCode);
+                    if (success)
+                        roomBackup.restartApp(new Intent(getApplicationContext(), DrugListActivity.class));
+                });
+                roomBackup.restore();
 
-    } else {
-        // TODO: call restore backup
-        //prescriptions.restore();
+            });
+        }
     }
-}
 }
 
 
