@@ -93,7 +93,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
     }
@@ -140,6 +140,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
