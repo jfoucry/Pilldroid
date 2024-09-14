@@ -98,6 +98,8 @@ public class DrugListActivity extends AppCompatActivity {
 
     private RecyclerViewAdapter mAdapter;
 
+    private final int PICK_DIRECTORY = 9999;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -335,7 +337,7 @@ public class DrugListActivity extends AppCompatActivity {
         if(requestCode == PICK_DIRECTORY && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             String path = (String) extras.get("chosenDir");
-            println("Path ==" path);
+            //println("Path ==" path);
         }
     }
 
@@ -427,7 +429,7 @@ public class DrugListActivity extends AppCompatActivity {
     private void askToAddInDB(Medicine aMedicine) {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dlg.setContentView(R.layout.custom_dialog_layout_one_button);
         dlg.setCancelable(false);
         TextView msg = dlg.findViewById(R.id.msg);
@@ -730,6 +732,7 @@ public class DrugListActivity extends AppCompatActivity {
 
     void choseDir() {
         Intent result = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        String path = "";
         result.putExtra("chosenDir", path);
         setResult(RESULT_OK, result);
     }
@@ -739,7 +742,7 @@ public class DrugListActivity extends AppCompatActivity {
 
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dlg.setContentView(R.layout.backupprefs);
         dlg.setCancelable(false);
 
