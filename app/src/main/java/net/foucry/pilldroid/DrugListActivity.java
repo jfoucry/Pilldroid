@@ -805,13 +805,13 @@ public class DrugListActivity extends AppCompatActivity {
 //            startActivity(intent);
 //        });
 
-        Button btn_export = findViewById(R.id.switch_btn_export);
+        Button btn_export = dlg.findViewById(R.id.switch_btn_export);
         assert btn_export != null;
-        Button btn_import = findViewById(R.id.switch_btn_import);
+        Button btn_import = dlg.findViewById(R.id.switch_btn_import);
         assert btn_import != null;
-        Button btn_properties = findViewById(R.id.btn_properties);
+        Button btn_properties = dlg.findViewById(R.id.btn_properties);
         assert btn_properties != null;
-        Button btn_backupLocation = findViewById(R.id.btn_backup_location);
+        Button btn_backupLocation = dlg.findViewById(R.id.btn_backup_location);
         assert btn_backupLocation != null;
 
         encryptBackup = sharedPreferences.getBoolean(spEncryptBackup, true);
@@ -885,6 +885,7 @@ public class DrugListActivity extends AppCompatActivity {
         Log.i(TAG, "ok button");
 
         PrescriptionDatabase.getInstanceDatabase(this);
+
         final RoomBackup roomBackup = new RoomBackup(DrugListActivity.this);
         if (btn_export.isEnabled()) {
             btn_export.setOnClickListener(v -> {
