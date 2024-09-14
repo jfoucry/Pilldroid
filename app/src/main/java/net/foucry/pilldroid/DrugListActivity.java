@@ -322,7 +322,8 @@ public class DrugListActivity extends AppCompatActivity {
             startActivity(new Intent(this, WelcomeActivity.class));
             return true;
         } else if (id == R.id.ImportExport) {
-            backupprefs();
+            //backupprefs();
+            choseDir();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -331,6 +332,11 @@ public class DrugListActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         constructDrugsList();
+        if(requestCode == PICK_DIRECTORY && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            String path = (String) extras.get("chosenDir");
+            println("Path ==" path);
+        }
     }
 
     public void onResume() {
@@ -722,6 +728,12 @@ public class DrugListActivity extends AppCompatActivity {
         }
     }
 
+    void choseDir() {
+        Intent result = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        result.putExtra("chosenDir", path);
+        setResult(RESULT_OK, result);
+    }
+
     void backupprefs() {
         Log.i(TAG, "backupprefs");
 
@@ -910,43 +922,3 @@ public class DrugListActivity extends AppCompatActivity {
         }
     }
 }
-
-
-/*
-final RoomBackup roomBackup = new RoomBackup(MainActivityJava.this);
-        */
-/*---------------------Backup and Restore Database--------------------------*//*
-
-        btn_backup.setOnClickListener(v -> {
-        roomBackup.backupLocation(storageLocation);
-            roomBackup.backupLocationCustomFile(new File(this.getFilesDir() + "/databasebackup/geilesBackup.sqlite3"));
-        roomBackup.database(FruitDatabase.Companion.getInstance(getApplicationContext()));
-        roomBackup.enableLogDebug(enableLog);
-            roomBackup.backupIsEncrypted(encryptBackup);
-            roomBackup.customEncryptPassword(MainActivity.SECRET_PASSWORD);
-            if (useMaxFileCount)
-        roomBackup.maxFileCount(5);
-            roomBackup.onCompleteListener((success, message, exitCode) -> {
-        Log.d(TAG, "oncomplete: " + success + ", message: " + message + ", exitCode: " + exitCode);
-                if (success)
-        roomBackup.restartApp(new Intent(getApplicationContext(), MainActivityJava.class));
-        });
-        roomBackup.backup();
-
-        });
-
-                btn_restore.setOnClickListener(v -> {
-        roomBackup.backupLocation(storageLocation);
-            roomBackup.backupLocationCustomFile(new File(this.getFilesDir() + "/databasebackup/geilesBackup.sqlite3"));
-        roomBackup.database(FruitDatabase.Companion.getInstance(getApplicationContext()));
-        roomBackup.enableLogDebug(enableLog);
-            roomBackup.backupIsEncrypted(encryptBackup);
-            roomBackup.customEncryptPassword(MainActivity.SECRET_PASSWORD);
-            roomBackup.onCompleteListener((success, message, exitCode) -> {
-        Log.d(TAG, "oncomplete: " + success + ", message: " + message + ", exitCode: " + exitCode);
-                if (success)
-        roomBackup.restartApp(new Intent(getApplicationContext(), MainActivityJava.class));
-        });
-        roomBackup.restore();
-
-        });*/
