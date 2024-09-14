@@ -48,3 +48,5 @@ gen/
 /android-signing-keystore.jks
 /secrets.properties
 *.hprof
+
+.zhistory
