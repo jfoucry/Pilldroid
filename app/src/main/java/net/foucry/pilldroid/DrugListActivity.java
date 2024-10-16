@@ -61,6 +61,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * An activity representing a list of Drugs is activity
@@ -354,7 +355,8 @@ public class DrugListActivity extends AppCompatActivity {
         ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.rounded_btn_disabled)));
         MaterialTextView title = dialog.findViewById(R.id.title);
         final EditText editText = dialog.findViewById(R.id.editcip13);
-        String cip13 = String.valueOf(editText.getText());
+        String input = "";
+        AtomicReference<String> cip13 = new AtomicReference<>(String.valueOf(editText.getText()));
 
         // TODO change the color of ok button when the number of character is correct.
 
@@ -372,8 +374,7 @@ public class DrugListActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //alert.getButton(alert.BUTTON_POSITIVE).setEnabled(s.length() == 8);
-                if (s.length() == 8) {
+                if (s.length() == 7) {
                     ok.setEnabled(true);
                     ok.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(editText.getContext(), R.drawable.rounded_btn)));
                 }
@@ -386,8 +387,9 @@ public class DrugListActivity extends AppCompatActivity {
         ok.setOnClickListener(v -> {
             dialog.cancel();
             Log.i("EditText Value",editText.getEditableText().toString());
+            cip13.set(340093 + editText.getEditableText().toString());
             MedicinesDAO medicinesDAO = medicines.getMedicinesDAO();
-            Medicine aMedicine = medicinesDAO.getMedicineByCIP13(cip13);
+            Medicine aMedicine = medicinesDAO.getMedicineByCIP13(String.valueOf(cip13));
             askToAddInDB(aMedicine);
         });
         cancel.setOnClickListener(v -> {
@@ -407,7 +409,7 @@ public class DrugListActivity extends AppCompatActivity {
     private void askToAddInDB(Medicine aMedicine) {
         final Dialog dlg = new Dialog(this);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Objects.requireNonNull(dlg.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dlg.setContentView(R.layout.custom_dialog_layout_one_button);
         dlg.setCancelable(true);
         MaterialTextView msg = dlg.findViewById(R.id.msg);
