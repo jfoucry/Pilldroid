@@ -37,6 +37,7 @@
             android:name=".DrugDetailActivity"
             android:label="@string/title_drug_detail"
             android:parentActivityName=".DrugListActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize">
             <meta-data
@@ -47,6 +48,7 @@
             android:name=".WelcomeActivity"
             android:label="Welcome"
             android:parentActivityName=".DrugListActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -56,6 +58,7 @@
             android:name=".About"
             android:label="À propos de PillDroid"
             android:parentActivityName=".DrugListActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme" />
         <activity android:name=".CustomScannerActivity" />
         <receiver android:name="net.foucry.pilldroid.AlarmReceiver"
